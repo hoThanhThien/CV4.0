@@ -30,6 +30,16 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
+Route::get('/setup-db', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        return 'Database migrated and seeded successfully!';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
