@@ -11,16 +11,12 @@ services:
     plan: free
     healthCheckPath: /
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: cv-database
-          property: connectionString
       - key: APP_KEY
         value: base64:Rzz68lGeiDWUlALy8OCrHkhnT9h9bzmQH9hPuYdjYg4=
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: false
+        value: true
       - key: APP_URL
         value: https://sondoc.io.vn
       - key: LOG_CHANNEL
