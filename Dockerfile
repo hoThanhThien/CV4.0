@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nginx \
     libpq-dev \
-    npm
+    dos2unix
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -34,9 +34,6 @@ COPY . /var/www
 
 # Install composer dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
-
-# Install node dependencies and build assets
-RUN npm install && npm run dev
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www \

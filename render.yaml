@@ -16,7 +16,7 @@ services:
           name: cv-database
           property: connectionString
       - key: APP_KEY
-        generateValue: true
+        value: base64:Rzz68lGeiDWUlALy8OCrHkhnT9h9bzmQH9hPuYdjYg4=
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
