@@ -23,6 +23,15 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
+Route::get('/sitemap.xml', function () {
+    $projects = \App\Models\Project::all();
+    $posts = \App\Models\BlogPost::published()->get();
+
+    return response()->view('sitemap', [
+        'projects' => $projects,
+        'posts' => $posts
+    ])->header('Content-Type', 'text/xml');
+});
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'vi'])) {
         session()->put('locale', $locale);
