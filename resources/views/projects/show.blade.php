@@ -69,7 +69,7 @@
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
                     @else
-                        <span class="placeholder"><i class="fas fa-code"></i></span>
+                        <img src="{{ asset('images/og-image.png') }}" alt="{{ $project->title }} - Thumbnail">
                     @endif
                 </div>
 

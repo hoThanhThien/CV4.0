@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@yield('description', 'Full-Stack Developer Portfolio - Building modern web applications')">
+    <meta property="og:title" content="@yield('title', __('Hồ Thành Thiện') . ' | Developer')">
+    <meta property="og:description" content="@yield('description', 'Full-Stack Developer Portfolio - Building modern web applications')">
+    <meta property="og:image" content="{{ asset('images/og-image.png') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
     <title>@yield('title', __('Hồ Thành Thiện') . ' | Developer') </title>
 
     <!-- Google Fonts -->
