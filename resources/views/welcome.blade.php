@@ -7,8 +7,11 @@
 <style>
     /* ===== HERO ===== */
     .hero {
-        min-height: 100vh; display: flex; align-items: center;
+        min-height: calc(100svh - 70px);
+        min-height: 90vh;
+        display: flex; align-items: center;
         position: relative; overflow: hidden;
+        padding: 4.5rem 0 3.5rem;
     }
 
     .hero-bg {
@@ -26,11 +29,11 @@
         -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     }
 
-    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; width: 100%; }
 
     .hero-badge {
         display: inline-flex; align-items: center; gap: 0.5rem;
-        padding: 0.25rem 0.85rem; border-radius: 50px;
+        padding: 0.3rem 0.85rem; border-radius: 50px;
         background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
         color: var(--accent-light); font-size: 0.85rem; font-weight: 600;
         margin-bottom: 1rem; animation: fadeInDown 0.6s ease;
@@ -48,14 +51,15 @@
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     .hero h1 {
-        font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 900;
-        line-height: 1.1; margin-bottom: 1rem;
+        font-size: clamp(2rem, 5.5vw, 3.8rem); font-weight: 900;
+        line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -0.02em;
+        word-break: break-word; overflow-wrap: break-word;
         animation: fadeInUp 0.7s ease 0.1s both;
     }
 
     .hero p {
-        font-size: 1.1rem; color: var(--text-secondary);
-        margin-bottom: 1.5rem; max-width: 560px; line-height: 1.6;
+        font-size: clamp(1rem, 2.5vw, 1.15rem); color: var(--text-secondary);
+        margin-bottom: 1.75rem; max-width: 560px; line-height: 1.65;
         animation: fadeInUp 0.7s ease 0.2s both;
     }
 
@@ -65,7 +69,7 @@
     }
 
     .hero-scroll {
-        position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+        position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
         display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
         color: var(--text-secondary); font-size: 0.8rem; animation: fadeInUp 1s ease 0.8s both;
     }
@@ -82,7 +86,7 @@
     /* ===== SKILLS ===== */
     .skills-section { background: var(--bg-secondary); }
 
-    .skills-categories { display: flex; flex-direction: column; gap: 3rem; }
+    .skills-categories { display: flex; flex-direction: column; gap: 2.75rem; }
     .skill-category-title {
         font-size: 1rem; font-weight: 700; color: var(--accent-light);
         margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;
@@ -100,15 +104,15 @@
 
 
     /* ===== EXPERIENCE ===== */
-    .timeline { position: relative; padding-left: 2rem; }
+    .timeline { position: relative; padding-left: 1.75rem; }
     .timeline::before {
-        content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+        content: ''; position: absolute; left: 5px; top: 0; bottom: 0;
         width: 2px; background: linear-gradient(to bottom, var(--accent), transparent);
     }
 
-    .timeline-item { position: relative; margin-bottom: 2.5rem; }
+    .timeline-item { position: relative; margin-bottom: 2.25rem; }
     .timeline-item::before {
-        content: ''; position: absolute; left: -2.45rem; top: 0.4rem;
+        content: ''; position: absolute; left: calc(-1.75rem); top: 0.35rem;
         width: 12px; height: 12px; border-radius: 50%;
         background: var(--accent); border: 2px solid var(--bg-primary);
         box-shadow: 0 0 12px var(--accent-glow);
@@ -123,14 +127,14 @@
     .timeline-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
 
     /* ===== PROJECTS ===== */
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1.5rem; }
 
     .project-card {
         background: var(--bg-card); border: 1px solid var(--border);
         border-radius: 16px; overflow: hidden;
         transition: all 0.3s ease; display: flex; flex-direction: column;
     }
-    .project-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-6px); box-shadow: 0 25px 60px rgba(0,0,0,0.5); }
+    .project-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-6px); box-shadow: 0 25px 60px rgba(0,0,0,0.08); }
 
     .project-image {
         height: 200px; overflow: hidden; position: relative;
@@ -144,12 +148,12 @@
     .project-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
     .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
     .project-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .project-desc { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+    .project-desc { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
     .project-links { display: flex; gap: 0.5rem; margin-top: auto; flex-wrap: wrap; }
-    .project-links .btn { flex: 1; min-width: max-content; justify-content: center; }
+    .project-links .btn { flex: 1 1 calc(33.333% - 0.5rem); min-width: 80px; justify-content: center; font-size: 0.85rem; padding: 0.5rem 0.75rem; }
 
     /* ===== BLOG ===== */
-    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
 
     .blog-card {
         background: var(--bg-card); border: 1px solid var(--border);
@@ -157,7 +161,7 @@
         transition: all 0.3s ease; display: flex; flex-direction: column;
         text-decoration: none; color: inherit;
     }
-    .blog-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    .blog-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.06); }
 
     .blog-image {
         height: 180px; overflow: hidden;
@@ -178,6 +182,43 @@
     }
     .cta-section h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 1rem; }
     .cta-section p { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; }
+
+    /* ===== RESPONSIVE MEDIA QUERIES ===== */
+    @media (max-width: 768px) {
+        .hero {
+            min-height: auto;
+            padding: 3.5rem 0 2.5rem;
+        }
+        .hero-scroll { display: none; }
+        .skills-categories { gap: 2rem; }
+        .cta-section { padding: 3.5rem 0; }
+    }
+
+    @media (max-width: 640px) {
+        .projects-grid, .blog-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-actions {
+            flex-direction: column;
+            width: 100%;
+            gap: 0.75rem;
+        }
+        .hero-actions .btn {
+            width: 100%;
+            justify-content: center;
+        }
+        .skills-pill-group { gap: 0.5rem; }
+        .skill-pill { padding: 0.4rem 0.85rem; font-size: 0.82rem; }
+        .project-image { height: 180px; }
+        .project-body { padding: 1.1rem; }
+        .project-links .btn { min-width: 70px; flex: 1; }
+        .blog-image { height: 160px; }
+        .blog-body { padding: 1.1rem; }
+        .cta-section .btn { width: 100%; justify-content: center; }
+    }
 </style>
 @endsection
 
@@ -193,7 +234,7 @@
                 <span class="dot"></span>
                 {{ __('Contact') }}
             </a>
-            <h1>{{ __("Programmers don't just") }} <span class="gradient-text">{{ __('write code,') }}</span><br> <span style="white-space: nowrap;">{!! __('they create solutions.') !!}</span></h1>
+            <h1>{{ __("Programmers don't just") }} <span class="gradient-text">{{ __('write code,') }}</span><br><span>{!! __('they create solutions.') !!}</span></h1>
             <p>{{ __("I'm Hồ Thành Thiện, a Full-Stack Developer crafting modern, scalable, and beautifully designed web applications with a passion for clean code.") }}</p>
             <div class="hero-actions">
                 <a href="{{ route('projects.index') }}" class="btn btn-primary">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Projects | Alex Nguyen')
+@section('title', __('Projects') . ' | ' . __('Hồ Thành Thiện'))
 @section('description', 'Explore my portfolio of web development projects built with modern technologies.')
 
 @section('styles')
@@ -10,10 +10,10 @@
         text-align: center;
         background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
     }
-    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 0.75rem; }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
     .page-hero p { color: var(--text-secondary); font-size: 1.1rem; }
 
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1.5rem; }
 
     .project-card {
         background: var(--bg-card); border: 1px solid var(--border);
@@ -40,20 +40,37 @@
     .project-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
     .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
     .project-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .project-desc { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+    .project-desc { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
     .project-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; }
-    .project-links .btn { flex: 1; min-width: max-content; justify-content: center; }
+    .project-links .btn { flex: 1 1 calc(33.333% - 0.5rem); min-width: 80px; justify-content: center; font-size: 0.85rem; padding: 0.5rem 0.75rem; }
 
     .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }
     .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.3; }
+
+    @media (max-width: 768px) {
+        .page-hero { padding: 3.5rem 0 2rem; }
+        .page-hero h1 { font-size: clamp(1.8rem, 6vw, 2.5rem); }
+        .page-hero p { font-size: 1rem; }
+    }
+
+    @media (max-width: 640px) {
+        .projects-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+        .page-hero { padding: 2.75rem 0 1.5rem; }
+        .project-image { height: 180px; }
+        .project-body { padding: 1.1rem; }
+        .project-links .btn { min-width: 70px; flex: 1; }
+    }
 </style>
 @endsection
 
 @section('content')
 <section class="page-hero">
     <div class="container">
-        <h1>My <span class="gradient-text">Projects</span></h1>
-        <p>Things I've built and worked on</p>
+        <h1>{{ __('My') }} <span class="gradient-text">{{ __('Projects') }}</span></h1>
+        <p>{{ __("Things I've built and worked on") }}</p>
     </div>
 </section>
 

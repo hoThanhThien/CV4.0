@@ -20,7 +20,7 @@
         box-shadow: 0 0 60px var(--accent-glow); flex-shrink: 0;
     }
 
-    .about-text h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin-bottom: 0.75rem; }
+    .about-text h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); font-weight: 900; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
     .about-text .role { color: var(--accent-light); font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
     .about-text p { color: var(--text-secondary); line-height: 1.8; font-size: 1rem; margin-bottom: 1rem; }
     .about-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
@@ -37,19 +37,28 @@
     .skill-category-title { font-size: 1rem; font-weight: 700; color: var(--accent-light); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
     .skill-category-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .timeline { position: relative; padding-left: 2rem; }
-    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent); }
-    .timeline-item { position: relative; margin-bottom: 2.5rem; }
-    .timeline-item::before { content: ''; position: absolute; left: -2.45rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg-primary); box-shadow: 0 0 12px var(--accent-glow); }
+    .timeline { position: relative; padding-left: 1.75rem; }
+    .timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent); }
+    .timeline-item { position: relative; margin-bottom: 2.25rem; }
+    .timeline-item::before { content: ''; position: absolute; left: calc(-1.75rem); top: 0.35rem; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg-primary); box-shadow: 0 0 12px var(--accent-glow); }
     .timeline-date { font-size: 0.78rem; font-weight: 700; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
     .timeline-company { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.15rem; }
     .timeline-position { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem; }
     .timeline-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
 
     @media (max-width: 768px) {
-        .about-intro { grid-template-columns: 1fr; text-align: center; }
-        .about-avatar { margin: 0 auto; width: 160px; height: 160px; font-size: 4rem; }
+        .about-hero { padding: 3.5rem 0 2rem; }
+        .about-intro { grid-template-columns: 1fr; gap: 2rem; text-align: center; margin-bottom: 3rem; }
+        .about-avatar { margin: 0 auto; width: 140px; height: 140px; font-size: 3.5rem; border-radius: 20px; }
         .about-actions { justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+        .about-hero { padding: 2.75rem 0 1.5rem; }
+        .about-actions { flex-direction: column; width: 100%; gap: 0.75rem; }
+        .about-actions .btn { width: 100%; justify-content: center; }
+        .skills-pill-group { gap: 0.5rem; }
+        .skill-pill { padding: 0.4rem 0.85rem; font-size: 0.82rem; }
     }
 </style>
 @endsection

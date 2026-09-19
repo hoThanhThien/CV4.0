@@ -189,18 +189,45 @@
         .alert-success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: var(--success); }
         .alert-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--danger); }
 
+        .admin-hamburger {
+            display: none; background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text); width: 38px; height: 38px; border-radius: 8px;
+            align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;
+            margin-right: 0.75rem;
+        }
+
+        .admin-backdrop {
+            display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            z-index: 99; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .admin-backdrop.open { display: block; opacity: 1; }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
+            .admin-hamburger { display: flex; }
+            .sidebar { transform: translateX(-100%); box-shadow: 0 0 30px rgba(0,0,0,0.15); }
             .sidebar.open { transform: none; }
             .main { margin-left: 0; }
+            .topbar { padding: 0.85rem 1rem; }
+            .content { padding: 1.25rem 1rem; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            table { min-width: 600px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .form-card { padding: 1.25rem; }
         }
     </style>
 
     @yield('styles')
 </head>
 <body>
+    <div class="admin-backdrop" id="admin-backdrop"></div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
@@ -247,7 +274,10 @@
     <!-- Main Content -->
     <div class="main">
         <header class="topbar">
-            <div>
+            <div style="display: flex; align-items: center;">
+                <button class="admin-hamburger" id="admin-hamburger" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="topbar-title">
                     @yield('title', 'Dashboard')
                     <span>/ Admin</span>
@@ -277,6 +307,28 @@
         </div>
     </div>
 
+    <script>
+        const adminHamburger = document.getElementById('admin-hamburger');
+        const adminSidebar = document.getElementById('sidebar');
+        const adminBackdrop = document.getElementById('admin-backdrop');
+
+        if (adminHamburger && adminSidebar) {
+            function toggleAdminSidebar(state) {
+                const isOpen = typeof state === 'boolean' ? state : !adminSidebar.classList.contains('open');
+                adminSidebar.classList.toggle('open', isOpen);
+                if (adminBackdrop) adminBackdrop.classList.toggle('open', isOpen);
+            }
+
+            adminHamburger.addEventListener('click', () => toggleAdminSidebar());
+            if (adminBackdrop) adminBackdrop.addEventListener('click', () => toggleAdminSidebar(false));
+
+            adminSidebar.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) toggleAdminSidebar(false);
+                });
+            });
+        }
+    </script>
     @yield('scripts')
 </body>
 </html>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Blog | Alex Nguyen')
+@section('title', __('Blog') . ' | ' . __('Hồ Thành Thiện'))
 @section('description', 'Articles and thoughts on web development, technology and software engineering.')
 
 @section('styles')
@@ -9,10 +9,10 @@
         padding: 5rem 0 3rem; text-align: center;
         background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
     }
-    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 0.75rem; }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
     .page-hero p { color: var(--text-secondary); font-size: 1.1rem; }
 
-    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
 
     .blog-card {
         background: var(--bg-card); border: 1px solid var(--border);
@@ -42,14 +42,29 @@
 
     .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }
     .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.3; }
+
+    @media (max-width: 768px) {
+        .page-hero { padding: 3.5rem 0 2rem; }
+        .page-hero h1 { font-size: clamp(1.8rem, 6vw, 2.5rem); }
+        .page-hero p { font-size: 1rem; }
+    }
+    @media (max-width: 640px) {
+        .blog-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+        .page-hero { padding: 2.75rem 0 1.5rem; }
+        .blog-image { height: 160px; }
+        .blog-body { padding: 1.1rem; }
+        .blog-meta { gap: 0.75rem; flex-wrap: wrap; }
+    }
 </style>
 @endsection
 
 @section('content')
 <section class="page-hero">
     <div class="container">
-        <h1>My <span class="gradient-text">Blog</span></h1>
-        <p>Thoughts, tutorials and learnings from the dev trenches</p>
+        <h1>{{ __('My') }} <span class="gradient-text">{{ __('Blog') }}</span></h1>
+        <p>{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
     </div>
 </section>
 
@@ -71,13 +86,13 @@
                         @if($post->published_at)
                         <span><i class="fas fa-calendar-alt"></i> {{ $post->published_at->format('M d, Y') }}</span>
                         @endif
-                        <span><i class="fas fa-clock"></i> {{ ceil(str_word_count(strip_tags($post->content)) / 200) }} min read</span>
+                        <span><i class="fas fa-clock"></i> {{ ceil(str_word_count(strip_tags($post->content)) / 200) }} {{ __('min read') }}</span>
                     </div>
                     <div class="blog-title">{{ $post->title }}</div>
                     @if($post->excerpt)
                     <p class="blog-excerpt">{{ Str::limit($post->excerpt, 130) }}</p>
                     @endif
-                    <span class="blog-read-more">Read more <i class="fas fa-arrow-right"></i></span>
+                    <span class="blog-read-more">{{ __('Read more') }} <i class="fas fa-arrow-right"></i></span>
                 </div>
             </a>
             @endforeach
@@ -86,9 +101,9 @@
         @if($posts->hasPages())
         <div class="pagination-wrap">
             @if($posts->onFirstPage())
-                <span class="page-link" style="opacity:0.4">« Prev</span>
+                <span class="page-link" style="opacity:0.4">« {{ __('Prev') }}</span>
             @else
-                <a href="{{ $posts->previousPageUrl() }}" class="page-link">« Prev</a>
+                <a href="{{ $posts->previousPageUrl() }}" class="page-link">« {{ __('Prev') }}</a>
             @endif
 
             @foreach($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
@@ -96,9 +111,9 @@
             @endforeach
 
             @if($posts->hasMorePages())
-                <a href="{{ $posts->nextPageUrl() }}" class="page-link">Next »</a>
+                <a href="{{ $posts->nextPageUrl() }}" class="page-link">{{ __('Next') }} »</a>
             @else
-                <span class="page-link" style="opacity:0.4">Next »</span>
+                <span class="page-link" style="opacity:0.4">{{ __('Next') }} »</span>
             @endif
         </div>
         @endif
@@ -106,8 +121,8 @@
         @else
         <div class="empty-state">
             <i class="fas fa-pen-nib"></i>
-            <h3>No articles yet</h3>
-            <p>Stay tuned for upcoming posts!</p>
+            <h3>{{ __('No articles yet') }}</h3>
+            <p>{{ __('Stay tuned for upcoming posts!') }}</p>
         </div>
         @endif
     </div>
