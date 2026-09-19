@@ -55,6 +55,20 @@
 
     .hero-content { position: relative; z-index: 1; max-width: 700px; width: 100%; }
 
+    .hero-line {
+        display: block;
+    }
+
+    @media (min-width: 992px) {
+        .hero-content {
+            max-width: 1020px;
+        }
+        .hero-line-1,
+        .hero-line-2 {
+            white-space: nowrap;
+        }
+    }
+
     .hero-badge {
         display: inline-flex; align-items: center; gap: 0.5rem;
         padding: 0.35rem 0.9rem; border-radius: 50px;
@@ -78,9 +92,9 @@
     @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
 
     .hero h1 {
-        font-size: clamp(2rem, 5.5vw, 3.8rem); font-weight: 900;
-        line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -0.02em;
-        word-break: break-word; overflow-wrap: break-word;
+        font-size: clamp(2rem, 4.4vw, 3.5rem); font-weight: 900;
+        line-height: 1.2; margin-bottom: 1.25rem; letter-spacing: -0.02em;
+        word-break: normal; overflow-wrap: break-word;
         animation: fadeInUp 0.7s ease 0.1s both;
     }
 
@@ -287,7 +301,10 @@
                 <span class="dot"></span>
                 {{ __('Contact') }}
             </a>
-            <h1>{{ __("Programmers don't just") }} <span class="gradient-text">{{ __('write code,') }}</span><br><span>{!! __('they create solutions.') !!}</span></h1>
+            <h1>
+                <span class="hero-line hero-line-1">{{ __("Programmers don't just") }} <span class="gradient-text">{{ __('write code,') }}</span></span>
+                <span class="hero-line hero-line-2">{!! __('they create solutions.') !!}</span>
+            </h1>
             <p>{{ __("I'm Hồ Thành Thiện, a Full-Stack Developer crafting modern, scalable, and beautifully designed web applications with a passion for clean code.") }}</p>
             <div class="hero-actions">
                 <a href="{{ route('projects.index') }}" class="btn btn-primary">
@@ -309,7 +326,7 @@
 @if($skills->count())
 <section class="section skills-section">
     <div class="container">
-        <h2 class="section-title reveal">{{ __('Technical') }} <span class="gradient-text">{{ __('Skills') }}</span></h2>
+        <h2 class="section-title reveal">Technical Skills</h2>
         <p class="section-subtitle reveal delay-1">{{ __('Technologies and tools I work with every day') }}</p>
 
         <div class="skills-categories reveal delay-2">
