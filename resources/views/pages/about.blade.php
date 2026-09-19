@@ -119,7 +119,7 @@
 @if($skills->count())
 <section class="section skills-section">
     <div class="container">
-        <h2 class="section-title reveal">{{ __('My') }} <span class="gradient-text">{{ __('Skills') }}</span></h2>
+        <h2 class="section-title reveal">{!! __('heading_my_skills') !!}</h2>
         <p class="section-subtitle reveal delay-1">{{ __('Technologies I work with') }}</p>
 
         <div style="display:flex; flex-direction:column; gap:3rem" class="reveal delay-2">
@@ -144,7 +144,7 @@
 @if($experiences->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title reveal">{{ __('Work') }} <span class="gradient-text">{{ __('Experience') }}</span></h2>
+        <h2 class="section-title reveal">{!! __('heading_experience') !!}</h2>
         <p class="section-subtitle reveal delay-1">{{ __('My professional journey') }}</p>
         <div style="max-width:700px; margin:0 auto">
             <div class="timeline">

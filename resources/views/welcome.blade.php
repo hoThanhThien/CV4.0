@@ -354,7 +354,7 @@
 @if($experiences->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title reveal">{{ __('Work') }} <span class="gradient-text">{{ __('Experience') }}</span></h2>
+        <h2 class="section-title reveal">{!! __('heading_experience') !!}</h2>
         <p class="section-subtitle reveal delay-1">{{ __('My professional journey so far') }}</p>
 
         <div style="max-width:700px; margin:0 auto">
@@ -380,7 +380,7 @@
 @if($featuredProjects->count())
 <section class="section" style="background: var(--bg-secondary)">
     <div class="container">
-        <h2 class="section-title reveal">{{ __('Featured') }} <span class="gradient-text">{{ __('Projects') }}</span></h2>
+        <h2 class="section-title reveal">{!! __('heading_featured_projects') !!}</h2>
         <p class="section-subtitle reveal delay-1">{{ __('Some of my recent and favourite work') }}</p>
 
         <div class="projects-grid">
@@ -434,7 +434,7 @@
 @if($recentPosts->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title reveal">{{ __('Recent') }} <span class="gradient-text">{{ __('Articles') }}</span></h2>
+        <h2 class="section-title reveal">{!! __('heading_recent_articles') !!}</h2>
         <p class="section-subtitle reveal delay-1">{{ __('Thoughts, learnings and insights from my journey') }}</p>
 
         <div class="blog-grid">
@@ -471,7 +471,7 @@
 <!-- ===== CTA ===== -->
 <section class="cta-section">
     <div class="container reveal">
-        <h2>{{ __("Let's build something") }} <span class="gradient-text">{{ __('amazing') }}</span> {{ __('together') }}</h2>
+        <h2>{!! __('cta_heading') !!}</h2>
         <p>{{ __("I'm always open to interesting projects and opportunities.") }}</p>
         <a href="mailto:hothanhthien119@gmail.com" class="btn btn-primary">
             <i class="fas fa-paper-plane"></i> {{ __('Send Me a Message') }}

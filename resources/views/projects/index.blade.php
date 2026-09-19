@@ -69,7 +69,7 @@
 @section('content')
 <section class="page-hero">
     <div class="container">
-        <h1 class="reveal">{{ __('My') }} <span class="gradient-text">{{ __('Projects') }}</span></h1>
+        <h1 class="reveal">{!! __('heading_my_projects') !!}</h1>
         <p class="reveal delay-1">{{ __("Things I've built and worked on") }}</p>
     </div>
 </section>
