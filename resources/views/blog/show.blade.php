@@ -80,7 +80,7 @@
 @section('content')
 <div class="post-hero">
     <div class="container">
-        <div class="breadcrumb">
+        <div class="breadcrumb reveal-fade">
             <a href="{{ route('home') }}">{{ __('Home') }}</a> /
             <a href="{{ route('blog.index') }}">{{ __('Blog') }}</a> /
             <span>{{ Str::limit($post->title, 40) }}</span>
@@ -92,7 +92,7 @@
     <div class="container">
         <div class="post-layout">
             <!-- Main -->
-            <article>
+            <article class="reveal">
                 <h1 class="post-title">{{ $post->title }}</h1>
                 <div class="post-meta">
                     @if($post->published_at)
@@ -113,7 +113,7 @@
             </article>
 
             <!-- Sidebar -->
-            <aside class="post-sidebar">
+            <aside class="post-sidebar reveal delay-1">
                 @if($post->excerpt)
                 <div class="card">
                     <h4><i class="fas fa-align-left"></i> {{ __('Summary') }}</h4>

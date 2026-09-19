@@ -61,7 +61,7 @@
 @section('content')
 <section class="project-hero">
     <div class="container">
-        <div class="breadcrumb">
+        <div class="breadcrumb reveal-fade">
             <a href="{{ route('home') }}">{{ __('Home') }}</a> /
             <a href="{{ route('projects.index') }}">{{ __('Projects') }}</a> /
             <span>{{ $project->title }}</span>
@@ -73,7 +73,7 @@
     <div class="container">
         <div class="project-detail">
             <!-- Main Content -->
-            <div>
+            <div class="reveal">
                 <div class="project-image-full">
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
@@ -87,7 +87,7 @@
             </div>
 
             <!-- Sidebar -->
-            <aside class="project-sidebar">
+            <aside class="project-sidebar reveal delay-1">
                 @if($project->technologies->count())
                 <div class="card">
                     <h4><i class="fas fa-microchip"></i> {{ __('Technologies') }}</h4>

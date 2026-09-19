@@ -63,8 +63,8 @@
 @section('content')
 <section class="page-hero">
     <div class="container">
-        <h1>{{ __('My') }} <span class="gradient-text">{{ __('Blog') }}</span></h1>
-        <p>{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
+        <h1 class="reveal">{{ __('My') }} <span class="gradient-text">{{ __('Blog') }}</span></h1>
+        <p class="reveal delay-1">{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
     </div>
 </section>
 
@@ -73,7 +73,7 @@
         @if($posts->count())
         <div class="blog-grid">
             @foreach($posts as $post)
-            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
+            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="blog-image">
                     @if($post->image)
                         <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
@@ -99,7 +99,7 @@
         </div>
 
         @if($posts->hasPages())
-        <div class="pagination-wrap">
+        <div class="pagination-wrap reveal delay-2">
             @if($posts->onFirstPage())
                 <span class="page-link" style="opacity:0.4">« {{ __('Prev') }}</span>
             @else
@@ -119,7 +119,7 @@
         @endif
 
         @else
-        <div class="empty-state">
+        <div class="empty-state reveal">
             <i class="fas fa-pen-nib"></i>
             <h3>{{ __('No articles yet') }}</h3>
             <p>{{ __('Stay tuned for upcoming posts!') }}</p>

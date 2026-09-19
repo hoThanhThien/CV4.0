@@ -69,8 +69,8 @@
 @section('content')
 <section class="page-hero">
     <div class="container">
-        <h1>{{ __('My') }} <span class="gradient-text">{{ __('Projects') }}</span></h1>
-        <p>{{ __("Things I've built and worked on") }}</p>
+        <h1 class="reveal">{{ __('My') }} <span class="gradient-text">{{ __('Projects') }}</span></h1>
+        <p class="reveal delay-1">{{ __("Things I've built and worked on") }}</p>
     </div>
 </section>
 
@@ -79,7 +79,7 @@
         @if($projects->count())
         <div class="projects-grid">
             @foreach($projects as $project)
-            <div class="project-card">
+            <div class="project-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="project-image">
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
@@ -87,7 +87,7 @@
                         <img src="{{ asset('images/og-image.png') }}" alt="{{ $project->title }} - Thumbnail">
                     @endif
                     @if($project->featured)
-                        <span class="project-featured-badge">⭐ Featured</span>
+                        <span class="project-featured-badge">⭐ {{ __('Featured') }}</span>
                     @endif
                 </div>
                 <div class="project-body">
@@ -100,16 +100,16 @@
                     <p class="project-desc">{{ Str::limit($project->description, 130) }}</p>
                     <div class="project-links">
                         <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-eye"></i> Details
+                            <i class="fas fa-eye"></i> {{ __('Details') }}
                         </a>
                         @if($project->github_url)
                         <a href="{{ $project->github_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
-                            <i class="fab fa-github"></i> Code
+                            <i class="fab fa-github"></i> {{ __('Code') }}
                         </a>
                         @endif
                         @if($project->demo_url)
                         <a href="{{ $project->demo_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
-                            <i class="fas fa-external-link-alt"></i> Demo
+                            <i class="fas fa-external-link-alt"></i> {{ __('Demo') }}
                         </a>
                         @endif
                     </div>
@@ -119,7 +119,7 @@
         </div>
 
         @if($projects->hasPages())
-        <div class="pagination-wrap">
+        <div class="pagination-wrap reveal delay-2">
             @foreach($projects->links()->elements[0] as $page => $url)
                 <a href="{{ $url }}" class="page-link {{ $projects->currentPage() == $page ? 'active' : '' }}">{{ $page }}</a>
             @endforeach
@@ -127,10 +127,10 @@
         @endif
 
         @else
-        <div class="empty-state">
+        <div class="empty-state reveal">
             <i class="fas fa-code"></i>
-            <h3>No projects yet</h3>
-            <p>Check back soon!</p>
+            <h3>{{ __('No projects yet') }}</h3>
+            <p>{{ __('Check back soon!') }}</p>
         </div>
         @endif
     </div>

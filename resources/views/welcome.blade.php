@@ -20,6 +20,30 @@
                     radial-gradient(ellipse 60% 60% at 80% 50%, rgba(6,182,212,0.1) 0%, transparent 60%);
     }
 
+    /* Ambient Floating Glow Blobs */
+    .hero-glow-blob {
+        position: absolute; border-radius: 50%; filter: blur(75px);
+        pointer-events: none; z-index: 0; opacity: 0.4;
+    }
+    .blob-1 {
+        width: 380px; height: 380px; top: 5%; left: 0%;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, transparent 70%);
+        animation: floatBlob1 14s ease-in-out infinite alternate;
+    }
+    .blob-2 {
+        width: 420px; height: 420px; bottom: 5%; right: 0%;
+        background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, transparent 70%);
+        animation: floatBlob2 16s ease-in-out infinite alternate;
+    }
+    @keyframes floatBlob1 {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(50px, 30px) scale(1.12); }
+    }
+    @keyframes floatBlob2 {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(-45px, -35px) scale(1.15); }
+    }
+
     .hero-grid {
         position: absolute; inset: 0; z-index: -1;
         background-size: 40px 40px;
@@ -33,14 +57,17 @@
 
     .hero-badge {
         display: inline-flex; align-items: center; gap: 0.5rem;
-        padding: 0.3rem 0.85rem; border-radius: 50px;
+        padding: 0.35rem 0.9rem; border-radius: 50px;
         background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
         color: var(--accent-light); font-size: 0.85rem; font-weight: 600;
-        margin-bottom: 1rem; animation: fadeInDown 0.6s ease;
-        text-decoration: none; transition: background 0.3s;
+        margin-bottom: 1.25rem; animation: fadeInDown 0.6s ease;
+        text-decoration: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
     }
     .hero-badge:hover {
         background: rgba(124,58,237,0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(99, 102, 241, 0.2);
     }
 
     .hero-badge .dot {
@@ -48,7 +75,7 @@
         box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite;
     }
 
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
 
     .hero h1 {
         font-size: clamp(2rem, 5.5vw, 3.8rem); font-weight: 900;
@@ -98,9 +125,15 @@
         background: var(--bg-card); border: 1px solid var(--border);
         padding: 0.5rem 1rem; border-radius: 50px;
         font-size: 0.9rem; font-weight: 600;
-        transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.4rem;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: inline-flex; align-items: center; gap: 0.45rem;
     }
-    .skill-pill:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99,102,241,0.1); }
+    .skill-pill:hover {
+        border-color: var(--accent); color: var(--accent);
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 8px 20px rgba(99,102,241,0.15);
+    }
+    .skill-pill i { transition: transform 0.3s ease; }
+    .skill-pill:hover i { transform: scale(1.2) rotate(15deg); }
 
 
     /* ===== EXPERIENCE ===== */
@@ -116,6 +149,13 @@
         width: 12px; height: 12px; border-radius: 50%;
         background: var(--accent); border: 2px solid var(--bg-primary);
         box-shadow: 0 0 12px var(--accent-glow);
+        animation: pulseNode 3s infinite;
+    }
+
+    @keyframes pulseNode {
+        0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6); }
+        70% { box-shadow: 0 0 0 9px rgba(99, 102, 241, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
     }
 
     .timeline-date {
@@ -132,17 +172,22 @@
     .project-card {
         background: var(--bg-card); border: 1px solid var(--border);
         border-radius: 16px; overflow: hidden;
-        transition: all 0.3s ease; display: flex; flex-direction: column;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+        display: flex; flex-direction: column;
     }
-    .project-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-6px); box-shadow: 0 25px 60px rgba(0,0,0,0.08); }
+    .project-card:hover {
+        border-color: rgba(99,102,241,0.4);
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(99,102,241,0.12), 0 4px 15px rgba(0,0,0,0.04);
+    }
 
     .project-image {
         height: 200px; overflow: hidden; position: relative;
         background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
         display: flex; align-items: center; justify-content: center;
     }
-    .project-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-    .project-card:hover .project-image img { transform: scale(1.05); }
+    .project-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .project-card:hover .project-image img { transform: scale(1.08); }
     .project-image-placeholder { font-size: 3rem; opacity: 0.4; }
 
     .project-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
@@ -158,17 +203,22 @@
     .blog-card {
         background: var(--bg-card); border: 1px solid var(--border);
         border-radius: 16px; overflow: hidden;
-        transition: all 0.3s ease; display: flex; flex-direction: column;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+        display: flex; flex-direction: column;
         text-decoration: none; color: inherit;
     }
-    .blog-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.06); }
+    .blog-card:hover {
+        border-color: rgba(99,102,241,0.4);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 45px rgba(99,102,241,0.12), 0 4px 15px rgba(0,0,0,0.04);
+    }
 
     .blog-image {
         height: 180px; overflow: hidden;
         background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
     }
-    .blog-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-    .blog-card:hover .blog-image img { transform: scale(1.05); }
+    .blog-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .blog-card:hover .blog-image img { transform: scale(1.08); }
 
     .blog-body { padding: 1.25rem; flex: 1; }
     .blog-date { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
@@ -192,6 +242,7 @@
         .hero-scroll { display: none; }
         .skills-categories { gap: 2rem; }
         .cta-section { padding: 3.5rem 0; }
+        .blob-1, .blob-2 { opacity: 0.25; filter: blur(60px); }
     }
 
     @media (max-width: 640px) {
@@ -227,6 +278,8 @@
 <!-- ===== HERO ===== -->
 <section class="hero">
     <div class="hero-bg"></div>
+    <div class="hero-glow-blob blob-1"></div>
+    <div class="hero-glow-blob blob-2"></div>
     <div class="hero-grid"></div>
     <div class="container">
         <div class="hero-content">
@@ -256,10 +309,10 @@
 @if($skills->count())
 <section class="section skills-section">
     <div class="container">
-        <h2 class="section-title">{{ __('Technical') }} <span class="gradient-text">{{ __('Skills') }}</span></h2>
-        <p class="section-subtitle">{{ __('Technologies and tools I work with every day') }}</p>
+        <h2 class="section-title reveal">{{ __('Technical') }} <span class="gradient-text">{{ __('Skills') }}</span></h2>
+        <p class="section-subtitle reveal delay-1">{{ __('Technologies and tools I work with every day') }}</p>
 
-        <div class="skills-categories">
+        <div class="skills-categories reveal delay-2">
             @foreach($skills as $category => $categorySkills)
             <div>
                 <div class="skill-category-title">
@@ -284,13 +337,13 @@
 @if($experiences->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title">{{ __('Work') }} <span class="gradient-text">{{ __('Experience') }}</span></h2>
-        <p class="section-subtitle">{{ __('My professional journey so far') }}</p>
+        <h2 class="section-title reveal">{{ __('Work') }} <span class="gradient-text">{{ __('Experience') }}</span></h2>
+        <p class="section-subtitle reveal delay-1">{{ __('My professional journey so far') }}</p>
 
         <div style="max-width:700px; margin:0 auto">
             <div class="timeline">
                 @foreach($experiences as $exp)
-                <div class="timeline-item">
+                <div class="timeline-item reveal delay-{{ ($loop->index % 3) + 1 }}">
                     <div class="timeline-date">
                         {{ $exp->start_date->format('M Y') }} —
                         {{ $exp->current ? __('Present') : ($exp->end_date ? $exp->end_date->format('M Y') : '?') }}
@@ -310,12 +363,12 @@
 @if($featuredProjects->count())
 <section class="section" style="background: var(--bg-secondary)">
     <div class="container">
-        <h2 class="section-title">{{ __('Featured') }} <span class="gradient-text">{{ __('Projects') }}</span></h2>
-        <p class="section-subtitle">{{ __('Some of my recent and favourite work') }}</p>
+        <h2 class="section-title reveal">{{ __('Featured') }} <span class="gradient-text">{{ __('Projects') }}</span></h2>
+        <p class="section-subtitle reveal delay-1">{{ __('Some of my recent and favourite work') }}</p>
 
         <div class="projects-grid">
             @foreach($featuredProjects as $project)
-            <div class="project-card">
+            <div class="project-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="project-image">
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
@@ -351,7 +404,7 @@
             @endforeach
         </div>
 
-        <div style="text-align:center; margin-top:2.5rem">
+        <div style="text-align:center; margin-top:2.5rem" class="reveal delay-2">
             <a href="{{ route('projects.index') }}" class="btn btn-outline">
                 <i class="fas fa-th-large"></i> {{ __('View All Projects') }}
             </a>
@@ -364,12 +417,12 @@
 @if($recentPosts->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title">{{ __('Recent') }} <span class="gradient-text">{{ __('Articles') }}</span></h2>
-        <p class="section-subtitle">{{ __('Thoughts, learnings and insights from my journey') }}</p>
+        <h2 class="section-title reveal">{{ __('Recent') }} <span class="gradient-text">{{ __('Articles') }}</span></h2>
+        <p class="section-subtitle reveal delay-1">{{ __('Thoughts, learnings and insights from my journey') }}</p>
 
         <div class="blog-grid">
             @foreach($recentPosts as $post)
-            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
+            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="blog-image">
                     @if($post->image)
                         <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
@@ -389,7 +442,7 @@
             @endforeach
         </div>
 
-        <div style="text-align:center; margin-top:2.5rem">
+        <div style="text-align:center; margin-top:2.5rem" class="reveal delay-2">
             <a href="{{ route('blog.index') }}" class="btn btn-outline">
                 <i class="fas fa-book-open"></i> {{ __('Read All Articles') }}
             </a>
@@ -400,7 +453,7 @@
 
 <!-- ===== CTA ===== -->
 <section class="cta-section">
-    <div class="container">
+    <div class="container reveal">
         <h2>{{ __("Let's build something") }} <span class="gradient-text">{{ __('amazing') }}</span> {{ __('together') }}</h2>
         <p>{{ __("I'm always open to interesting projects and opportunities.") }}</p>
         <a href="mailto:hothanhthien119@gmail.com" class="btn btn-primary">

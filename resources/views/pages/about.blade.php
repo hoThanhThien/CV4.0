@@ -7,17 +7,34 @@
 <style>
     .about-hero {
         padding: 5rem 0 3rem;
-        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
+        position: relative; overflow: hidden;
+        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.18) 0%, transparent 70%);
     }
 
     .about-intro { display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center; margin-bottom: 5rem; }
 
     .about-avatar {
-        width: 200px; height: 200px; border-radius: 24px;
+        width: 200px; height: 200px; border-radius: 28px;
         background: var(--gradient);
         display: flex; align-items: center; justify-content: center;
         font-size: 5rem; font-weight: 900; color: white;
-        box-shadow: 0 0 60px var(--accent-glow); flex-shrink: 0;
+        box-shadow: 0 10px 40px var(--accent-glow); flex-shrink: 0;
+        animation: floatAvatar 6s ease-in-out infinite alternate;
+        position: relative;
+    }
+    .about-avatar::after {
+        content: ''; position: absolute; inset: -4px; border-radius: 32px;
+        border: 2px solid rgba(99, 102, 241, 0.3); pointer-events: none;
+        animation: pulseRing 3s ease-in-out infinite;
+    }
+    @keyframes floatAvatar {
+        0% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-8px) rotate(1deg); }
+        100% { transform: translateY(0) rotate(0deg); }
+    }
+    @keyframes pulseRing {
+        0%, 100% { transform: scale(1); opacity: 0.6; }
+        50% { transform: scale(1.05); opacity: 0.2; }
     }
 
     .about-text h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); font-weight: 900; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
@@ -31,16 +48,29 @@
         background: var(--bg-card); border: 1px solid var(--border);
         padding: 0.5rem 1rem; border-radius: 50px;
         font-size: 0.9rem; font-weight: 600;
-        transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.4rem;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: inline-flex; align-items: center; gap: 0.45rem;
     }
-    .skill-pill:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99,102,241,0.1); }
+    .skill-pill:hover {
+        border-color: var(--accent); color: var(--accent);
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 8px 20px rgba(99,102,241,0.15);
+    }
+    .skill-pill i { transition: transform 0.3s ease; }
+    .skill-pill:hover i { transform: scale(1.2) rotate(15deg); }
+
     .skill-category-title { font-size: 1rem; font-weight: 700; color: var(--accent-light); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
     .skill-category-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
     .timeline { position: relative; padding-left: 1.75rem; }
     .timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent); }
     .timeline-item { position: relative; margin-bottom: 2.25rem; }
-    .timeline-item::before { content: ''; position: absolute; left: calc(-1.75rem); top: 0.35rem; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg-primary); box-shadow: 0 0 12px var(--accent-glow); }
+    .timeline-item::before {
+        content: ''; position: absolute; left: calc(-1.75rem); top: 0.35rem;
+        width: 12px; height: 12px; border-radius: 50%;
+        background: var(--accent); border: 2px solid var(--bg-primary);
+        box-shadow: 0 0 12px var(--accent-glow);
+        animation: pulseNode 3s infinite;
+    }
     .timeline-date { font-size: 0.78rem; font-weight: 700; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
     .timeline-company { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.15rem; }
     .timeline-position { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem; }
@@ -49,7 +79,7 @@
     @media (max-width: 768px) {
         .about-hero { padding: 3.5rem 0 2rem; }
         .about-intro { grid-template-columns: 1fr; gap: 2rem; text-align: center; margin-bottom: 3rem; }
-        .about-avatar { margin: 0 auto; width: 140px; height: 140px; font-size: 3.5rem; border-radius: 20px; }
+        .about-avatar { margin: 0 auto; width: 140px; height: 140px; font-size: 3.5rem; border-radius: 24px; }
         .about-actions { justify-content: center; }
     }
 
@@ -67,8 +97,8 @@
 <section class="about-hero">
     <div class="container">
         <div class="about-intro">
-            <div class="about-avatar">T</div>
-            <div class="about-text">
+            <div class="about-avatar reveal-fade">T</div>
+            <div class="about-text reveal delay-1">
                 <h1>{{ __("Hi, I'm") }} <span class="gradient-text">{{ __('Hồ Thành Thiện') }}</span></h1>
                 <div class="role">⚡ {{ __('Full-Stack Developer & Problem Solver') }}</div>
                 <p>{{ __("I'm a passionate developer with a love for building clean, performant, and user-friendly web applications. I bridge the gap between design and functionality to create digital experiences that matter.") }}</p>
@@ -89,10 +119,10 @@
 @if($skills->count())
 <section class="section skills-section">
     <div class="container">
-        <h2 class="section-title">{{ __('My') }} <span class="gradient-text">{{ __('Skills') }}</span></h2>
-        <p class="section-subtitle">{{ __('Technologies I work with') }}</p>
+        <h2 class="section-title reveal">{{ __('My') }} <span class="gradient-text">{{ __('Skills') }}</span></h2>
+        <p class="section-subtitle reveal delay-1">{{ __('Technologies I work with') }}</p>
 
-        <div style="display:flex; flex-direction:column; gap:3rem">
+        <div style="display:flex; flex-direction:column; gap:3rem" class="reveal delay-2">
             @foreach($skills as $category => $categorySkills)
             <div>
                 <div class="skill-category-title"><i class="fas fa-layer-group"></i> {{ $category }}</div>
@@ -114,12 +144,12 @@
 @if($experiences->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title">{{ __('Work') }} <span class="gradient-text">{{ __('Experience') }}</span></h2>
-        <p class="section-subtitle">{{ __('My professional journey') }}</p>
+        <h2 class="section-title reveal">{{ __('Work') }} <span class="gradient-text">{{ __('Experience') }}</span></h2>
+        <p class="section-subtitle reveal delay-1">{{ __('My professional journey') }}</p>
         <div style="max-width:700px; margin:0 auto">
             <div class="timeline">
                 @foreach($experiences as $exp)
-                <div class="timeline-item">
+                <div class="timeline-item reveal delay-{{ ($loop->index % 3) + 1 }}">
                     <div class="timeline-date">
                         {{ $exp->start_date->format('M Y') }} —
                         {{ $exp->current ? __('Present') : ($exp->end_date ? $exp->end_date->format('M Y') : '?') }}
