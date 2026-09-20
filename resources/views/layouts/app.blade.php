@@ -703,11 +703,6 @@
 
     <!-- Page Content -->
     <main class="page-content">
-        @if(session('success'))
-            <div class="container" style="padding-top:1rem">
-                <div class="alert alert-success">{{ session('success') }}</div>
-            </div>
-        @endif
         @yield('content')
     </main>
 
