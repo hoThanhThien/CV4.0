@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('title', __('Blog') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', 'Articles and thoughts on web development, technology and software engineering.')
+@section('description', __('Thoughts, tutorials and learnings from the dev trenches'))
+@section('keywords', 'Blog Hồ Thành Thiện, Lập trình web, Kiến thức Laravel, PHP Tips, Clean Code, Web Development')
 
 @section('styles')
 <style>

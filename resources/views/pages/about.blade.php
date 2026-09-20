@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('title', __('About Me') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', 'Learn more about Hồ Thành Thiện - Full-Stack Developer, his experience, skills and background.')
+@section('description', __('I\'m a passionate developer with a love for building clean, performant, and user-friendly web applications. I bridge the gap between design and functionality to create digital experiences that matter.'))
+@section('keywords', 'Về Hồ Thành Thiện, Hồ Thành Thiện Full-Stack Developer, Kinh nghiệm lập trình, Kỹ năng Web Developer')
 
 @section('styles')
 <style>

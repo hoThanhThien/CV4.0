@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('title', __('Projects') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', 'Explore my portfolio of web development projects built with modern technologies.')
+@section('description', __('Things I\'ve built and worked on'))
+@section('keywords', 'Dự án Hồ Thành Thiện, Portfolio Dự án, Web Apps, Laravel Projects, Vue.js Projects')
 
 @section('styles')
 <style>

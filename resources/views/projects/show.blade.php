@@ -1,6 +1,33 @@
 @extends('layouts.app')
 
-@section('title', $project->title . ' | Projects')
+@section('title', $project->title . ' | ' . __('Hồ Thành Thiện'))
+@section('description', Str::limit(strip_tags($project->description), 155))
+@section('og_type', 'article')
+@section('og_image', $project->image ? asset('storage/' . $project->image) : asset('images/og-image.png'))
+
+@section('structured_data')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{ e($project->title) }}",
+  "description": "{{ e(Str::limit(strip_tags($project->description), 200)) }}",
+  "applicationCategory": "WebApplication",
+  "operatingSystem": "All",
+  "author": {
+    "@type": "Person",
+    "name": "Hồ Thành Thiện",
+    "url": "{{ url('/') }}"
+  }
+  @if($project->image)
+  ,"image": "{{ asset('storage/' . $project->image) }}"
+  @endif
+  @if($project->demo_url)
+  ,"url": "{{ $project->demo_url }}"
+  @endif
+}
+</script>
+@endsection
 
 @section('styles')
 <style>

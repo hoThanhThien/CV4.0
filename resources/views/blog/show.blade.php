@@ -1,7 +1,39 @@
 @extends('layouts.app')
 
-@section('title', $post->title . ' | Blog')
-@section('description', $post->excerpt ?? Str::limit(strip_tags($post->content), 160))
+@section('title', $post->title . ' | ' . __('Hồ Thành Thiện'))
+@section('description', $post->excerpt ? Str::limit(strip_tags($post->excerpt), 155) : Str::limit(strip_tags($post->content), 155))
+@section('og_type', 'article')
+@section('og_image', $post->image ? asset('storage/' . $post->image) : asset('images/og-image.png'))
+
+@section('structured_data')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ e($post->title) }}",
+  "description": "{{ e($post->excerpt ? Str::limit(strip_tags($post->excerpt), 180) : Str::limit(strip_tags($post->content), 180)) }}",
+  "author": {
+    "@type": "Person",
+    "name": "Hồ Thành Thiện",
+    "url": "{{ url('/') }}"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Hồ Thành Thiện",
+    "url": "{{ url('/') }}"
+  },
+  "datePublished": "{{ $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String() }}",
+  "dateModified": "{{ $post->updated_at->toIso8601String() }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ url()->current() }}"
+  }
+  @if($post->image)
+  ,"image": "{{ asset('storage/' . $post->image) }}"
+  @endif
+}
+</script>
+@endsection
 
 @section('styles')
 <style>

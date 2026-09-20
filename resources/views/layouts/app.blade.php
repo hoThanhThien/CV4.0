@@ -1,16 +1,76 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@yield('description', 'Full-Stack Developer Portfolio - Building modern web applications')">
-    <meta property="og:title" content="@yield('title', __('Hồ Thành Thiện') . ' | Developer')">
-    <meta property="og:description" content="@yield('description', 'Full-Stack Developer Portfolio - Building modern web applications')">
-    <meta property="og:image" content="{{ asset('images/og-image.png') }}">
+    <title>@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')</title>
+
+    <!-- Core SEO Meta Tags -->
+    <meta name="description" content="@yield('description', 'Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, chuẩn kiến trúc, tối ưu hiệu năng và trải nghiệm người dùng.')">
+    <meta name="keywords" content="@yield('keywords', 'Hồ Thành Thiện, Full-Stack Developer, Web Developer, Lập trình viên Laravel, PHP Developer, JavaScript, Vue.js, React, Clean Code, Portfolio')">
+    <meta name="author" content="Hồ Thành Thiện">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Canonical & Multi-Language Alternate URLs -->
+    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="alternate" hreflang="vi" href="{{ url()->current() }}?lang=vi">
+    <link rel="alternate" hreflang="en" href="{{ url()->current() }}?lang=en">
+    <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="Hồ Thành Thiện | Portfolio">
+    <meta property="og:locale" content="{{ app()->getLocale() == 'vi' ? 'vi_VN' : 'en_US' }}">
+    <meta property="og:locale:alternate" content="{{ app()->getLocale() == 'vi' ? 'en_US' : 'vi_VN' }}">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:title" content="@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')">
+    <meta property="og:description" content="@yield('description', 'Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, chuẩn kiến trúc, tối ưu hiệu năng.')">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:type" content="website">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-image.png'))">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')">
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <title>@yield('title', __('Hồ Thành Thiện') . ' | Developer') </title>
+    <meta name="twitter:title" content="@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')">
+    <meta name="twitter:description" content="@yield('description', 'Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, chuẩn kiến trúc, tối ưu hiệu năng.')">
+    <meta name="twitter:image" content="@yield('og_image', asset('images/og-image.png'))">
+    <meta name="twitter:creator" content="@hoThanhThien">
+
+    <!-- Global Structured Data (Schema.org / JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "{{ url('/') }}#website",
+          "url": "{{ url('/') }}",
+          "name": "Hồ Thành Thiện - Full-Stack Developer",
+          "description": "Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, tối ưu hiệu năng.",
+          "inLanguage": "{{ app()->getLocale() }}"
+        },
+        {
+          "@type": "Person",
+          "@id": "{{ url('/') }}#person",
+          "name": "Hồ Thành Thiện",
+          "jobTitle": "Full-Stack Developer",
+          "url": "{{ url('/') }}",
+          "image": "{{ asset('images/og-image.png') }}",
+          "email": "hothanhthien119@gmail.com",
+          "sameAs": [
+            "https://github.com/hoThanhThien"
+          ],
+          "knowsAbout": ["PHP", "Laravel", "JavaScript", "Vue.js", "React", "MySQL", "RESTful API", "Full-Stack Development"]
+        }
+      ]
+    }
+    </script>
+    @yield('structured_data')
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,6 +136,8 @@
             color: var(--accent);
             text-decoration: none;
             letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1002;
         }
 
         /* Scroll Progress Bar */
@@ -133,16 +195,20 @@
             color: var(--text-primary); width: 42px; height: 42px; border-radius: 10px;
             align-items: center; justify-content: center; font-size: 1.15rem; cursor: pointer;
             transition: all 0.2s ease;
+            position: relative;
+            z-index: 1002;
         }
         .hamburger:hover { background: var(--bg-secondary); border-color: var(--accent); }
         .hamburger:active { transform: scale(0.95); }
 
         .nav-backdrop {
-            display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            display: none; position: fixed; inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
             z-index: 998; opacity: 0; transition: opacity 0.3s ease;
+            pointer-events: none;
         }
-        .nav-backdrop.open { display: block; opacity: 1; }
+        .nav-backdrop.open { display: block; opacity: 1; pointer-events: auto; }
 
         /* Page content offset for fixed navbar */
         .page-content { padding-top: 70px; min-height: calc(100vh - 200px); }
@@ -352,33 +418,61 @@
             }
             .nav-links {
                 position: absolute; top: 100%; left: 0; right: 0;
-                background: rgba(255, 255, 255, 0.98);
-                backdrop-filter: blur(25px);
-                -webkit-backdrop-filter: blur(25px);
-                padding: 1.25rem; border-bottom: 1px solid var(--border);
-                box-shadow: 0 16px 32px rgba(0,0,0,0.08);
-                flex-direction: column; align-items: stretch; gap: 0.4rem;
-                opacity: 0; visibility: hidden; transform: translateY(-8px);
-                transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-                max-height: calc(100vh - 65px); overflow-y: auto;
+                background: #ffffff !important;
+                padding: 1.25rem 1.25rem 1.75rem;
+                border-bottom: 2px solid var(--border);
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                flex-direction: column; align-items: stretch; gap: 0.5rem;
+                opacity: 0; visibility: hidden; transform: translateY(-10px);
+                transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
+                max-height: calc(100vh - 65px);
+                max-height: calc(100dvh - 65px);
+                overflow-y: auto;
+                z-index: 1001;
             }
             .nav-links.open {
                 opacity: 1; visibility: visible; transform: translateY(0);
             }
-            .nav-links a {
-                padding: 0.8rem 1rem; font-size: 0.95rem; border-radius: 10px;
-                display: block; width: 100%;
+            .nav-links a:not(.btn) {
+                padding: 0.9rem 1.15rem; font-size: 1rem; font-weight: 600;
+                border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
+                width: 100%; color: var(--text-primary);
+                background: #f8fafc;
+                border: 1px solid transparent;
+                transition: all 0.2s ease;
+            }
+            .nav-links a:not(.btn):hover, .nav-links a:not(.btn).active {
+                color: var(--accent);
+                background: rgba(99, 102, 241, 0.08);
+                border-color: rgba(99, 102, 241, 0.2);
             }
             .nav-cta {
-                text-align: center; justify-content: center;
-                margin-top: 0.5rem; padding: 0.85rem 1.25rem !important;
+                text-align: center; justify-content: center !important;
+                margin-top: 0.5rem; padding: 0.95rem 1.25rem !important;
+                font-size: 1rem !important; font-weight: 700 !important;
+                border-radius: 12px !important;
+                display: flex !important; width: 100% !important;
             }
             .lang-switcher {
-                margin-left: 0; margin-top: 0.75rem; padding: 0.4rem 0.75rem;
-                justify-content: center; width: 100%; border-radius: 10px;
+                margin-left: 0; margin-top: 0.5rem; padding: 0.35rem;
+                justify-content: center; width: 100%; border-radius: 12px;
+                background: #f1f5f9;
+                border: 1px solid var(--border);
+                display: flex; gap: 0.35rem;
             }
             .lang-switcher a {
-                flex: 1; text-align: center; padding: 0.4rem 0.5rem !important;
+                flex: 1; text-align: center; padding: 0.55rem 0.75rem !important;
+                border-radius: 8px; font-weight: 700; font-size: 0.9rem;
+                justify-content: center;
+                background: transparent !important;
+                color: var(--text-secondary) !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .lang-switcher a.active {
+                background: #ffffff !important;
+                color: var(--accent) !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
             }
 
             .container { padding: 0 1.25rem; }
@@ -449,7 +543,6 @@
         <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
             <i class="fas fa-bars" id="hamburger-icon"></i>
         </button>
-        <div class="nav-backdrop" id="nav-backdrop"></div>
         <ul class="nav-links" id="nav-links">
             <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">{{ __('Home') }}</a></li>
             <li><a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'active' : '' }}">{{ __('Projects') }}</a></li>
@@ -463,6 +556,7 @@
             </li>
         </ul>
     </nav>
+    <div class="nav-backdrop" id="nav-backdrop"></div>
 
     <!-- Page Content -->
     <main class="page-content">
