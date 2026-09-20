@@ -637,6 +637,19 @@
         .back-to-top:hover {
             background: var(--accent-light); transform: translateY(-3px); box-shadow: 0 6px 16px var(--accent-glow);
         }
+        .back-to-top.hide-on-focus {
+            opacity: 0 !important; pointer-events: none !important; transform: translateY(20px) !important;
+        }
+        @media (max-width: 768px) {
+            .back-to-top {
+                bottom: 1.25rem; right: 1rem; width: 40px; height: 40px; font-size: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .back-to-top {
+                bottom: 1rem; right: 0.85rem; width: 38px; height: 38px; font-size: 0.95rem;
+            }
+        }
 
         /* Noise overlay */
         body::before {
@@ -664,8 +677,7 @@
             <li><a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'active' : '' }}">{{ __('Projects') }}</a></li>
             <li><a href="{{ route('blog.index') }}" class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">{{ __('Blog') }}</a></li>
             <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">{{ __('About') }}</a></li>
-            <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('Contact') }}</a></li>
-            <li><a href="{{ route('contact') }}" class="btn btn-primary nav-cta">{{ __('Hire Me') }}</a></li>
+            <li><a href="{{ route('contact') }}" class="btn btn-primary nav-cta {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('Contact') }}</a></li>
             <li class="lang-switcher" role="group" aria-label="Language selection">
                 <a href="{{ route('lang.switch', 'vi') }}" class="lang-btn {{ session('locale') == 'vi' ? 'active' : '' }}" title="Tiếng Việt">
                     <svg class="flag-icon" viewBox="0 0 640 480" width="18" height="13.5" aria-hidden="true">

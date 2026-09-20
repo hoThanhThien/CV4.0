@@ -239,15 +239,126 @@
         color: #10b981; font-size: 1.3rem; margin-top: 0.1rem;
     }
 
-    @media (max-width: 860px) {
-        .contact-layout { grid-template-columns: 1fr; gap: 2rem; }
-        .contact-hero { padding: 3.5rem 0 1.5rem; }
+    /* Quick Contact Chips under Hero */
+    .contact-quick-chips {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 1.25rem;
     }
-    @media (max-width: 480px) {
-        .form-card { padding: 1.5rem 1.25rem; }
-        .captcha-container { flex-direction: column; align-items: stretch; }
-        .captcha-img-wrap { justify-content: center; }
-        .captcha-img-wrap img { width: 100%; max-width: 180px; }
+    .contact-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 1rem;
+        border-radius: 50px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .contact-chip:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.18);
+    }
+    .contact-chip i {
+        color: var(--accent);
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 860px) {
+        .contact-hero { padding: 3.5rem 0 1.5rem; }
+        .contact-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            padding-bottom: 5rem;
+        }
+        .form-card {
+            order: 1;
+            padding: 1.75rem 1.5rem;
+        }
+        .info-group {
+            order: 2;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .info-card.info-card-full {
+            grid-column: 1 / -1;
+        }
+        .grecaptcha-badge-floating {
+            display: none !important;
+        }
+        .reveal-left, .reveal-right {
+            transform: translateY(20px) !important;
+        }
+    }
+
+    @media (max-width: 580px) {
+        .contact-hero h1 { font-size: 1.85rem; }
+        .contact-quick-chips { gap: 0.5rem; }
+        .contact-chip { font-size: 0.82rem; padding: 0.38rem 0.75rem; }
+        .info-group {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+        }
+        .info-card {
+            padding: 1.15rem 1.15rem;
+            border-radius: 14px;
+        }
+        .info-icon {
+            width: 38px;
+            height: 38px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+        .info-card-title {
+            font-size: 0.82rem;
+        }
+        .info-card-value {
+            font-size: 0.98rem;
+        }
+        .form-card {
+            padding: 1.35rem 1.15rem;
+            border-radius: 16px;
+        }
+        .form-card-title {
+            font-size: 1.25rem;
+        }
+        .form-card-subtitle {
+            font-size: 0.88rem;
+            margin-bottom: 1.25rem;
+        }
+        .form-control {
+            font-size: 16px !important; /* Prevents iOS Safari auto-zoom */
+            padding: 0.78rem 0.9rem;
+            border-radius: 10px;
+        }
+        .form-label {
+            font-size: 0.85rem;
+            margin-bottom: 0.35rem;
+        }
+        .btn-submit {
+            min-height: 48px;
+            font-size: 1rem;
+            border-radius: 10px;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .recaptcha-v3-text {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            padding-bottom: 0.25rem;
+        }
     }
 </style>
 @endsection
@@ -261,6 +372,18 @@
         </span>
         <h1 class="reveal">{!! __('heading_contact') !!}</h1>
         <p class="reveal delay-1">{{ __('I\'m always open to interesting projects and opportunities.') }}</p>
+
+        <div class="contact-quick-chips reveal delay-2">
+            <a href="mailto:hothanhthien119@gmail.com" class="contact-chip">
+                <i class="fas fa-envelope"></i> hothanhthien119@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="contact-chip">
+                <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="contact-chip">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
     </div>
 </div>
 
@@ -271,7 +394,7 @@
             <!-- Left: Info Cards -->
             <div class="info-group reveal-left">
                 <!-- Status -->
-                <div class="info-card">
+                <div class="info-card info-card-full">
                     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem">
                         <span class="info-card-title">{{ __('Availability') }}</span>
                         <span class="status-badge">
@@ -309,13 +432,13 @@
                 </div>
 
                 <!-- Socials -->
-                <div class="info-card">
+                <div class="info-card info-card-full">
                     <div class="info-card-title" style="margin-bottom:0.75rem">{{ __('Follow & Connect') }}</div>
-                    <div style="display:flex; gap:0.75rem">
-                        <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex:1; justify-content:center">
+                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap">
+                        <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex:1; min-width:120px; justify-content:center">
                             <i class="fab fa-github"></i> GitHub
                         </a>
-                        <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex:1; justify-content:center">
+                        <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex:1; min-width:120px; justify-content:center">
                             <i class="fab fa-linkedin"></i> LinkedIn
                         </a>
                     </div>
@@ -483,11 +606,28 @@
 @endif
 
 <script>
-    // Auto focus name input
+    // Mobile-friendly focus interaction:
+    // Only auto-focus on desktop screens to prevent mobile viewport jump/keyboard trigger
     window.addEventListener('DOMContentLoaded', () => {
         const nameInput = document.getElementById('name');
-        if (nameInput && !nameInput.value) {
+        if (window.innerWidth > 768 && nameInput && !nameInput.value) {
             nameInput.focus();
+        }
+
+        // Auto-hide floating back-to-top button when focusing inputs in the form
+        const backToTopBtn = document.getElementById('backToTop');
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm && backToTopBtn) {
+            contactForm.addEventListener('focusin', () => {
+                backToTopBtn.classList.add('hide-on-focus');
+            });
+            contactForm.addEventListener('focusout', () => {
+                setTimeout(() => {
+                    if (!contactForm.contains(document.activeElement)) {
+                        backToTopBtn.classList.remove('hide-on-focus');
+                    }
+                }, 100);
+            });
         }
     });
 </script>
