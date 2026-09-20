@@ -62,24 +62,86 @@
     .skill-category-title { font-size: 1rem; font-weight: 700; color: var(--accent-light); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
     .skill-category-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .timeline { position: relative; padding-left: 2rem; }
+    /* ===== EXPERIENCE TIMELINE (TECH GLOW & INTERACTIVE NODES) ===== */
+    .timeline {
+        position: relative;
+        padding-left: 3.75rem;
+    }
     .timeline::before {
-        content: ''; position: absolute; left: 8px; top: 1.5rem; bottom: 1.5rem;
-        width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, rgba(99, 102, 241, 0.2) 100%);
+        content: '';
+        position: absolute;
+        left: 20.5px;
+        top: 24px;
+        bottom: 24px;
+        width: 3px;
+        background: linear-gradient(180deg, var(--accent) 0%, #8b5cf6 45%, #06b6d4 85%, rgba(6, 182, 212, 0) 100%);
+        border-radius: 99px;
+        box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
     }
 
-    .timeline-item { position: relative; margin-bottom: 2rem; }
-    .timeline-item::before {
-        content: ''; position: absolute; left: -2rem; top: 1.5rem;
-        width: 18px; height: 18px; border-radius: 50%;
-        background: var(--bg-primary); border: 4px solid var(--accent);
-        box-shadow: 0 0 12px var(--accent-glow);
-        z-index: 2; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    .timeline-item {
+        position: relative;
+        margin-bottom: 2.25rem;
     }
-    .timeline-item:hover::before {
-        background: var(--accent);
-        transform: scale(1.2);
-        box-shadow: 0 0 18px var(--accent);
+    .timeline-item:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Modern Node Marker */
+    .timeline-marker {
+        position: absolute;
+        left: -3.75rem;
+        top: 1.25rem;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+    }
+
+    .timeline-marker-inner {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)), var(--bg-card);
+        border: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 0.95rem;
+        box-shadow: 0 0 16px rgba(99, 102, 241, 0.25), inset 0 0 10px rgba(99, 102, 241, 0.12);
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Radar Pulse Animation for current / first role */
+    .timeline-marker-pulse {
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        border: 2px solid var(--accent);
+        opacity: 0.8;
+        animation: timelinePulse 2.4s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    @keyframes timelinePulse {
+        0% { transform: scale(0.92); opacity: 0.85; }
+        70% { transform: scale(1.55); opacity: 0; }
+        100% { transform: scale(1.55); opacity: 0; }
+    }
+
+    /* Hover Interaction on Marker */
+    .timeline-item:hover .timeline-marker-inner {
+        background: linear-gradient(135deg, var(--accent), #06b6d4);
+        border-color: #06b6d4;
+        color: #ffffff;
+        transform: scale(1.15) rotate(10deg);
+        box-shadow: 0 0 24px rgba(99, 102, 241, 0.65), 0 0 12px rgba(6, 182, 212, 0.45);
     }
 
     .timeline-card {
@@ -91,10 +153,36 @@
         transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
     }
-    .timeline-card:hover {
+    /* Arrow indicator connecting card to marker */
+    .timeline-card::before {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 1.75rem;
+        width: 14px;
+        height: 14px;
+        background: var(--bg-card);
+        border-left: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        transform: rotate(45deg);
+        transition: border-color 0.35s ease, background 0.35s ease;
+        z-index: 1;
+    }
+    .timeline-item:hover .timeline-card {
         border-color: rgba(99, 102, 241, 0.4);
-        transform: translateY(-3px) translateX(4px);
-        box-shadow: 0 16px 32px -5px rgba(99, 102, 241, 0.12);
+        transform: translateY(-3px) translateX(6px);
+        box-shadow: 0 16px 36px -6px rgba(99, 102, 241, 0.14);
+    }
+    .timeline-item:hover .timeline-card::before {
+        border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    @media (max-width: 640px) {
+        .timeline { padding-left: 3rem; }
+        .timeline::before { left: 16px; }
+        .timeline-marker { left: -3rem; width: 34px; height: 34px; }
+        .timeline-marker-inner { width: 34px; height: 34px; font-size: 0.8rem; }
+        .timeline-card::before { left: -6px; width: 10px; height: 10px; top: 1.6rem; }
     }
 
     .timeline-header {
@@ -212,6 +300,20 @@
             <div class="timeline">
                 @foreach($experiences as $exp)
                 <div class="timeline-item reveal delay-{{ ($loop->index % 3) + 1 }}">
+                    <div class="timeline-marker">
+                        <div class="timeline-marker-inner">
+                            @if($loop->first)
+                                <i class="fas fa-laptop-code"></i>
+                            @elseif($loop->iteration == 2)
+                                <i class="fas fa-server"></i>
+                            @else
+                                <i class="fas fa-briefcase"></i>
+                            @endif
+                        </div>
+                        @if($loop->first)
+                            <span class="timeline-marker-pulse"></span>
+                        @endif
+                    </div>
                     <div class="timeline-card">
                         <div class="timeline-header">
                             <h3 class="timeline-company">
