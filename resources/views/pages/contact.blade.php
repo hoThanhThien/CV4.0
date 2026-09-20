@@ -315,7 +315,7 @@
                         <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex:1; justify-content:center">
                             <i class="fab fa-github"></i> GitHub
                         </a>
-                        <a href="#" class="btn btn-outline btn-sm" style="flex:1; justify-content:center">
+                        <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex:1; justify-content:center">
                             <i class="fab fa-linkedin"></i> LinkedIn
                         </a>
                     </div>

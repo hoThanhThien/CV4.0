@@ -94,7 +94,8 @@
             "addressCountry": "VN"
           },
           "sameAs": [
-            "https://github.com/hoThanhThien"
+            "https://github.com/hoThanhThien",
+            "https://www.linkedin.com/in/httblackhat"
           ],
           "knowsAbout": ["PHP", "Laravel", "JavaScript", "Vue.js", "React", "MySQL", "RESTful API", "Full-Stack Development", "Clean Architecture"],
           "knowsLanguage": ["vi", "en"]
@@ -709,9 +710,8 @@
             <a href="{{ route('contact') }}">{{ __('Contact') }}</a>
         </nav>
         <div class="footer-socials">
-            <a href="https://github.com/hoThanhThien" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
             <a href="{{ route('contact') }}" aria-label="{{ __('Contact') }}" title="{{ __('Contact') }}"><i class="fas fa-envelope"></i></a>
         </div>
         <p class="footer-copy">&copy; {{ date('Y') }} {{ __('Hồ Thành Thiện') }}. {{ __('Built with Laravel & ♥') }}</p>

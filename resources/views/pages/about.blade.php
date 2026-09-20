@@ -260,6 +260,9 @@
                     <a href="{{ route('contact') }}" class="btn btn-outline">
                         <i class="fas fa-envelope"></i> {{ __('Get In Touch') }}
                     </a>
+                    <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="btn btn-outline">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
                 </div>
             </div>
         </div>
