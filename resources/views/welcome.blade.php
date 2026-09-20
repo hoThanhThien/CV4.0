@@ -553,9 +553,7 @@
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
                     @else
-                        <div class="project-image-placeholder">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
+                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} - Thumbnail" loading="lazy" decoding="async">
                     @endif
                 </div>
                 <div class="project-body">
