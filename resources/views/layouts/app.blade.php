@@ -703,15 +703,15 @@
             <li><a href="{{ route('blog.index') }}" class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">{{ __('Blog') }}</a></li>
             <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">{{ __('About') }}</a></li>
             <li><a href="{{ route('contact') }}" class="btn btn-primary nav-cta {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('Contact') }}</a></li>
-            <li class="lang-switcher" role="group" aria-label="Language selection">
-                <a href="{{ route('lang.switch', 'vi') }}" class="lang-btn {{ session('locale') == 'vi' ? 'active' : '' }}" title="Tiếng Việt">
+            <li class="lang-switcher">
+                <a href="{{ route('lang.switch', 'vi') }}" class="lang-btn {{ session('locale') == 'vi' ? 'active' : '' }}" title="Tiếng Việt" aria-label="Tiếng Việt">
                     <svg class="flag-icon" viewBox="0 0 640 480" width="18" height="13.5" aria-hidden="true">
                         <rect width="640" height="480" fill="#da251d"/>
                         <polygon points="320,120 357,235 477,235 380,305 417,420 320,350 223,420 260,305 163,235 283,235" fill="#ffff00"/>
                     </svg>
                     <span>VI</span>
                 </a>
-                <a href="{{ route('lang.switch', 'en') }}" class="lang-btn {{ session('locale') != 'vi' ? 'active' : '' }}" title="English">
+                <a href="{{ route('lang.switch', 'en') }}" class="lang-btn {{ session('locale') != 'vi' ? 'active' : '' }}" title="English" aria-label="English">
                     <svg class="flag-icon" viewBox="0 0 640 480" width="18" height="13.5" aria-hidden="true">
                         <path fill="#012169" d="M0 0h640v480H0z"/>
                         <path fill="#FFF" d="m75 0 245 180L565 0h75v60L435 240l205 180v60h-75L320 300 75 480H0v-60l205-180L0 60V0h75z"/>
