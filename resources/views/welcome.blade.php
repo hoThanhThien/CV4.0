@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')
+@section('title', __('Hồ Thành Thiện') . ' | ' . (app()->getLocale() == 'vi' ? 'Kỹ sư Full-Stack Web Developer' : 'Full-Stack Software Engineer'))
 @section('description', __('I\'m Hồ Thành Thiện, a Full-Stack Developer crafting modern, scalable, and beautifully designed web applications with a passion for clean code.'))
-@section('keywords', 'Hồ Thành Thiện, Full-Stack Developer, Laravel Developer, PHP Developer, JavaScript, Vue.js, Portfolio, Web Developer Việt Nam')
+@section('keywords', app()->getLocale() == 'vi' ? 'Hồ Thành Thiện, Kỹ sư Full-Stack, Lập trình viên Web, Laravel Developer Việt Nam, PHP Developer, JavaScript, Vue.js, React, Clean Architecture, Tuyển dụng lập trình viên' : 'Ho Thanh Thien, Full-Stack Developer, Web Developer, Laravel Software Engineer, PHP Developer Vietnam, JavaScript, Vue.js, React, Clean Code Architecture')
 
 @section('styles')
 <style>

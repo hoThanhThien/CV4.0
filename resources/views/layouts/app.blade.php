@@ -3,41 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')</title>
+@php
+    $currentLocale = app()->getLocale();
+    $isVi = $currentLocale === 'vi';
+    $currentBaseUrl = url()->current();
+    $canonicalUrl = request()->has('lang') ? $currentBaseUrl . '?lang=' . $currentLocale : $currentBaseUrl;
+    
+    $defaultTitle = $isVi 
+        ? 'Hồ Thành Thiện | Kỹ sư Full-Stack Web Developer' 
+        : 'Ho Thanh Thien | Full-Stack Web Developer Portfolio';
+        
+    $defaultDescription = $isVi 
+        ? 'Portfolio của Hồ Thành Thiện - Kỹ sư Full-Stack Developer chuyên xây dựng ứng dụng web hiện đại, kiến trúc tối ưu, bảo mật cao và trải nghiệm mượt mà.'
+        : 'Portfolio of Ho Thanh Thien - Full-Stack Developer crafting modern, scalable, high-performance web applications with clean architecture and delightful user experiences.';
+        
+    $defaultKeywords = $isVi
+        ? 'Hồ Thành Thiện, Kỹ sư Full-Stack, Lập trình viên Web, Laravel Developer Việt Nam, PHP Developer, JavaScript, Vue.js, React, Clean Architecture, Tuyển dụng lập trình viên, Web Portfolio'
+        : 'Ho Thanh Thien, Full-Stack Developer, Web Developer, Laravel Software Engineer, PHP Developer Vietnam, JavaScript, Vue.js, React, Clean Code, Web Portfolio';
+        
+    $siteName = $isVi ? 'Hồ Thành Thiện | Hồ Sơ Năng Lực & Dự Án' : 'Ho Thanh Thien | Portfolio & Engineering';
+@endphp
+    <title>@yield('title', $defaultTitle)</title>
 
     <!-- Core SEO Meta Tags -->
-    <meta name="description" content="@yield('description', 'Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, chuẩn kiến trúc, tối ưu hiệu năng và trải nghiệm người dùng.')">
-    <meta name="keywords" content="@yield('keywords', 'Hồ Thành Thiện, Full-Stack Developer, Web Developer, Lập trình viên Laravel, PHP Developer, JavaScript, Vue.js, React, Clean Code, Portfolio')">
+    <meta name="description" content="@yield('description', $defaultDescription)">
+    <meta name="keywords" content="@yield('keywords', $defaultKeywords)">
     <meta name="author" content="Hồ Thành Thiện">
+    <meta http-equiv="content-language" content="{{ $currentLocale }}">
+    <meta name="language" content="{{ $isVi ? 'Vietnamese' : 'English' }}">
+    <meta name="geo.region" content="{{ $isVi ? 'VN-SG' : 'VN' }}">
+    <meta name="geo.placename" content="Ho Chi Minh City, Vietnam">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="theme-color" content="#6366f1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- Canonical & Multi-Language Alternate URLs -->
-    <link rel="canonical" href="{{ url()->current() }}">
-    <link rel="alternate" hreflang="vi" href="{{ url()->current() }}?lang=vi">
-    <link rel="alternate" hreflang="en" href="{{ url()->current() }}?lang=en">
-    <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}">
+    <!-- Canonical & Multi-Language Alternate URLs (Hreflang for Google SEO) -->
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+    <link rel="alternate" hreflang="vi" href="{{ $currentBaseUrl }}?lang=vi">
+    <link rel="alternate" hreflang="en" href="{{ $currentBaseUrl }}?lang=en">
+    <link rel="alternate" hreflang="x-default" href="{{ $currentBaseUrl }}">
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:site_name" content="Hồ Thành Thiện | Portfolio">
-    <meta property="og:locale" content="{{ app()->getLocale() == 'vi' ? 'vi_VN' : 'en_US' }}">
-    <meta property="og:locale:alternate" content="{{ app()->getLocale() == 'vi' ? 'en_US' : 'vi_VN' }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:locale" content="{{ $isVi ? 'vi_VN' : 'en_US' }}">
+    <meta property="og:locale:alternate" content="{{ $isVi ? 'en_US' : 'vi_VN' }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')">
-    <meta property="og:description" content="@yield('description', 'Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, chuẩn kiến trúc, tối ưu hiệu năng.')">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', $defaultTitle)">
+    <meta property="og:description" content="@yield('description', $defaultDescription)">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:image" content="@yield('og_image', asset('images/og-image.png'))">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')">
+    <meta property="og:image:alt" content="@yield('title', $defaultTitle)">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('title', __('Hồ Thành Thiện') . ' | Full-Stack Developer')">
-    <meta name="twitter:description" content="@yield('description', 'Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, chuẩn kiến trúc, tối ưu hiệu năng.')">
+    <meta name="twitter:title" content="@yield('title', $defaultTitle)">
+    <meta name="twitter:description" content="@yield('description', $defaultDescription)">
     <meta name="twitter:image" content="@yield('og_image', asset('images/og-image.png'))">
     <meta name="twitter:creator" content="@hoThanhThien">
 
@@ -50,26 +75,70 @@
           "@type": "WebSite",
           "@id": "{{ url('/') }}#website",
           "url": "{{ url('/') }}",
-          "name": "Hồ Thành Thiện - Full-Stack Developer",
-          "description": "Portfolio của Hồ Thành Thiện - Full-Stack Developer chuyên phát triển ứng dụng web hiện đại, tối ưu hiệu năng.",
-          "inLanguage": "{{ app()->getLocale() }}"
+          "name": "{{ $isVi ? 'Hồ Thành Thiện - Kỹ sư Full-Stack Web Developer' : 'Ho Thanh Thien - Full-Stack Software Engineer' }}",
+          "description": "{{ $defaultDescription }}",
+          "inLanguage": "{{ $isVi ? 'vi-VN' : 'en-US' }}"
         },
         {
           "@type": "Person",
           "@id": "{{ url('/') }}#person",
           "name": "Hồ Thành Thiện",
-          "jobTitle": "Full-Stack Developer",
+          "alternateName": "Ho Thanh Thien",
+          "jobTitle": "{{ $isVi ? 'Kỹ sư Lập trình Full-Stack' : 'Full-Stack Software Engineer' }}",
           "url": "{{ url('/') }}",
           "image": "{{ asset('images/og-image.png') }}",
           "email": "hothanhthien119@gmail.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Ho Chi Minh City",
+            "addressCountry": "VN"
+          },
           "sameAs": [
             "https://github.com/hoThanhThien"
           ],
-          "knowsAbout": ["PHP", "Laravel", "JavaScript", "Vue.js", "React", "MySQL", "RESTful API", "Full-Stack Development"]
+          "knowsAbout": ["PHP", "Laravel", "JavaScript", "Vue.js", "React", "MySQL", "RESTful API", "Full-Stack Development", "Clean Architecture"],
+          "knowsLanguage": ["vi", "en"]
         }
       ]
     }
     </script>
+
+    @if(request()->path() !== '/')
+    @php
+        $pathSegments = explode('/', trim(request()->path(), '/'));
+        $breadcrumbs = [];
+        $breadcrumbs[] = [
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => $isVi ? 'Trang chủ' : 'Home',
+            'item' => url('/') . ($isVi ? '?lang=vi' : '?lang=en')
+        ];
+        $cumulativePath = '';
+        foreach ($pathSegments as $idx => $segment) {
+            $cumulativePath .= '/' . $segment;
+            $crumbName = ucfirst($segment);
+            if ($segment === 'about') $crumbName = $isVi ? 'Giới thiệu' : 'About';
+            elseif ($segment === 'contact') $crumbName = $isVi ? 'Liên hệ' : 'Contact';
+            elseif ($segment === 'projects') $crumbName = $isVi ? 'Dự án' : 'Projects';
+            elseif ($segment === 'blog') $crumbName = $isVi ? 'Bài viết' : 'Blog';
+            
+            $breadcrumbs[] = [
+                '@type' => 'ListItem',
+                'position' => $idx + 2,
+                'name' => $crumbName,
+                'item' => url($cumulativePath) . ($isVi ? '?lang=vi' : '?lang=en')
+            ];
+        }
+    @endphp
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": {!! json_encode($breadcrumbs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+    }
+    </script>
+    @endif
+
     @yield('structured_data')
 
     <!-- Google Fonts -->

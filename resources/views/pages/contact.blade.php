@@ -2,7 +2,7 @@
 
 @section('title', __('Contact') . ' | ' . __('Hồ Thành Thiện'))
 @section('description', __('Feel free to reach out for collaborations, project inquiries, or just to say hello!'))
-@section('keywords', 'Liên hệ Hồ Thành Thiện, Contact Hồ Thành Thiện, Thuê lập trình viên, Hợp tác dự án Web')
+@section('keywords', app()->getLocale() == 'vi' ? 'Liên hệ Hồ Thành Thiện, Tuyển dụng lập trình viên, Thuê lập trình viên Laravel, Hợp tác dự án Web' : 'Contact Ho Thanh Thien, Hire Full-Stack Developer, Web Development Collaboration, Software Engineer Inquiries')
 
 @section('styles')
 <style>

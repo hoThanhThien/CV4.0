@@ -2,7 +2,7 @@
 
 @section('title', __('Blog') . ' | ' . __('Hồ Thành Thiện'))
 @section('description', __('Thoughts, tutorials and learnings from the dev trenches'))
-@section('keywords', 'Blog Hồ Thành Thiện, Lập trình web, Kiến thức Laravel, PHP Tips, Clean Code, Web Development')
+@section('keywords', app()->getLocale() == 'vi' ? 'Blog Hồ Thành Thiện, Lập trình web, Kiến thức Laravel, PHP Tips, Clean Code, Web Development' : 'Ho Thanh Thien Blog, Web Development Tutorials, Laravel Insights, Software Engineering, Clean Code')
 
 @section('styles')
 <style>

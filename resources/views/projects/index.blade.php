@@ -2,7 +2,7 @@
 
 @section('title', __('Projects') . ' | ' . __('Hồ Thành Thiện'))
 @section('description', __('Things I\'ve built and worked on'))
-@section('keywords', 'Dự án Hồ Thành Thiện, Portfolio Dự án, Web Apps, Laravel Projects, Vue.js Projects')
+@section('keywords', app()->getLocale() == 'vi' ? 'Dự án Hồ Thành Thiện, Portfolio Dự án, Web Apps, Laravel Projects, Vue.js Projects' : 'Ho Thanh Thien Projects, Software Portfolio, Laravel Web Apps, Vue.js React Applications')
 
 @section('styles')
 <style>

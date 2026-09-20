@@ -2,7 +2,7 @@
 
 @section('title', __('About Me') . ' | ' . __('Hồ Thành Thiện'))
 @section('description', __('I\'m a passionate developer with a love for building clean, performant, and user-friendly web applications. I bridge the gap between design and functionality to create digital experiences that matter.'))
-@section('keywords', 'Về Hồ Thành Thiện, Hồ Thành Thiện Full-Stack Developer, Kinh nghiệm lập trình, Kỹ năng Web Developer')
+@section('keywords', app()->getLocale() == 'vi' ? 'Về Hồ Thành Thiện, Hồ Thành Thiện Full-Stack Developer, Kinh nghiệm lập trình, Kỹ năng Web Developer' : 'About Ho Thanh Thien, Full-Stack Developer Experience, Web Developer Skills, Laravel Software Engineer')
 
 @section('styles')
 <style>

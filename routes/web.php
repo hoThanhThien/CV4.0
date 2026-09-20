@@ -34,7 +34,13 @@ Route::get('/sitemap.xml', function () {
     return response()->view('sitemap', [
         'projects' => $projects,
         'posts' => $posts
-    ])->header('Content-Type', 'text/xml');
+    ])->header('Content-Type', 'text/xml; charset=utf-8');
+});
+
+Route::get('/robots.txt', function () {
+    $sitemapUrl = url('/sitemap.xml');
+    $content = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin/\nDisallow: /setup-db\nDisallow: /setup-db/\n\nSitemap: {$sitemapUrl}\n";
+    return response($content, 200, ['Content-Type' => 'text/plain']);
 });
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'vi'])) {
