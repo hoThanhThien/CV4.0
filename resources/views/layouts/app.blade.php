@@ -174,21 +174,42 @@
         .nav-cta:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35); }
 
         .lang-switcher {
-            display: flex; align-items: center; gap: 0.35rem;
-            padding: 0.2rem 0.5rem; background: var(--bg-secondary);
-            border: 1px solid var(--border); border-radius: 8px;
-            font-size: 0.82rem; margin-left: 0.5rem;
-            transition: all 0.2s ease;
+            display: inline-flex; align-items: center; gap: 3px;
+            padding: 3px; background: #f1f5f9;
+            border: 1px solid var(--border); border-radius: 10px;
+            margin-left: 0.5rem;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
         }
-        .lang-switcher a {
-            padding: 0.2rem 0.4rem !important; border-radius: 5px; text-decoration: none;
-            color: var(--text-muted); font-weight: 600; transition: all 0.2s;
+        .lang-switcher:hover {
+            border-color: rgba(99, 102, 241, 0.35);
         }
-        .lang-switcher a.active {
-            color: var(--accent) !important; background: var(--bg-card);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        .lang-switcher .lang-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 0.35rem 0.65rem !important; border-radius: 7px; text-decoration: none;
+            color: var(--text-secondary); font-weight: 700; font-size: 0.82rem;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            background: transparent;
         }
-        .lang-switcher span { color: var(--border); font-size: 0.75rem; }
+        .lang-switcher .lang-btn:hover {
+            color: var(--text-primary);
+        }
+        .lang-switcher .lang-btn.active {
+            color: var(--accent) !important;
+            background: #ffffff !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+        .flag-icon {
+            border-radius: 2.5px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+        .lang-switcher .lang-btn:hover .flag-icon {
+            transform: scale(1.08);
+        }
 
         .hamburger {
             display: none; background: var(--bg-card); border: 1px solid var(--border);
@@ -454,25 +475,31 @@
                 display: flex !important; width: 100% !important;
             }
             .lang-switcher {
-                margin-left: 0; margin-top: 0.5rem; padding: 0.35rem;
-                justify-content: center; width: 100%; border-radius: 12px;
+                margin-left: 0; margin-top: 0.75rem; padding: 4px;
+                width: 100%; border-radius: 14px;
                 background: #f1f5f9;
                 border: 1px solid var(--border);
-                display: flex; gap: 0.35rem;
+                display: flex; gap: 4px;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
             }
-            .lang-switcher a {
-                flex: 1; text-align: center; padding: 0.55rem 0.75rem !important;
-                border-radius: 8px; font-weight: 700; font-size: 0.9rem;
-                justify-content: center;
+            .lang-switcher .lang-btn {
+                flex: 1; display: flex; align-items: center; justify-content: center;
+                gap: 8px; padding: 0.7rem 1rem !important;
+                border-radius: 10px; font-weight: 700; font-size: 0.95rem;
                 background: transparent !important;
                 color: var(--text-secondary) !important;
                 box-shadow: none !important;
                 border: none !important;
+                transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             }
-            .lang-switcher a.active {
+            .lang-switcher .lang-btn .flag-icon {
+                width: 20px;
+                height: 15px;
+            }
+            .lang-switcher .lang-btn.active {
                 background: #ffffff !important;
                 color: var(--accent) !important;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05) !important;
             }
 
             .container { padding: 0 1.25rem; }
@@ -549,10 +576,24 @@
             <li><a href="{{ route('blog.index') }}" class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">{{ __('Blog') }}</a></li>
             <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">{{ __('About') }}</a></li>
             <li><a href="mailto:hothanhthien119@gmail.com" class="btn btn-primary nav-cta">{{ __('Hire Me') }}</a></li>
-            <li class="lang-switcher">
-                <a href="{{ route('lang.switch', 'vi') }}" class="{{ session('locale') == 'vi' ? 'active' : '' }}">VI</a>
-                <span>|</span>
-                <a href="{{ route('lang.switch', 'en') }}" class="{{ session('locale') != 'vi' ? 'active' : '' }}">EN</a>
+            <li class="lang-switcher" role="group" aria-label="Language selection">
+                <a href="{{ route('lang.switch', 'vi') }}" class="lang-btn {{ session('locale') == 'vi' ? 'active' : '' }}" title="Tiếng Việt">
+                    <svg class="flag-icon" viewBox="0 0 640 480" width="18" height="13.5" aria-hidden="true">
+                        <rect width="640" height="480" fill="#da251d"/>
+                        <polygon points="320,120 357,235 477,235 380,305 417,420 320,350 223,420 260,305 163,235 283,235" fill="#ffff00"/>
+                    </svg>
+                    <span>VI</span>
+                </a>
+                <a href="{{ route('lang.switch', 'en') }}" class="lang-btn {{ session('locale') != 'vi' ? 'active' : '' }}" title="English">
+                    <svg class="flag-icon" viewBox="0 0 640 480" width="18" height="13.5" aria-hidden="true">
+                        <path fill="#012169" d="M0 0h640v480H0z"/>
+                        <path fill="#FFF" d="m75 0 245 180L565 0h75v60L435 240l205 180v60h-75L320 300 75 480H0v-60l205-180L0 60V0h75z"/>
+                        <path fill="#C8102E" d="m424 288 216 159v33h-25L383 312h41zm-208 0-41 24L0 447v33h25l191-140v-52zM640 0v15L453 150h-41L640 0zM0 0l191 140v52L0 41V0z"/>
+                        <path fill="#FFF" d="M240 0h160v480H240zM0 160h640v160H0z"/>
+                        <path fill="#C8102E" d="M272 0h96v480h-96zM0 192h640v96H0z"/>
+                    </svg>
+                    <span>EN</span>
+                </a>
             </li>
         </ul>
     </nav>
