@@ -32,10 +32,71 @@ Route::get('/sitemap.xml', function () {
     $projects = \App\Models\Project::all();
     $posts = \App\Models\BlogPost::published()->get();
 
-    return response()->view('sitemap', [
-        'projects' => $projects,
-        'posts' => $posts
-    ])->header('Content-Type', 'text/xml; charset=utf-8');
+    $staticPages = [
+        ['url' => url('/'), 'freq' => 'weekly', 'priority' => '1.0'],
+        ['url' => url('/about'), 'freq' => 'monthly', 'priority' => '0.8'],
+        ['url' => url('/contact'), 'freq' => 'monthly', 'priority' => '0.9'],
+        ['url' => url('/projects'), 'freq' => 'weekly', 'priority' => '0.9'],
+        ['url' => url('/blog'), 'freq' => 'weekly', 'priority' => '0.8'],
+    ];
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">' . "\n";
+
+    // Static pages with bilingual alternates
+    foreach ($staticPages as $page) {
+        foreach (['vi', 'en'] as $lang) {
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>" . htmlspecialchars($page['url'] . '?lang=' . $lang, ENT_XML1) . "</loc>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"vi\" href=\"" . htmlspecialchars($page['url'] . '?lang=vi', ENT_XML1) . "\"/>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" . htmlspecialchars($page['url'] . '?lang=en', ENT_XML1) . "\"/>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" . htmlspecialchars($page['url'], ENT_XML1) . "\"/>\n";
+            $xml .= "    <lastmod>" . now()->toAtomString() . "</lastmod>\n";
+            $xml .= "    <changefreq>{$page['freq']}</changefreq>\n";
+            $xml .= "    <priority>{$page['priority']}</priority>\n";
+            $xml .= "  </url>\n";
+        }
+    }
+
+    // Dynamic project pages
+    foreach ($projects as $project) {
+        $pUrl = url('/projects/' . $project->id);
+        $lastmod = $project->updated_at ? $project->updated_at->toAtomString() : now()->toAtomString();
+        foreach (['vi', 'en'] as $lang) {
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>" . htmlspecialchars($pUrl . '?lang=' . $lang, ENT_XML1) . "</loc>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"vi\" href=\"" . htmlspecialchars($pUrl . '?lang=vi', ENT_XML1) . "\"/>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" . htmlspecialchars($pUrl . '?lang=en', ENT_XML1) . "\"/>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" . htmlspecialchars($pUrl, ENT_XML1) . "\"/>\n";
+            $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
+            $xml .= "    <changefreq>monthly</changefreq>\n";
+            $xml .= "    <priority>0.7</priority>\n";
+            $xml .= "  </url>\n";
+        }
+    }
+
+    // Dynamic blog posts
+    foreach ($posts as $post) {
+        $bUrl = url('/blog/' . $post->slug);
+        $lastmod = $post->updated_at ? $post->updated_at->toAtomString() : now()->toAtomString();
+        foreach (['vi', 'en'] as $lang) {
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>" . htmlspecialchars($bUrl . '?lang=' . $lang, ENT_XML1) . "</loc>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"vi\" href=\"" . htmlspecialchars($bUrl . '?lang=vi', ENT_XML1) . "\"/>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" . htmlspecialchars($bUrl . '?lang=en', ENT_XML1) . "\"/>\n";
+            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" . htmlspecialchars($bUrl, ENT_XML1) . "\"/>\n";
+            $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
+            $xml .= "    <changefreq>monthly</changefreq>\n";
+            $xml .= "    <priority>0.7</priority>\n";
+            $xml .= "  </url>\n";
+        }
+    }
+
+    $xml .= '</urlset>';
+
+    return response($xml, 200, [
+        'Content-Type' => 'text/xml; charset=utf-8'
+    ]);
 });
 
 Route::get('/robots.txt', function () {
