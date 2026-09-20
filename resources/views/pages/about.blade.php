@@ -169,7 +169,7 @@
                     <a href="{{ route('projects.index') }}" class="btn btn-primary">
                         <i class="fas fa-rocket"></i> {{ __('See My Work') }}
                     </a>
-                    <a href="mailto:hothanhthien119@gmail.com" class="btn btn-outline">
+                    <a href="{{ route('contact') }}" class="btn btn-outline">
                         <i class="fas fa-envelope"></i> {{ __('Get In Touch') }}
                     </a>
                 </div>

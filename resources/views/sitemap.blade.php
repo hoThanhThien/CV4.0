@@ -13,6 +13,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>{{ url('/contact') }}</loc>
+        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>{{ url('/projects') }}</loc>
         <lastmod>{{ now()->toAtomString() }}</lastmod>
         <changefreq>weekly</changefreq>

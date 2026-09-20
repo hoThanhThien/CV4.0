@@ -575,7 +575,8 @@
             <li><a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'active' : '' }}">{{ __('Projects') }}</a></li>
             <li><a href="{{ route('blog.index') }}" class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">{{ __('Blog') }}</a></li>
             <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">{{ __('About') }}</a></li>
-            <li><a href="mailto:hothanhthien119@gmail.com" class="btn btn-primary nav-cta">{{ __('Hire Me') }}</a></li>
+            <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('Contact') }}</a></li>
+            <li><a href="{{ route('contact') }}" class="btn btn-primary nav-cta">{{ __('Hire Me') }}</a></li>
             <li class="lang-switcher" role="group" aria-label="Language selection">
                 <a href="{{ route('lang.switch', 'vi') }}" class="lang-btn {{ session('locale') == 'vi' ? 'active' : '' }}" title="Tiếng Việt">
                     <svg class="flag-icon" viewBox="0 0 640 480" width="18" height="13.5" aria-hidden="true">
@@ -617,12 +618,13 @@
             <a href="{{ route('projects.index') }}">{{ __('Projects') }}</a>
             <a href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
             <a href="{{ route('about') }}">{{ __('About') }}</a>
+            <a href="{{ route('contact') }}">{{ __('Contact') }}</a>
         </nav>
         <div class="footer-socials">
             <a href="https://github.com/hoThanhThien" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
             <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="mailto:hothanhthien119@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <a href="{{ route('contact') }}" aria-label="{{ __('Contact') }}" title="{{ __('Contact') }}"><i class="fas fa-envelope"></i></a>
         </div>
         <p class="footer-copy">&copy; {{ date('Y') }} {{ __('Hồ Thành Thiện') }}. {{ __('Built with Laravel & ♥') }}</p>
     </footer>

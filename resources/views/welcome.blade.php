@@ -345,7 +345,7 @@
     <div class="hero-grid"></div>
     <div class="container">
         <div class="hero-content">
-            <a href="mailto:hothanhthien119@gmail.com" class="hero-badge">
+            <a href="{{ route('contact') }}" class="hero-badge">
                 <span class="dot"></span>
                 {{ __('Contact') }}
             </a>
@@ -358,7 +358,7 @@
                 <a href="{{ route('projects.index') }}" class="btn btn-primary">
                     <i class="fas fa-rocket"></i> {{ __('View My Work') }}
                 </a>
-                <a href="mailto:hothanhthien119@gmail.com" class="btn btn-outline">
+                <a href="{{ route('contact') }}" class="btn btn-outline">
                     <i class="fas fa-paper-plane"></i> {{ __('Get In Touch') }}
                 </a>
             </div>
@@ -538,7 +538,7 @@
     <div class="container reveal">
         <h2>{!! __('cta_heading') !!}</h2>
         <p>{{ __("I'm always open to interesting projects and opportunities.") }}</p>
-        <a href="mailto:hothanhthien119@gmail.com" class="btn btn-primary">
+        <a href="{{ route('contact') }}" class="btn btn-primary">
             <i class="fas fa-paper-plane"></i> {{ __('Send Me a Message') }}
         </a>
     </div>
