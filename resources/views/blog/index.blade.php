@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', __('Blog') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', __('Thoughts, tutorials and learnings from the dev trenches'))
+@section('description', app()->getLocale() == 'vi' ? 'Tổng hợp các bài viết, hướng dẫn lập trình Laravel, PHP, JavaScript và kinh nghiệm phát triển phần mềm thực chiến của Hồ Thành Thiện.' : 'Articles, architectural insights, and practical web development tutorials on Laravel, PHP, and modern JavaScript by Ho Thanh Thien.')
 @section('keywords', app()->getLocale() == 'vi' ? 'Blog Hồ Thành Thiện, Lập trình web, Kiến thức Laravel, PHP Tips, Clean Code, Web Development' : 'Ho Thanh Thien Blog, Web Development Tutorials, Laravel Insights, Software Engineering, Clean Code')
 
 @section('styles')

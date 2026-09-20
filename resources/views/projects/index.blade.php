@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', __('Projects') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', __('Things I\'ve built and worked on'))
+@section('description', app()->getLocale() == 'vi' ? 'Khám phá danh sách các dự án, sản phẩm phần mềm và ứng dụng web hiện đại được phát triển bởi Hồ Thành Thiện.' : 'Explore a curated portfolio of modern web applications, open-source tools, and software projects developed by Ho Thanh Thien.')
 @section('keywords', app()->getLocale() == 'vi' ? 'Dự án Hồ Thành Thiện, Portfolio Dự án, Web Apps, Laravel Projects, Vue.js Projects' : 'Ho Thanh Thien Projects, Software Portfolio, Laravel Web Apps, Vue.js React Applications')
 
 @section('styles')
