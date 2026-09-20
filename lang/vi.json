@@ -107,5 +107,10 @@
     "Nội dung tin nhắn cần tối thiểu 10 ký tự.": "Nội dung tin nhắn cần tối thiểu 10 ký tự.",
     "Vui lòng nhập mã bảo vệ (Captcha).": "Vui lòng nhập mã bảo vệ (Captcha).",
     "Mã bảo vệ (Captcha) không chính xác. Vui lòng thử lại.": "Mã bảo vệ (Captcha) không chính xác. Vui lòng thử lại.",
-    "Cảm ơn bạn đã liên hệ! Tin nhắn của bạn đã được gửi thành công, tôi sẽ phản hồi trong thời gian sớm nhất.": "Cảm ơn bạn đã liên hệ! Tin nhắn của bạn đã được gửi thành công, tôi sẽ phản hồi trong thời gian sớm nhất."
+    "Cảm ơn bạn đã liên hệ! Tin nhắn của bạn đã được gửi thành công, tôi sẽ phản hồi trong thời gian sớm nhất.": "Cảm ơn bạn đã liên hệ! Tin nhắn của bạn đã được gửi thành công, tôi sẽ phản hồi trong thời gian sớm nhất.",
+    "I'm not a robot": "Tôi không phải là người máy",
+    "Security Verification": "Xác minh bảo mật",
+    "Please verify that you are not a robot.": "Vui lòng xác nhận bạn không phải là người máy.",
+    "Privacy": "Bảo mật",
+    "Terms": "Điều khoản"
 }

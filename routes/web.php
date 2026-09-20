@@ -25,6 +25,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+Route::post('/contact/verify-recaptcha', [ContactController::class, 'verifyRecaptcha'])->name('contact.verify-recaptcha');
 Route::get('/contact/captcha', [ContactController::class, 'captcha'])->name('contact.captcha');
 
 Route::get('/sitemap.xml', function () {

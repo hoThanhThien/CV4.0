@@ -115,35 +115,173 @@
         color: #ef4444; font-size: 0.82rem; margin-top: 0.35rem; display: block; font-weight: 500;
     }
 
-    /* Captcha Section */
-    .captcha-container {
-        display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
-        margin-bottom: 0.75rem;
+    /* Google reCAPTCHA v2 Style Widget */
+    .recaptcha-widget {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f9f9f9;
+        border: 1px solid #d3d3d3;
+        border-radius: 4px;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.08);
+        width: 304px;
+        height: 78px;
+        padding: 0 12px;
+        box-sizing: border-box;
+        user-select: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        margin-bottom: 0.5rem;
     }
-    .captcha-img-wrap {
-        display: flex; align-items: center; border-radius: 10px; overflow: hidden;
-        border: 1px solid var(--border); background: #ffffff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    .recaptcha-widget:hover {
+        border-color: #c1c1c1;
     }
-    .captcha-img-wrap img {
-        display: block; height: 46px; width: 155px;
+    .recaptcha-widget.is-invalid {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
     }
-    .btn-refresh-captcha {
-        width: 44px; height: 44px; border-radius: 10px;
-        background: var(--bg-secondary); border: 1px solid var(--border);
-        color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
-        font-size: 1rem; cursor: pointer; transition: all 0.25s ease;
+
+    .recaptcha-checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
-    .btn-refresh-captcha:hover {
-        border-color: var(--accent); color: var(--accent);
-        background: rgba(99, 102, 241, 0.08);
-        transform: rotate(180deg);
+
+    /* Checkbox square */
+    .recaptcha-checkbox {
+        width: 28px;
+        height: 28px;
+        border: 2px solid #c1c1c1;
+        border-radius: 2px;
+        background: #ffffff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 0;
+        outline: none;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
     }
-    .btn-refresh-captcha:active {
-        transform: scale(0.92) rotate(180deg);
+    .recaptcha-checkbox:hover {
+        border-color: #b2b2b2;
     }
-    .captcha-input-wrap {
-        flex: 1; min-width: 140px;
+
+    /* Spinner Animation */
+    .recaptcha-spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(66, 133, 244, 0.2);
+        border-top-color: #4285F4;
+        border-radius: 50%;
+        animation: recaptchaSpin 0.75s linear infinite;
+    }
+    @keyframes recaptchaSpin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Checkmark */
+    .recaptcha-checkmark {
+        display: none;
+        width: 28px;
+        height: 28px;
+        align-items: center;
+        justify-content: center;
+        animation: checkmarkPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes checkmarkPop {
+        0% { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Active States */
+    .recaptcha-checkbox.loading {
+        border-color: transparent !important;
+        background: transparent !important;
+        cursor: wait;
+    }
+    .recaptcha-checkbox.loading .recaptcha-spinner {
+        display: block;
+    }
+
+    .recaptcha-checkbox.verified {
+        border-color: transparent !important;
+        background: transparent !important;
+        cursor: default;
+    }
+    .recaptcha-checkbox.verified .recaptcha-checkmark {
+        display: flex;
+    }
+
+    /* Text Label */
+    .recaptcha-label {
+        font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #282727;
+        cursor: pointer;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    /* Badge on Right */
+    .recaptcha-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 100%;
+        text-align: center;
+    }
+    .recaptcha-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2px;
+    }
+    .recaptcha-logo svg {
+        display: block;
+        transition: transform 0.35s ease;
+    }
+    .recaptcha-widget:hover .recaptcha-logo svg {
+        transform: rotate(30deg);
+    }
+    .recaptcha-brand {
+        font-family: Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 10px;
+        font-weight: 600;
+        color: #555555;
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+        display: block;
+    }
+    .recaptcha-links {
+        font-size: 8px;
+        color: #555555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        line-height: 1.1;
+        margin-top: 2px;
+    }
+    .recaptcha-links a {
+        color: #555555;
+        text-decoration: none;
+    }
+    .recaptcha-links a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+        .recaptcha-widget {
+            width: 100%;
+            max-width: 320px;
+        }
+        .recaptcha-label {
+            font-size: 13px;
+        }
     }
 
     /* Submit Button */
@@ -325,25 +463,50 @@
                         @enderror
                     </div>
 
-                    <!-- CAPTCHA -->
-                    <div class="form-group">
-                        <label for="captcha" class="form-label">
-                            {{ __('Security Verification (Captcha)') }} <span class="required">*</span>
+                    <!-- GOOGLE reCAPTCHA STYLE WIDGET -->
+                    <div class="form-group" style="margin-top: 0.5rem">
+                        <label class="form-label" style="margin-bottom: 0.45rem">
+                            {{ __('Security Verification') }} <span class="required">*</span>
                         </label>
-                        <div class="captcha-container">
-                            <div class="captcha-img-wrap">
-                                <img src="{{ route('contact.captcha') }}" id="captchaImage" alt="Captcha Code" title="{{ __('Click button to refresh') }}">
+                        <div>
+                            <div class="recaptcha-widget @error('recaptcha_token') is-invalid @enderror" id="recaptchaWidget">
+                                <div class="recaptcha-checkbox-wrapper">
+                                    <button type="button" class="recaptcha-checkbox" id="recaptchaCheckbox" role="checkbox" aria-checked="false" aria-label="{{ __('I\'m not a robot') }}">
+                                        <span class="recaptcha-spinner"></span>
+                                        <span class="recaptcha-checkmark">
+                                            <svg viewBox="0 0 24 24" width="22" height="22">
+                                                <polyline points="4 12 9 17 20 6" fill="none" stroke="#0f9d58" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                    <label for="recaptchaCheckbox" class="recaptcha-label" id="recaptchaLabel">
+                                        {{ __('I\'m not a robot') }}
+                                    </label>
+                                </div>
+                                <div class="recaptcha-badge">
+                                    <div class="recaptcha-logo">
+                                        <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true">
+                                            <!-- Google reCAPTCHA 3-arrow logo -->
+                                            <path fill="#4285F4" d="M24 4C14.1 4 5.9 11.2 4.3 20.6l5.9 1c1.2-7.5 7.7-13.2 15.6-13.2 5.1 0 9.7 2.4 12.6 6.2L31 20h17V3l-6.3 6.3C37.5 5.2 31.1 4 24 4z"/>
+                                            <path fill="#1A4B9C" d="M43.7 27.4l-5.9-1c-1.2 7.5-7.7 13.2-15.6 13.2-5.1 0-9.7-2.4-12.6-6.2L17 28H0v17l6.3-6.3C10.5 42.8 16.9 44 24 44c9.9 0 18.1-7.2 19.7-16.6z"/>
+                                            <path fill="#9E9E9E" d="M12.6 34.2C9.7 30.4 8 25.8 8 20.8c0-1.4.2-2.8.5-4.1l-5.9-1C2.2 17.5 2 19.3 2 21.1c0 6.2 2.2 12 5.9 16.7l-4.8 4.8h17V26l-7.5 8.2z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="recaptcha-brand">reCAPTCHA</span>
+                                    <div class="recaptcha-links">
+                                        <a href="https://www.google.com/intl/{{ app()->getLocale() }}/policies/privacy/" target="_blank" rel="noopener">{{ __('Privacy') }}</a>
+                                        <span>-</span>
+                                        <a href="https://www.google.com/intl/{{ app()->getLocale() }}/policies/terms/" target="_blank" rel="noopener">{{ __('Terms') }}</a>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" class="btn-refresh-captcha" id="refreshCaptcha" title="{{ __('Get new code') }}" aria-label="{{ __('Refresh Captcha') }}">
-                                <i class="fas fa-arrows-rotate"></i>
-                            </button>
-                            <div class="captcha-input-wrap">
-                                <input type="text" name="captcha" id="captcha" class="form-control @error('captcha') is-invalid @enderror" placeholder="{{ __('Enter 5 characters...') }}" maxlength="6" autocomplete="off" required style="text-transform: uppercase; font-weight:700; letter-spacing:1px">
-                            </div>
+                            <input type="hidden" name="recaptcha_token" id="recaptchaToken" value="">
+                            <!-- Anti-spam honeypot -->
+                            <input type="text" name="website_hp_check" value="" tabindex="-1" autocomplete="off" style="display:none !important" aria-hidden="true">
+                            <span class="invalid-feedback" id="recaptchaError" style="{{ $errors->has('recaptcha_token') ? 'display:block' : 'display:none' }}">
+                                {{ $errors->first('recaptcha_token') ?? __('Please verify that you are not a robot.') }}
+                            </span>
                         </div>
-                        @error('captcha')
-                        <span class="invalid-feedback" style="display:block">{{ $message }}</span>
-                        @enderror
                     </div>
 
                     <!-- Submit Button -->
@@ -361,24 +524,85 @@
 
 @section('scripts')
 <script>
-    // Refresh Captcha
-    const refreshBtn = document.getElementById('refreshCaptcha');
-    const captchaImg = document.getElementById('captchaImage');
-    const captchaInput = document.getElementById('captcha');
-
-    if (refreshBtn && captchaImg) {
-        refreshBtn.addEventListener('click', () => {
-            // Append timestamp to bust browser cache
-            captchaImg.src = "{{ route('contact.captcha') }}?t=" + new Date().getTime();
-            if (captchaInput) captchaInput.value = '';
-        });
-    }
-
-    // Auto focus name on load
-    window.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto focus name input
         const nameInput = document.getElementById('name');
         if (nameInput && !nameInput.value) {
             nameInput.focus();
+        }
+
+        // Google reCAPTCHA interactive behavior
+        const checkbox = document.getElementById('recaptchaCheckbox');
+        const label = document.getElementById('recaptchaLabel');
+        const tokenInput = document.getElementById('recaptchaToken');
+        const widget = document.getElementById('recaptchaWidget');
+        const contactForm = document.getElementById('contactForm');
+        const errorMsg = document.getElementById('recaptchaError');
+
+        let isVerifying = false;
+        let isVerified = false;
+
+        function triggerRecaptcha() {
+            if (isVerified || isVerifying) return;
+
+            isVerifying = true;
+            checkbox.classList.add('loading');
+            widget.classList.remove('is-invalid');
+            if (errorMsg) errorMsg.style.display = 'none';
+
+            // Natural reCAPTCHA verification delay (simulate human behavioral check)
+            setTimeout(() => {
+                fetch("{{ route('contact.verify-recaptcha') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        timestamp: Date.now()
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.token) {
+                        tokenInput.value = data.token;
+                        isVerified = true;
+                        isVerifying = false;
+                        checkbox.classList.remove('loading');
+                        checkbox.classList.add('verified');
+                        checkbox.setAttribute('aria-checked', 'true');
+                    } else {
+                        throw new Error('Verification failed');
+                    }
+                })
+                .catch(err => {
+                    isVerifying = false;
+                    checkbox.classList.remove('loading');
+                    widget.classList.add('is-invalid');
+                    if (errorMsg) errorMsg.style.display = 'block';
+                });
+            }, 650);
+        }
+
+        if (checkbox) {
+            checkbox.addEventListener('click', triggerRecaptcha);
+        }
+        if (label) {
+            label.addEventListener('click', triggerRecaptcha);
+        }
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                if (!tokenInput.value || !isVerified) {
+                    e.preventDefault();
+                    widget.classList.add('is-invalid');
+                    if (errorMsg) {
+                        errorMsg.style.display = 'block';
+                        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
         }
     });
 </script>
