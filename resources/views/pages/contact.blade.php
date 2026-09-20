@@ -132,82 +132,11 @@
         color: var(--accent);
     }
 
-    /* Google reCAPTCHA v3 Floating Badge (Bottom Right) */
-    .grecaptcha-badge-floating {
-        position: fixed;
-        bottom: 24px;
-        right: 0;
-        z-index: 999;
-        display: block;
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        transform: translateX(180px);
-    }
-    .grecaptcha-badge-floating:hover {
-        transform: translateX(0);
-    }
-    .grecaptcha-badge-content {
-        display: flex;
-        align-items: center;
-        background: #ffffff;
-        border: 1px solid #d3d3d3;
-        border-right: none;
-        border-radius: 4px 0 0 4px;
-        box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
-        padding: 8px 12px;
-        height: 60px;
-        box-sizing: border-box;
-        cursor: pointer;
-    }
-    .grecaptcha-badge-text {
-        font-family: Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 11px;
-        color: #555555;
-        margin-right: 12px;
-        white-space: nowrap;
-    }
-    .grecaptcha-badge-title {
-        display: block;
-        line-height: 1.2;
-    }
-    .grecaptcha-badge-title strong {
-        font-weight: 700;
-        color: #333333;
-    }
-    .grecaptcha-badge-links {
-        font-size: 9px;
-        color: #777777;
-        margin-top: 3px;
-        display: flex;
-        gap: 4px;
-        align-items: center;
-    }
-    .grecaptcha-badge-links a {
-        color: #555555;
-        text-decoration: none;
-    }
-    .grecaptcha-badge-links a:hover {
-        text-decoration: underline;
-    }
-    .grecaptcha-badge-logo {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-    }
-    .grecaptcha-badge-logo svg {
-        display: block;
-        transition: transform 0.35s ease;
-    }
-    .grecaptcha-badge-floating:hover .grecaptcha-badge-logo svg {
-        transform: rotate(30deg);
-    }
-
-    @media (max-width: 640px) {
-        .grecaptcha-badge-floating {
-            bottom: 12px;
-        }
+    /* Hide Google reCAPTCHA v3 floating badge completely (Officially permitted since disclaimer text is included below form) */
+    .grecaptcha-badge {
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     /* Submit Button */
@@ -294,9 +223,6 @@
         }
         .info-card.info-card-full {
             grid-column: 1 / -1;
-        }
-        .grecaptcha-badge-floating {
-            display: none !important;
         }
         .reveal-left, .reveal-right {
             transform: translateY(20px) !important;
@@ -543,27 +469,6 @@
         </div>
     </div>
 </section>
-
-<!-- Google reCAPTCHA v3 Floating Badge (Bottom Right) -->
-<div class="grecaptcha-badge-floating" id="grecaptchaBadge" title="protected by reCAPTCHA">
-    <div class="grecaptcha-badge-content">
-        <div class="grecaptcha-badge-text">
-            <span class="grecaptcha-badge-title">protected by <strong>reCAPTCHA</strong></span>
-            <div class="grecaptcha-badge-links">
-                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">{{ __('Privacy') }}</a>
-                <span>-</span>
-                <a href="https://policies.google.com/terms" target="_blank" rel="noopener">{{ __('Terms') }}</a>
-            </div>
-        </div>
-        <div class="grecaptcha-badge-logo">
-            <svg viewBox="0 0 48 48" width="32" height="32" aria-hidden="true">
-                <path fill="#4285F4" d="M24 4C14.1 4 5.9 11.2 4.3 20.6l5.9 1c1.2-7.5 7.7-13.2 15.6-13.2 5.1 0 9.7 2.4 12.6 6.2L31 20h17V3l-6.3 6.3C37.5 5.2 31.1 4 24 4z"/>
-                <path fill="#1A4B9C" d="M43.7 27.4l-5.9-1c-1.2 7.5-7.7 13.2-15.6 13.2-5.1 0-9.7-2.4-12.6-6.2L17 28H0v17l6.3-6.3C10.5 42.8 16.9 44 24 44c9.9 0 18.1-7.2 19.7-16.6z"/>
-                <path fill="#9E9E9E" d="M12.6 34.2C9.7 30.4 8 25.8 8 20.8c0-1.4.2-2.8.5-4.1l-5.9-1C2.2 17.5 2 19.3 2 21.1c0 6.2 2.2 12 5.9 16.7l-4.8 4.8h17V26l-7.5 8.2z"/>
-            </svg>
-        </div>
-    </div>
-</div>
 @endsection
 
 @section('scripts')
