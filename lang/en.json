@@ -71,5 +71,11 @@
     "Stay tuned for upcoming posts!": "Stay tuned for upcoming posts!",
     "Summary": "Summary",
     "Published": "Published",
-    "All Articles": "All Articles"
+    "All Articles": "All Articles",
+    "Fullstack Developer": "Fullstack Developer",
+    "Back End Developer": "Back End Developer",
+    "Intern Fullstack Developer": "Intern Fullstack Developer",
+    "Developed a web-based Caro (Gomoku) game with interactive UI and real-time gameplay logic. Applied modern frontend practices to optimize rendering performance.": "Developed a web-based Caro (Gomoku) game with interactive UI and real-time gameplay logic. Applied modern frontend practices to optimize rendering performance.",
+    "Developed a web-based laundry management system. Implemented order lifecycle management with real-time status updates and built role-based access control (RBAC).": "Developed a web-based laundry management system. Implemented order lifecycle management with real-time status updates and built role-based access control (RBAC).",
+    "Developed Education websites using WordPress and built company websites using PHP. Worked with HTML, CSS, JavaScript, PHP, and Postgresql.": "Developed Education websites using WordPress and built company websites using PHP. Worked with HTML, CSS, JavaScript, PHP, and Postgresql."
 }

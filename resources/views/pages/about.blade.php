@@ -62,20 +62,81 @@
     .skill-category-title { font-size: 1rem; font-weight: 700; color: var(--accent-light); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
     .skill-category-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .timeline { position: relative; padding-left: 1.75rem; }
-    .timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent); }
-    .timeline-item { position: relative; margin-bottom: 2.25rem; }
-    .timeline-item::before {
-        content: ''; position: absolute; left: calc(-1.75rem); top: 0.35rem;
-        width: 12px; height: 12px; border-radius: 50%;
-        background: var(--accent); border: 2px solid var(--bg-primary);
-        box-shadow: 0 0 12px var(--accent-glow);
-        animation: pulseNode 3s infinite;
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+        content: ''; position: absolute; left: 8px; top: 1.5rem; bottom: 1.5rem;
+        width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, rgba(99, 102, 241, 0.2) 100%);
     }
-    .timeline-date { font-size: 0.78rem; font-weight: 700; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
-    .timeline-company { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.15rem; }
-    .timeline-position { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem; }
-    .timeline-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+
+    .timeline-item { position: relative; margin-bottom: 2rem; }
+    .timeline-item::before {
+        content: ''; position: absolute; left: -2rem; top: 1.5rem;
+        width: 18px; height: 18px; border-radius: 50%;
+        background: var(--bg-primary); border: 4px solid var(--accent);
+        box-shadow: 0 0 12px var(--accent-glow);
+        z-index: 2; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .timeline-item:hover::before {
+        background: var(--accent);
+        transform: scale(1.2);
+        box-shadow: 0 0 18px var(--accent);
+    }
+
+    .timeline-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.04);
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+    }
+    .timeline-card:hover {
+        border-color: rgba(99, 102, 241, 0.4);
+        transform: translateY(-3px) translateX(4px);
+        box-shadow: 0 16px 32px -5px rgba(99, 102, 241, 0.12);
+    }
+
+    .timeline-header {
+        display: flex; align-items: flex-start; justify-content: space-between;
+        flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.65rem;
+    }
+    .timeline-date-badge {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        padding: 0.3rem 0.75rem; border-radius: 50px;
+        background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25);
+        color: var(--accent); font-size: 0.78rem; font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+    .timeline-company {
+        font-size: 1.15rem; font-weight: 800; color: var(--text-primary);
+        display: flex; align-items: center; gap: 0.5rem;
+    }
+    .timeline-company i {
+        color: var(--accent); font-size: 0.95rem;
+    }
+    .timeline-position-badge {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        font-size: 0.9rem; font-weight: 600; color: var(--accent-light);
+        margin-bottom: 0.85rem;
+    }
+    .timeline-desc {
+        color: var(--text-secondary); font-size: 0.92rem; line-height: 1.65;
+        margin-bottom: 1rem;
+    }
+    .timeline-tags {
+        display: flex; flex-wrap: wrap; gap: 0.45rem;
+    }
+    .timeline-tag {
+        font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.65rem;
+        background: var(--bg-secondary); border: 1px solid var(--border);
+        border-radius: 6px; color: var(--text-secondary);
+        transition: all 0.2s ease;
+    }
+    .timeline-card:hover .timeline-tag {
+        border-color: rgba(99, 102, 241, 0.25);
+        color: var(--accent);
+    }
 
     @media (max-width: 768px) {
         .about-hero { padding: 3.5rem 0 2rem; }
@@ -147,17 +208,34 @@
     <div class="container">
         <h2 class="section-title reveal">{!! __('heading_experience') !!}</h2>
         <p class="section-subtitle reveal delay-1">{{ __('My professional journey') }}</p>
-        <div style="max-width:700px; margin:0 auto">
+        <div style="max-width:760px; margin:0 auto">
             <div class="timeline">
                 @foreach($experiences as $exp)
                 <div class="timeline-item reveal delay-{{ ($loop->index % 3) + 1 }}">
-                    <div class="timeline-date">
-                        {{ $exp->start_date->format('M Y') }} —
-                        {{ $exp->current ? __('Present') : ($exp->end_date ? $exp->end_date->format('M Y') : '?') }}
+                    <div class="timeline-card">
+                        <div class="timeline-header">
+                            <h3 class="timeline-company">
+                                <i class="fas fa-briefcase"></i>
+                                {{ $exp->company }}
+                            </h3>
+                            <span class="timeline-date-badge">
+                                <i class="far fa-calendar-alt"></i>
+                                {{ $exp->formatted_date }}
+                            </span>
+                        </div>
+                        <div class="timeline-position-badge">
+                            <i class="fas fa-code-branch"></i>
+                            {{ $exp->localized_position }}
+                        </div>
+                        <p class="timeline-desc">{{ $exp->localized_description }}</p>
+                        @if(count($exp->tech_tags))
+                        <div class="timeline-tags">
+                            @foreach($exp->tech_tags as $tag)
+                            <span class="timeline-tag">{{ $tag }}</span>
+                            @endforeach
+                        </div>
+                        @endif
                     </div>
-                    <div class="timeline-company">{{ $exp->company }}</div>
-                    <div class="timeline-position">{{ $exp->position }}</div>
-                    <div class="timeline-desc">{{ $exp->description }}</div>
                 </div>
                 @endforeach
             </div>

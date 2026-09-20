@@ -71,5 +71,11 @@
     "Stay tuned for upcoming posts!": "Các bài viết mới sẽ sớm được xuất bản!",
     "Summary": "Tóm tắt",
     "Published": "Ngày đăng",
-    "All Articles": "Tất cả bài viết"
+    "All Articles": "Tất cả bài viết",
+    "Fullstack Developer": "Lập trình viên Full-Stack",
+    "Back End Developer": "Lập trình viên Back-End",
+    "Intern Fullstack Developer": "Thực tập sinh Full-Stack Developer",
+    "Developed a web-based Caro (Gomoku) game with interactive UI and real-time gameplay logic. Applied modern frontend practices to optimize rendering performance.": "Xây dựng và phát triển trò chơi Cờ Caro (Gomoku) trực tuyến với giao diện tương tác mượt mà và logic xử lý thời gian thực. Áp dụng các kỹ thuật frontend hiện đại để tối ưu hiệu năng hiển thị.",
+    "Developed a web-based laundry management system. Implemented order lifecycle management with real-time status updates and built role-based access control (RBAC).": "Phát triển hệ thống quản lý tiệm giặt ủi trên nền tảng web. Xây dựng quy trình theo dõi vòng đời đơn hàng tự động với cập nhật trạng thái thời gian thực và phân quyền người dùng chặt chẽ (RBAC).",
+    "Developed Education websites using WordPress and built company websites using PHP. Worked with HTML, CSS, JavaScript, PHP, and Postgresql.": "Tham gia phát triển các website giáo dục trên nền tảng WordPress và xây dựng các website doanh nghiệp bằng PHP. Trực tiếp làm việc với HTML, CSS, JavaScript, PHP và cơ sở dữ liệu PostgreSQL."
 }
