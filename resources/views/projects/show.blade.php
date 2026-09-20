@@ -3,7 +3,7 @@
 @section('title', $project->title . ' | ' . __('Hồ Thành Thiện'))
 @section('description', Str::limit(strip_tags($project->description), 155))
 @section('og_type', 'article')
-@section('og_image', $project->image ? asset('storage/' . $project->image) : asset('images/og-image.png'))
+@section('og_image', $project->image ? asset('storage/' . $project->image) : asset('images/og-image.webp'))
 
 @section('structured_data')
 <script type="application/ld+json">
@@ -105,7 +105,7 @@
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
                     @else
-                        <img src="{{ asset('images/og-image.png') }}" alt="{{ $project->title }} - Thumbnail">
+                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} - Thumbnail">
                     @endif
                 </div>
 

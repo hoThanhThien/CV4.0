@@ -85,7 +85,7 @@
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
                     @else
-                        <img src="{{ asset('images/og-image.png') }}" alt="{{ $project->title }} - Thumbnail">
+                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} - Thumbnail">
                     @endif
                     @if($project->featured)
                         <span class="project-featured-badge">⭐ {{ __('Featured') }}</span>

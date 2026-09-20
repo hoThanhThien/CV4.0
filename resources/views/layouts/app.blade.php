@@ -54,7 +54,7 @@
     <meta property="og:title" content="@yield('title', $defaultTitle)">
     <meta property="og:description" content="@yield('description', $defaultDescription)">
     <meta property="og:url" content="{{ $canonicalUrl }}">
-    <meta property="og:image" content="@yield('og_image', asset('images/og-image.png'))">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-image.webp'))">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="@yield('title', $defaultTitle)">
@@ -63,7 +63,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('title', $defaultTitle)">
     <meta name="twitter:description" content="@yield('description', $defaultDescription)">
-    <meta name="twitter:image" content="@yield('og_image', asset('images/og-image.png'))">
+    <meta name="twitter:image" content="@yield('og_image', asset('images/og-image.webp'))">
     <meta name="twitter:creator" content="@hoThanhThien">
 
     <!-- Global Structured Data (Schema.org / JSON-LD) -->
@@ -86,7 +86,7 @@
           "alternateName": "Ho Thanh Thien",
           "jobTitle": "{{ $isVi ? 'Kỹ sư Lập trình Full-Stack' : 'Full-Stack Software Engineer' }}",
           "url": "{{ url('/') }}",
-          "image": "{{ asset('images/og-image.png') }}",
+          "image": "{{ asset('images/og-image.webp') }}",
           "email": "hothanhthien119@gmail.com",
           "address": {
             "@type": "PostalAddress",
@@ -142,12 +142,24 @@
 
     @yield('structured_data')
 
-    <!-- Google Fonts -->
+    <!-- Performance & Font Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Asynchronous Non-blocking Google Fonts -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    </noscript>
+
+    <!-- Asynchronous Non-blocking Font Awesome -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </noscript>
 
     <style>
         :root {
@@ -170,11 +182,24 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+        }
+
+        /* Project & Media Placeholders */
+        .project-image-placeholder {
+            width: 100%;
+            height: 100%;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%);
+            color: var(--accent);
+            font-size: 2.5rem;
         }
 
         /* Scrollbar */

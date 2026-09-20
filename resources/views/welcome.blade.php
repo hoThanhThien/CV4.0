@@ -96,18 +96,15 @@
         font-size: clamp(2rem, 4.4vw, 3.5rem); font-weight: 900;
         line-height: 1.2; margin-bottom: 1.25rem; letter-spacing: -0.02em;
         word-break: normal; overflow-wrap: break-word;
-        animation: fadeInUp 0.7s ease 0.1s both;
     }
 
     .hero p {
         font-size: clamp(1rem, 2.5vw, 1.15rem); color: var(--text-secondary);
         margin-bottom: 1.75rem; max-width: 560px; line-height: 1.65;
-        animation: fadeInUp 0.7s ease 0.2s both;
     }
 
     .hero-actions {
         display: flex; gap: 1rem; flex-wrap: wrap;
-        animation: fadeInUp 0.7s ease 0.3s both;
     }
 
     .hero-scroll {
@@ -554,9 +551,11 @@
             <div class="project-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="project-image">
                     @if($project->image)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
                     @else
-                        <img src="{{ asset('images/og-image.png') }}" alt="{{ $project->title }} - Thumbnail">
+                        <div class="project-image-placeholder">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
                     @endif
                 </div>
                 <div class="project-body">
@@ -608,7 +607,7 @@
             <a href="{{ route('blog.show', $post->slug) }}" class="blog-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="blog-image">
                     @if($post->image)
-                        <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
+                        <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" loading="lazy" decoding="async">
                     @endif
                 </div>
                 <div class="blog-body">

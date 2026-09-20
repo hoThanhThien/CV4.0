@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Clear config cache
+# Optimize Laravel caches for production performance
 php artisan config:clear
-php artisan route:clear
-php artisan view:clear
+php artisan route:cache
+php artisan view:cache
 
 # Run migrations
 php artisan migrate --force

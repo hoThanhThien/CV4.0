@@ -3,7 +3,7 @@
 @section('title', $post->title . ' | ' . __('Hồ Thành Thiện'))
 @section('description', $post->excerpt ? Str::limit(strip_tags($post->excerpt), 155) : Str::limit(strip_tags($post->content), 155))
 @section('og_type', 'article')
-@section('og_image', $post->image ? asset('storage/' . $post->image) : asset('images/og-image.png'))
+@section('og_image', $post->image ? asset('storage/' . $post->image) : asset('images/og-image.webp'))
 
 @section('structured_data')
 <script type="application/ld+json">
