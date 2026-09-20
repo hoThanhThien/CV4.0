@@ -228,7 +228,7 @@
             position: relative;
         }
 
-        .nav-links a:not(.btn):hover, .nav-links a:not(.btn).active {
+        .nav-links a:not(.btn):not(.lang-btn):hover, .nav-links a:not(.btn):not(.lang-btn).active {
             color: var(--accent);
             background: rgba(99, 102, 241, 0.08);
         }
@@ -254,26 +254,38 @@
             border-color: rgba(99, 102, 241, 0.35);
         }
         .lang-switcher .lang-btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 0.35rem 0.65rem !important; border-radius: 7px; text-decoration: none;
-            color: var(--text-secondary); font-weight: 700; font-size: 0.82rem;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            width: auto !important;
+            padding: 0.35rem 0.65rem !important;
+            border-radius: 7px;
+            text-decoration: none;
+            color: var(--text-secondary) !important;
+            font-weight: 700;
+            font-size: 0.82rem;
+            line-height: 1;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
-            background: transparent;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
         }
         .lang-switcher .lang-btn:hover {
-            color: var(--text-primary);
+            color: var(--text-primary) !important;
         }
         .lang-switcher .lang-btn.active {
             color: var(--accent) !important;
             background: #ffffff !important;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
         }
         .flag-icon {
-            border-radius: 2.5px;
+            border-radius: 2px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
             flex-shrink: 0;
-            display: block;
+            display: inline-block;
+            vertical-align: middle;
             transition: transform 0.2s ease;
         }
         .lang-switcher .lang-btn:hover .flag-icon {
@@ -523,7 +535,7 @@
             .nav-links.open {
                 opacity: 1; visibility: visible; transform: translateY(0);
             }
-            .nav-links a:not(.btn) {
+            .nav-links a:not(.btn):not(.lang-btn) {
                 padding: 0.9rem 1.15rem; font-size: 1rem; font-weight: 600;
                 border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
                 width: 100%; color: var(--text-primary);
@@ -531,7 +543,7 @@
                 border: 1px solid transparent;
                 transition: all 0.2s ease;
             }
-            .nav-links a:not(.btn):hover, .nav-links a:not(.btn).active {
+            .nav-links a:not(.btn):not(.lang-btn):hover, .nav-links a:not(.btn):not(.lang-btn).active {
                 color: var(--accent);
                 background: rgba(99, 102, 241, 0.08);
                 border-color: rgba(99, 102, 241, 0.2);
@@ -552,18 +564,25 @@
                 box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
             }
             .lang-switcher .lang-btn {
-                flex: 1; display: flex; align-items: center; justify-content: center;
-                gap: 8px; padding: 0.7rem 1rem !important;
-                border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+                flex: 1;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 8px !important;
+                padding: 0.65rem 1rem !important;
+                border-radius: 10px;
+                font-weight: 700;
+                font-size: 0.92rem;
                 background: transparent !important;
                 color: var(--text-secondary) !important;
                 box-shadow: none !important;
                 border: none !important;
+                width: auto !important;
                 transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             }
             .lang-switcher .lang-btn .flag-icon {
-                width: 20px;
-                height: 15px;
+                width: 18px;
+                height: 13.5px;
             }
             .lang-switcher .lang-btn.active {
                 background: #ffffff !important;
