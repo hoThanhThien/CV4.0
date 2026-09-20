@@ -83,9 +83,11 @@
             <div class="project-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="project-image">
                     @if($project->image)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
                     @else
-                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} - Thumbnail">
+                        <div class="project-image-placeholder">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
                     @endif
                     @if($project->featured)
                         <span class="project-featured-badge">⭐ {{ __('Featured') }}</span>

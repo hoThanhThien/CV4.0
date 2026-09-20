@@ -103,9 +103,11 @@
             <div class="reveal">
                 <div class="project-image-full">
                     @if($project->image)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
                     @else
-                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} - Thumbnail">
+                        <div class="project-image-placeholder" style="min-height: 320px;">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
                     @endif
                 </div>
 

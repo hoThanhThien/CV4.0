@@ -135,7 +135,7 @@
 
                 @if($post->image)
                 <div class="post-image">
-                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" loading="lazy" decoding="async">
                 </div>
                 @endif
 
