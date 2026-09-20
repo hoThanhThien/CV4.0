@@ -112,5 +112,10 @@
     "Security Verification": "Xác minh bảo mật",
     "Please verify that you are not a robot.": "Vui lòng xác nhận bạn không phải là người máy.",
     "Privacy": "Bảo mật",
-    "Terms": "Điều khoản"
+    "Terms": "Điều khoản",
+    "This site is protected by reCAPTCHA and the Google": "Trang web này được bảo vệ bởi reCAPTCHA theo",
+    "Privacy Policy": "Chính sách quyền riêng tư",
+    "Terms of Service": "Điều khoản dịch vụ",
+    "apply.": "của Google.",
+    "Spam detection triggered. Please try again.": "Phát hiện hành vi bất thường hoặc bot spam. Vui lòng thử lại sau."
 }
