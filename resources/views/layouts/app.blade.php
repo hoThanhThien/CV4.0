@@ -162,16 +162,40 @@
     </noscript>
 
     <style>
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-style: normal;
+            font-weight: 900;
+            font-display: swap;
+            src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-solid-900.woff2") format("woff2"),
+                 url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-solid-900.ttf") format("truetype");
+        }
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-regular-400.woff2") format("woff2"),
+                 url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-regular-400.ttf") format("truetype");
+        }
+        @font-face {
+            font-family: 'Font Awesome 6 Brands';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-brands-400.woff2") format("woff2"),
+                 url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-brands-400.ttf") format("truetype");
+        }
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
             --bg-card: #ffffff;
             --border: #e2e8f0;
             --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --accent: #6366f1;
-            --accent-light: #8b5cf6;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --accent: #4f46e5;
+            --accent-light: #6366f1;
             --accent-glow: rgba(99, 102, 241, 0.2);
             --cyan: #06b6d4;
             --green: #10b981;
@@ -755,20 +779,43 @@
     </button>
 
     <script>
-        // Scroll progress bar
+        // DOM Elements
         const progressBar = document.getElementById('scrollProgressBar');
-        function updateProgress() {
-            const scrollTop = window.scrollY || document.documentElement.scrollTop;
-            const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-            if (progressBar) progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
-        }
-        window.addEventListener('scroll', updateProgress, { passive: true });
-
-        // Navbar scroll effect
         const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
+        
+        // Unified Scroll Handler for better performance (avoids forced reflow)
+        let isScrolling = false;
         window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
+            if (!isScrolling) {
+                window.requestAnimationFrame(() => {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    
+                    // Progress bar
+                    if (progressBar) {
+                        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+                    }
+
+                    // Navbar
+                    if (navbar) {
+                        navbar.classList.toggle('scrolled', scrollTop > 50);
+                    }
+
+                    // Back to top
+                    if (backToTop) {
+                        if (scrollTop > 300) {
+                            backToTop.classList.add('visible');
+                        } else {
+                            backToTop.classList.remove('visible');
+                        }
+                    }
+
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
         }, { passive: true });
 
         // Mobile menu toggle & interactions
@@ -814,14 +861,6 @@
         });
 
         // Back to top
-        const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        }, { passive: true });
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
