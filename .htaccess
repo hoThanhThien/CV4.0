@@ -1,6 +1,5 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    # Redirect mọi luồng truy cập vào thư mục public của Laravel
-    RewriteCond %{REQUEST_URI} !^public
-    RewriteRule ^(.*)$ public/$1 [L]
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L,QSA]
 </IfModule>
