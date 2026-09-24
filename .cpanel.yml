@@ -2,16 +2,12 @@
 deployment:
   tasks:
     # 1. Copy toan bo source code tu thu muc repositories sang public_html
-    - export DEPLOYPATH=/home/hothanht1/public_html/
-    - /bin/rsync -a --exclude='.git' ./ $DEPLOYPATH
+    - /bin/cp -R -a . /home/hothanht1/public_html/
 
     # 2. Chuyen vao public_html va chay composer
-    - cd $DEPLOYPATH && (/usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader)
+    - cd /home/hothanht1/public_html/ && (/usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader)
 
     # 3. Chay cac lenh optimize cua Laravel
-    - cd $DEPLOYPATH && php artisan optimize:clear
-    - cd $DEPLOYPATH && php artisan config:cache
-    - cd $DEPLOYPATH && php artisan view:cache
-
-    # 4. Chay lenh migrate database (Tuy chon: bo comment neu can)
-    # - cd $DEPLOYPATH && php artisan migrate --force
+    - cd /home/hothanht1/public_html/ && php artisan optimize:clear
+    - cd /home/hothanht1/public_html/ && php artisan config:cache
+    - cd /home/hothanht1/public_html/ && php artisan view:cache
