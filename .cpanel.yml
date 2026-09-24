@@ -1,13 +1,17 @@
 ---
 deployment:
   tasks:
-    # 1. Cai dat cac thu vien PHP (Composer)
-    - /usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader
+    # 1. Copy toan bo source code tu thu muc repositories sang public_html
+    - export DEPLOYPATH=/home/hothanht1/public_html/
+    - /bin/rsync -a --exclude='.git' ./ $DEPLOYPATH
 
-    # 2. Xoa cache cu va tao cache moi de toi uu toc do
-    - php artisan optimize:clear
-    - php artisan config:cache
-    - php artisan view:cache
+    # 2. Chuyen vao public_html va chay composer
+    - cd $DEPLOYPATH && (/usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader)
 
-    # 3. Chay lenh migrate database (Tuy chon: neu can thiet bo comment dong duoi)
-    # - php artisan migrate --force
+    # 3. Chay cac lenh optimize cua Laravel
+    - cd $DEPLOYPATH && php artisan optimize:clear
+    - cd $DEPLOYPATH && php artisan config:cache
+    - cd $DEPLOYPATH && php artisan view:cache
+
+    # 4. Chay lenh migrate database (Tuy chon: bo comment neu can)
+    # - cd $DEPLOYPATH && php artisan migrate --force
