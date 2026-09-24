@@ -1,0 +1,13 @@
+---
+deployment:
+  tasks:
+    # 1. Cai dat cac thu vien PHP (Composer)
+    - /usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader
+
+    # 2. Xoa cache cu va tao cache moi de toi uu toc do
+    - php artisan optimize:clear
+    - php artisan config:cache
+    - php artisan view:cache
+
+    # 3. Chay lenh migrate database (Tuy chon: neu can thiet bo comment dong duoi)
+    # - php artisan migrate --force
