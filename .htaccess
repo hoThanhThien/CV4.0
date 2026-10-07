@@ -1,5 +1,19 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/$1 [L,QSA]
+    DirectoryIndex public/index.php index.php
+
+    # 1. Do not rewrite if already accessing /public/
+    RewriteCond %{REQUEST_URI} ^/public/
+    RewriteRule ^ - [L]
+
+    # 2. Rewrite root homepage directly to public/index.php (avoids directory index 403 on LiteSpeed)
+    RewriteRule ^$ public/index.php [L]
+
+    # 3. If file or directory exists inside public/, serve it directly
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # 4. Route all other requests to Laravel front controller
+    RewriteRule ^(.*)$ public/index.php [L,QSA]
 </IfModule>

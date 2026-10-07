@@ -1,13 +1,18 @@
 ---
 deployment:
   tasks:
-    # 1. Copy toan bo source code tu thu muc repositories sang public_html
+    # 1. Copy toan bo source code sang public_html
     - /bin/cp -R -a . /home/hothanht1/public_html/
 
-    # 2. Chuyen vao public_html va chay composer
+    # 2. Dam bao quyen file chuan cho LiteSpeed Web Server (thu muc: 755, file: 644, cache: 775)
+    - find /home/hothanht1/public_html/ -type d -exec chmod 755 {} +
+    - find /home/hothanht1/public_html/ -type f -exec chmod 644 {} +
+    - chmod -R 775 /home/hothanht1/public_html/storage /home/hothanht1/public_html/bootstrap/cache
+
+    # 3. Chuyen vao public_html va chay composer
     - cd /home/hothanht1/public_html/ && (/usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader)
 
-    # 3. Chay cac lenh optimize va tao storage link cua Laravel
+    # 4. Tao lien ket storage va toi uu cache
     - cd /home/hothanht1/public_html/ && (php artisan storage:link || true)
     - cd /home/hothanht1/public_html/ && php artisan optimize:clear
     - cd /home/hothanht1/public_html/ && php artisan config:cache
