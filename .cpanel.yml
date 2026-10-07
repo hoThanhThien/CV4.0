@@ -7,7 +7,8 @@ deployment:
     # 2. Chuyen vao public_html va chay composer
     - cd /home/hothanht1/public_html/ && (/usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader)
 
-    # 3. Chay cac lenh optimize cua Laravel
+    # 3. Chay cac lenh optimize va tao storage link cua Laravel
+    - cd /home/hothanht1/public_html/ && (php artisan storage:link || true)
     - cd /home/hothanht1/public_html/ && php artisan optimize:clear
     - cd /home/hothanht1/public_html/ && php artisan config:cache
     - cd /home/hothanht1/public_html/ && php artisan view:cache

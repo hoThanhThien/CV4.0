@@ -77,7 +77,7 @@
             <a href="{{ route('blog.show', $post->slug) }}" class="blog-card reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="blog-image">
                     @if($post->image)
-                        <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
+                        <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
                     @else
                         <span class="blog-image-placeholder"><i class="fas fa-pen-nib"></i></span>
                     @endif

@@ -103,7 +103,7 @@
             <div class="reveal">
                 <div class="project-image-full">
                     @if($project->image)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
                     @else
                         <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} - Thumbnail" loading="lazy" decoding="async">
                     @endif

@@ -113,11 +113,30 @@ Route::get('/setup-db', function () {
     try {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-        return 'Database migrated and seeded successfully!';
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'Database migrated, seeded, and storage linked successfully!';
     } catch (\Exception $e) {
         return 'Error: ' . $e->getMessage();
     }
 });
+
+Route::get('/setup-storage', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'Storage symlink created successfully!';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
+// Fallback direct storage route if symlink is missing on hosting
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*');
 
 /*
 |--------------------------------------------------------------------------
