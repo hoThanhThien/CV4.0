@@ -55,7 +55,7 @@
     .project-image-full .placeholder { font-size: 5rem; opacity: 0.3; }
 
     .project-title { font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 900; margin-bottom: 1rem; letter-spacing: -0.02em; word-break: break-word; }
-    .project-desc { color: var(--text-secondary); font-size: 1rem; line-height: 1.8; word-break: break-word; }
+    .project-desc { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.85; word-break: break-word; white-space: pre-line; }
 
     .project-sidebar .card { margin-bottom: 1.25rem; }
     .project-sidebar .card h4 { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
@@ -110,7 +110,7 @@
                 </div>
 
                 <h1 class="project-title">{{ $project->title }}</h1>
-                <p class="project-desc">{{ $project->description }}</p>
+                <div class="project-desc">{!! nl2br(e($project->description)) !!}</div>
             </div>
 
             <!-- Sidebar -->

@@ -28,7 +28,10 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="description">Description *</label>
-                    <textarea id="description" name="description" class="form-control" required>{{ old('description', $project->description) }}</textarea>
+                    <textarea id="description" name="description" class="form-control" style="min-height:200px; line-height:1.6" required>{{ old('description', $project->description) }}</textarea>
+                    <span style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top:0.35rem">
+                        <i class="fas fa-info-circle"></i> Supports multiple lines, bullet points (e.g. <code>+</code> or <code>-</code>) and sections. Preserved cleanly on public pages.
+                    </span>
                     @error('description')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
                 </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
@@ -72,15 +75,16 @@
                 </div>
             </div>
 
-            @if($technologies->count())
             <div class="form-card" style="margin-bottom:1.5rem">
-                <label class="form-label">Technologies</label>
-                <div style="display:flex; flex-wrap:wrap; gap:0.5rem">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem">
+                    <label class="form-label" style="margin-bottom:0">Technologies</label>
+                    <a href="{{ route('admin.technologies.index') }}" target="_blank" style="font-size:0.78rem; color:var(--accent-light); text-decoration:none">Manage →</a>
+                </div>
+
+                <div id="tech-container" style="display:flex; flex-wrap:wrap; gap:0.5rem; max-height:220px; overflow-y:auto; padding-bottom:0.5rem">
                     @foreach($technologies as $tech)
                     @php $isSelected = in_array($tech->id, old('technologies', $selectedTechnologies)); @endphp
-                    <label style="display:flex; align-items:center; gap:0.4rem; padding:0.3rem 0.6rem; border-radius:8px; border:1px solid var(--border); cursor:pointer; font-size:0.85rem; transition: all 0.2s; user-select:none {{ $isSelected ? '; background:rgba(124,58,237,0.15); border-color:var(--accent); color:var(--accent-light)' : '' }}"
-                        class="{{ $isSelected ? 'active-tech' : '' }}"
-                        onclick="this.classList.toggle('active-tech')">
+                    <label class="tech-tag-label {{ $isSelected ? 'active-tech' : '' }}">
                         <input type="checkbox" name="technologies[]" value="{{ $tech->id }}"
                             {{ $isSelected ? 'checked' : '' }}
                             style="display:none">
@@ -88,8 +92,18 @@
                     </label>
                     @endforeach
                 </div>
+
+                <!-- Quick Add Tech -->
+                <div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--border)">
+                    <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.35rem; font-weight:600">+ Quick Add Technology:</div>
+                    <div style="display:flex; gap:0.4rem">
+                        <input type="text" id="quick-tech-name" class="form-control" style="padding:0.4rem 0.65rem; font-size:0.85rem" placeholder="e.g. Laravel, Docker" onkeydown="if(event.key==='Enter'){event.preventDefault();quickAddTech();}">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="quickAddTech()" style="white-space:nowrap">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
             </div>
-            @endif
 
             <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center">
                 <i class="fas fa-save"></i> Save Changes
@@ -99,7 +113,18 @@
 </form>
 
 <style>
-    label.active-tech { background: rgba(124,58,237,0.15) !important; border-color: var(--accent) !important; color: var(--accent-light) !important; }
+    .tech-tag-label {
+        display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.7rem;
+        border-radius: 8px; border: 1px solid var(--border); cursor: pointer;
+        font-size: 0.85rem; transition: all 0.2s; user-select: none; background: var(--bg);
+    }
+    .tech-tag-label:hover { border-color: var(--accent); }
+    .tech-tag-label.active-tech {
+        background: rgba(124,58,237,0.15) !important;
+        border-color: var(--accent) !important;
+        color: var(--accent-light) !important;
+        font-weight: 600;
+    }
 </style>
 
 <script>
@@ -112,9 +137,54 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-    document.querySelectorAll('input[name="technologies[]"]').forEach(cb => {
-        const label = cb.closest('label');
-        cb.addEventListener('change', () => label.classList.toggle('active-tech', cb.checked));
-    });
+
+    // Attach change listener to all tech checkboxes
+    function bindTechCheckboxes() {
+        document.querySelectorAll('#tech-container input[type="checkbox"]').forEach(cb => {
+            const label = cb.closest('label');
+            if (cb.checked) label.classList.add('active-tech');
+            cb.onchange = () => label.classList.toggle('active-tech', cb.checked);
+        });
+    }
+    bindTechCheckboxes();
+
+    // Quick Add Technology via Ajax
+    function quickAddTech() {
+        const input = document.getElementById('quick-tech-name');
+        const name = input.value.trim();
+        if (!name) return;
+
+        fetch("{{ route('admin.technologies.quick') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ name: name })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.technology) {
+                const container = document.getElementById('tech-container');
+                let existing = container.querySelector(`input[value="${data.technology.id}"]`);
+                if (!existing) {
+                    const label = document.createElement('label');
+                    label.className = 'tech-tag-label active-tech';
+                    label.innerHTML = `<input type="checkbox" name="technologies[]" value="${data.technology.id}" checked style="display:none"> ${data.technology.name}`;
+                    container.appendChild(label);
+                } else {
+                    existing.checked = true;
+                    existing.closest('label').classList.add('active-tech');
+                }
+                bindTechCheckboxes();
+                input.value = '';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to add technology. Please try again.');
+        });
+    }
 </script>
 @endsection

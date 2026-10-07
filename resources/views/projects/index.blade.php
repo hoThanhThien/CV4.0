@@ -98,7 +98,7 @@
                         @endforeach
                     </div>
                     <div class="project-title">{{ $project->title }}</div>
-                    <p class="project-desc">{{ Str::limit($project->description, 130) }}</p>
+                    <p class="project-desc">{{ Str::limit(preg_replace('/\s+/', ' ', $project->description), 140) }}</p>
                     <div class="project-links">
                         <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i> {{ __('Details') }}

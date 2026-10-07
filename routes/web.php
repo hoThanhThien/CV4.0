@@ -25,8 +25,6 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
-Route::post('/contact/verify-recaptcha', [ContactController::class, 'verifyRecaptcha'])->name('contact.verify-recaptcha');
-Route::get('/contact/captcha', [ContactController::class, 'captcha'])->name('contact.captcha');
 
 Route::get('/sitemap.xml', function () {
     $projects = \App\Models\Project::all();
@@ -140,8 +138,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('projects', App\Http\Controllers\Admin\ProjectController::class)->except(['show']);
+        Route::post('technologies/quick', [App\Http\Controllers\Admin\TechnologyController::class, 'quick'])->name('technologies.quick');
+        Route::resource('technologies', App\Http\Controllers\Admin\TechnologyController::class)->except(['show']);
         Route::resource('blog', App\Http\Controllers\Admin\BlogController::class);
         Route::resource('skills', App\Http\Controllers\Admin\SkillController::class)->except(['show']);
         Route::resource('experiences', App\Http\Controllers\Admin\ExperienceController::class)->except(['show']);
+        Route::resource('messages', App\Http\Controllers\Admin\ContactMessageController::class)->only(['index', 'show', 'destroy']);
+        Route::post('messages/{message}/toggle-read', [App\Http\Controllers\Admin\ContactMessageController::class, 'toggleRead'])->name('messages.toggle-read');
     });
 });

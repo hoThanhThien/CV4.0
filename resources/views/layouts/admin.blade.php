@@ -245,6 +245,9 @@
             <a href="{{ route('admin.projects.index') }}" class="{{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
                 <i class="fas fa-code"></i> Projects
             </a>
+            <a href="{{ route('admin.technologies.index') }}" class="{{ request()->routeIs('admin.technologies.*') ? 'active' : '' }}">
+                <i class="fas fa-microchip"></i> Technologies
+            </a>
             <a href="{{ route('admin.blog.index') }}" class="{{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">
                 <i class="fas fa-newspaper"></i> Blog Posts
             </a>
@@ -253,6 +256,15 @@
             </a>
             <a href="{{ route('admin.experiences.index') }}" class="{{ request()->routeIs('admin.experiences.*') ? 'active' : '' }}">
                 <i class="fas fa-briefcase"></i> Experiences
+            </a>
+
+            <div class="nav-section-title" style="margin-top:1rem">Inbox</div>
+            <a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">
+                <i class="fas fa-envelope"></i> Messages
+                @php $sidebarUnread = \App\Models\ContactMessage::where('is_read', false)->count(); @endphp
+                @if($sidebarUnread > 0)
+                    <span class="badge badge-danger" style="margin-left:auto; font-size:0.7rem; padding:0.15rem 0.45rem">{{ $sidebarUnread }}</span>
+                @endif
             </a>
 
             <div class="nav-section-title" style="margin-top:1rem">View Site</div>

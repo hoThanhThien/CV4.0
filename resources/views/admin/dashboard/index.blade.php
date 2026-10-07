@@ -30,12 +30,28 @@
         <div class="stat-label">Skills</div>
         <div class="stat-value">{{ $stats['skills'] }}</div>
     </div>
+    <div class="stat-card {{ $stats['unread_messages'] > 0 ? 'stat-purple' : '' }}">
+        <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+        <div class="stat-label">Inbox Messages</div>
+        <div class="stat-value">
+            {{ $stats['unread_messages'] }}
+            @if($stats['unread_messages'] > 0)
+                <span style="font-size:0.75rem; color:var(--danger); font-weight:600">unread</span>
+            @endif
+        </div>
+    </div>
 </div>
 
 <!-- Quick Actions -->
 <div style="display:flex; gap:0.75rem; margin-bottom:2rem; flex-wrap:wrap">
     <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> New Project
+    </a>
+    <a href="{{ route('admin.technologies.index') }}" class="btn btn-secondary">
+        <i class="fas fa-microchip"></i> Manage Techs
+    </a>
+    <a href="{{ route('admin.messages.index') }}" class="btn btn-secondary">
+        <i class="fas fa-envelope"></i> View Messages
     </a>
     <a href="{{ route('admin.blog.create') }}" class="btn btn-secondary">
         <i class="fas fa-pen"></i> New Blog Post
@@ -121,6 +137,51 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
+<!-- Recent Messages -->
+<div style="margin-top:2rem">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem">
+        <h3 style="font-size:1rem; font-weight:700">
+            <i class="fas fa-inbox" style="color:var(--accent)"></i> Recent Contact Messages
+        </h3>
+        <a href="{{ route('admin.messages.index') }}" style="color: var(--accent-light); font-size:0.85rem; text-decoration:none">View all messages →</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sender</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th style="text-align:right">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($recentMessages as $msg)
+                <tr style="{{ !$msg->is_read ? 'background: rgba(99,102,241,0.03); font-weight:600' : '' }}">
+                    <td>
+                        <div>{{ $msg->name }}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:400">{{ $msg->email }}</div>
+                    </td>
+                    <td>{{ $msg->subject ?: '(No Subject)' }}</td>
+                    <td style="max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:400; color:var(--text-muted)">
+                        {{ $msg->message }}
+                    </td>
+                    <td style="font-size:0.85rem; color:var(--text-muted); font-weight:400; white-space:nowrap">
+                        {{ $msg->created_at->diffForHumans() }}
+                    </td>
+                    <td style="text-align:right">
+                        <a href="{{ route('admin.messages.show', $msg->id) }}" class="btn btn-secondary btn-sm">Read</a>
+                    </td>
+                </tr>
+                @empty
+                <tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:2rem">No messages yet</td></tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 
