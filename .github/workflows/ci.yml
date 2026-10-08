@@ -55,7 +55,7 @@ jobs:
   deploy-production:
     name: "Bước 3 & 4 — Deploy lên Production Server"
     needs: [laravel-tests] # Chỉ chạy khi toàn bộ tests ở Bước 2 PASS
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: (github.ref == 'refs/heads/main' || github.ref_name == 'main') && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
