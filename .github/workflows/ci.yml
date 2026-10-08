@@ -1,4 +1,4 @@
-name: Laravel CI
+name: Laravel CI/CD Pipeline
 
 on:
   push:
@@ -8,22 +8,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  # ==========================================
+  # BƯỚC 2: CI - BUILD & AUTOMATED TEST
+  # ==========================================
   laravel-tests:
-    name: Build & Test
+    name: "Bước 2 — CI: Build & Test"
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Setup PHP 8.2
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, dom, fileinfo, sqlite, pdo_sqlite, bcmath, gd, curl
           coverage: none
 
-      - name: Setup Node.js
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -38,11 +41,71 @@ jobs:
       - name: Generate App Key
         run: php artisan key:generate
 
-      - name: Install NPM Dependencies
-        run: npm ci
-
-      - name: Compile Assets (npm run prod)
-        run: npm run prod
+      - name: Install NPM Dependencies & Build Assets
+        run: |
+          npm ci
+          npm run prod
 
       - name: Run Tests (php artisan test)
         run: php artisan test
+
+  # ==========================================
+  # BƯỚC 3 & 4: CD - DEPLOY NẾU CI THÀNH CÔNG
+  # ==========================================
+  deploy-production:
+    name: "Bước 3 & 4 — Deploy lên Production Server"
+    needs: [laravel-tests] # Chỉ chạy khi toàn bộ tests ở Bước 2 PASS
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH to cPanel Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST || 'hothanhthien.io.vn' }}
+          username: ${{ secrets.SSH_USER || 'hothanht1' }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 63456 }}
+          script: |
+            echo ">>> 1. Kéo mã nguồn mới nhất từ GitHub..."
+            cd /home/hothanht1/repositories/CV4.0
+            git pull origin main
+
+            echo ">>> 2. Đồng bộ mã nguồn sang public_html..."
+            /bin/cp -R -a . /home/hothanht1/public_html/
+            find /home/hothanht1/public_html/ -type d -exec chmod 755 {} +
+            find /home/hothanht1/public_html/ -type f -exec chmod 644 {} +
+            chmod -R 775 /home/hothanht1/public_html/storage /home/hothanht1/public_html/bootstrap/cache
+
+            echo ">>> 3. Chạy Composer và cấu hình cache Laravel..."
+            cd /home/hothanht1/public_html/
+            (/usr/local/bin/composer install --no-dev --optimize-autoloader || composer install --no-dev --optimize-autoloader)
+            php artisan migrate --force
+            php artisan storage:link || true
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            echo ">>> Deploy hoàn tất thành công!"
+
+  # ==========================================
+  # BƯỚC 5: HEALTH CHECK - KIỂM TRA ỨNG DỤNG
+  # ==========================================
+  health-check:
+    name: "Bước 5 — Kiểm tra ứng dụng (Health Check)"
+    needs: [deploy-production]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify Live Website Status
+        run: |
+          echo "Chờ 5 giây để LiteSpeed Web Server nạp cache..."
+          sleep 5
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://hothanhthien.io.vn)
+          echo "Mã phản hồi HTTP từ https://hothanhthien.io.vn: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -ne 200 ] && [ "$HTTP_STATUS" -ne 301 ] && [ "$HTTP_STATUS" -ne 302 ]; then
+            echo "❌ Health check thất bại! Trang web trả về mã lỗi $HTTP_STATUS"
+            exit 1
+          fi
+          echo "✅ Website đang hoạt động bình thường và ổn định (HTTP $HTTP_STATUS)!"
