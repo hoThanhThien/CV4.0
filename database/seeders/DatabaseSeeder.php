@@ -90,6 +90,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'FastAPI', 'color' => '#009688'],
             ['name' => 'NextJS', 'color' => '#000000'],
             ['name' => 'PHP', 'color' => '#777bb4'],
+            ['name' => 'Laravel', 'color' => '#ff2d20'],
+            ['name' => 'Docker', 'color' => '#2496ed'],
+            ['name' => 'Nginx', 'color' => '#009639'],
+            ['name' => 'cPanel', 'color' => '#ff6c2c'],
             ['name' => 'WordPress', 'color' => '#21759b'],
             ['name' => 'Python', 'color' => '#3776ab'],
             ['name' => 'MySQL', 'color' => '#4479a1'],
@@ -104,12 +108,21 @@ class DatabaseSeeder extends Seeder
         // ====== Projects ======
         $projects = [
             [
+                'title' => 'Personal Portfolio & CMS',
+                'description' => "Personal Portfolio & CMS | 08/2026 - 10/2026\n+Project Description: Developed a personal portfolio and content management system with bilingual support (English/Vietnamese).\n+Built an admin dashboard for managing projects, skills, experiences, technologies, blog posts, and contact submissions.\n+Designed relational database schemas and implemented CRUD operations, authentication, and SEO features including dynamic sitemap generation.\n+Implemented CI/CD pipelines to automate application deployment, code integration, and production updates.\n+Tech: PHP, Laravel, Blade, MySQL/SQLite, Docker, Nginx, cPanel",
+                'github_url' => 'https://github.com/hoThanhThien/CV4.0',
+                'demo_url' => 'https://hothanhthien.io.vn',
+                'featured' => true,
+                'order' => 1,
+                'techs' => ['PHP', 'MySQL', 'Laravel', 'Docker', 'Nginx', 'cPanel'],
+            ],
+            [
                 'title' => 'Caro (Gomoku) Game',
                 'description' => 'A web-based Caro game with interactive UI and real-time gameplay logic, responsive across desktop and mobile devices.',
                 'github_url' => 'https://github.com/hoThanhThien',
                 'demo_url' => 'https://caro-game-2025.fly.dev/',
                 'featured' => true,
-                'order' => 1,
+                'order' => 2,
                 'techs' => ['ReactJS', 'FastAPI', 'Python'],
             ],
             [
@@ -118,7 +131,7 @@ class DatabaseSeeder extends Seeder
                 'github_url' => 'https://github.com/hoThanhThien/LT_JAVA_010412213603',
                 'demo_url' => null,
                 'featured' => true,
-                'order' => 2,
+                'order' => 3,
                 'techs' => ['NextJS', 'Spring Boot', 'MySQL'],
             ],
             [
@@ -127,7 +140,7 @@ class DatabaseSeeder extends Seeder
                 'github_url' => null,
                 'demo_url' => 'https://hothanhthien.io.vn/',
                 'featured' => true,
-                'order' => 3,
+                'order' => 4,
                 'techs' => ['PHP', 'WordPress', 'PostgreSQL'],
             ],
         ];

@@ -1,0 +1,392 @@
+{
+  "info": {
+    "_postman_id": "7b8f9a2e-4c1d-4890-a8d1-123456789abc",
+    "name": "Ho Thanh Thien - Portfolio & CMS REST API",
+    "description": "Production RESTful API Collection for Ho Thanh Thien's Portfolio & CMS Platform (Laravel 9 + PostgreSQL/MySQL).\n\nIncludes endpoints for Projects, Blog Posts (Full CRUD), Skills, Experiences, Contact Form submissions, and Sanctum Token Authentication.\n\nLive Deployed URL: https://hothanhthien.io.vn\nSwagger Docs: https://hothanhthien.io.vn/api/docs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://hothanhthien.io.vn",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login (Generate Bearer Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "    console.log(\"Sanctum Token saved:\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"hothanhthien119@gmail.com\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Authenticates admin user and returns a Laravel Sanctum Bearer token. The test script automatically saves this token into the {{token}} collection variable."
+          }
+        },
+        {
+          "name": "Get Profile (Me)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            },
+            "description": "Returns authenticated user information."
+          }
+        },
+        {
+          "name": "Logout (Revoke Token)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            },
+            "description": "Revokes current Sanctum API token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Projects",
+      "item": [
+        {
+          "name": "Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects"]
+            },
+            "description": "Retrieves all portfolio projects with attached technology badges."
+          }
+        },
+        {
+          "name": "Filter Featured Projects",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects?featured=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects"],
+              "query": [{ "key": "featured", "value": "true" }]
+            },
+            "description": "Filters projects marked as featured."
+          }
+        },
+        {
+          "name": "Get Project by ID (e.g. Project 4)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects", "4"]
+            },
+            "description": "Fetches single project details by ID."
+          }
+        },
+        {
+          "name": "Create Project (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cloud Microservices Architecture\",\n  \"description\": \"Designed high-scale distributed backend services with Docker, Redis caching, and CI/CD pipelines.\",\n  \"github_url\": \"https://github.com/hoThanhThien\",\n  \"demo_url\": \"https://hothanhthien.io.vn\",\n  \"featured\": true,\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects"]
+            },
+            "description": "Creates a new project. Requires Bearer Token."
+          }
+        },
+        {
+          "name": "Update Project (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Personal Portfolio & CMS (Updated via API)\",\n  \"featured\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects", "4"]
+            },
+            "description": "Updates project fields. Requires Bearer Token."
+          }
+        },
+        {
+          "name": "Delete Project (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects", "999"]
+            },
+            "description": "Deletes a project. Requires Bearer Token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Blog Posts (CRUD)",
+      "item": [
+        {
+          "name": "Get All Blog Posts",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog?per_page=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog"],
+              "query": [{ "key": "per_page", "value": "10" }]
+            },
+            "description": "Lists published blog articles with pagination metadata."
+          }
+        },
+        {
+          "name": "Get Single Post by Slug",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog", "1"]
+            },
+            "description": "Retrieves post by slug or ID."
+          }
+        },
+        {
+          "name": "Create Blog Post (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Debugging High-Volume Backend Systems with Postman\",\n  \"excerpt\": \"Best practices for isolating backend bugs, analyzing server logs, and verifying API regression.\",\n  \"content\": \"# Debugging Backend Systems\\n\\nI usually debug backend issues by first reproducing the problem locally and checking application logs for errors, stack traces, and relevant request details.\\n\\nI then inspect the affected API endpoints, business logic, database queries, and environment configuration to identify the root cause.\\n\\nAfter implementing a fix, I test normal and edge cases using Postman and verify that the issue is resolved without introducing regressions. For production issues, I also check server logs and deployment configuration.\",\n  \"published\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog"]
+            },
+            "description": "Creates a new blog article. Requires Bearer Token."
+          }
+        },
+        {
+          "name": "Update Blog Post (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Debugging High-Volume Backend Systems with Postman (Revised)\",\n  \"published\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog", "1"]
+            },
+            "description": "Updates a blog article. Requires Bearer Token."
+          }
+        },
+        {
+          "name": "Delete Blog Post (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog/999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog", "999"]
+            },
+            "description": "Deletes a blog post by ID. Requires Bearer Token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Skills & Experiences",
+      "item": [
+        {
+          "name": "Get Skills (Grouped by Category)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "skills"]
+            },
+            "description": "Lists all technical skills organized into categories (Frontend, Backend, Database, Tools & Practices)."
+          }
+        },
+        {
+          "name": "Get Experiences",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/experiences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "experiences"]
+            },
+            "description": "Lists all job positions and project milestones in chronological order."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Contact Submission",
+      "item": [
+        {
+          "name": "Submit Contact Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Senior Technical Recruiter\",\n  \"email\": \"talent@techcorp.io\",\n  \"subject\": \"Software Engineer Opportunity\",\n  \"message\": \"Hi Thien, we were impressed by your backend API implementation and portfolio. We would like to schedule an interview with our engineering team.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/contact",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "contact"]
+            },
+            "description": "Public endpoint to send messages directly into the Portfolio database inbox."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Documentation Endpoints",
+      "item": [
+        {
+          "name": "Get OpenAPI 3.0 JSON Specification",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/docs/openapi.json",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "docs", "openapi.json"]
+            },
+            "description": "Returns machine-readable OpenAPI 3.0 specification."
+          }
+        },
+        {
+          "name": "Swagger UI Interactive Documentation",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/docs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "docs"]
+            },
+            "description": "Live interactive Swagger UI web interface."
+          }
+        }
+      ]
+    }
+  ]
+}
