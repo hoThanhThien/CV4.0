@@ -66,6 +66,7 @@ jobs:
           username: ${{ secrets.SSH_USER || 'hothanht1' }}
           password: ${{ secrets.SSH_PASSWORD }}
           key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT || 63456 }}
           script: |
             echo ">>> 1. Kéo mã nguồn mới nhất từ GitHub..."
