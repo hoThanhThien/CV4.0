@@ -40,6 +40,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+
     <!-- Canonical & Multi-Language Alternate URLs (Hreflang for Google SEO) -->
     <link rel="canonical" href="{{ $canonicalUrl }}">
     <link rel="alternate" hreflang="vi" href="{{ $currentBaseUrl }}?lang=vi">
