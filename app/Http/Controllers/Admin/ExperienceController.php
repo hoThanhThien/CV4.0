@@ -31,9 +31,22 @@ class ExperienceController extends Controller
             'order' => 'nullable|integer',
         ]);
 
-        $validated['current'] = $request->has('current');
+        $validated['current'] = $request->boolean('current');
+        if ($validated['current']) {
+            $validated['end_date'] = null;
+        }
+        $validated['order'] = $validated['order'] ?? 0;
 
-        Experience::create($validated);
+        $experience = Experience::create($validated);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Experience created successfully',
+                'experience' => $experience,
+            ], 201);
+        }
+
         return redirect()->route('admin.experiences.index')->with('success', 'Experience created successfully');
     }
 
@@ -54,15 +67,36 @@ class ExperienceController extends Controller
             'order' => 'nullable|integer',
         ]);
 
-        $validated['current'] = $request->has('current');
+        $validated['current'] = $request->boolean('current');
+        if ($validated['current']) {
+            $validated['end_date'] = null;
+        }
+        $validated['order'] = $validated['order'] ?? $experience->order ?? 0;
 
         $experience->update($validated);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Experience updated successfully',
+                'experience' => $experience,
+            ]);
+        }
+
         return redirect()->route('admin.experiences.index')->with('success', 'Experience updated successfully');
     }
 
-    public function destroy(Experience $experience)
+    public function destroy(Request $request, Experience $experience)
     {
         $experience->delete();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Experience deleted successfully',
+            ]);
+        }
+
         return redirect()->route('admin.experiences.index')->with('success', 'Experience deleted successfully');
     }
 }

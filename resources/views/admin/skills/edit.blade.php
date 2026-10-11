@@ -22,7 +22,14 @@
         
         <div class="form-group">
             <label class="form-label" for="category">Category *</label>
-            <input type="text" id="category" name="category" class="form-control" value="{{ old('category', $skill->category) }}" required>
+            <input type="text" id="category" name="category" list="category-options" class="form-control" value="{{ old('category', $skill->category) }}" required>
+            <datalist id="category-options">
+                <option value="Frontend">
+                <option value="Backend">
+                <option value="Database">
+                <option value="Tools & Practices">
+                <option value="DevOps & Cloud">
+            </datalist>
             @error('category')<span style="color:#ef4444; font-size:0.8rem">{{ $message }}</span>@enderror
         </div>
         

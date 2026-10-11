@@ -320,6 +320,16 @@
                     <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
                 </div>
             @endif
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Please correct the following errors:</strong>
+                    <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.85rem;">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             @yield('content')
         </div>

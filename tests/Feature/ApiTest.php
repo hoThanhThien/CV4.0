@@ -125,4 +125,153 @@ class ApiTest extends TestCase
         $deleteRes->assertStatus(200)
                   ->assertJsonPath('success', true);
     }
+
+    public function test_skills_crud_api()
+    {
+        $user = User::first();
+        $token = $user->createToken('test-token')->plainTextToken;
+        $headers = ['Authorization' => 'Bearer ' . $token];
+
+        // 1. Create skill (Protected)
+        $createRes = $this->postJson('/api/v1/skills', [
+            'name' => 'Docker',
+            'category' => 'Tools & Practices',
+            'level' => 85,
+            'order' => null,
+        ], $headers);
+        $createRes->assertStatus(201)
+                  ->assertJsonPath('success', true)
+                  ->assertJsonPath('data.name', 'Docker')
+                  ->assertJsonPath('data.order', 0);
+
+        $skillId = $createRes->json('data.id');
+
+        // 2. Show skill (Public)
+        $showRes = $this->getJson('/api/v1/skills/' . $skillId);
+        $showRes->assertStatus(200)
+                ->assertJsonPath('data.name', 'Docker');
+
+        // 3. Update skill (Protected)
+        $updateRes = $this->putJson('/api/v1/skills/' . $skillId, [
+            'level' => 95,
+        ], $headers);
+        $updateRes->assertStatus(200)
+                  ->assertJsonPath('data.level', 95);
+
+        // 4. Delete skill (Protected)
+        $deleteRes = $this->deleteJson('/api/v1/skills/' . $skillId, [], $headers);
+        $deleteRes->assertStatus(200)
+                  ->assertJsonPath('success', true);
+    }
+
+    public function test_experiences_crud_api()
+    {
+        $user = User::first();
+        $token = $user->createToken('test-token')->plainTextToken;
+        $headers = ['Authorization' => 'Bearer ' . $token];
+
+        // 1. Create experience (Protected)
+        $createRes = $this->postJson('/api/v1/experiences', [
+            'company' => 'Acme Inc',
+            'position' => 'Senior Developer',
+            'description' => 'Built high-scale APIs with Laravel',
+            'start_date' => '2025-01-01',
+            'current' => true,
+            'order' => null,
+        ], $headers);
+        $createRes->assertStatus(201)
+                  ->assertJsonPath('success', true)
+                  ->assertJsonPath('data.company', 'Acme Inc')
+                  ->assertJsonPath('data.order', 0)
+                  ->assertJsonPath('data.is_current', true);
+
+        $expId = $createRes->json('data.id');
+
+        // 2. Show experience (Public)
+        $showRes = $this->getJson('/api/v1/experiences/' . $expId);
+        $showRes->assertStatus(200)
+                ->assertJsonPath('data.company', 'Acme Inc');
+
+        // 3. Update experience (Protected)
+        $updateRes = $this->putJson('/api/v1/experiences/' . $expId, [
+            'position' => 'Lead Architect',
+        ], $headers);
+        $updateRes->assertStatus(200)
+                  ->assertJsonPath('data.position', 'Lead Architect');
+
+        // 4. Delete experience (Protected)
+        $deleteRes = $this->deleteJson('/api/v1/experiences/' . $expId, [], $headers);
+        $deleteRes->assertStatus(200)
+                  ->assertJsonPath('success', true);
+    }
+
+    public function test_technologies_crud_api()
+    {
+        $user = User::first();
+        $token = $user->createToken('test-token')->plainTextToken;
+        $headers = ['Authorization' => 'Bearer ' . $token];
+
+        // 1. Create technology (Protected)
+        $createRes = $this->postJson('/api/v1/technologies', [
+            'name' => 'Redis Cache',
+            'color' => '#dc2626',
+        ], $headers);
+        $createRes->assertStatus(201)
+                  ->assertJsonPath('success', true)
+                  ->assertJsonPath('data.name', 'Redis Cache');
+
+        $techId = $createRes->json('data.id');
+
+        // 2. Get technologies (Public)
+        $listRes = $this->getJson('/api/v1/technologies');
+        $listRes->assertStatus(200)
+                ->assertJsonPath('success', true);
+
+        // 3. Update technology (Protected)
+        $updateRes = $this->putJson('/api/v1/technologies/' . $techId, [
+            'color' => '#b91c1c',
+        ], $headers);
+        $updateRes->assertStatus(200)
+                  ->assertJsonPath('data.color', '#b91c1c');
+
+        // 4. Delete technology (Protected)
+        $deleteRes = $this->deleteJson('/api/v1/technologies/' . $techId, [], $headers);
+        $deleteRes->assertStatus(200)
+                  ->assertJsonPath('success', true);
+    }
+
+    public function test_admin_web_controllers_nullable_order()
+    {
+        $user = User::first();
+
+        // Admin skill store with empty order
+        $resSkill = $this->actingAs($user)->post(route('admin.skills.store'), [
+            'name' => 'GraphQL',
+            'category' => 'Backend',
+            'order' => '',
+        ]);
+        $resSkill->assertRedirect(route('admin.skills.index'));
+        $this->assertDatabaseHas('skills', ['name' => 'GraphQL', 'order' => 0]);
+
+        // Admin experience store with empty order
+        $resExp = $this->actingAs($user)->post(route('admin.experiences.store'), [
+            'company' => 'Global Corp',
+            'position' => 'Software Engineer',
+            'description' => 'Worked on microservices',
+            'start_date' => '2025-02-01',
+            'order' => '',
+        ]);
+        $resExp->assertRedirect(route('admin.experiences.index'));
+        $this->assertDatabaseHas('experiences', ['company' => 'Global Corp', 'order' => 0]);
+
+        // Admin project store with empty order
+        $resProj = $this->actingAs($user)->post(route('admin.projects.store'), [
+            'title' => 'E-Commerce Platform',
+            'description' => 'Full-featured online store',
+            'order' => '',
+        ]);
+        $resProj->assertRedirect(route('admin.projects.index'));
+        $this->assertDatabaseHas('projects', ['title' => 'E-Commerce Platform', 'order' => 0]);
+    }
 }
+

@@ -30,8 +30,8 @@ class ProjectController extends Controller
             'image' => 'nullable|image|max:2048',
             'github_url' => 'nullable|url',
             'demo_url' => 'nullable|url',
-            'featured' => 'boolean',
-            'order' => 'integer',
+            'featured' => 'nullable|boolean',
+            'order' => 'nullable|integer',
             'technologies' => 'nullable|array',
         ]);
 
@@ -40,11 +40,20 @@ class ProjectController extends Controller
         }
 
         $validated['featured'] = $request->boolean('featured');
+        $validated['order'] = $validated['order'] ?? 0;
 
         $project = Project::create($validated);
 
         if ($request->has('technologies')) {
             $project->technologies()->sync($request->technologies);
+        }
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Project created successfully!',
+                'project' => $project->load('technologies'),
+            ], 201);
         }
 
         return redirect()->route('admin.projects.index')->with('success', 'Project created successfully!');
@@ -74,8 +83,8 @@ class ProjectController extends Controller
             'image' => 'nullable|image|max:2048',
             'github_url' => 'nullable|url',
             'demo_url' => 'nullable|url',
-            'featured' => 'boolean',
-            'order' => 'integer',
+            'featured' => 'nullable|boolean',
+            'order' => 'nullable|integer',
             'technologies' => 'nullable|array',
         ]);
 
@@ -87,14 +96,23 @@ class ProjectController extends Controller
         }
 
         $validated['featured'] = $request->boolean('featured');
+        $validated['order'] = $validated['order'] ?? $project->order ?? 0;
 
         $project->update($validated);
         $project->technologies()->sync($request->technologies ?? []);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Project updated successfully!',
+                'project' => $project->load('technologies'),
+            ]);
+        }
+
         return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully!');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $project = Project::findOrFail($id);
 
@@ -104,6 +122,13 @@ class ProjectController extends Controller
 
         $project->technologies()->detach();
         $project->delete();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Project deleted successfully!',
+            ]);
+        }
 
         return redirect()->route('admin.projects.index')->with('success', 'Project deleted successfully!');
     }

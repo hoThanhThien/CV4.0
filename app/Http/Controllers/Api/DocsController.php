@@ -152,6 +152,27 @@ HTML, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
                             'published_at' => ['type' => 'string', 'format' => 'date-time', 'example' => '2026-10-01T12:00:00Z'],
                         ],
                     ],
+                    'Skill' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'id' => ['type' => 'integer', 'example' => 1],
+                            'name' => ['type' => 'string', 'example' => 'PHP / Laravel'],
+                            'category' => ['type' => 'string', 'example' => 'Backend'],
+                            'level' => ['type' => 'integer', 'example' => 90],
+                            'icon' => ['type' => 'string', 'nullable' => true, 'example' => 'fab fa-laravel'],
+                            'order' => ['type' => 'integer', 'example' => 1],
+                        ],
+                    ],
+                    'Technology' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'id' => ['type' => 'integer', 'example' => 1],
+                            'name' => ['type' => 'string', 'example' => 'Laravel'],
+                            'color' => ['type' => 'string', 'example' => '#6366f1'],
+                            'icon' => ['type' => 'string', 'nullable' => true, 'example' => 'fab fa-laravel'],
+                            'projects_count' => ['type' => 'integer', 'example' => 3],
+                        ],
+                    ],
                     'SkillCategory' => [
                         'type' => 'object',
                         'properties' => [
@@ -469,11 +490,15 @@ HTML, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
                     ],
                 ],
 
-                // Skills & Experiences
+                // Skills
                 '/api/v1/skills' => [
                     'get' => [
-                        'tags' => ['Skills & Experiences'],
+                        'tags' => ['Skills'],
                         'summary' => 'Get all technical skills grouped by category',
+                        'parameters' => [
+                            ['name' => 'category', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'description' => 'Filter by category (e.g. Backend, Frontend)'],
+                            ['name' => 'search', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'description' => 'Search by skill name'],
+                        ],
                         'responses' => [
                             '200' => [
                                 'description' => 'List of skills by category',
@@ -492,10 +517,91 @@ HTML, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
                             ],
                         ],
                     ],
+                    'post' => [
+                        'tags' => ['Skills'],
+                        'summary' => 'Create a new skill (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'requestBody' => [
+                            'required' => true,
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'required' => ['name', 'category'],
+                                        'properties' => [
+                                            'name' => ['type' => 'string', 'example' => 'PostgreSQL'],
+                                            'category' => ['type' => 'string', 'example' => 'Database'],
+                                            'level' => ['type' => 'integer', 'example' => 85],
+                                            'icon' => ['type' => 'string', 'example' => 'fas fa-database'],
+                                            'order' => ['type' => 'integer', 'example' => 1],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '201' => ['description' => 'Skill created successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
                 ],
+                '/api/v1/skills/{id}' => [
+                    'get' => [
+                        'tags' => ['Skills'],
+                        'summary' => 'Get a specific skill by ID',
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Skill details'],
+                            '404' => ['description' => 'Skill not found'],
+                        ],
+                    ],
+                    'put' => [
+                        'tags' => ['Skills'],
+                        'summary' => 'Update a skill (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'requestBody' => [
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'name' => ['type' => 'string'],
+                                            'category' => ['type' => 'string'],
+                                            'level' => ['type' => 'integer'],
+                                            'order' => ['type' => 'integer'],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Skill updated successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
+                    'delete' => [
+                        'tags' => ['Skills'],
+                        'summary' => 'Delete a skill (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Skill deleted successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
+                ],
+
+                // Experiences
                 '/api/v1/experiences' => [
                     'get' => [
-                        'tags' => ['Skills & Experiences'],
+                        'tags' => ['Experiences'],
                         'summary' => 'Get all work and project experiences',
                         'responses' => [
                             '200' => [
@@ -513,6 +619,189 @@ HTML, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
                                     ],
                                 ],
                             ],
+                        ],
+                    ],
+                    'post' => [
+                        'tags' => ['Experiences'],
+                        'summary' => 'Create a new experience (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'requestBody' => [
+                            'required' => true,
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'required' => ['company', 'position', 'description', 'start_date'],
+                                        'properties' => [
+                                            'company' => ['type' => 'string', 'example' => 'Tech Corp'],
+                                            'position' => ['type' => 'string', 'example' => 'Backend Engineer'],
+                                            'description' => ['type' => 'string', 'example' => 'Architected scalable microservices using Laravel and Redis.'],
+                                            'start_date' => ['type' => 'string', 'format' => 'date', 'example' => '2025-01-01'],
+                                            'end_date' => ['type' => 'string', 'format' => 'date', 'nullable' => true, 'example' => '2026-01-01'],
+                                            'current' => ['type' => 'boolean', 'example' => false],
+                                            'order' => ['type' => 'integer', 'example' => 0],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '201' => ['description' => 'Experience created successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
+                ],
+                '/api/v1/experiences/{id}' => [
+                    'get' => [
+                        'tags' => ['Experiences'],
+                        'summary' => 'Get a specific experience by ID',
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Experience details'],
+                            '404' => ['description' => 'Experience not found'],
+                        ],
+                    ],
+                    'put' => [
+                        'tags' => ['Experiences'],
+                        'summary' => 'Update an experience (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'requestBody' => [
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'company' => ['type' => 'string'],
+                                            'position' => ['type' => 'string'],
+                                            'description' => ['type' => 'string'],
+                                            'current' => ['type' => 'boolean'],
+                                            'order' => ['type' => 'integer'],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Experience updated successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
+                    'delete' => [
+                        'tags' => ['Experiences'],
+                        'summary' => 'Delete an experience (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Experience deleted successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
+                ],
+
+                // Technologies
+                '/api/v1/technologies' => [
+                    'get' => [
+                        'tags' => ['Technologies'],
+                        'summary' => 'Get all technologies with project counts',
+                        'responses' => [
+                            '200' => [
+                                'description' => 'List of technologies',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'success' => ['type' => 'boolean', 'example' => true],
+                                                'total' => ['type' => 'integer', 'example' => 8],
+                                                'data' => ['type' => 'array', 'items' => ['$ref' => '#/components/schemas/Technology']],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'post' => [
+                        'tags' => ['Technologies'],
+                        'summary' => 'Create a new technology (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'requestBody' => [
+                            'required' => true,
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'required' => ['name'],
+                                        'properties' => [
+                                            'name' => ['type' => 'string', 'example' => 'Docker'],
+                                            'color' => ['type' => 'string', 'example' => '#2496ed'],
+                                            'icon' => ['type' => 'string', 'example' => 'fab fa-docker'],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '201' => ['description' => 'Technology created successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
+                ],
+                '/api/v1/technologies/{id}' => [
+                    'get' => [
+                        'tags' => ['Technologies'],
+                        'summary' => 'Get a specific technology by ID',
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Technology details'],
+                            '404' => ['description' => 'Technology not found'],
+                        ],
+                    ],
+                    'put' => [
+                        'tags' => ['Technologies'],
+                        'summary' => 'Update a technology (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'requestBody' => [
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'name' => ['type' => 'string'],
+                                            'color' => ['type' => 'string'],
+                                            'icon' => ['type' => 'string'],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Technology updated successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
+                        ],
+                    ],
+                    'delete' => [
+                        'tags' => ['Technologies'],
+                        'summary' => 'Delete a technology (Admin Only)',
+                        'security' => [['bearerAuth' => []]],
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'responses' => [
+                            '200' => ['description' => 'Technology deleted successfully'],
+                            '401' => ['description' => 'Unauthenticated'],
                         ],
                     ],
                 ],

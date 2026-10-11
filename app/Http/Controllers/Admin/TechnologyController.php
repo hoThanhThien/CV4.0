@@ -66,16 +66,35 @@ class TechnologyController extends Controller
             'icon' => 'nullable|string|max:50',
         ]);
 
+        if (empty($validated['color'])) {
+            $validated['color'] = '#6366f1';
+        }
+
         $tech->update($validated);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Technology updated successfully!',
+                'technology' => $tech,
+            ]);
+        }
 
         return redirect()->route('admin.technologies.index')->with('success', 'Technology updated successfully!');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $tech = Technology::findOrFail($id);
         $tech->projects()->detach();
         $tech->delete();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Technology deleted successfully!',
+            ]);
+        }
 
         return redirect()->route('admin.technologies.index')->with('success', 'Technology deleted successfully!');
     }

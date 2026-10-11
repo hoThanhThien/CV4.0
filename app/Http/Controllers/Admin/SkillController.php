@@ -25,11 +25,22 @@ class SkillController extends Controller
             'name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'order' => 'nullable|integer',
+            'level' => 'nullable|integer|min:0|max:100',
         ]);
 
-        $validated['level'] = 0; // Default since we're hiding it
+        $validated['order'] = $validated['order'] ?? 0;
+        $validated['level'] = $validated['level'] ?? 80;
         
-        Skill::create($validated);
+        $skill = Skill::create($validated);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Skill created successfully',
+                'skill' => $skill,
+            ], 201);
+        }
+
         return redirect()->route('admin.skills.index')->with('success', 'Skill created successfully');
     }
 
@@ -44,15 +55,36 @@ class SkillController extends Controller
             'name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'order' => 'nullable|integer',
+            'level' => 'nullable|integer|min:0|max:100',
         ]);
 
+        $validated['order'] = $validated['order'] ?? $skill->order ?? 0;
+        $validated['level'] = $validated['level'] ?? $skill->level ?? 80;
+
         $skill->update($validated);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Skill updated successfully',
+                'skill' => $skill,
+            ]);
+        }
+
         return redirect()->route('admin.skills.index')->with('success', 'Skill updated successfully');
     }
 
-    public function destroy(Skill $skill)
+    public function destroy(Request $request, Skill $skill)
     {
         $skill->delete();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Skill deleted successfully',
+            ]);
+        }
+
         return redirect()->route('admin.skills.index')->with('success', 'Skill deleted successfully');
     }
 }

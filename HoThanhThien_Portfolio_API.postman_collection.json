@@ -303,7 +303,7 @@
       ]
     },
     {
-      "name": "4. Skills & Experiences",
+      "name": "4. Skills",
       "item": [
         {
           "name": "Get Skills (Grouped by Category)",
@@ -319,6 +319,76 @@
           }
         },
         {
+          "name": "Create Skill (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"PostgreSQL\",\n  \"category\": \"Database\",\n  \"level\": 85,\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "skills"]
+            },
+            "description": "Creates a new skill. Requires Sanctum Bearer Token."
+          }
+        },
+        {
+          "name": "Update Skill (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"level\": 90,\n  \"order\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/skills/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "skills", "1"]
+            },
+            "description": "Updates an existing skill. Requires Sanctum Bearer Token."
+          }
+        },
+        {
+          "name": "Delete Skill (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/skills/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "skills", "1"]
+            },
+            "description": "Deletes a skill by ID. Requires Sanctum Bearer Token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Experiences",
+      "item": [
+        {
           "name": "Get Experiences",
           "request": {
             "method": "GET",
@@ -330,11 +400,159 @@
             },
             "description": "Lists all job positions and project milestones in chronological order."
           }
+        },
+        {
+          "name": "Create Experience (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company\": \"Tech Solutions Ltd\",\n  \"position\": \"Senior Backend Engineer\",\n  \"description\": \"Designed and deployed microservices architecture using Laravel and Docker.\",\n  \"start_date\": \"2025-01-01\",\n  \"current\": true,\n  \"order\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/experiences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "experiences"]
+            },
+            "description": "Creates a new experience record. Requires Sanctum Bearer Token."
+          }
+        },
+        {
+          "name": "Update Experience (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"position\": \"Lead Full-Stack Engineer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/experiences/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "experiences", "1"]
+            },
+            "description": "Updates an existing experience. Requires Sanctum Bearer Token."
+          }
+        },
+        {
+          "name": "Delete Experience (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/experiences/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "experiences", "1"]
+            },
+            "description": "Deletes an experience by ID. Requires Sanctum Bearer Token."
+          }
         }
       ]
     },
     {
-      "name": "5. Contact Submission",
+      "name": "6. Technologies",
+      "item": [
+        {
+          "name": "Get Technologies",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/technologies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "technologies"]
+            },
+            "description": "Lists all technologies with associated project counts."
+          }
+        },
+        {
+          "name": "Create Technology (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kubernetes\",\n  \"color\": \"#326ce5\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/technologies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "technologies"]
+            },
+            "description": "Creates a new technology tag. Requires Sanctum Bearer Token."
+          }
+        },
+        {
+          "name": "Update Technology (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"color\": \"#1e40af\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/technologies/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "technologies", "1"]
+            },
+            "description": "Updates an existing technology. Requires Sanctum Bearer Token."
+          }
+        },
+        {
+          "name": "Delete Technology (Protected)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+            },
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/technologies/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "technologies", "1"]
+            },
+            "description": "Deletes a technology by ID. Requires Sanctum Bearer Token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Contact Submission",
       "item": [
         {
           "name": "Submit Contact Message",
@@ -359,7 +577,7 @@
       ]
     },
     {
-      "name": "6. Documentation Endpoints",
+      "name": "8. Documentation Endpoints",
       "item": [
         {
           "name": "Get OpenAPI 3.0 JSON Specification",

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\BlogPostController;
 use App\Http\Controllers\Api\V1\SkillController;
 use App\Http\Controllers\Api\V1\ExperienceController;
+use App\Http\Controllers\Api\V1\TechnologyController;
 use App\Http\Controllers\Api\V1\ContactController;
 
 /*
@@ -50,9 +51,32 @@ Route::prefix('v1')->group(function () {
         Route::delete('/blog/{id}', [BlogPostController::class, 'destroy']);
     });
 
-    // === Skills & Experiences ===
+    // === Skills (Public & Protected CRUD) ===
     Route::get('/skills', [SkillController::class, 'index']);
+    Route::get('/skills/{id}', [SkillController::class, 'show']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/skills', [SkillController::class, 'store']);
+        Route::put('/skills/{id}', [SkillController::class, 'update']);
+        Route::delete('/skills/{id}', [SkillController::class, 'destroy']);
+    });
+
+    // === Experiences (Public & Protected CRUD) ===
     Route::get('/experiences', [ExperienceController::class, 'index']);
+    Route::get('/experiences/{id}', [ExperienceController::class, 'show']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/experiences', [ExperienceController::class, 'store']);
+        Route::put('/experiences/{id}', [ExperienceController::class, 'update']);
+        Route::delete('/experiences/{id}', [ExperienceController::class, 'destroy']);
+    });
+
+    // === Technologies (Public & Protected CRUD) ===
+    Route::get('/technologies', [TechnologyController::class, 'index']);
+    Route::get('/technologies/{id}', [TechnologyController::class, 'show']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/technologies', [TechnologyController::class, 'store']);
+        Route::put('/technologies/{id}', [TechnologyController::class, 'update']);
+        Route::delete('/technologies/{id}', [TechnologyController::class, 'destroy']);
+    });
 
     // === Contact Submission ===
     Route::post('/contact', [ContactController::class, 'store']);
