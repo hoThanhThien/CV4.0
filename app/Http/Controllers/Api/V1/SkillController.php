@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Skill;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 
 class SkillController extends Controller
@@ -86,6 +87,11 @@ class SkillController extends Controller
             'order' => $validated['order'] ?? 0,
         ]);
 
+        Technology::firstOrCreate(
+            ['name' => trim($skill->name)],
+            ['color' => '#6366f1']
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Skill created successfully',
@@ -120,6 +126,11 @@ class SkillController extends Controller
         }
 
         $skill->update($validated);
+
+        Technology::firstOrCreate(
+            ['name' => trim($skill->name)],
+            ['color' => '#6366f1']
+        );
 
         return response()->json([
             'success' => true,

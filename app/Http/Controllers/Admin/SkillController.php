@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Skill;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 
 class SkillController extends Controller
@@ -16,7 +17,10 @@ class SkillController extends Controller
 
     public function create()
     {
-        return view('admin.skills.create');
+        $existingCategories = Skill::distinct()->pluck('category')->filter()->values();
+        $defaultCategories = collect(['Frontend', 'Backend', 'Database', 'Tools & Practices', 'DevOps & Cloud']);
+        $categories = $defaultCategories->merge($existingCategories)->unique()->values();
+        return view('admin.skills.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -33,6 +37,12 @@ class SkillController extends Controller
         
         $skill = Skill::create($validated);
 
+        // Auto-sync into technologies table so it is instantly selectable in Projects
+        Technology::firstOrCreate(
+            ['name' => trim($skill->name)],
+            ['color' => '#6366f1']
+        );
+
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -46,7 +56,10 @@ class SkillController extends Controller
 
     public function edit(Skill $skill)
     {
-        return view('admin.skills.edit', compact('skill'));
+        $existingCategories = Skill::distinct()->pluck('category')->filter()->values();
+        $defaultCategories = collect(['Frontend', 'Backend', 'Database', 'Tools & Practices', 'DevOps & Cloud']);
+        $categories = $defaultCategories->merge($existingCategories)->unique()->values();
+        return view('admin.skills.edit', compact('skill', 'categories'));
     }
 
     public function update(Request $request, Skill $skill)
@@ -61,7 +74,14 @@ class SkillController extends Controller
         $validated['order'] = $validated['order'] ?? $skill->order ?? 0;
         $validated['level'] = $validated['level'] ?? $skill->level ?? 80;
 
+        $oldName = $skill->name;
         $skill->update($validated);
+
+        // Auto-sync into technologies if name changed or missing
+        Technology::firstOrCreate(
+            ['name' => trim($skill->name)],
+            ['color' => '#6366f1']
+        );
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([

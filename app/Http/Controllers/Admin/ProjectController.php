@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Skill;
 use App\Models\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +20,8 @@ class ProjectController extends Controller
     public function create()
     {
         $technologies = Technology::orderBy('name')->get();
-        return view('admin.projects.create', compact('technologies'));
+        $skills = Skill::all()->keyBy('name');
+        return view('admin.projects.create', compact('technologies', 'skills'));
     }
 
     public function store(Request $request)
@@ -70,7 +72,8 @@ class ProjectController extends Controller
         $project = Project::with('technologies')->findOrFail($id);
         $technologies = Technology::orderBy('name')->get();
         $selectedTechnologies = $project->technologies->pluck('id')->toArray();
-        return view('admin.projects.edit', compact('project', 'technologies', 'selectedTechnologies'));
+        $skills = Skill::all()->keyBy('name');
+        return view('admin.projects.edit', compact('project', 'technologies', 'selectedTechnologies', 'skills'));
     }
 
     public function update(Request $request, $id)
