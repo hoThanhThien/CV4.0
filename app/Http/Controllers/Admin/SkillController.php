@@ -15,6 +15,32 @@ class SkillController extends Controller
         return view('admin.skills.index', compact('skills'));
     }
 
+    public function quick(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'nullable|string|max:255',
+        ]);
+
+        $name = trim($validated['name']);
+        $category = !empty($validated['category']) ? trim($validated['category']) : 'Other';
+
+        $skill = Skill::firstOrCreate(
+            ['name' => $name],
+            [
+                'category' => $category,
+                'level' => 85,
+                'order' => 0,
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Skill ready!',
+            'skill' => $skill,
+        ]);
+    }
+
     public function create()
     {
         $existingCategories = Skill::distinct()->pluck('category')->filter()->values();

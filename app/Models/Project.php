@@ -17,8 +17,13 @@ class Project extends Model
         'featured' => 'boolean',
     ];
 
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'project_skill');
+    }
+
     public function technologies()
     {
-        return $this->belongsToMany(Technology::class, 'project_technology');
+        return $this->skills();
     }
 }

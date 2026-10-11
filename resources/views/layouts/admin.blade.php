@@ -251,9 +251,6 @@
             <a href="{{ route('admin.projects.index') }}" class="{{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
                 <i class="fas fa-code"></i> Projects
             </a>
-            <a href="{{ route('admin.technologies.index') }}" class="{{ request()->routeIs('admin.technologies.*') ? 'active' : '' }}">
-                <i class="fas fa-microchip"></i> Technologies
-            </a>
             <a href="{{ route('admin.blog.index') }}" class="{{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">
                 <i class="fas fa-newspaper"></i> Blog Posts
             </a>

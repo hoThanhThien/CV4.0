@@ -16,7 +16,7 @@
             <tr>
                 <th>#</th>
                 <th>Title</th>
-                <th>Technologies</th>
+                <th>Skills</th>
                 <th>Featured</th>
                 <th>Order</th>
                 <th>Created</th>
@@ -33,11 +33,11 @@
                 </td>
                 <td>
                     <div style="display:flex; flex-wrap:wrap; gap:0.3rem">
-                        @foreach($project->technologies->take(3) as $tech)
-                            <span class="badge badge-purple">{{ $tech->name }}</span>
+                        @foreach($project->skills->take(3) as $skill)
+                            <span class="badge badge-purple">{{ $skill->name }}</span>
                         @endforeach
-                        @if($project->technologies->count() > 3)
-                            <span class="badge" style="background:rgba(255,255,255,0.05); color:var(--text-muted)">+{{ $project->technologies->count() - 3 }}</span>
+                        @if($project->skills->count() > 3)
+                            <span class="badge" style="background:rgba(255,255,255,0.05); color:var(--text-muted)">+{{ $project->skills->count() - 3 }}</span>
                         @endif
                     </div>
                 </td>

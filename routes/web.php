@@ -160,6 +160,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('technologies/quick', [App\Http\Controllers\Admin\TechnologyController::class, 'quick'])->name('technologies.quick');
         Route::resource('technologies', App\Http\Controllers\Admin\TechnologyController::class)->except(['show']);
         Route::resource('blog', App\Http\Controllers\Admin\BlogController::class);
+        Route::post('skills/quick', [App\Http\Controllers\Admin\SkillController::class, 'quick'])->name('skills.quick');
         Route::resource('skills', App\Http\Controllers\Admin\SkillController::class)->except(['show']);
         Route::resource('experiences', App\Http\Controllers\Admin\ExperienceController::class)->except(['show']);
         Route::resource('messages', App\Http\Controllers\Admin\ContactMessageController::class)->only(['index', 'show', 'destroy']);

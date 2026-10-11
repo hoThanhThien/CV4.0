@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Skill;
-use App\Models\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,15 +12,14 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::with('technologies')->orderBy('order')->paginate(10);
+        $projects = Project::with('skills')->orderBy('order')->paginate(10);
         return view('admin.projects.index', compact('projects'));
     }
 
     public function create()
     {
-        $technologies = Technology::orderBy('name')->get();
-        $skills = Skill::all()->keyBy('name');
-        return view('admin.projects.create', compact('technologies', 'skills'));
+        $skills = Skill::orderBy('category')->orderBy('order')->get();
+        return view('admin.projects.create', compact('skills'));
     }
 
     public function store(Request $request)
@@ -34,6 +32,7 @@ class ProjectController extends Controller
             'demo_url' => 'nullable|url',
             'featured' => 'nullable|boolean',
             'order' => 'nullable|integer',
+            'skills' => 'nullable|array',
             'technologies' => 'nullable|array',
         ]);
 
@@ -46,15 +45,16 @@ class ProjectController extends Controller
 
         $project = Project::create($validated);
 
-        if ($request->has('technologies')) {
-            $project->technologies()->sync($request->technologies);
+        $skillIds = $request->input('skills', $request->input('technologies', []));
+        if (!empty($skillIds)) {
+            $project->skills()->sync($skillIds);
         }
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Project created successfully!',
-                'project' => $project->load('technologies'),
+                'project' => $project->load('skills'),
             ], 201);
         }
 
@@ -63,17 +63,16 @@ class ProjectController extends Controller
 
     public function show($id)
     {
-        $project = Project::with('technologies')->findOrFail($id);
+        $project = Project::with('skills')->findOrFail($id);
         return view('admin.projects.show', compact('project'));
     }
 
     public function edit($id)
     {
-        $project = Project::with('technologies')->findOrFail($id);
-        $technologies = Technology::orderBy('name')->get();
-        $selectedTechnologies = $project->technologies->pluck('id')->toArray();
-        $skills = Skill::all()->keyBy('name');
-        return view('admin.projects.edit', compact('project', 'technologies', 'selectedTechnologies', 'skills'));
+        $project = Project::with('skills')->findOrFail($id);
+        $skills = Skill::orderBy('category')->orderBy('order')->get();
+        $selectedSkills = $project->skills->pluck('id')->toArray();
+        return view('admin.projects.edit', compact('project', 'skills', 'selectedSkills'));
     }
 
     public function update(Request $request, $id)
@@ -88,6 +87,7 @@ class ProjectController extends Controller
             'demo_url' => 'nullable|url',
             'featured' => 'nullable|boolean',
             'order' => 'nullable|integer',
+            'skills' => 'nullable|array',
             'technologies' => 'nullable|array',
         ]);
 
@@ -102,13 +102,15 @@ class ProjectController extends Controller
         $validated['order'] = $validated['order'] ?? $project->order ?? 0;
 
         $project->update($validated);
-        $project->technologies()->sync($request->technologies ?? []);
+
+        $skillIds = $request->input('skills', $request->input('technologies', []));
+        $project->skills()->sync($skillIds);
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Project updated successfully!',
-                'project' => $project->load('technologies'),
+                'project' => $project->load('skills'),
             ]);
         }
 
@@ -123,7 +125,7 @@ class ProjectController extends Controller
             Storage::disk('public')->delete($project->image);
         }
 
-        $project->technologies()->detach();
+        $project->skills()->detach();
         $project->delete();
 
         if ($request->wantsJson() || $request->ajax()) {

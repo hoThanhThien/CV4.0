@@ -219,8 +219,8 @@ HTML, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
                                         'type' => 'object',
                                         'required' => ['email', 'password'],
                                         'properties' => [
-                                            'email' => ['type' => 'string', 'format' => 'email', 'example' => 'hothanhthien119@gmail.com'],
-                                            'password' => ['type' => 'string', 'example' => 'password'],
+                                            'email' => ['type' => 'string', 'format' => 'email', 'example' => 'admin@example.com'],
+                                            'password' => ['type' => 'string', 'example' => 'your-password'],
                                         ],
                                     ],
                                 ],

@@ -10,4 +10,9 @@ class Skill extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'level', 'category', 'icon', 'order'];
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_skill');
+    }
 }

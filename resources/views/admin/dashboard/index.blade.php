@@ -47,8 +47,8 @@
     <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> New Project
     </a>
-    <a href="{{ route('admin.technologies.index') }}" class="btn btn-secondary">
-        <i class="fas fa-microchip"></i> Manage Techs
+    <a href="{{ route('admin.skills.index') }}" class="btn btn-secondary">
+        <i class="fas fa-star"></i> Manage Skills
     </a>
     <a href="{{ route('admin.messages.index') }}" class="btn btn-secondary">
         <i class="fas fa-envelope"></i> View Messages

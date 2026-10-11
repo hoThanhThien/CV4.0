@@ -20,9 +20,9 @@ class ApiTest extends TestCase
         parent::setUp();
 
         User::create([
-            'name' => 'Ho Thanh Thien',
-            'email' => 'hothanhthien119@gmail.com',
-            'password' => Hash::make('password'),
+            'name' => 'Test Admin',
+            'email' => 'admin@test.local',
+            'password' => Hash::make('password123'),
         ]);
     }
 
@@ -84,8 +84,8 @@ class ApiTest extends TestCase
     {
         // 1. Login
         $loginRes = $this->postJson('/api/v1/auth/login', [
-            'email' => 'hothanhthien119@gmail.com',
-            'password' => 'password',
+            'email' => 'admin@test.local',
+            'password' => 'password123',
         ]);
 
         $loginRes->assertStatus(200)

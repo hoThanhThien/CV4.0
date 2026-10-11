@@ -16,14 +16,20 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // ====== Admin User ======
-        User::firstOrCreate(
-            ['email' => 'hothanhthien119@gmail.com'],
-            [
-                'name' => 'Hồ Thành Thiện',
-                'password' => Hash::make('password'),
-            ]
-        );
+        // ====== Admin User (Configured via .env or artisan admin:create) ======
+        $adminEmail = env('ADMIN_EMAIL');
+        $adminPassword = env('ADMIN_PASSWORD');
+        $adminName = env('ADMIN_NAME', 'Admin');
+
+        if (!empty($adminEmail) && !empty($adminPassword)) {
+            User::firstOrCreate(
+                ['email' => $adminEmail],
+                [
+                    'name' => $adminName,
+                    'password' => Hash::make($adminPassword),
+                ]
+            );
+        }
 
         // ====== Skills ======
         $skills = [
