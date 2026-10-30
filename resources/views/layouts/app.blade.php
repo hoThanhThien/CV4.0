@@ -95,6 +95,11 @@
           "url": "{{ url('/') }}",
           "image": "{{ asset('images/og-image.webp') }}",
           "email": "hothanhthien119@gmail.com",
+          "telephone": "+84375227764",
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Transport Ho Chi Minh City"
+          },
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Ho Chi Minh City",
@@ -104,7 +109,7 @@
             "https://github.com/hoThanhThien",
             "https://www.linkedin.com/in/httblackhat"
           ],
-          "knowsAbout": ["PHP", "Laravel", "JavaScript", "Vue.js", "React", "MySQL", "RESTful API", "Full-Stack Development", "Clean Architecture"],
+          "knowsAbout": ["ReactJS", "Java", "Spring Boot", "PHP", "Laravel", "Python", "FastAPI", "Odoo", "RAG", "LLM", "Vector Search", "MySQL", "PostgreSQL", "RESTful API", "Full-Stack Development", "Clean Architecture"],
           "knowsLanguage": ["vi", "en"]
         }
       ]

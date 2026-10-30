@@ -47,14 +47,17 @@ class Experience extends Model
 
     public function getTechTagsAttribute(): array
     {
+        if (str_contains($this->company, 'Enmasys') || str_contains($this->position, 'Odoo')) {
+            return ['Odoo ERP', 'Python', 'PostgreSQL', 'B2B Sales', 'Retail Management', 'Accounting'];
+        }
+        if (str_contains($this->company, 'AIPower')) {
+            return ['PHP', 'WordPress', 'PostgreSQL', 'JavaScript', 'HTML5 / CSS3'];
+        }
         if (str_contains($this->company, 'Caro')) {
             return ['ReactJS', 'Real-time Logic', 'Frontend Optimization'];
         }
         if (str_contains($this->company, 'Laundry')) {
-            return ['PHP / Laravel', 'RESTful API', 'RBAC', 'Database'];
-        }
-        if (str_contains($this->company, 'AIPower')) {
-            return ['PHP', 'WordPress', 'PostgreSQL', 'JavaScript'];
+            return ['NextJS', 'Spring Boot', 'RESTful API', 'JWT & OTP', 'MySQL'];
         }
         return [];
     }

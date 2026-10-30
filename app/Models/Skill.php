@@ -9,7 +9,7 @@ class Skill extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'level', 'category', 'icon', 'order'];
+    protected $fillable = ['name', 'details', 'level', 'category', 'icon', 'order'];
 
     public function projects()
     {

@@ -300,8 +300,14 @@
         <p class="reveal delay-1">{{ __('I\'m always open to interesting projects and opportunities.') }}</p>
 
         <div class="contact-quick-chips reveal delay-2">
+            <a href="tel:0375227764" class="contact-chip">
+                <i class="fas fa-phone-alt"></i> 0375227764
+            </a>
             <a href="mailto:hothanhthien119@gmail.com" class="contact-chip">
                 <i class="fas fa-envelope"></i> hothanhthien119@gmail.com
+            </a>
+            <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="contact-chip">
+                <i class="fas fa-globe"></i> hothanhthien.io.vn
             </a>
             <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="contact-chip">
                 <i class="fab fa-linkedin"></i> LinkedIn
@@ -333,6 +339,18 @@
                     </p>
                 </div>
 
+                <!-- Phone -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div>
+                            <div class="info-card-title">{{ __('Phone') }}</div>
+                            <a href="tel:0375227764" class="info-card-value">0375227764</a>
+                        </div>
+                    </div>
+                    <div class="info-card-sub">{{ __('Call / Zalo') }}</div>
+                </div>
+
                 <!-- Email -->
                 <div class="info-card">
                     <div class="info-card-header">
@@ -345,6 +363,18 @@
                     <div class="info-card-sub">{{ __('Response time: Usually within 24 hours') }}</div>
                 </div>
 
+                <!-- Website -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-icon"><i class="fas fa-globe"></i></div>
+                        <div>
+                            <div class="info-card-title">{{ __('Website') }}</div>
+                            <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="info-card-value">hothanhthien.io.vn</a>
+                        </div>
+                    </div>
+                    <div class="info-card-sub">https://hothanhthien.io.vn/</div>
+                </div>
+
                 <!-- Location -->
                 <div class="info-card">
                     <div class="info-card-header">
@@ -354,7 +384,7 @@
                             <span class="info-card-value">{{ __('Hồ Chí Minh, Việt Nam') }}</span>
                         </div>
                     </div>
-                    <div class="info-card-sub">UTC+7 (Indochina Time)</div>
+                    <div class="info-card-sub">HCM • UTC+7</div>
                 </div>
 
                 <!-- Socials -->
