@@ -120,73 +120,204 @@
     @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: none; } }
     @keyframes fadeInUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: none; } }
 
-    /* ===== KEY ACHIEVEMENTS CARDS ===== */
+    /* ===== KEY ACHIEVEMENTS (PRESTIGE EDITION) ===== */
     .achievements-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        gap: 1.75rem;
     }
     .achievement-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 1.5rem;
+        background: #ffffff;
+        border: 1px solid rgba(226, 232, 240, 0.85);
+        border-radius: 22px;
+        padding: 1.85rem 1.65rem 1.65rem;
         position: relative;
         overflow: hidden;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.38s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
         flex-direction: column;
+        box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
     }
     .achievement-card::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; height: 3px;
-        background: var(--gradient);
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: var(--card-gradient, var(--gradient));
+        transition: height 0.3s ease;
+    }
+    .achievement-card::after {
+        content: '';
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 140px; height: 140px;
+        background: var(--card-glow, rgba(99, 102, 241, 0.12));
+        border-radius: 50%;
+        filter: blur(40px);
+        opacity: 0.5;
+        transition: all 0.4s ease;
+        pointer-events: none;
     }
     .achievement-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(99, 102, 241, 0.4);
-        box-shadow: 0 16px 36px -8px rgba(99, 102, 241, 0.16);
+        transform: translateY(-8px);
+        border-color: var(--card-border-hover, rgba(99, 102, 241, 0.4));
+        box-shadow: 0 20px 40px -12px var(--card-glow, rgba(99, 102, 241, 0.2)), 0 2px 6px rgba(0,0,0,0.03);
     }
+    .achievement-card:hover::before {
+        height: 6px;
+    }
+    .achievement-card:hover::after {
+        opacity: 0.85;
+        transform: scale(1.25);
+    }
+
+    /* Card Themes */
+    .achievement-card.theme-blue {
+        --card-gradient: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+        --card-glow: rgba(79, 70, 229, 0.2);
+        --card-border-hover: rgba(79, 70, 229, 0.4);
+        --card-icon-gradient: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+        --card-icon-shadow: rgba(37, 99, 235, 0.35);
+        --chip-bg: rgba(79, 70, 229, 0.08);
+        --chip-color: #4338ca;
+        --chip-border: rgba(79, 70, 229, 0.2);
+    }
+    .achievement-card.theme-emerald {
+        --card-gradient: linear-gradient(135deg, #059669 0%, #06b6d4 100%);
+        --card-glow: rgba(5, 150, 105, 0.2);
+        --card-border-hover: rgba(5, 150, 105, 0.4);
+        --card-icon-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        --card-icon-shadow: rgba(16, 185, 129, 0.35);
+        --chip-bg: rgba(5, 150, 105, 0.08);
+        --chip-color: #047857;
+        --chip-border: rgba(5, 150, 105, 0.2);
+    }
+    .achievement-card.theme-rose {
+        --card-gradient: linear-gradient(135deg, #db2777 0%, #f59e0b 100%);
+        --card-glow: rgba(219, 39, 119, 0.2);
+        --card-border-hover: rgba(219, 39, 119, 0.4);
+        --card-icon-gradient: linear-gradient(135deg, #db2777 0%, #f43f5e 100%);
+        --card-icon-shadow: rgba(244, 63, 94, 0.35);
+        --chip-bg: rgba(219, 39, 119, 0.08);
+        --chip-color: #be185d;
+        --chip-border: rgba(219, 39, 119, 0.2);
+    }
+
     .achievement-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 0.85rem;
+        margin-bottom: 1.15rem;
     }
-    .achievement-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.15));
-        border: 1px solid rgba(99, 102, 241, 0.25);
-        color: var(--accent);
+    .achievement-icon-wrap {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        background: var(--card-icon-gradient);
+        box-shadow: 0 10px 22px -6px var(--card-icon-shadow);
+        color: #ffffff;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.25rem;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        flex-shrink: 0;
+    }
+    .achievement-card:hover .achievement-icon-wrap {
+        transform: scale(1.08) rotate(-4deg);
+    }
+    .achievement-icon-wrap svg {
+        width: 26px;
+        height: 26px;
+        stroke: currentColor;
     }
     .achievement-year-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
         font-size: 0.8rem;
         font-weight: 800;
-        padding: 0.25rem 0.65rem;
+        letter-spacing: 0.03em;
+        padding: 0.32rem 0.8rem;
         border-radius: 50px;
-        background: rgba(99, 102, 241, 0.1);
-        color: var(--accent);
-        border: 1px solid rgba(99, 102, 241, 0.2);
+        background: rgba(15, 23, 42, 0.04);
+        color: var(--text-primary);
+        border: 1px solid rgba(15, 23, 42, 0.08);
     }
+    .achievement-year-badge .year-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 8px currentColor;
+    }
+
+    .achievement-highlight-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 8px;
+        background: var(--chip-bg);
+        color: var(--chip-color);
+        border: 1px solid var(--chip-border);
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 0.85rem;
+        width: fit-content;
+    }
+    .achievement-highlight-chip i {
+        font-size: 0.72rem;
+    }
+
     .achievement-title {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         font-weight: 800;
         color: var(--text-primary);
         line-height: 1.4;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.65rem;
+        letter-spacing: -0.015em;
+        transition: color 0.25s ease;
+    }
+    .achievement-card:hover .achievement-title {
+        color: var(--accent);
     }
     .achievement-desc {
         color: var(--text-secondary);
-        font-size: 0.9rem;
-        line-height: 1.6;
+        font-size: 0.92rem;
+        line-height: 1.65;
         flex: 1;
+        margin-bottom: 1.25rem;
+    }
+
+    .achievement-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(226, 232, 240, 0.7);
+        margin-top: auto;
+    }
+    .achievement-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.22rem 0.55rem;
+        border-radius: 6px;
+        background: var(--bg-secondary);
+        color: var(--text-muted);
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        transition: all 0.2s ease;
+    }
+    .achievement-tag i {
+        color: var(--chip-color);
+        font-size: 0.65rem;
+    }
+    .achievement-card:hover .achievement-tag {
+        background: #ffffff;
+        color: var(--text-secondary);
+        border-color: var(--chip-border);
     }
 
     /* ===== SKILLS ===== */
@@ -508,39 +639,89 @@
 
         <div class="achievements-grid reveal delay-2">
             <!-- 1. GPA 4.0 -->
-            <div class="achievement-card">
+            <div class="achievement-card theme-blue">
                 <div class="achievement-top">
-                    <div class="achievement-icon"><i class="fas fa-star"></i></div>
-                    <span class="achievement-year-badge">2026</span>
+                    <div class="achievement-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <div class="achievement-top-meta">
+                        <span class="achievement-year-badge"><span class="year-dot"></span>2026</span>
+                    </div>
+                </div>
+                <div class="achievement-highlight-chip">
+                    <i class="fas fa-star"></i>
+                    <span>{{ app()->getLocale() == 'vi' ? 'Học kỳ gần nhất • GPA 4.0/4.0' : 'Latest Semester • GPA 4.0/4.0' }}</span>
                 </div>
                 <h3 class="achievement-title">{{ __('GPA in Most Recent Semester — 4.0/4.0') }}</h3>
                 <p class="achievement-desc">
                     {{ app()->getLocale() == 'vi' ? 'Đạt kết quả học tập xuất sắc với điểm GPA 4.0/4.0 trong học kỳ gần nhất, thể hiện tính kỷ luật cao và tư duy logic chuyên sâu.' : 'Achieved a perfect 4.0/4.0 GPA in the most recent semester, demonstrating high dedication, discipline, and strong software engineering competence.' }}
                 </p>
+                <div class="achievement-tags">
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Kỷ luật cao' : 'High Discipline' }}</span>
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Tư duy logic' : 'Logical Thinking' }}</span>
+                </div>
             </div>
 
             <!-- 2. Excellent Graduation -->
-            <div class="achievement-card">
+            <div class="achievement-card theme-emerald">
                 <div class="achievement-top">
-                    <div class="achievement-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <span class="achievement-year-badge">2026</span>
+                    <div class="achievement-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                    </div>
+                    <div class="achievement-top-meta">
+                        <span class="achievement-year-badge"><span class="year-dot"></span>2026</span>
+                    </div>
+                </div>
+                <div class="achievement-highlight-chip">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>{{ app()->getLocale() == 'vi' ? 'Tốt nghiệp Xuất sắc • UTH' : 'Summa Cum Laude • UTH' }}</span>
                 </div>
                 <h3 class="achievement-title">{{ __('Bachelor’s Degree – Excellent Graduation Classification') }}</h3>
                 <p class="achievement-desc">
                     {{ app()->getLocale() == 'vi' ? 'Bằng Cử nhân Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc.' : "Bachelor's Degree in Information Technology from University of Transport Ho Chi Minh City with Excellent Graduation Classification." }}
                 </p>
+                <div class="achievement-tags">
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Loại Xuất sắc' : 'Summa Cum Laude' }}</span>
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'ĐH GTVT TP.HCM' : 'UTH University' }}</span>
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Cử nhân CNTT' : 'IT Engineer' }}</span>
+                </div>
             </div>
 
             <!-- 3. Logo Design Award -->
-            <div class="achievement-card">
+            <div class="achievement-card theme-rose">
                 <div class="achievement-top">
-                    <div class="achievement-icon"><i class="fas fa-palette"></i></div>
-                    <span class="achievement-year-badge">2025</span>
+                    <div class="achievement-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="13.5" cy="6.5" r=".8" fill="currentColor"></circle>
+                            <circle cx="17.5" cy="10.5" r=".8" fill="currentColor"></circle>
+                            <circle cx="8.5" cy="7.5" r=".8" fill="currentColor"></circle>
+                            <circle cx="6.5" cy="12.5" r=".8" fill="currentColor"></circle>
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="achievement-top-meta">
+                        <span class="achievement-year-badge"><span class="year-dot"></span>2025</span>
+                    </div>
+                </div>
+                <div class="achievement-highlight-chip">
+                    <i class="fas fa-trophy"></i>
+                    <span>{{ app()->getLocale() == 'vi' ? 'Giải Nhì • Thiết kế Cấp Viện' : 'Second Prize • Logo Design' }}</span>
                 </div>
                 <h3 class="achievement-title">{{ __('Second prize in the institute/faculty logo design competition') }}</h3>
                 <p class="achievement-desc">
                     {{ __('Designed a competition-winning logo concept, demonstrating strong creativity, visual communication, and design thinking.') }}
                 </p>
+                <div class="achievement-tags">
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Giải Nhì cấp Viện' : '2nd Prize Winner' }}</span>
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Design Thinking' : 'Design Thinking' }}</span>
+                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Truyền thông thị giác' : 'Visual Aesthetics' }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -567,7 +748,6 @@
                                 <i class="{{ $skill->icon ?: 'fas fa-check-circle' }}"></i>
                                 {{ $skill->name }}
                             </span>
-                            <small style="color:var(--text-muted); font-size:0.75rem">{{ $skill->level }}%</small>
                         </div>
                         @if($skill->details)
                         <div class="skill-item-details">
