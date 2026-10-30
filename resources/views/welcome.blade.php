@@ -70,19 +70,12 @@
         }
     }
 
-    .hero-badge-wrap {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
-        margin-bottom: 1.25rem;
-    }
-
     .hero-badge {
         display: inline-flex; align-items: center; gap: 0.5rem;
         padding: 0.35rem 0.9rem; border-radius: 50px;
         background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
         color: var(--accent-light); font-size: 0.85rem; font-weight: 600;
-        animation: fadeInDown 0.6s ease;
+        margin-bottom: 1.25rem; animation: fadeInDown 0.6s ease;
         text-decoration: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
     }
@@ -110,42 +103,7 @@
     }
 
     .hero-actions {
-        display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;
-    }
-
-    /* ===== STATS BANNER ===== */
-    .hero-stats-banner {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 1rem;
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 1.25rem 1.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        max-width: 820px;
-    }
-    .stat-box {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-    }
-    .stat-val {
-        font-size: 1.35rem;
-        font-weight: 900;
-        color: var(--accent);
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-    .stat-label {
-        font-size: 0.78rem;
-        color: var(--text-secondary);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
+        display: flex; gap: 1rem; flex-wrap: wrap;
     }
 
     .hero-scroll {
@@ -482,7 +440,6 @@
 
     @media (max-width: 768px) {
         .hero { padding: 3.5rem 0 2rem; }
-        .hero-stats-banner { grid-template-columns: repeat(2, 1fr); }
         .timeline { padding-left: 3rem; }
         .timeline::before { left: 16px; }
         .timeline-marker { left: -3rem; width: 34px; height: 34px; }
@@ -493,7 +450,6 @@
     @media (max-width: 480px) {
         .hero-actions { flex-direction: column; width: 100%; gap: 0.75rem; }
         .hero-actions .btn { width: 100%; justify-content: center; }
-        .hero-stats-banner { grid-template-columns: 1fr; }
         .project-image { height: 180px; }
         .project-body { padding: 1.1rem; }
         .project-links .btn { min-width: 70px; flex: 1; }
@@ -512,15 +468,10 @@
     <div class="hero-grid"></div>
     <div class="container">
         <div class="hero-content">
-            <div class="hero-badge-wrap">
-                <a href="{{ route('contact') }}" class="hero-badge">
-                    <span class="dot"></span>
-                    {{ __('Available for opportunities') }}
-                </a>
-                <span class="hero-badge" style="background:rgba(6,182,212,0.12); border-color:rgba(6,182,212,0.3); color:#06b6d4">
-                    <i class="fas fa-graduation-cap"></i> {{ __('Bachelor’s Degree – Excellent Graduation Classification') }}
-                </span>
-            </div>
+            <a href="{{ route('contact') }}" class="hero-badge">
+                <span class="dot"></span>
+                {{ __('Available for opportunities') }}
+            </a>
             
             <h1>
                 <span class="hero-line hero-line-1">{{ __("Programmers don't just") }} <span class="gradient-text">{{ __('write code,') }}</span></span>
@@ -540,25 +491,7 @@
                 </a>
             </div>
 
-            <!-- Stats & Credentials Banner -->
-            <div class="hero-stats-banner reveal delay-2">
-                <div class="stat-box">
-                    <div class="stat-val"><i class="fas fa-star" style="font-size:1.1rem"></i> 4.0 / 4.0</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'vi' ? 'GPA Kỳ Gần Nhất' : 'Recent Semester GPA' }}</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-val"><i class="fas fa-award" style="font-size:1.1rem"></i> 3.6 / 4.0</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'vi' ? 'GPA Tích Lũy UTH' : 'Cumulative GPA (UTH)' }}</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-val"><i class="fas fa-trophy" style="font-size:1.1rem"></i> 2nd Prize</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'vi' ? 'Thiết kế Logo 2025' : 'Logo Design Award' }}</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-val"><i class="fab fa-google" style="font-size:1.1rem"></i> GDSC</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'vi' ? 'Member Chapter UTH' : 'Chapter Member' }}</div>
-                </div>
-            </div>
+
         </div>
     </div>
     <div class="hero-scroll">
