@@ -19,6 +19,11 @@ class Experience extends Model
         'end_date' => 'date',
     ];
 
+    public function getLocalizedCompanyAttribute(): string
+    {
+        return __($this->company);
+    }
+
     public function getLocalizedPositionAttribute(): string
     {
         return __($this->position);

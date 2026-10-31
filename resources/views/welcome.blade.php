@@ -506,6 +506,30 @@
         color: var(--text-secondary); font-size: 0.92rem; line-height: 1.65;
         margin-bottom: 1rem;
     }
+    .timeline-bullets {
+        list-style: none;
+        padding-left: 0;
+        margin: 0.5rem 0 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+    .timeline-bullets li {
+        position: relative;
+        padding-left: 1.25rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    .timeline-bullets li::before {
+        content: '•';
+        position: absolute;
+        left: 0.25rem;
+        top: 0;
+        color: var(--accent);
+        font-weight: 900;
+        font-size: 1.15rem;
+    }
     .timeline-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
     .timeline-tag {
         font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.65rem;
@@ -791,7 +815,7 @@
                         <div class="timeline-header">
                             <h3 class="timeline-company">
                                 <i class="fas fa-building"></i>
-                                {{ $exp->company }}
+                                {{ $exp->localized_company }}
                             </h3>
                             <span class="timeline-date-badge">
                                 <i class="far fa-calendar-alt"></i>
@@ -802,7 +826,22 @@
                             <i class="fas fa-code-branch"></i>
                             {{ $exp->localized_position }}
                         </div>
-                        <p class="timeline-desc">{{ $exp->localized_description }}</p>
+                        <div class="timeline-desc">
+                            @php
+                                $sentences = array_filter(array_map('trim', explode('.', $exp->localized_description)));
+                            @endphp
+                            @if(count($sentences) > 1)
+                                <ul class="timeline-bullets">
+                                    @foreach($sentences as $s)
+                                        @if(!empty($s))
+                                        <li>{{ $s }}.</li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p>{{ $exp->localized_description }}</p>
+                            @endif
+                        </div>
                         @if(count($exp->tech_tags))
                         <div class="timeline-tags">
                             @foreach($exp->tech_tags as $tag)
