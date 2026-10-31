@@ -1,8 +1,8 @@
-# 🌟 Personal Portfolio & CMS — Hồ Thanh Thiện
+# 🌟 Hồ Thành Thiện
 
 <p align="center">
   <a href="https://hothanhthien.io.vn">
-    <img src="https://hothanhthien.io.vn/images/og-image.webp" alt="Hồ Thanh Thiện - Personal Portfolio & CMS" width="100%" style="max-width: 820px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
+    <img src="https://hothanhthien.io.vn/images/og-image.webp" alt="Hồ Thành Thiện - Full-Stack Developer" width="100%" style="max-width: 820px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
   </a>
 </p>
 
