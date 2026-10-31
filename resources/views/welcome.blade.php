@@ -1037,6 +1037,9 @@
                 <div class="home-cert-footer">
                     <span class="home-cert-size">
                         <i class="fas fa-file"></i> {{ strtoupper($cert->file_type) }} ({{ $cert->file_size ?? 'N/A' }})
+                        @if(count($cert->extra_files_with_urls) > 0)
+                            <span style="color:var(--accent-light); font-size:0.75rem; font-weight:700">+{{ count($cert->extra_files_with_urls) }} đính kèm</span>
+                        @endif
                     </span>
                     <div style="display:flex; gap:0.4rem">
                         <a href="{{ $cert->file_url }}" target="_blank" class="btn btn-primary btn-sm">

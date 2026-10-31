@@ -45,7 +45,9 @@ class CertificateController extends Controller
             'issue_date' => 'nullable|string|max:100',
             'description' => 'nullable|string',
             'file' => 'required|file|mimes:pdf,jpg,jpeg,png,webp|max:25600',
-            'thumbnail' => 'nullable|image|max:5120',
+            'thumbnail' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:25600',
+            'extra_files' => 'nullable|array',
+            'extra_files.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:25600',
             'featured' => 'nullable|boolean',
             'order' => 'nullable|integer',
         ]);
@@ -65,6 +67,22 @@ class CertificateController extends Controller
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('certificates/thumbs', 'public');
         }
+
+        // Handle multiple additional PDF / Document attachments
+        $extraFiles = [];
+        if ($request->hasFile('extra_files')) {
+            foreach ($request->file('extra_files') as $extraFile) {
+                $ext = strtolower($extraFile->getClientOriginalExtension());
+                $storedExtra = $extraFile->store('certificates/extras', 'public');
+                $extraFiles[] = [
+                    'name' => $extraFile->getClientOriginalName(),
+                    'path' => $storedExtra,
+                    'size' => $this->formatBytes($extraFile->getSize()),
+                    'type' => in_array($ext, ['jpg', 'jpeg', 'png', 'webp']) ? 'image' : 'pdf',
+                ];
+            }
+        }
+        $validated['extra_files'] = $extraFiles;
 
         $validated['featured'] = $request->boolean('featured');
         $validated['order'] = (int) ($validated['order'] ?? 0);
@@ -91,7 +109,10 @@ class CertificateController extends Controller
             'issue_date' => 'nullable|string|max:100',
             'description' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:25600',
-            'thumbnail' => 'nullable|image|max:5120',
+            'thumbnail' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:25600',
+            'extra_files' => 'nullable|array',
+            'extra_files.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:25600',
+            'remove_extra_files' => 'nullable|array',
             'featured' => 'nullable|boolean',
             'order' => 'nullable|integer',
         ]);
@@ -119,12 +140,46 @@ class CertificateController extends Controller
             $validated['thumbnail'] = $request->file('thumbnail')->store('certificates/thumbs', 'public');
         }
 
+        // Manage Extra Attached Files
+        $currentExtras = $certificate->extra_files ?? [];
+
+        // Remove files checked for deletion
+        if ($request->filled('remove_extra_files')) {
+            $removeList = (array) $request->input('remove_extra_files', []);
+            $kept = [];
+            foreach ($currentExtras as $idx => $item) {
+                if (in_array((string) $idx, $removeList) || in_array($item['path'], $removeList)) {
+                    if (!empty($item['path']) && Storage::disk('public')->exists($item['path'])) {
+                        Storage::disk('public')->delete($item['path']);
+                    }
+                } else {
+                    $kept[] = $item;
+                }
+            }
+            $currentExtras = $kept;
+        }
+
+        // Add newly uploaded extra files
+        if ($request->hasFile('extra_files')) {
+            foreach ($request->file('extra_files') as $extraFile) {
+                $ext = strtolower($extraFile->getClientOriginalExtension());
+                $storedExtra = $extraFile->store('certificates/extras', 'public');
+                $currentExtras[] = [
+                    'name' => $extraFile->getClientOriginalName(),
+                    'path' => $storedExtra,
+                    'size' => $this->formatBytes($extraFile->getSize()),
+                    'type' => in_array($ext, ['jpg', 'jpeg', 'png', 'webp']) ? 'image' : 'pdf',
+                ];
+            }
+        }
+        $validated['extra_files'] = $currentExtras;
+
         $validated['featured'] = $request->boolean('featured');
         $validated['order'] = (int) ($validated['order'] ?? 0);
 
         $certificate->update($validated);
 
-        return redirect()->route('admin.certificates.index')->with('success', 'Thông tin tài liệu / giấy khen đã được cập nhật!');
+        return redirect()->route('admin.certificates.index')->with('success', 'Thông tin tài liệu / giấy khen đã được cập nhật thành công!');
     }
 
     public function destroy($id)
@@ -136,6 +191,15 @@ class CertificateController extends Controller
         }
         if ($certificate->thumbnail && Storage::disk('public')->exists($certificate->thumbnail)) {
             Storage::disk('public')->delete($certificate->thumbnail);
+        }
+
+        // Delete extra files from disk
+        if (!empty($certificate->extra_files)) {
+            foreach ($certificate->extra_files as $extra) {
+                if (!empty($extra['path']) && Storage::disk('public')->exists($extra['path'])) {
+                    Storage::disk('public')->delete($extra['path']);
+                }
+            }
         }
 
         $certificate->delete();

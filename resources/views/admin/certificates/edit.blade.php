@@ -6,11 +6,11 @@
 <div class="page-header">
     <div>
         <h1>Chỉnh sửa: {{ $certificate->title }}</h1>
-        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.25rem">Cập nhật thông tin, thay thế file đính kèm hoặc ảnh bìa.</p>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.25rem">Cập nhật thông tin, thay thế file chính, đính kèm thêm nhiều file PDF hoặc đổi ảnh bìa.</p>
     </div>
     <div style="display:flex; gap:0.5rem">
         <a href="{{ $certificate->file_url }}" target="_blank" class="btn btn-secondary">
-            <i class="fas fa-external-link-alt"></i> Xem file hiện tại
+            <i class="fas fa-external-link-alt"></i> Xem file chính
         </a>
         <a href="{{ route('admin.certificates.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Quay lại
@@ -21,8 +21,8 @@
 <form method="POST" action="{{ route('admin.certificates.update', $certificate->id) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-    <div style="display:grid; grid-template-columns:1fr 360px; gap:1.5rem; align-items:start">
-        <!-- Main Form -->
+    <div style="display:grid; grid-template-columns:1fr 380px; gap:1.5rem; align-items:start">
+        <!-- Main Form Left -->
         <div>
             <div class="form-card" style="margin-bottom:1.5rem">
                 <h3 style="font-size:1.1rem; margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem; color:var(--text)">
@@ -70,14 +70,70 @@
                     @error('description')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
                 </div>
             </div>
+
+            <!-- Additional Attached Files (Multi-PDF Support) -->
+            <div class="form-card" style="margin-bottom:1.5rem">
+                <h3 style="font-size:1.1rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem; color:var(--text)">
+                    <i class="fas fa-paperclip" style="color:var(--primary)"></i> File PDF / Tài liệu đính kèm thêm
+                </h3>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.25rem">
+                    Bạn có thể tải lên thêm các file PDF hoặc tài liệu phụ (Ví dụ: Brochure tiếng Anh, Bảng điểm, Phụ lục dự án, Tài liệu thuyết minh...).
+                </p>
+
+                <!-- Currently Attached Extra Files -->
+                @if(!empty($certificate->extra_files) && count($certificate->extra_files) > 0)
+                    <div style="margin-bottom:1.25rem">
+                        <label class="form-label" style="margin-bottom:0.5rem">Danh sách file đính kèm hiện có:</label>
+                        <div style="display:flex; flex-direction:column; gap:0.6rem">
+                            @foreach($certificate->extra_files as $idx => $extra)
+                                <div style="display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0.9rem; border-radius:8px; background:rgba(255,255,255,0.03); border:1px solid var(--border); gap:0.75rem">
+                                    <div style="display:flex; align-items:center; gap:0.65rem; min-width:0; flex:1">
+                                        <i class="fas {{ ($extra['type'] ?? '') == 'pdf' ? 'fa-file-pdf' : 'fa-file-image' }}" style="font-size:1.3rem; color:{{ ($extra['type'] ?? '') == 'pdf' ? '#ef4444' : '#06b6d4' }}"></i>
+                                        <div style="min-width:0; flex:1">
+                                            <div style="font-size:0.88rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">
+                                                {{ $extra['name'] ?? basename($extra['path']) }}
+                                            </div>
+                                            <div style="font-size:0.75rem; color:var(--text-muted)">
+                                                Dung lượng: {{ $extra['size'] ?? 'N/A' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex; align-items:center; gap:0.5rem">
+                                        <a href="{{ asset('storage/' . ltrim($extra['path'], '/')) }}" target="_blank" class="btn btn-secondary" style="padding:0.3rem 0.6rem; font-size:0.78rem" title="Xem file">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <label style="display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; color:#ef4444; cursor:pointer; padding:0.3rem 0.5rem; border-radius:6px; background:rgba(239,68,68,0.1)">
+                                            <input type="checkbox" name="remove_extra_files[]" value="{{ $idx }}" style="accent-color:#ef4444">
+                                            <span>Xóa file này</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Upload More Extra Files -->
+                <div class="form-group">
+                    <label class="form-label" for="extra_files">Tải thêm các file PDF khác (Chọn được nhiều file cùng lúc)</label>
+                    <input type="file" id="extra_files" name="extra_files[]" class="form-control" multiple accept=".pdf,application/pdf,image/jpeg,image/png,image/webp" onchange="handleExtraFilesSelect(this)">
+                    <span style="font-size:0.78rem; color:var(--text-muted); display:block; margin-top:0.35rem">
+                        Giữ phím <strong>Ctrl</strong> hoặc kéo thả để chọn nhiều file PDF cùng lúc (Tối đa 25MB mỗi file).
+                    </span>
+                    @error('extra_files.*')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
+
+                    <!-- Preview of newly selected extra files -->
+                    <div id="extra-files-preview-list" style="display:none; margin-top:0.85rem; flex-direction:column; gap:0.5rem"></div>
+                </div>
+            </div>
         </div>
 
-        <!-- Sidebar / Files Upload -->
+        <!-- Sidebar Right -->
         <div>
             <!-- Main Document File -->
             <div class="form-card" style="margin-bottom:1.5rem">
                 <h3 style="font-size:1.05rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; color:var(--text)">
-                    <i class="fas fa-file-alt" style="color:var(--primary)"></i> File tài liệu
+                    <i class="fas fa-file-alt" style="color:var(--primary)"></i> File tài liệu chính
                 </h3>
 
                 <!-- Current file preview -->
@@ -99,10 +155,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="file">Tải file mới thay thế (Nếu cần)</label>
-                    <input type="file" id="file" name="file" class="form-control" accept=".pdf,image/jpeg,image/png,image/webp" onchange="handleFileSelect(this)">
+                    <label class="form-label" for="file">Tải file chính mới thay thế (Nếu cần)</label>
+                    <input type="file" id="file" name="file" class="form-control" accept=".pdf,application/pdf,image/jpeg,image/png,image/webp" onchange="handleFileSelect(this)">
                     <span style="font-size:0.78rem; color:var(--text-muted); display:block; margin-top:0.35rem">
-                        Để trống nếu muốn giữ nguyên file hiện tại. Hỗ trợ <strong>.PDF, .JPG, .PNG, .WEBP</strong> (tối đa 25MB).
+                        Để trống nếu muốn giữ nguyên file chính hiện tại. Hỗ trợ <strong>.PDF, .JPG, .PNG, .WEBP</strong> (tối đa 25MB).
                     </span>
                     @error('file')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
 
@@ -118,7 +174,7 @@
                 </div>
             </div>
 
-            <!-- Thumbnail / Cover Image -->
+            <!-- Thumbnail / Cover / Preview Document (Supports PDF & Images) -->
             <div class="form-card" style="margin-bottom:1.5rem">
                 <h3 style="font-size:1.05rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; color:var(--text)">
                     <i class="fas fa-image" style="color:var(--primary)"></i> Ảnh bìa / Xem trước
@@ -126,22 +182,38 @@
 
                 @if($certificate->thumbnail)
                     <div style="margin-bottom:0.75rem">
-                        <span style="font-size:0.78rem; color:var(--text-muted); display:block; margin-bottom:0.35rem">Ảnh bìa hiện tại:</span>
-                        <img src="{{ $certificate->thumbnail_url }}" alt="Thumbnail" style="width:100%; max-height:160px; object-fit:cover; border-radius:8px; border:1px solid var(--border)">
+                        <span style="font-size:0.78rem; color:var(--text-muted); display:block; margin-bottom:0.35rem">File bìa / xem trước hiện tại:</span>
+                        @if($certificate->thumbnail_is_pdf)
+                            <div style="padding:0.75rem; border-radius:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); display:flex; align-items:center; gap:0.75rem">
+                                <i class="fas fa-file-pdf" style="font-size:1.6rem; color:#ef4444"></i>
+                                <div style="flex:1; min-width:0; font-size:0.85rem; font-weight:600; text-overflow:ellipsis; overflow:hidden; white-space:nowrap">
+                                    {{ basename($certificate->thumbnail) }}
+                                </div>
+                                <a href="{{ $certificate->thumbnail_url }}" target="_blank" class="btn btn-secondary" style="padding:0.3rem 0.5rem; font-size:0.78rem">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        @else
+                            <img src="{{ $certificate->thumbnail_url }}" alt="Thumbnail" style="width:100%; max-height:160px; object-fit:cover; border-radius:8px; border:1px solid var(--border)">
+                        @endif
                     </div>
                 @endif
 
                 <div class="form-group">
-                    <label class="form-label" for="thumbnail">{{ $certificate->thumbnail ? 'Thay đổi ảnh bìa' : 'Thêm ảnh bìa' }}</label>
-                    <input type="file" id="thumbnail" name="thumbnail" class="form-control" accept="image/*" onchange="previewThumbnail(this)">
+                    <label class="form-label" for="thumbnail">{{ $certificate->thumbnail ? 'Thay đổi ảnh bìa / file xem trước' : 'Thêm ảnh bìa hoặc file PDF xem trước' }}</label>
+                    <input type="file" id="thumbnail" name="thumbnail" class="form-control" accept=".pdf,application/pdf,image/jpeg,image/png,image/webp" onchange="previewThumbnail(this)">
                     <span style="font-size:0.78rem; color:var(--text-muted); display:block; margin-top:0.35rem">
-                        Nếu để trống đối với file PDF, hệ thống tự hiển thị giao diện PDF sang trọng.
+                        Hỗ trợ cả <strong>file PDF hoặc file Ảnh</strong> (.PDF, .JPG, .PNG, .WEBP).
                     </span>
                     @error('thumbnail')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
 
                     <div id="thumb-preview-wrap" style="display:none; margin-top:0.85rem">
-                        <span style="font-size:0.75rem; color:var(--primary); font-weight:600; display:block; margin-bottom:0.25rem">Ảnh mới được chọn:</span>
-                        <img id="thumb-preview" src="" alt="Thumbnail preview" style="width:100%; max-height:160px; object-fit:cover; border-radius:8px; border:1px solid var(--border)">
+                        <span style="font-size:0.75rem; color:var(--primary); font-weight:600; display:block; margin-bottom:0.25rem">File mới được chọn:</span>
+                        <div id="thumb-pdf-indicator" style="display:none; padding:0.75rem; border-radius:8px; background:rgba(239,68,68,0.1); border:1px dashed #ef4444; align-items:center; gap:0.75rem">
+                            <i class="fas fa-file-pdf" style="font-size:1.6rem; color:#ef4444"></i>
+                            <div id="thumb-pdf-name" style="font-size:0.85rem; font-weight:600; color:#ef4444"></div>
+                        </div>
+                        <img id="thumb-preview" src="" alt="Thumbnail preview" style="display:none; width:100%; max-height:160px; object-fit:cover; border-radius:8px; border:1px solid var(--border)">
                     </div>
                 </div>
             </div>
@@ -207,16 +279,48 @@ function previewThumbnail(input) {
     const file = input.files[0];
     const wrap = document.getElementById('thumb-preview-wrap');
     const img = document.getElementById('thumb-preview');
+    const pdfInd = document.getElementById('thumb-pdf-indicator');
+    const pdfName = document.getElementById('thumb-pdf-name');
 
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            img.src = e.target.result;
-            wrap.style.display = 'block';
+        wrap.style.display = 'block';
+        if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
+            img.style.display = 'none';
+            pdfInd.style.display = 'flex';
+            pdfName.textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+        } else {
+            pdfInd.style.display = 'none';
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                img.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
     } else {
         wrap.style.display = 'none';
+    }
+}
+
+function handleExtraFilesSelect(input) {
+    const list = document.getElementById('extra-files-preview-list');
+    list.innerHTML = '';
+    if (input.files && input.files.length > 0) {
+        list.style.display = 'flex';
+        for (let i = 0; i < input.files.length; i++) {
+            const f = input.files[i];
+            const isPdf = f.name.toLowerCase().endsWith('.pdf') || f.type === 'application/pdf';
+            const item = document.createElement('div');
+            item.style.cssText = 'padding:0.5rem 0.75rem; border-radius:6px; background:rgba(99,102,241,0.08); border:1px dashed var(--primary); display:flex; align-items:center; gap:0.6rem; font-size:0.84rem';
+            item.innerHTML = `
+                <i class="fas ${isPdf ? 'fa-file-pdf' : 'fa-file-image'}" style="color:${isPdf ? '#ef4444' : '#06b6d4'}; font-size:1.1rem"></i>
+                <div style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600">${f.name}</div>
+                <div style="font-size:0.75rem; color:var(--text-muted)">${(f.size / 1024).toFixed(1)} KB</div>
+            `;
+            list.appendChild(item);
+        }
+    } else {
+        list.style.display = 'none';
     }
 }
 </script>

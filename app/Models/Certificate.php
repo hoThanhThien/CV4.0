@@ -18,6 +18,7 @@ class Certificate extends Model
         'file_path',
         'file_type',
         'file_size',
+        'extra_files',
         'thumbnail',
         'featured',
         'order',
@@ -26,6 +27,7 @@ class Certificate extends Model
     protected $casts = [
         'featured' => 'boolean',
         'order' => 'integer',
+        'extra_files' => 'array',
     ];
 
     public function getFileUrlAttribute(): string
@@ -45,6 +47,37 @@ class Certificate extends Model
             return $this->thumbnail;
         }
         return asset('storage/' . ltrim($this->thumbnail, '/'));
+    }
+
+    public function getThumbnailIsPdfAttribute(): bool
+    {
+        if (!$this->thumbnail) {
+            return false;
+        }
+        return str_ends_with(strtolower($this->thumbnail), '.pdf');
+    }
+
+    public function getExtraFilesWithUrlsAttribute(): array
+    {
+        if (empty($this->extra_files) || !is_array($this->extra_files)) {
+            return [];
+        }
+
+        return array_map(function ($file) {
+            $path = $file['path'] ?? '';
+            $url = (str_starts_with($path, 'http://') || str_starts_with($path, 'https://'))
+                ? $path
+                : asset('storage/' . ltrim($path, '/'));
+
+            return [
+                'name' => $file['name'] ?? basename($path),
+                'path' => $path,
+                'url' => $url,
+                'size' => $file['size'] ?? 'N/A',
+                'type' => $file['type'] ?? (str_ends_with(strtolower($path), '.pdf') ? 'pdf' : 'image'),
+                'is_pdf' => ($file['type'] ?? '') === 'pdf' || str_ends_with(strtolower($path), '.pdf'),
+            ];
+        }, $this->extra_files);
     }
 
     public function getIsPdfAttribute(): bool

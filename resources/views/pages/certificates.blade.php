@@ -438,7 +438,30 @@
                             </div>
 
                             @if($cert->thumbnail)
-                                <img src="{{ $cert->thumbnail_url }}" alt="{{ $cert->title }}" class="cert-preview-img" loading="lazy">
+                                @if($cert->thumbnail_is_pdf)
+                                    <!-- PDF Thumbnail Mockup -->
+                                    <div class="pdf-mockup-plate">
+                                        <div class="pdf-header-bar">
+                                            <div class="pdf-badge-tag">
+                                                <i class="fas fa-file-pdf"></i> PREVIEW PDF
+                                            </div>
+                                            <div style="font-size:0.72rem; color:#64748b; font-weight:700">
+                                                {{ basename($cert->thumbnail) }}
+                                            </div>
+                                        </div>
+                                        <div class="pdf-lines-mock">
+                                            <div class="pdf-line" style="width:90%"></div>
+                                            <div class="pdf-line" style="width:75%"></div>
+                                            <div class="pdf-line" style="width:85%"></div>
+                                        </div>
+                                        <div class="pdf-footer-tag">
+                                            <span><i class="fas fa-check-circle" style="color:#10b981"></i> Verified</span>
+                                            <span>{{ $cert->issuer ?? 'Official' }}</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <img src="{{ $cert->thumbnail_url }}" alt="{{ $cert->title }}" class="cert-preview-img" loading="lazy">
+                                @endif
                             @elseif($cert->is_pdf)
                                 <!-- Elegant PDF Plate Mockup -->
                                 <div class="pdf-mockup-plate">
@@ -481,6 +504,33 @@
                             <h2 class="cert-title" title="{{ $cert->title }}">{{ $cert->title }}</h2>
 
                             <p class="cert-desc">{{ $cert->description ?: 'Tài liệu xác thực chính thức và hồ sơ năng lực cá nhân.' }}</p>
+
+                            @if(count($cert->extra_files_with_urls) > 0)
+                                <div style="margin-bottom:1rem; padding-top:0.75rem; border-top:1px dashed var(--border)">
+                                    <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-bottom:0.4rem; display:flex; align-items:center; gap:0.35rem">
+                                        <i class="fas fa-paperclip" style="color:var(--accent-light)"></i> File đính kèm thêm ({{ count($cert->extra_files_with_urls) }}):
+                                    </div>
+                                    <div style="display:flex; flex-direction:column; gap:0.35rem">
+                                        @foreach($cert->extra_files_with_urls as $extra)
+                                            <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; font-size:0.8rem; background:rgba(255,255,255,0.03); padding:0.35rem 0.6rem; border-radius:6px; border:1px solid var(--border)">
+                                                <div style="display:flex; align-items:center; gap:0.4rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1">
+                                                    <i class="fas {{ $extra['is_pdf'] ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $extra['is_pdf'] ? '#ef4444' : '#06b6d4' }}"></i>
+                                                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="{{ $extra['name'] }}">{{ $extra['name'] }}</span>
+                                                    <span style="font-size:0.72rem; color:var(--text-muted); flex-shrink:0">({{ $extra['size'] }})</span>
+                                                </div>
+                                                <div style="display:flex; gap:0.3rem; flex-shrink:0">
+                                                    <button type="button" class="btn btn-secondary" style="padding:0.15rem 0.45rem; font-size:0.72rem" onclick="openCertModal('{{ $extra['url'] }}', '{{ addslashes($extra['name']) }}', '{{ $extra['type'] }}')" title="Xem">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <a href="{{ $extra['url'] }}" download class="btn btn-secondary" style="padding:0.15rem 0.45rem; font-size:0.72rem" title="Tải xuống">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
 
                             <!-- Card Footer -->
                             <div class="cert-footer">
