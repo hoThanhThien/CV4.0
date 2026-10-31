@@ -536,5 +536,8 @@ class DatabaseSeeder extends Seeder
         foreach ($posts as $post) {
             BlogPost::create($post);
         }
+
+        // ====== Certificates & Brochures ======
+        $this->call(CertificateSeeder::class);
     }
 }

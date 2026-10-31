@@ -641,6 +641,9 @@
                     <a href="{{ route('projects.index') }}" class="btn btn-primary">
                         <i class="fas fa-rocket"></i> {{ __('See My Work') }}
                     </a>
+                    <a href="{{ route('certificates') }}" class="btn btn-outline" style="border-color: rgba(124,58,237,0.45); background: rgba(124,58,237,0.06)">
+                        <i class="fas fa-file-pdf" style="color:#ef4444"></i> {{ __('Brochure & Giấy khen') }}
+                    </a>
                     <a href="{{ route('contact') }}" class="btn btn-outline">
                         <i class="fas fa-envelope"></i> {{ __('Get In Touch') }}
                     </a>

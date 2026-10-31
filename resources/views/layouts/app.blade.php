@@ -134,6 +134,7 @@
             elseif ($segment === 'contact') $crumbName = $isVi ? 'Liên hệ' : 'Contact';
             elseif ($segment === 'projects') $crumbName = $isVi ? 'Dự án' : 'Projects';
             elseif ($segment === 'blog') $crumbName = $isVi ? 'Bài viết' : 'Blog';
+            elseif ($segment === 'certificates') $crumbName = $isVi ? 'Brochure & Giấy khen' : 'Credentials';
             
             $breadcrumbs[] = [
                 '@type' => 'ListItem',
@@ -706,6 +707,7 @@
         <ul class="nav-links" id="nav-links">
             <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">{{ __('Home') }}</a></li>
             <li><a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'active' : '' }}">{{ __('Projects') }}</a></li>
+            <li><a href="{{ route('certificates') }}" class="{{ request()->routeIs('certificates') ? 'active' : '' }}">{{ __('Credentials') }}</a></li>
             <li><a href="{{ route('blog.index') }}" class="{{ request()->routeIs('blog.*') ? 'active' : '' }}">{{ __('Blog') }}</a></li>
             <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">{{ __('About') }}</a></li>
             <li><a href="{{ route('contact') }}" class="btn btn-primary nav-cta {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('Contact') }}</a></li>
@@ -743,6 +745,7 @@
         <nav class="footer-links">
             <a href="{{ route('home') }}">{{ __('Home') }}</a>
             <a href="{{ route('projects.index') }}">{{ __('Projects') }}</a>
+            <a href="{{ route('certificates') }}">{{ __('Credentials') }}</a>
             <a href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
             <a href="{{ route('about') }}">{{ __('About') }}</a>
             <a href="{{ route('contact') }}">{{ __('Contact') }}</a>

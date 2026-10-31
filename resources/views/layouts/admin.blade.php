@@ -260,6 +260,9 @@
             <a href="{{ route('admin.experiences.index') }}" class="{{ request()->routeIs('admin.experiences.*') ? 'active' : '' }}">
                 <i class="fas fa-briefcase"></i> Experiences
             </a>
+            <a href="{{ route('admin.certificates.index') }}" class="{{ request()->routeIs('admin.certificates.*') ? 'active' : '' }}">
+                <i class="fas fa-certificate"></i> Brochure & Giấy khen
+            </a>
 
             <div class="nav-section-title" style="margin-top:1rem">Inbox</div>
             <a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">

@@ -8,6 +8,7 @@ use App\Models\BlogPost;
 use App\Models\Experience;
 use App\Models\Skill;
 use App\Models\ContactMessage;
+use App\Models\Certificate;
 
 class DashboardController extends Controller
 {
@@ -19,6 +20,7 @@ class DashboardController extends Controller
             'published_posts' => BlogPost::where('published', true)->count(),
             'experiences' => Experience::count(),
             'skills' => Skill::count(),
+            'certificates' => Certificate::count(),
             'unread_messages' => ContactMessage::where('is_read', false)->count(),
         ];
 

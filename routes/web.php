@@ -23,6 +23,7 @@ Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/certificates', [PageController::class, 'certificates'])->name('certificates');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
@@ -35,6 +36,7 @@ Route::get('/sitemap.xml', function () {
         ['url' => url('/about'), 'freq' => 'monthly', 'priority' => '0.8'],
         ['url' => url('/contact'), 'freq' => 'monthly', 'priority' => '0.9'],
         ['url' => url('/projects'), 'freq' => 'weekly', 'priority' => '0.9'],
+        ['url' => url('/certificates'), 'freq' => 'weekly', 'priority' => '0.85'],
         ['url' => url('/blog'), 'freq' => 'weekly', 'priority' => '0.8'],
     ];
 
@@ -163,6 +165,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('skills/quick', [App\Http\Controllers\Admin\SkillController::class, 'quick'])->name('skills.quick');
         Route::resource('skills', App\Http\Controllers\Admin\SkillController::class)->except(['show']);
         Route::resource('experiences', App\Http\Controllers\Admin\ExperienceController::class)->except(['show']);
+        Route::resource('certificates', App\Http\Controllers\Admin\CertificateController::class)->except(['show']);
         Route::resource('messages', App\Http\Controllers\Admin\ContactMessageController::class)->only(['index', 'show', 'destroy']);
         Route::post('messages/{message}/toggle-read', [App\Http\Controllers\Admin\ContactMessageController::class, 'toggleRead'])->name('messages.toggle-read');
     });

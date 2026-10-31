@@ -610,6 +610,96 @@
         .project-links .btn { min-width: 70px; flex: 1; }
         .cta-section .btn { width: 100%; justify-content: center; }
     }
+
+    /* ===== HOME CREDENTIALS SHOWCASE ===== */
+    .home-cert-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        gap: 1.75rem;
+    }
+    .home-cert-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    .home-cert-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(124, 58, 237, 0.35);
+        box-shadow: 0 16px 36px -8px var(--accent-glow);
+    }
+    .home-cert-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.1rem;
+    }
+    .home-cert-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        border: 1px solid var(--border);
+    }
+    .home-cert-cat {
+        font-size: 0.76rem;
+        font-weight: 700;
+        padding: 0.3rem 0.65rem;
+        border-radius: 50px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        color: var(--accent-light);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+    .home-cert-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+    .home-cert-meta {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.85rem;
+    }
+    .home-cert-meta i { color: var(--accent-light); }
+    .home-cert-desc {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1.4rem;
+        flex: 1;
+    }
+    .home-cert-footer {
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    .home-cert-size {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
 </style>
 @endsection
 
@@ -637,6 +727,9 @@
             <div class="hero-actions">
                 <a href="{{ route('projects.index') }}" class="btn btn-primary">
                     <i class="fas fa-rocket"></i> {{ __('View My Work') }}
+                </a>
+                <a href="{{ route('certificates') }}" class="btn btn-outline" style="border-color: rgba(124,58,237,0.45); background: rgba(124,58,237,0.06)">
+                    <i class="fas fa-file-pdf" style="color:#ef4444"></i> {{ __('Brochure & Giấy khen') }}
                 </a>
                 <a href="{{ route('contact') }}" class="btn btn-outline">
                     <i class="fas fa-paper-plane"></i> {{ __('Get In Touch') }}
@@ -906,6 +999,61 @@
         <div style="text-align:center; margin-top:2.5rem" class="reveal delay-2">
             <a href="{{ route('projects.index') }}" class="btn btn-outline">
                 <i class="fas fa-th-large"></i> {{ __('View All Projects') }}
+            </a>
+        </div>
+    </div>
+</section>
+@endif
+
+<!-- ===== BROCHURE & CREDENTIALS SHOWCASE ===== -->
+@if(isset($certificates) && $certificates->count())
+<section class="section">
+    <div class="container">
+        <h2 class="section-title reveal">{!! __('heading_credentials') !!}</h2>
+        <p class="section-subtitle reveal delay-1">{{ __('credentials_subtitle') }}</p>
+
+        <div class="home-cert-grid">
+            @foreach($certificates->take(3) as $cert)
+            <div class="home-cert-card reveal delay-{{ ($loop->index % 3) + 1 }}">
+                <div class="home-cert-top">
+                    <div class="home-cert-icon" style="color: {{ $cert->is_pdf ? '#ef4444' : '#06b6d4' }}; background: {{ $cert->is_pdf ? 'rgba(239,68,68,0.1)' : 'rgba(6,182,212,0.1)' }}">
+                        <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}"></i>
+                    </div>
+                    <span class="home-cert-cat">
+                        <i class="{{ $cert->category_icon }}"></i> {{ $cert->category_label }}
+                    </span>
+                </div>
+                <h3 class="home-cert-title">{{ $cert->title }}</h3>
+                <div class="home-cert-meta">
+                    @if($cert->issuer)
+                        <span><i class="fas fa-building"></i> {{ $cert->issuer }}</span>
+                    @endif
+                    @if($cert->issue_date)
+                        <span>&bull;</span>
+                        <span><i class="fas fa-calendar-alt"></i> {{ $cert->issue_date }}</span>
+                    @endif
+                </div>
+                <p class="home-cert-desc">{{ Str::limit($cert->description, 130) }}</p>
+                <div class="home-cert-footer">
+                    <span class="home-cert-size">
+                        <i class="fas fa-file"></i> {{ strtoupper($cert->file_type) }} ({{ $cert->file_size ?? 'N/A' }})
+                    </span>
+                    <div style="display:flex; gap:0.4rem">
+                        <a href="{{ $cert->file_url }}" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i> {{ __('View') }}
+                        </a>
+                        <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm" title="{{ __('Download') }}">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        <div style="text-align:center; margin-top:2.5rem" class="reveal delay-2">
+            <a href="{{ route('certificates') }}" class="btn btn-outline">
+                <i class="fas fa-folder-open"></i> {{ __('All Documents') }} ({{ \App\Models\Certificate::count() }})
             </a>
         </div>
     </div>
