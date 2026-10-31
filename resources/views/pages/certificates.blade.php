@@ -250,65 +250,82 @@
 
     /* Card Footer Actions */
     .cert-footer {
-        padding-top: 1rem;
+        padding-top: 1.1rem;
+        margin-top: auto;
         border-top: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .cert-footer-meta {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 0.75rem;
+        gap: 0.5rem;
     }
     .cert-file-badge {
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
         font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
+        gap: 0.4rem;
     }
     .cert-action-btns {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.65rem;
+        width: 100%;
     }
     .btn-cert-view {
-        padding: 0.45rem 0.9rem;
-        border-radius: 8px;
+        padding: 0.6rem 0.9rem;
+        border-radius: 12px;
         background: var(--gradient);
         color: #ffffff;
-        font-size: 0.84rem;
-        font-weight: 600;
+        font-size: 0.86rem;
+        font-weight: 700;
         text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        transition: all 0.2s ease;
-        border: none;
-        cursor: pointer;
-    }
-    .btn-cert-view:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px var(--accent-glow);
-        color: #ffffff;
-    }
-    .btn-cert-dl {
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        color: var(--text-secondary);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.88rem;
+        gap: 0.45rem;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px var(--accent-glow);
+    }
+    .btn-cert-view:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px var(--accent-glow);
+        color: #ffffff;
+        filter: brightness(1.08);
+    }
+    .btn-cert-dl {
+        padding: 0.6rem 0.9rem;
+        border-radius: 12px;
+        background: rgba(99, 102, 241, 0.08);
+        border: 1.5px solid rgba(99, 102, 241, 0.3);
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        font-size: 0.86rem;
+        font-weight: 700;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        cursor: pointer;
     }
     .btn-cert-dl:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-        background: rgba(124, 58, 237, 0.08);
+        border-color: transparent;
+        color: #ffffff;
+        background: var(--gradient);
         transform: translateY(-2px);
+        box-shadow: 0 6px 18px var(--accent-glow);
+    }
+    .btn-cert-view svg,
+    .btn-cert-dl svg {
+        flex-shrink: 0;
     }
 
     /* Modal Viewer */
@@ -534,17 +551,33 @@
 
                             <!-- Card Footer -->
                             <div class="cert-footer">
-                                <div class="cert-file-badge">
-                                    <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $cert->is_pdf ? '#ef4444' : '#06b6d4' }}"></i>
-                                    <span>{{ strtoupper($cert->file_type) }} ({{ $cert->file_size ?? 'N/A' }})</span>
+                                <div class="cert-footer-meta">
+                                    <div class="cert-file-badge">
+                                        <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $cert->is_pdf ? '#ef4444' : '#06b6d4' }}"></i>
+                                        <span>{{ strtoupper($cert->file_type) }} &bull; {{ $cert->file_size ?? 'N/A' }}</span>
+                                    </div>
+                                    @if(count($cert->extra_files_with_urls) > 0)
+                                        <span style="font-size:0.75rem; color:var(--accent-light); font-weight:700">
+                                            <i class="fas fa-paperclip"></i> +{{ count($cert->extra_files_with_urls) }} đính kèm
+                                        </span>
+                                    @endif
                                 </div>
 
                                 <div class="cert-action-btns">
                                     <button type="button" class="btn-cert-view" onclick="openCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
-                                        <i class="fas fa-eye"></i> {{ __('View Document') }}
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <span>{{ __('View Document') }}</span>
                                     </button>
                                     <a href="{{ $cert->file_url }}" download class="btn-cert-dl" title="{{ __('Download') }}">
-                                        <i class="fas fa-download"></i>
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                        <span>{{ __('Download') }}</span>
                                     </a>
                                 </div>
                             </div>

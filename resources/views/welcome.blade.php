@@ -686,19 +686,34 @@
     }
     .home-cert-footer {
         padding-top: 1rem;
+        margin-top: auto;
         border-top: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .home-cert-footer-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 0.5rem;
-    }
-    .home-cert-size {
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
         font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
+    }
+    .home-cert-btns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+        width: 100%;
+    }
+    .home-cert-btns .btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 0.55rem 0.75rem;
+        border-radius: 10px;
+        gap: 0.45rem;
     }
 </style>
 @endsection
@@ -1035,18 +1050,32 @@
                 </div>
                 <p class="home-cert-desc">{{ Str::limit($cert->description, 130) }}</p>
                 <div class="home-cert-footer">
-                    <span class="home-cert-size">
-                        <i class="fas fa-file"></i> {{ strtoupper($cert->file_type) }} ({{ $cert->file_size ?? 'N/A' }})
+                    <div class="home-cert-footer-top">
+                        <span>
+                            <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $cert->is_pdf ? '#ef4444' : '#06b6d4' }}"></i>
+                            {{ strtoupper($cert->file_type) }} &bull; {{ $cert->file_size ?? 'N/A' }}
+                        </span>
                         @if(count($cert->extra_files_with_urls) > 0)
-                            <span style="color:var(--accent-light); font-size:0.75rem; font-weight:700">+{{ count($cert->extra_files_with_urls) }} đính kèm</span>
+                            <span style="color:var(--accent-light); font-size:0.75rem; font-weight:700">
+                                <i class="fas fa-paperclip"></i> +{{ count($cert->extra_files_with_urls) }} đính kèm
+                            </span>
                         @endif
-                    </span>
-                    <div style="display:flex; gap:0.4rem">
+                    </div>
+                    <div class="home-cert-btns">
                         <a href="{{ $cert->file_url }}" target="_blank" class="btn btn-primary btn-sm">
-                            <i class="fas fa-eye"></i> {{ __('View') }}
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span>{{ __('View') }}</span>
                         </a>
-                        <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm" title="{{ __('Download') }}">
-                            <i class="fas fa-download"></i>
+                        <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm" style="border-color:rgba(99,102,241,0.3); background:rgba(99,102,241,0.06)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span>{{ __('Download') }}</span>
                         </a>
                     </div>
                 </div>
