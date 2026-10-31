@@ -168,5 +168,42 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('certificates', App\Http\Controllers\Admin\CertificateController::class)->except(['show']);
         Route::resource('messages', App\Http\Controllers\Admin\ContactMessageController::class)->only(['index', 'show', 'destroy']);
         Route::post('messages/{message}/toggle-read', [App\Http\Controllers\Admin\ContactMessageController::class, 'toggleRead'])->name('messages.toggle-read');
+
+        // AI Blog Studio
+        Route::prefix('ai')->name('ai.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\AIDashboardController::class, 'index'])->name('dashboard');
+
+            // Providers
+            Route::post('providers/{provider}/test', [App\Http\Controllers\Admin\AIProviderController::class, 'testConnection'])->name('providers.test');
+            Route::post('providers/{provider}/set-default', [App\Http\Controllers\Admin\AIProviderController::class, 'setDefault'])->name('providers.set-default');
+            Route::post('providers/{provider}/toggle-active', [App\Http\Controllers\Admin\AIProviderController::class, 'toggleActive'])->name('providers.toggle-active');
+            Route::resource('providers', App\Http\Controllers\Admin\AIProviderController::class)->except(['show']);
+
+            // Content Configurations
+            Route::post('configs/{config}/generate-now', [App\Http\Controllers\Admin\AIContentConfigController::class, 'generateNow'])->name('configs.generate-now');
+            Route::resource('configs', App\Http\Controllers\Admin\AIContentConfigController::class)->except(['show']);
+
+            // Automations
+            Route::post('automations/{automation}/toggle-active', [App\Http\Controllers\Admin\BlogAutomationController::class, 'toggleActive'])->name('automations.toggle-active');
+            Route::post('automations/{automation}/run-now', [App\Http\Controllers\Admin\BlogAutomationController::class, 'runNow'])->name('automations.run-now');
+            Route::resource('automations', App\Http\Controllers\Admin\BlogAutomationController::class)->except(['show']);
+
+            // AI Generated Posts
+            Route::get('posts', [App\Http\Controllers\Admin\AIPostController::class, 'index'])->name('posts.index');
+            Route::get('posts/{post}/preview', [App\Http\Controllers\Admin\AIPostController::class, 'preview'])->name('posts.preview');
+            Route::get('posts/{post}/edit', [App\Http\Controllers\Admin\AIPostController::class, 'edit'])->name('posts.edit');
+            Route::put('posts/{post}', [App\Http\Controllers\Admin\AIPostController::class, 'update'])->name('posts.update');
+            Route::post('posts/{post}/approve', [App\Http\Controllers\Admin\AIPostController::class, 'approve'])->name('posts.approve');
+            Route::post('posts/{post}/publish-now', [App\Http\Controllers\Admin\AIPostController::class, 'publishNow'])->name('posts.publish-now');
+            Route::post('posts/{post}/schedule', [App\Http\Controllers\Admin\AIPostController::class, 'schedule'])->name('posts.schedule');
+            Route::post('posts/{post}/cancel-schedule', [App\Http\Controllers\Admin\AIPostController::class, 'cancelSchedule'])->name('posts.cancel-schedule');
+            Route::post('posts/{post}/regenerate', [App\Http\Controllers\Admin\AIPostController::class, 'regenerate'])->name('posts.regenerate');
+            Route::delete('posts/{post}', [App\Http\Controllers\Admin\AIPostController::class, 'destroy'])->name('posts.destroy');
+
+            // Logs
+            Route::get('logs', [App\Http\Controllers\Admin\BlogAutomationLogController::class, 'index'])->name('logs.index');
+            Route::get('logs/{log}', [App\Http\Controllers\Admin\BlogAutomationLogController::class, 'show'])->name('logs.show');
+            Route::post('logs/{log}/retry', [App\Http\Controllers\Admin\BlogAutomationLogController::class, 'retry'])->name('logs.retry');
+        });
     });
 });

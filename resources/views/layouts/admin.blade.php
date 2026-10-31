@@ -264,6 +264,33 @@
                 <i class="fas fa-certificate"></i> Brochure & Giấy khen
             </a>
 
+            <div class="nav-section-title" style="margin-top:1rem; display:flex; align-items:center; justify-content:space-between">
+                <span>AI Blog Studio</span>
+                <span class="badge" style="background:rgba(99,102,241,0.2); color:var(--accent); font-size:0.65rem; padding:0.1rem 0.4rem">AI 4.0</span>
+            </div>
+            <a href="{{ route('admin.ai.dashboard') }}" class="{{ request()->routeIs('admin.ai.dashboard') ? 'active' : '' }}">
+                <i class="fas fa-magic"></i> AI Dashboard
+            </a>
+            <a href="{{ route('admin.ai.posts.index') }}" class="{{ request()->routeIs('admin.ai.posts.*') ? 'active' : '' }}">
+                <i class="fas fa-robot"></i> AI Blog Posts
+                @php $pendingCount = \App\Models\BlogPost::where('ai_generated', true)->where('status', 'pending_review')->count(); @endphp
+                @if($pendingCount > 0)
+                    <span class="badge badge-warning" style="margin-left:auto; font-size:0.7rem; padding:0.15rem 0.45rem">{{ $pendingCount }}</span>
+                @endif
+            </a>
+            <a href="{{ route('admin.ai.automations.index') }}" class="{{ request()->routeIs('admin.ai.automations.*') ? 'active' : '' }}">
+                <i class="fas fa-clock"></i> Automations
+            </a>
+            <a href="{{ route('admin.ai.configs.index') }}" class="{{ request()->routeIs('admin.ai.configs.*') ? 'active' : '' }}">
+                <i class="fas fa-sliders-h"></i> Content Configs
+            </a>
+            <a href="{{ route('admin.ai.providers.index') }}" class="{{ request()->routeIs('admin.ai.providers.*') ? 'active' : '' }}">
+                <i class="fas fa-brain"></i> AI Providers
+            </a>
+            <a href="{{ route('admin.ai.logs.index') }}" class="{{ request()->routeIs('admin.ai.logs.*') ? 'active' : '' }}">
+                <i class="fas fa-history"></i> Automation Logs
+            </a>
+
             <div class="nav-section-title" style="margin-top:1rem">Inbox</div>
             <a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">
                 <i class="fas fa-envelope"></i> Messages

@@ -140,7 +140,38 @@
                 @endif
 
                 <div class="post-content">
-                    {!! nl2br(e($post->content)) !!}
+                    @if($post->ai_generated || str_contains($post->content, '<p>') || str_contains($post->content, '<h2>'))
+                        {!! $post->content !!}
+                    @else
+                        {!! nl2br(e($post->content)) !!}
+                    @endif
+
+                    @if(!empty($post->faq) && is_array($post->faq))
+                        <div style="margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border)">
+                            <h3 style="font-size:1.3rem; margin-bottom:1rem; color:var(--text-primary)"><i class="fas fa-question-circle" style="color:var(--accent-light)"></i> {{ __('FAQ') }}</h3>
+                            <div style="display:flex; flex-direction:column; gap:0.75rem">
+                                @foreach($post->faq as $faq)
+                                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:1rem">
+                                        <div style="font-weight:700; color:var(--text-primary); margin-bottom:0.35rem">{{ $faq['question'] ?? '' }}</div>
+                                        <div style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6">{{ $faq['answer'] ?? '' }}</div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    @if(!empty($post->sources) && is_array($post->sources))
+                        <div style="margin-top:2rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.9rem">
+                            <h4 style="color:var(--text-secondary); margin-bottom:0.5rem"><i class="fas fa-link"></i> {{ __('Sources & References') }}:</h4>
+                            <ul style="margin-left:1.5rem">
+                                @foreach($post->sources as $source)
+                                    <li>
+                                        <a href="{{ $source['url'] ?? '#' }}" target="_blank" rel="noopener">{{ $source['title'] ?? ($source['url'] ?? '') }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </article>
 

@@ -15,7 +15,17 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // 1. Tự động kiểm tra và xuất bản các bài viết blog đã đến giờ hẹn (chạy mỗi phút)
+        $schedule->command('blog:publish-scheduled')
+                 ->everyMinute()
+                 ->withoutOverlapping(10)
+                 ->runInBackground();
+
+        // 2. Tự động kiểm tra và kích hoạt các lịch tạo bài blog AI đến chu kỳ (chạy mỗi 5 phút)
+        $schedule->command('blog:run-automations')
+                 ->everyFiveMinutes()
+                 ->withoutOverlapping(15)
+                 ->runInBackground();
     }
 
     /**
