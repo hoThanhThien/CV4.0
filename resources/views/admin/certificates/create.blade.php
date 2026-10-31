@@ -44,7 +44,7 @@
 
                     <div class="form-group">
                         <label class="form-label" for="issuer">Đơn vị cấp / Tổ chức</label>
-                        <input type="text" id="issuer" name="issuer" class="form-control" value="{{ old('issuer') }}" placeholder="VD: ĐH Công nghiệp Hà Nội, HaUI, Cisco...">
+                        <input type="text" id="issuer" name="issuer" class="form-control" value="{{ old('issuer') }}" placeholder="VD: Trường ĐH Giao thông Vận tải TP.HCM (UTH), AWS, Cisco...">
                         @error('issuer')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
                     </div>
                 </div>

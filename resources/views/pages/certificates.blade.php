@@ -2,7 +2,7 @@
 
 @section('title', __('Credentials') . ' | ' . __('Hồ Thành Thiện'))
 @section('description', app()->getLocale() == 'vi' ? 'Hồ sơ năng lực cá nhân, Brochure PDF, bằng cấp chính quy, chứng chỉ chuyên môn và các giải thưởng đạt được của Kỹ sư Hồ Thành Thiện.' : 'Official degrees, verified certificates, honors, awards and portfolio brochure of Ho Thanh Thien - Full-Stack Developer.')
-@section('keywords', app()->getLocale() == 'vi' ? 'Hồ sơ năng lực, Brochure Hồ Thành Thiện, Bằng cấp CNTT HaUI, Chứng chỉ lập trình, Giấy khen, Giải thưởng' : 'Credentials, Ho Thanh Thien Brochure, IT Degree HaUI, Certificates, Honors, Awards')
+@section('keywords', app()->getLocale() == 'vi' ? 'Hồ sơ năng lực, Brochure Hồ Thành Thiện, Bằng Cử nhân CNTT UTH, Chứng chỉ lập trình, Giấy khen, Giải thưởng' : 'Credentials, Ho Thanh Thien Brochure, IT Degree UTH, Certificates, Honors, Awards')
 
 @section('styles')
 <style>
@@ -274,43 +274,45 @@
     .cert-action-btns {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.65rem;
+        gap: 0.75rem;
         width: 100%;
     }
     .btn-cert-view {
-        padding: 0.6rem 0.9rem;
+        height: 42px;
+        padding: 0 1rem;
         border-radius: 12px;
         background: var(--gradient);
         color: #ffffff;
-        font-size: 0.86rem;
+        font-size: 0.88rem;
         font-weight: 700;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.45rem;
+        gap: 0.5rem;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         border: none;
         cursor: pointer;
-        box-shadow: 0 4px 12px var(--accent-glow);
+        box-shadow: 0 4px 14px var(--accent-glow);
     }
     .btn-cert-view:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 18px var(--accent-glow);
+        box-shadow: 0 8px 22px var(--accent-glow);
         color: #ffffff;
         filter: brightness(1.08);
     }
     .btn-cert-dl {
-        padding: 0.6rem 0.9rem;
+        height: 42px;
+        padding: 0 1rem;
         border-radius: 12px;
         background: rgba(99, 102, 241, 0.08);
-        border: 1.5px solid rgba(99, 102, 241, 0.3);
-        color: var(--accent);
+        border: 1.5px solid rgba(99, 102, 241, 0.35);
+        color: var(--accent-light);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.45rem;
-        font-size: 0.86rem;
+        gap: 0.5rem;
+        font-size: 0.88rem;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -321,7 +323,7 @@
         color: #ffffff;
         background: var(--gradient);
         transform: translateY(-2px);
-        box-shadow: 0 6px 18px var(--accent-glow);
+        box-shadow: 0 8px 22px var(--accent-glow);
     }
     .btn-cert-view svg,
     .btn-cert-dl svg {
@@ -336,47 +338,55 @@
         display: none;
         align-items: center;
         justify-content: center;
-        padding: 1.5rem;
-        background: rgba(15, 23, 42, 0.82);
-        backdrop-filter: blur(8px);
+        padding: 1.25rem;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
         animation: fadeIn 0.2s ease;
     }
     .cert-modal.active { display: flex; }
     .cert-modal-box {
         background: var(--bg-card);
-        border: 1px solid var(--border);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 20px;
-        width: 100%;
-        max-width: 960px;
-        max-height: 92vh;
+        width: 95vw;
+        max-width: 1180px;
+        height: 90vh;
+        max-height: 90vh;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
     }
     .cert-modal-header {
-        padding: 1rem 1.5rem;
+        padding: 0.9rem 1.5rem;
         border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
         background: var(--bg-primary);
+        flex-shrink: 0;
     }
     .cert-modal-title {
-        font-size: 1.1rem;
-        font-weight: 700;
+        font-size: 1.15rem;
+        font-weight: 800;
         color: var(--text-primary);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .cert-modal-title i {
+        color: var(--accent-light);
     }
     .cert-modal-body {
         flex: 1;
-        min-height: 60vh;
+        height: calc(90vh - 65px);
         position: relative;
         overflow: hidden;
-        background: #0f172a;
+        background: #0b0f19;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -385,9 +395,72 @@
     .cert-modal-body img {
         width: 100%;
         height: 100%;
-        min-height: 60vh;
         border: none;
+        display: block;
         object-fit: contain;
+    }
+    .btn-modal-dl {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.5rem 1.15rem;
+        border-radius: 50px;
+        background: var(--gradient);
+        color: #ffffff !important;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-decoration: none;
+        border: none;
+        box-shadow: 0 4px 14px var(--accent-glow);
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+    .btn-modal-dl:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px var(--accent-glow);
+        filter: brightness(1.1);
+        color: #ffffff !important;
+    }
+    .btn-modal-ext {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        color: var(--accent-light) !important;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+    .btn-modal-ext:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: var(--accent);
+        color: #ffffff !important;
+        transform: translateY(-2px);
+    }
+    .btn-modal-close {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+    .btn-modal-close:hover {
+        background: rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        transform: rotate(90deg);
     }
 </style>
 @endsection
@@ -593,16 +666,21 @@
 <div class="cert-modal" id="certModal" onclick="closeCertModal(event)">
     <div class="cert-modal-box" onclick="event.stopPropagation()">
         <div class="cert-modal-header">
-            <div class="cert-modal-title" id="certModalTitle">Tài liệu</div>
-            <div style="display:flex; align-items:center; gap:0.5rem">
-                <a id="certModalExternalBtn" href="#" target="_blank" class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.82rem">
-                    <i class="fas fa-external-link-alt"></i> Mở tab mới
+            <div class="cert-modal-title" id="certModalTitle">
+                <i class="fas fa-file-pdf"></i>
+                <span id="certModalTitleText">Tài liệu</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.6rem">
+                <a id="certModalExternalBtn" href="#" target="_blank" class="btn-modal-ext" title="Mở trong tab trình duyệt mới">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <span>Mở tab mới</span>
                 </a>
-                <a id="certModalDownloadBtn" href="#" download class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.82rem">
-                    <i class="fas fa-download"></i> Tải về
+                <a id="certModalDownloadBtn" href="#" download class="btn-modal-dl" title="Tải tài liệu PDF về máy">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Tải về</span>
                 </a>
-                <button type="button" class="btn btn-secondary" style="padding:0.4rem 0.75rem" onclick="closeCertModalDirect()">
-                    <i class="fas fa-times"></i>
+                <button type="button" class="btn-modal-close" onclick="closeCertModalDirect()" title="Đóng cửa sổ">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
         </div>
@@ -615,12 +693,16 @@
 <script>
 function openCertModal(url, title, type) {
     const modal = document.getElementById('certModal');
-    const titleEl = document.getElementById('certModalTitle');
+    const titleTextEl = document.getElementById('certModalTitleText');
     const bodyEl = document.getElementById('certModalBody');
     const extBtn = document.getElementById('certModalExternalBtn');
     const dlBtn = document.getElementById('certModalDownloadBtn');
 
-    titleEl.textContent = title;
+    if (titleTextEl) {
+        titleTextEl.textContent = title;
+    } else if (titleEl) {
+        titleEl.textContent = title;
+    }
     extBtn.href = url;
     dlBtn.href = url;
 

@@ -36,11 +36,11 @@ class CertificateSeeder extends Seeder
         ]);
 
         Certificate::create([
-            'title' => 'Bằng Kỹ sư / Cử nhân Công nghệ Thông tin',
+            'title' => 'Bằng Cử nhân Công nghệ Thông tin',
             'category' => 'degree',
-            'issuer' => 'Trường Đại học Công nghiệp Hà Nội (HaUI)',
-            'issue_date' => '2020 - 2024',
-            'description' => "Tốt nghiệp chuyên ngành Công nghệ Thông tin, hoàn thành chương trình đào tạo với các đồ án ứng dụng web, trí tuệ nhân tạo và hệ thống doanh nghiệp.",
+            'issuer' => 'Trường ĐH Giao thông Vận tải TP.HCM (UTH)',
+            'issue_date' => '2026',
+            'description' => "Tốt nghiệp Cử nhân chuyên ngành Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc (GPA kỳ gần nhất 4.0/4.0).",
             'file_path' => 'certificates/HoThanhThien_CV_Brochure.pdf',
             'file_type' => 'pdf',
             'file_size' => '402.15 KB',
@@ -50,11 +50,11 @@ class CertificateSeeder extends Seeder
         ]);
 
         Certificate::create([
-            'title' => 'Giải Nhất Cuộc thi Sáng tác Logo & Nhận diện Khoa CNTT',
+            'title' => 'Giải Nhì Cuộc thi Sáng tác Logo & Nhận diện Khoa/Viện CNTT',
             'category' => 'award',
-            'issuer' => 'Khoa Công nghệ Thông tin - HaUI',
-            'issue_date' => '2022',
-            'description' => "Đạt giải Quán quân trong cuộc thi thiết kế sáng tạo biểu trưng chính thức cho Khoa Công nghệ Thông tin - Trường Đại học Công nghiệp Hà Nội.",
+            'issuer' => 'Khoa/Viện Công nghệ Thông tin - UTH',
+            'issue_date' => '2025',
+            'description' => "Đạt Giải Nhì trong cuộc thi thiết kế sáng tạo biểu trưng chính thức cho Khoa/Viện Công nghệ Thông tin - Trường ĐH Giao thông Vận tải TP.HCM (UTH).",
             'file_path' => 'certificates/HoThanhThien_CV_Brochure.pdf',
             'file_type' => 'pdf',
             'file_size' => '402.15 KB',
