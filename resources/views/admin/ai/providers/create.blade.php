@@ -79,10 +79,13 @@
         <!-- Model -->
         <div style="margin-bottom:1.5rem">
             <label for="model" style="display:block; font-weight:600; margin-bottom:0.5rem">Model AI sử dụng <span style="color:var(--danger)">*</span></label>
-            <input type="text" id="model" name="model" class="form-control" value="{{ old('model', 'gpt-4o-mini') }}" placeholder="VD: gpt-4o-mini" required style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">
+            <input type="text" id="model" name="model" class="form-control" value="{{ old('model', 'gpt-4o-mini') }}" placeholder="VD: gemini-1.5-flash hoặc gpt-4o-mini" required style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">
             <div id="model-suggestions" style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap">
                 <!-- Javascript will inject suggestions -->
             </div>
+            <small id="model-help" style="color:var(--text-muted); display:block; margin-top:0.4rem; font-size:0.83rem">
+                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini: <code>gemini-1.5-flash</code> hoặc <code>gemini-1.5-pro</code>). Hệ thống sẽ tự động làm sạch khoảng trắng và tiền tố dư thừa.
+            </small>
         </div>
 
         <!-- Base URL (Custom) -->
@@ -137,14 +140,22 @@
 <script>
     const modelSuggestions = {
         openai: ['gpt-4o-mini', 'gpt-4o', 'gpt-3.5-turbo'],
-        gemini: ['gemini-1.5-flash', 'gemini-1.5-pro'],
+        gemini: ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp'],
         deepseek: ['deepseek-chat', 'deepseek-coder'],
         custom: ['llama-3.1-70b', 'mixtral-8x7b-32768']
+    };
+
+    const defaultNames = {
+        openai: 'OpenAI Primary',
+        gemini: 'Google Gemini',
+        deepseek: 'DeepSeek Pro',
+        custom: 'Custom LLM'
     };
 
     function onProviderTypeChange(type) {
         const baseUrlGroup = document.getElementById('base_url_group');
         const modelInput = document.getElementById('model');
+        const nameInput = document.getElementById('name');
         const suggestionsBox = document.getElementById('model-suggestions');
 
         if (type === 'custom') {
@@ -153,14 +164,36 @@
             baseUrlGroup.style.display = 'none';
         }
 
+        // Auto update name if still matching previous defaults
+        const allDefaults = Object.values(defaultNames);
+        if (nameInput && (!nameInput.value || allDefaults.includes(nameInput.value))) {
+            nameInput.value = defaultNames[type] || 'AI Provider';
+        }
+
         const list = modelSuggestions[type] || [];
-        if (list.length > 0 && (!modelInput.value || Object.values(modelSuggestions).flat().includes(modelInput.value))) {
+        const allSuggestions = Object.values(modelSuggestions).flat();
+        if (list.length > 0 && (!modelInput.value || allSuggestions.includes(modelInput.value))) {
             modelInput.value = list[0];
         }
 
-        suggestionsBox.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted)">Gợi ý:</span> ' +
-            list.map(m => `<button type="button" onclick="document.getElementById('model').value='${m}'" class="badge" style="cursor:pointer; background:rgba(99,102,241,0.1); color:var(--accent); border:1px solid rgba(99,102,241,0.2)">${m}</button>`).join(' ');
+        suggestionsBox.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted)">Gợi ý mã model:</span> ' +
+            list.map(m => `<button type="button" onclick="selectModel('${m}')" class="badge" style="cursor:pointer; background:rgba(99,102,241,0.1); color:var(--accent); border:1px solid rgba(99,102,241,0.2); padding:0.3rem 0.6rem; border-radius:6px; font-family:monospace; margin-right:4px">${m}</button>`).join(' ');
     }
+
+    function selectModel(m) {
+        document.getElementById('model').value = m;
+    }
+
+    // Auto-clean model input on blur
+    document.getElementById('model').addEventListener('blur', function() {
+        const type = document.querySelector('input[name="provider_type"]:checked')?.value;
+        let val = this.value.trim();
+        if (type === 'gemini') {
+            val = val.replace(/^models\//i, '').replace(/^\/+/, '').trim().toLowerCase().replace(/\s+/g, '-');
+            if (val === 'gemini' || val === 'google-gemini') val = 'gemini-1.5-flash';
+        }
+        this.value = val;
+    });
 
     function togglePasswordVisibility(id) {
         const input = document.getElementById(id);

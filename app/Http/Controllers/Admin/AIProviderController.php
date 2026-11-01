@@ -36,6 +36,8 @@ class AIProviderController extends Controller
             'is_default' => 'boolean',
         ]);
 
+        $validated = $this->cleanProviderData($validated);
+
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_default'] = $request->boolean('is_default', false);
 
@@ -71,6 +73,8 @@ class AIProviderController extends Controller
             'is_default' => 'boolean',
         ]);
 
+        $validated = $this->cleanProviderData($validated);
+
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_default'] = $request->boolean('is_default', false);
 
@@ -86,6 +90,37 @@ class AIProviderController extends Controller
         $provider->update($validated);
 
         return redirect()->route('admin.ai.providers.index')->with('success', 'Đã cập nhật nhà cung cấp AI!');
+    }
+
+    private function cleanProviderData(array $validated): array
+    {
+        $validated['name'] = trim($validated['name']);
+        if (!empty($validated['api_key'])) {
+            $validated['api_key'] = trim($validated['api_key']);
+        }
+        if (!empty($validated['base_url'])) {
+            $validated['base_url'] = trim($validated['base_url']);
+        }
+
+        $type = $validated['provider_type'];
+        $model = trim($validated['model']);
+
+        if ($type === 'gemini') {
+            while (str_starts_with(strtolower($model), 'models/')) {
+                $model = substr($model, 7);
+                $model = trim($model);
+            }
+            $model = ltrim($model, '/');
+            $model = strtolower(trim($model));
+            $model = preg_replace('/\s+/', '-', $model);
+
+            if (in_array($model, ['', 'gemini', 'google', 'google-gemini', 'gemini-ai'])) {
+                $model = 'gemini-1.5-flash';
+            }
+        }
+
+        $validated['model'] = $model;
+        return $validated;
     }
 
     public function destroy($id)

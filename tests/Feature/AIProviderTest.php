@@ -122,4 +122,47 @@ class AIProviderTest extends TestCase
         $this->assertTrue($result['success']);
         $this->assertEquals('CONNECTED', $result['code']);
     }
+
+    public function test_gemini_model_name_normalization()
+    {
+        $gemini = new \App\Services\AI\Providers\GeminiProvider();
+
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('gemini-1.5-flash'));
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('models/gemini-1.5-flash'));
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('models/models/gemini-1.5-flash'));
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('Gemini 1.5 Flash'));
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel(' gemini-1.5-flash '));
+        $this->assertEquals('gemini-1.5-pro', $gemini->normalizeModel('models/gemini-1.5-pro'));
+        $this->assertEquals('gemini-1.5-pro', $gemini->normalizeModel('GEMINI 1.5 PRO'));
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('gemini'));
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('Google Gemini'));
+        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel(''));
+    }
+
+    public function test_gemini_error_classification_for_unexpected_model_name_format()
+    {
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response([
+                'error' => [
+                    'code' => 400,
+                    'message' => "* GenerateContentRequest.model: unexpected model name format\n",
+                    'status' => 'INVALID_ARGUMENT'
+                ]
+            ], 400),
+        ]);
+
+        $provider = AiProvider::create([
+            'name' => 'Gehihi Provider',
+            'provider_type' => 'gemini',
+            'api_key' => 'AIzaSyValidKeyFormat',
+            'model' => 'invalid-model-name',
+        ]);
+
+        $adapter = AIProviderFactory::make($provider);
+        $result = $adapter->testConnection($provider);
+
+        $this->assertFalse($result['success']);
+        $this->assertEquals('INVALID_MODEL_FORMAT', $result['code']);
+        $this->assertStringContainsString('Tên Model Gemini', $result['message']);
+    }
 }

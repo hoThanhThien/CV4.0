@@ -14,7 +14,7 @@ class OpenAIProvider implements AIProviderInterface
 
     public function testConnection(AiProvider $provider): array
     {
-        $apiKey = $provider->getDecryptedApiKey();
+        $apiKey = trim($provider->getDecryptedApiKey());
         if (empty($apiKey)) {
             return [
                 'success' => false,
@@ -26,7 +26,7 @@ class OpenAIProvider implements AIProviderInterface
         }
 
         $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
-        $model = $provider->model ?: 'gpt-4o-mini';
+        $model = trim($provider->model ?: 'gpt-4o-mini');
         $timeout = $provider->timeout ?: 30;
 
         try {
@@ -79,7 +79,7 @@ class OpenAIProvider implements AIProviderInterface
         string $userPrompt,
         ?string $modelOverride = null
     ): array {
-        $apiKey = $provider->getDecryptedApiKey();
+        $apiKey = trim($provider->getDecryptedApiKey());
         if (empty($apiKey)) {
             return [
                 'success' => false,
@@ -94,7 +94,7 @@ class OpenAIProvider implements AIProviderInterface
         }
 
         $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
-        $model = $modelOverride ?: ($provider->model ?: 'gpt-4o-mini');
+        $model = trim($modelOverride ?: ($provider->model ?: 'gpt-4o-mini'));
         $temperature = (float)($provider->temperature ?? 0.7);
         $maxTokens = (int)($provider->max_tokens ?? 4000);
         $timeout = (int)($provider->timeout ?? 90);

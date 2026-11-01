@@ -12,9 +12,32 @@ class GeminiProvider implements AIProviderInterface
 {
     protected string $defaultBaseUrl = 'https://generativelanguage.googleapis.com/v1beta';
 
+    public function normalizeModel(?string $model): string
+    {
+        $m = trim((string)$model);
+
+        // Strip repeated 'models/' prefixes if present
+        while (str_starts_with(strtolower($m), 'models/')) {
+            $m = substr($m, 7);
+            $m = trim($m);
+        }
+
+        $m = ltrim($m, '/');
+        $m = strtolower(trim($m));
+        // Replace spaces with hyphens (e.g., 'gemini 1.5 flash' -> 'gemini-1.5-flash')
+        $m = preg_replace('/\s+/', '-', $m);
+
+        // If empty or common generic keywords, default to recommended model
+        if (in_array($m, ['', 'gemini', 'google', 'google-gemini', 'gemini-ai'])) {
+            return 'gemini-1.5-flash';
+        }
+
+        return $m;
+    }
+
     public function testConnection(AiProvider $provider): array
     {
-        $apiKey = $provider->getDecryptedApiKey();
+        $apiKey = trim($provider->getDecryptedApiKey());
         if (empty($apiKey)) {
             return [
                 'success' => false,
@@ -25,7 +48,7 @@ class GeminiProvider implements AIProviderInterface
             ];
         }
 
-        $model = $provider->model ?: 'gemini-1.5-flash';
+        $model = $this->normalizeModel($provider->model);
         $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
         $timeout = $provider->timeout ?: 30;
 
@@ -81,7 +104,7 @@ class GeminiProvider implements AIProviderInterface
         string $userPrompt,
         ?string $modelOverride = null
     ): array {
-        $apiKey = $provider->getDecryptedApiKey();
+        $apiKey = trim($provider->getDecryptedApiKey());
         if (empty($apiKey)) {
             return [
                 'success' => false,
@@ -95,7 +118,7 @@ class GeminiProvider implements AIProviderInterface
             ];
         }
 
-        $model = $modelOverride ?: ($provider->model ?: 'gemini-1.5-flash');
+        $model = $this->normalizeModel($modelOverride ?: $provider->model);
         $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
         $temperature = (float)($provider->temperature ?? 0.7);
         $maxTokens = (int)($provider->max_tokens ?? 4000);
@@ -201,6 +224,16 @@ class GeminiProvider implements AIProviderInterface
                     'model_available' => false,
                 ];
             }
+
+            if (str_contains(strtolower($message), 'unexpected model name format') || str_contains(strtolower($message), 'model name format')) {
+                return [
+                    'success' => false,
+                    'message' => "Tên Model Gemini '{$model}' không đúng định dạng của Google AI. Vui lòng nhập mã model chính xác (Ví dụ: gemini-1.5-flash hoặc gemini-1.5-pro, viết thường, không có khoảng trắng hoặc tiền tố 'models/').",
+                    'code' => 'INVALID_MODEL_FORMAT',
+                    'status_code' => 400,
+                    'model_available' => false,
+                ];
+            }
         }
 
         if ($statusCode === 403 || $status === 'PERMISSION_DENIED') {
@@ -213,10 +246,10 @@ class GeminiProvider implements AIProviderInterface
             ];
         }
 
-        if ($statusCode === 404 || $status === 'NOT_FOUND') {
+        if ($statusCode === 404 || $status === 'NOT_FOUND' || str_contains(strtolower($message), 'not found') || str_contains(strtolower($message), 'is not found for api version')) {
             return [
                 'success' => false,
-                'message' => "Model Not Found: Model '{$model}' không tồn tại trong Google AI API.",
+                'message' => "Model Not Found: Model '{$model}' không tồn tại hoặc chưa được hỗ trợ bởi Google Gemini API v1beta. Khuyên dùng: 'gemini-1.5-flash' hoặc 'gemini-1.5-pro'.",
                 'code' => 'MODEL_NOT_FOUND',
                 'status_code' => 404,
                 'model_available' => false,
