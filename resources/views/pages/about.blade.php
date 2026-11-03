@@ -594,7 +594,7 @@
         .about-avatar { width: 160px; height: 160px; font-size: 4rem; }
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 1024px) {
         .achievements-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 1.25rem;

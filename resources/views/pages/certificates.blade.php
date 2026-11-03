@@ -270,6 +270,8 @@
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
     .cert-action-btns {
         display: grid;
@@ -294,6 +296,7 @@
         border: none;
         cursor: pointer;
         box-shadow: 0 4px 14px var(--accent-glow);
+        white-space: nowrap;
     }
     .btn-cert-view:hover {
         transform: translateY(-2px);
@@ -317,6 +320,7 @@
         text-decoration: none;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         cursor: pointer;
+        white-space: nowrap;
     }
     .btn-cert-dl:hover {
         border-color: transparent;
