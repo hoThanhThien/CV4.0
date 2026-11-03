@@ -309,6 +309,59 @@ class GeminiProvider implements AIProviderInterface
     }
 
     /**
+     * Select a diverse set of fallback model IDs across serving pools (standard Flash, Lite, Pro)
+     * from the dynamically discovered API catalog so 503 spikes on one pool fail over immediately.
+     *
+     * @param array<int, array{id: string, display_name?: string, output_token_limit?: int}> $discovered
+     * @return array<int, string>
+     */
+    protected function selectDiverseFallbackModels(array $discovered, bool $preferLitePool = false): array
+    {
+        $litePool = [];
+        $flashPool = [];
+        $otherPool = [];
+
+        foreach ($discovered as $meta) {
+            $id = $meta['id'] ?? '';
+            if ($id === '') {
+                continue;
+            }
+            if (str_contains($id, 'lite')) {
+                $litePool[] = $id;
+            } elseif (str_contains($id, 'flash')) {
+                $flashPool[] = $id;
+            } else {
+                $otherPool[] = $id;
+            }
+        }
+
+        $ordered = [];
+        if ($preferLitePool) {
+            $pools = [$litePool, $flashPool, $otherPool];
+        } else {
+            $pools = [$flashPool, $litePool, $otherPool];
+        }
+
+        for ($round = 0; $round < 3; $round++) {
+            foreach ($pools as $pool) {
+                if (isset($pool[$round]) && !in_array($pool[$round], $ordered, true)) {
+                    $ordered[] = $pool[$round];
+                }
+            }
+        }
+
+        // Append any remaining discovered models if pools were small (e.g. single-model test stubs)
+        foreach ($discovered as $meta) {
+            $id = $meta['id'] ?? '';
+            if ($id !== '' && !in_array($id, $ordered, true)) {
+                $ordered[] = $id;
+            }
+        }
+
+        return array_slice($ordered, 0, 5);
+    }
+
+    /**
      * JSON Schema for Structured Outputs per Google AI Studio API Reference.
      */
     public function blogPostJsonSchema(): array
@@ -401,9 +454,7 @@ class GeminiProvider implements AIProviderInterface
 
         if (empty($modelsToTry)) {
             $discoveryAttempted = true;
-            foreach ($this->discoverModels($apiKey, $provider->base_url) as $meta) {
-                $modelsToTry[] = $meta['id'];
-            }
+            $modelsToTry = $this->selectDiverseFallbackModels($this->discoverModels($apiKey, $provider->base_url), false);
         }
 
         if (empty($modelsToTry)) {
@@ -545,12 +596,14 @@ class GeminiProvider implements AIProviderInterface
                     break;
                 }
 
-                // On 404 / 429 / 503, dynamically discover active models from Google's `/models` API once
+                // On 404 / 429 / 503, dynamically discover active models across diverse pools once
                 if (!$discoveryAttempted) {
                     $discoveryAttempted = true;
-                    foreach (array_slice($this->discoverModels($apiKey, $provider->base_url), 0, 5) as $meta) {
-                        if (!in_array($meta['id'], $modelsToTry, true)) {
-                            $modelsToTry[] = $meta['id'];
+                    $preferLite = in_array($statusCode, [429, 503], true);
+                    $fallbacks = $this->selectDiverseFallbackModels($this->discoverModels($apiKey, $provider->base_url), $preferLite);
+                    foreach ($fallbacks as $fbId) {
+                        if (!in_array($fbId, $modelsToTry, true)) {
+                            $modelsToTry[] = $fbId;
                         }
                     }
                 }
@@ -621,9 +674,7 @@ class GeminiProvider implements AIProviderInterface
 
         if (empty($modelsToTry)) {
             $discoveryAttempted = true;
-            foreach (array_slice($this->discoverModels($apiKey, $provider->base_url), 0, 5) as $meta) {
-                $modelsToTry[] = $meta['id'];
-            }
+            $modelsToTry = $this->selectDiverseFallbackModels($this->discoverModels($apiKey, $provider->base_url), false);
         }
 
         if (empty($modelsToTry)) {
@@ -746,9 +797,11 @@ class GeminiProvider implements AIProviderInterface
 
                 if (!$discoveryAttempted) {
                     $discoveryAttempted = true;
-                    foreach (array_slice($this->discoverModels($apiKey, $provider->base_url), 0, 5) as $meta) {
-                        if (!in_array($meta['id'], $modelsToTry, true)) {
-                            $modelsToTry[] = $meta['id'];
+                    $preferLite = in_array($lastStatusCode, [429, 503], true);
+                    $fallbacks = $this->selectDiverseFallbackModels($this->discoverModels($apiKey, $provider->base_url), $preferLite);
+                    foreach ($fallbacks as $fbId) {
+                        if (!in_array($fbId, $modelsToTry, true)) {
+                            $modelsToTry[] = $fbId;
                         }
                     }
                 }
