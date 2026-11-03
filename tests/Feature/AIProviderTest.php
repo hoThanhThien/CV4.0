@@ -102,10 +102,14 @@ class AIProviderTest extends TestCase
     public function test_gemini_connection_success_with_mock()
     {
         Http::fake([
-            'generativelanguage.googleapis.com/*' => Http::response([
-                'candidates' => [
-                    ['content' => ['parts' => [['text' => 'pong']]]]
-                ]
+            'generativelanguage.googleapis.com/v1beta/interactions' => Http::response([
+                'id' => 'v1_interaction_test',
+                'object' => 'interaction',
+                'status' => 'completed',
+                'steps' => [
+                    ['type' => 'thought', 'signature' => 'sig'],
+                    ['type' => 'model_output', 'content' => [['type' => 'text', 'text' => 'OK']]],
+                ],
             ], 200),
         ]);
 
@@ -121,6 +125,14 @@ class AIProviderTest extends TestCase
 
         $this->assertTrue($result['success']);
         $this->assertEquals('CONNECTED', $result['code']);
+        $this->assertEquals('gemini-3.5-flash', $provider->fresh()->model);
+
+        Http::assertSent(function ($request) {
+            return $request->url() === 'https://generativelanguage.googleapis.com/v1beta/interactions'
+                && $request->hasHeader('x-goog-api-key', 'AIzaSyFakeKey123')
+                && !str_contains($request->url(), 'key=')
+                && ($request['model'] ?? null) === 'gemini-3.5-flash';
+        });
     }
 
     public function test_gemini_model_name_normalization()
@@ -151,14 +163,20 @@ class AIProviderTest extends TestCase
     public function test_gemini_automatic_fallback_when_model_returns_404()
     {
         Http::fake([
-            'generativelanguage.googleapis.com/v1beta/models/gemini-experimental-old:generateContent*' => Http::response([
+            'generativelanguage.googleapis.com/v1beta/interactions' => Http::response([
+                'error' => [
+                    'code' => 'not_found',
+                    'message' => 'Model not found on interactions endpoint',
+                ],
+            ], 404),
+            'generativelanguage.googleapis.com/v1beta/models/gemini-experimental-old:generateContent' => Http::response([
                 'error' => [
                     'code' => 404,
                     'message' => 'models/gemini-experimental-old is not found for API version v1beta',
                     'status' => 'NOT_FOUND',
                 ],
             ], 404),
-            'generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent*' => Http::response([
+            'generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent' => Http::response([
                 'candidates' => [
                     ['content' => ['parts' => [['text' => 'OK']]]],
                 ],
@@ -182,20 +200,30 @@ class AIProviderTest extends TestCase
 
     public function test_gemini_fallback_on_503_high_demand_and_vertex_express_fallback()
     {
-        Http::fake([
-            'generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent*' => Http::response([
-                'error' => [
-                    'code' => 503,
-                    'message' => 'This model is currently experiencing high demand.',
-                    'status' => 'UNAVAILABLE',
-                ],
-            ], 503),
-            'generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent*' => Http::response([
-                'candidates' => [
-                    ['content' => ['parts' => [['text' => 'OK']]]],
-                ],
-            ], 200),
-        ]);
+        Http::fake(function ($request) {
+            if ($request->url() === 'https://generativelanguage.googleapis.com/v1beta/interactions') {
+                if (($request['model'] ?? '') === 'gemini-3.8-flash') {
+                    return Http::response([
+                        'error' => [
+                            'code' => 'service_unavailable',
+                            'message' => 'gemini-3.8-flash is currently experiencing high demand.',
+                        ],
+                    ], 503);
+                }
+
+                if (($request['model'] ?? '') === 'gemini-3.5-flash') {
+                    return Http::response([
+                        'object' => 'interaction',
+                        'status' => 'completed',
+                        'steps' => [
+                            ['type' => 'model_output', 'content' => [['type' => 'text', 'text' => 'OK']]],
+                        ],
+                    ], 200);
+                }
+            }
+
+            return Http::response([], 404);
+        });
 
         $provider = AiProvider::create([
             'name' => 'Gemini 503 Fallback Test',

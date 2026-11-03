@@ -206,4 +206,85 @@ class AIContentGenerationTest extends TestCase
         $this->assertEquals('Tối ưu hiệu năng Laravel với Gemini 2.5', $result['post']->title);
         $this->assertStringContainsString('php artisan optimize', $result['post']->content);
     }
+
+    public function test_gemini_interactions_api_structured_output_and_header_auth()
+    {
+        $geminiProvider = AiProvider::create([
+            'name' => 'Gemini 3.5 Interactions Test',
+            'provider_type' => 'gemini',
+            'api_key' => 'AQ.FakeStudioInteractionsKey999',
+            'model' => 'gemini-3.5-flash',
+            'is_active' => true,
+        ]);
+
+        $this->config->update(['ai_provider_id' => $geminiProvider->id]);
+
+        $structuredArticle = [
+            'title' => 'Kiến trúc Microservices hiện đại với Gemini Interactions API',
+            'slug' => 'kien-truc-microservices-gemini-interactions-api',
+            'excerpt' => 'Phân tích chuyên sâu cách tích hợp Gemini Interactions API chuẩn JSON Schema vào hệ thống Laravel.',
+            'content' => '<h2>1. Tổng quan Interactions API</h2><p>Chuẩn kết nối mới sử dụng x-goog-api-key và JSON Schema.</p>',
+            'meta_title' => 'Gemini Interactions API với Laravel | Hồ Thành Thiện',
+            'meta_description' => 'Hướng dẫn tích hợp chuẩn Google AI Studio Interactions API vào Laravel.',
+            'keywords' => ['Gemini', 'Interactions API', 'Laravel'],
+            'category' => 'Technology',
+            'tags' => ['Gemini', 'Laravel'],
+            'faq' => [
+                ['question' => 'Interactions API dùng header nào?', 'answer' => 'Sử dụng header x-goog-api-key.'],
+            ],
+            'sources' => [
+                ['title' => 'Google AI Studio API Reference', 'url' => 'https://aistudio.google.com/api-reference'],
+            ],
+            'cover_image_prompt' => 'Modern cloud API architecture diagram in 3D isometric style',
+        ];
+
+        Http::fake([
+            'generativelanguage.googleapis.com/v1beta/interactions' => Http::response([
+                'id' => 'v1_interaction_blog_001',
+                'object' => 'interaction',
+                'model' => 'gemini-3.5-flash',
+                'status' => 'completed',
+                'usage' => [
+                    'total_input_tokens' => 420,
+                    'total_output_tokens' => 980,
+                    'total_tokens' => 1400,
+                ],
+                'steps' => [
+                    ['type' => 'thought', 'signature' => 'sig_abc'],
+                    [
+                        'type' => 'model_output',
+                        'content' => [
+                            ['type' => 'text', 'text' => json_encode($structuredArticle, JSON_UNESCAPED_UNICODE)],
+                        ],
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $runLog = \App\Models\BlogAutomationRun::create([
+            'provider_used' => 'Google Gemini',
+            'model_used' => 'gemini-3.5-flash',
+            'trigger_type' => 'manual',
+            'started_at' => now(),
+            'status' => 'running',
+        ]);
+
+        $generator = new BlogContentGenerator();
+        $result = $generator->generatePost($this->config->fresh(), 'manual_approval', null, $runLog);
+
+        $this->assertTrue($result['success']);
+        $this->assertNotNull($result['post']);
+        $this->assertEquals('Kiến trúc Microservices hiện đại với Gemini Interactions API', $result['post']->title);
+        $this->assertEquals(420, $runLog->fresh()->prompt_tokens);
+        $this->assertEquals(980, $runLog->fresh()->completion_tokens);
+        $this->assertEquals(1400, $runLog->fresh()->total_tokens);
+
+        Http::assertSent(function ($request) {
+            return $request->url() === 'https://generativelanguage.googleapis.com/v1beta/interactions'
+                && $request->hasHeader('x-goog-api-key', 'AQ.FakeStudioInteractionsKey999')
+                && !str_contains($request->url(), 'key=')
+                && ($request['response_mime_type'] ?? null) === 'application/json'
+                && ($request['response_format']['type'] ?? null) === 'object';
+        });
+    }
 }

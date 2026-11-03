@@ -79,12 +79,12 @@
         <!-- Model -->
         <div style="margin-bottom:1.5rem">
             <label for="model" style="display:block; font-weight:600; margin-bottom:0.5rem">Model AI sử dụng <span style="color:var(--danger)">*</span></label>
-            <input type="text" id="model" name="model" class="form-control" value="{{ old('model', 'gpt-4o-mini') }}" placeholder="VD: gemini-2.5-flash hoặc gpt-4o-mini" required style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">
+            <input type="text" id="model" name="model" class="form-control" value="{{ old('model', 'gpt-4o-mini') }}" placeholder="VD: gemini-3.5-flash hoặc gpt-4o-mini" required style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">
             <div id="model-suggestions" style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap">
                 <!-- Javascript will inject suggestions -->
             </div>
             <small id="model-help" style="color:var(--text-muted); display:block; margin-top:0.4rem; font-size:0.83rem">
-                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini khuyên dùng: <code>gemini-2.5-flash</code> hoặc <code>gemini-2.5-pro</code>). Hệ thống tự động chuẩn hóa tên model và chuyển đổi các model cũ đã ngừng hỗ trợ.
+                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini khuyên dùng: <code>gemini-3.5-flash</code>, <code>gemini-3.8-flash</code> hoặc <code>gemini-3.5-flash-lite</code>). Chuẩn Google AI Studio <code>Interactions API (/v1beta/interactions)</code> với xác thực header <code>x-goog-api-key</code>.
             </small>
         </div>
 

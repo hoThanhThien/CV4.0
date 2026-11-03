@@ -85,7 +85,7 @@
             <div id="model-suggestions" style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap">
             </div>
             <small id="model-help" style="color:var(--text-muted); display:block; margin-top:0.4rem; font-size:0.83rem">
-                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini khuyên dùng: <code>gemini-2.5-flash</code> hoặc <code>gemini-2.5-pro</code>). Hệ thống sẽ tự động chuẩn hóa tên model khi lưu.
+                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini khuyên dùng: <code>gemini-3.5-flash</code>, <code>gemini-3.8-flash</code> hoặc <code>gemini-3.5-flash-lite</code>). Chuẩn Google AI Studio <code>Interactions API (/v1beta/interactions)</code> với xác thực header <code>x-goog-api-key</code>.
             </small>
         </div>
 
