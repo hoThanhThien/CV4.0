@@ -162,4 +162,48 @@ class AIContentGenerationTest extends TestCase
         $this->assertTrue($resPub['post']->published);
         $this->assertNotNull($resPub['post']->published_at);
     }
+
+    public function test_gemini_thinking_parts_and_raw_newlines_in_json_are_parsed_cleanly()
+    {
+        $geminiProvider = AiProvider::create([
+            'name' => 'Gemini 2.5 Test',
+            'provider_type' => 'gemini',
+            'api_key' => 'AIzaSyFakeGeminiKey123456',
+            'model' => 'gemini-2.5-flash',
+            'is_active' => true,
+        ]);
+
+        $this->config->update(['ai_provider_id' => $geminiProvider->id]);
+
+        // Simulate Gemini 2.5 response containing a thought part AND markdown-fenced JSON with raw newlines inside string
+        $rawMalformedJson = "```json\n{\n  \"title\": \"Tối ưu hiệu năng Laravel với Gemini 2.5\",\n  \"slug\": \"toi-uu-hieu-nang-laravel-gemini\",\n  \"excerpt\": \"Hướng dẫn chi tiết tối ưu Laravel.\",\n  \"content\": \"<h2>Giới thiệu</h2>\n<pre><code>php artisan optimize</code></pre>\",\n}\n```";
+
+        Http::fake([
+            'generativelanguage.googleapis.com/*' => Http::response([
+                'candidates' => [
+                    [
+                        'finishReason' => 'STOP',
+                        'content' => [
+                            'parts' => [
+                                ['thought' => true, 'text' => 'Thinking about Laravel performance...'],
+                                ['text' => $rawMalformedJson],
+                            ],
+                        ],
+                    ],
+                ],
+                'usageMetadata' => [
+                    'promptTokenCount' => 400,
+                    'candidatesTokenCount' => 900,
+                    'totalTokenCount' => 1300,
+                ],
+            ], 200),
+        ]);
+
+        $generator = new BlogContentGenerator();
+        $result = $generator->generatePost($this->config->fresh(), 'manual_approval');
+
+        $this->assertTrue($result['success']);
+        $this->assertEquals('Tối ưu hiệu năng Laravel với Gemini 2.5', $result['post']->title);
+        $this->assertStringContainsString('php artisan optimize', $result['post']->content);
+    }
 }

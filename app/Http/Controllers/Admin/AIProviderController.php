@@ -30,7 +30,7 @@ class AIProviderController extends Controller
             'model' => 'required|string|max:100',
             'base_url' => 'nullable|url|max:255',
             'temperature' => 'required|numeric|between:0,2',
-            'max_tokens' => 'required|integer|min:200|max:16000',
+            'max_tokens' => 'required|integer|min:200|max:65536',
             'timeout' => 'required|integer|min:10|max:300',
             'is_active' => 'boolean',
             'is_default' => 'boolean',
@@ -67,7 +67,7 @@ class AIProviderController extends Controller
             'model' => 'required|string|max:100',
             'base_url' => 'nullable|url|max:255',
             'temperature' => 'required|numeric|between:0,2',
-            'max_tokens' => 'required|integer|min:200|max:16000',
+            'max_tokens' => 'required|integer|min:200|max:65536',
             'timeout' => 'required|integer|min:10|max:300',
             'is_active' => 'boolean',
             'is_default' => 'boolean',
@@ -106,17 +106,7 @@ class AIProviderController extends Controller
         $model = trim($validated['model']);
 
         if ($type === 'gemini') {
-            while (str_starts_with(strtolower($model), 'models/')) {
-                $model = substr($model, 7);
-                $model = trim($model);
-            }
-            $model = ltrim($model, '/');
-            $model = strtolower(trim($model));
-            $model = preg_replace('/\s+/', '-', $model);
-
-            if (in_array($model, ['', 'gemini', 'google', 'google-gemini', 'gemini-ai'])) {
-                $model = 'gemini-1.5-flash';
-            }
+            $model = (new \App\Services\AI\Providers\GeminiProvider())->normalizeModel($model);
         }
 
         $validated['model'] = $model;

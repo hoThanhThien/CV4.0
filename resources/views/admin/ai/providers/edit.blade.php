@@ -85,7 +85,7 @@
             <div id="model-suggestions" style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap">
             </div>
             <small id="model-help" style="color:var(--text-muted); display:block; margin-top:0.4rem; font-size:0.83rem">
-                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini: <code>gemini-1.5-flash</code> hoặc <code>gemini-1.5-pro</code>). Hệ thống sẽ tự động làm sạch khoảng trắng và tiền tố dư thừa khi lưu.
+                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini khuyên dùng: <code>gemini-2.5-flash</code> hoặc <code>gemini-2.5-pro</code>). Hệ thống sẽ tự động chuẩn hóa tên model khi lưu.
             </small>
         </div>
 
@@ -103,7 +103,7 @@
             </div>
             <div>
                 <label for="max_tokens" style="display:block; font-weight:600; margin-bottom:0.5rem">Max Output Tokens</label>
-                <input type="number" id="max_tokens" name="max_tokens" value="{{ old('max_tokens', $provider->max_tokens) }}" min="500" max="16000" style="width:100%; padding:0.6rem; border:1px solid var(--border); border-radius:8px">
+                <input type="number" id="max_tokens" name="max_tokens" value="{{ old('max_tokens', $provider->max_tokens) }}" min="500" max="65536" style="width:100%; padding:0.6rem; border:1px solid var(--border); border-radius:8px">
             </div>
             <div>
                 <label for="timeout" style="display:block; font-weight:600; margin-bottom:0.5rem">Timeout (giây)</label>
@@ -136,10 +136,10 @@
 @section('scripts')
 <script>
     const modelSuggestions = {
-        openai: ['gpt-4o-mini', 'gpt-4o', 'gpt-3.5-turbo'],
-        gemini: ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp'],
-        deepseek: ['deepseek-chat', 'deepseek-coder'],
-        custom: ['llama-3.1-70b', 'mixtral-8x7b-32768']
+        openai: ['gpt-4o-mini', 'gpt-4o', 'gpt-4.1-mini'],
+        gemini: ['gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
+        deepseek: ['deepseek-chat', 'deepseek-reasoner'],
+        custom: ['llama-3.3-70b-versatile', 'qwen-qwq-32b']
     };
 
     function onProviderTypeChange(type) {
@@ -167,7 +167,7 @@
         let val = this.value.trim();
         if (type === 'gemini') {
             val = val.replace(/^models\//i, '').replace(/^\/+/, '').trim().toLowerCase().replace(/\s+/g, '-');
-            if (val === 'gemini' || val === 'google-gemini') val = 'gemini-1.5-flash';
+            if (['', 'gemini', 'google-gemini', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-exp', 'gemini-1.5-pro'].includes(val)) val = 'gemini-3.5-flash';
         }
         this.value = val;
     });

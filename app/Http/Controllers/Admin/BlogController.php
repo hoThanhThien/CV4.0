@@ -35,6 +35,7 @@ class BlogController extends Controller
         }
 
         $validated['published'] = $request->boolean('published');
+        $validated['status'] = $validated['published'] ? BlogPost::STATUS_PUBLISHED : BlogPost::STATUS_DRAFT;
         $validated['slug'] = BlogPost::generateSlug($validated['title']);
         $validated['published_at'] = $validated['published'] ? now() : null;
 
@@ -76,6 +77,7 @@ class BlogController extends Controller
 
         $wasPublished = $post->published;
         $validated['published'] = $request->boolean('published');
+        $validated['status'] = $validated['published'] ? BlogPost::STATUS_PUBLISHED : BlogPost::STATUS_DRAFT;
 
         if (!$wasPublished && $validated['published']) {
             $validated['published_at'] = now();

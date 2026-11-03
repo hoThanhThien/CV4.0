@@ -1,14 +1,14 @@
-name: Keep Render App Awake
+name: Keep App Awake & Run AI Blog Scheduler
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Chạy mỗi 10 phút
+    - cron: '*/5 * * * *' # Chạy mỗi 5 phút để kích hoạt lịch đăng bài & AI Automation đúng giờ
   workflow_dispatch: # Cho phép chạy thủ công
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping hothanhthien.io.vn
-        run: curl -sSf https://hothanhthien.io.vn > /dev/null
+      - name: Trigger Scheduled Blog & AI Tasks on hothanhthien.io.vn
+        run: curl -sSf --max-time 240 https://hothanhthien.io.vn/cron/schedule-run
         continue-on-error: true

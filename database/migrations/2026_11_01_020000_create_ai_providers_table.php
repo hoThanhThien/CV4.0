@@ -6,13 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
+        if (Schema::hasTable('ai_providers')) {
+            return;
+        }
+
         Schema::create('ai_providers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
@@ -21,8 +20,8 @@ return new class extends Migration
             $table->string('model', 100);
             $table->string('base_url', 255)->nullable();
             $table->decimal('temperature', 3, 2)->default(0.70);
-            $table->integer('max_tokens')->default(4000);
-            $table->integer('timeout')->default(60);
+            $table->integer('max_tokens')->default(8192);
+            $table->integer('timeout')->default(90);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_default')->default(false);
             $table->timestamp('last_tested_at')->nullable();
@@ -32,11 +31,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('ai_providers');

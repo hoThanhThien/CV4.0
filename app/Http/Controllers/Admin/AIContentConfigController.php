@@ -118,10 +118,27 @@ class AIContentConfigController extends Controller
      */
     public function generateNow($id, BlogContentGenerator $generator)
     {
+        @set_time_limit(300);
+
         $config = AiContentConfig::findOrFail($id);
+        $provider = $config->getEffectiveProvider();
+
+        $runLog = \App\Models\BlogAutomationRun::create([
+            'automation_id' => null,
+            'content_config_id' => $config->id,
+            'ai_provider_id' => $provider ? $provider->id : null,
+            'provider_name' => $provider ? $provider->name : 'Unknown',
+            'model_used' => $config->getEffectiveModel(),
+            'topic_processed' => $config->main_topic ?: 'Manual Test Topic',
+            'articles_requested' => 1,
+            'articles_created' => 0,
+            'articles_failed' => 0,
+            'status' => 'running',
+            'started_at' => now(),
+        ]);
 
         try {
-            $result = $generator->generatePost($config, 'manual_approval');
+            $result = $generator->generatePost($config, 'manual_approval', null, $runLog);
 
             if ($result['success']) {
                 $post = $result['post'];
@@ -131,6 +148,12 @@ class AIContentConfigController extends Controller
 
             return back()->with('error', 'Tạo bài viết thất bại: ' . $result['error']);
         } catch (Throwable $e) {
+            $runLog->update([
+                'articles_failed' => 1,
+                'status' => 'failed',
+                'error_details' => $e->getMessage(),
+                'completed_at' => now(),
+            ]);
             return back()->with('error', 'Lỗi ngoại lệ khi tạo bài viết: ' . $e->getMessage());
         }
     }

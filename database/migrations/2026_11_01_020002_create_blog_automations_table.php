@@ -6,25 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
+        if (Schema::hasTable('blog_automations')) {
+            return;
+        }
+
         Schema::create('blog_automations', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
-            $table->foreignId('content_config_id')->constrained('ai_content_configs')->cascadeOnDelete();
+            $table->unsignedBigInteger('content_config_id')->index();
             $table->string('frequency', 50)->default('daily'); // daily, weekly, monthly
-            $table->time('execution_time')->default('08:00:00'); // Store in HH:MM:SS
+            $table->time('execution_time')->default('08:00:00');
             $table->string('timezone', 50)->default('Asia/Ho_Chi_Minh');
-            $table->smallInteger('day_of_week')->nullable(); // 0 = Sunday, 1 = Monday, etc.
-            $table->smallInteger('day_of_month')->nullable(); // 1 - 31
+            $table->smallInteger('day_of_week')->nullable();
+            $table->smallInteger('day_of_month')->nullable();
             $table->integer('articles_per_run')->default(1);
-            $table->string('publishing_mode', 50)->default('manual_approval'); // manual_approval, auto_schedule, auto_publish
-            $table->integer('interval_minutes')->default(120); // Interval between multiple articles in same run
+            $table->string('publishing_mode', 50)->default('manual_approval');
+            $table->integer('interval_minutes')->default(120);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamp('next_run_at')->nullable();
@@ -32,13 +31,16 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
+
+        try {
+            Schema::table('blog_automations', function (Blueprint $table) {
+                $table->foreign('content_config_id')->references('id')->on('ai_content_configs')->cascadeOnDelete();
+            });
+        } catch (\Throwable $e) {
+            // Safe fallback on MyISAM
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('blog_automations');

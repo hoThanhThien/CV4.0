@@ -60,9 +60,13 @@ class BlogPost extends Model
      */
     public function scopePublished($query)
     {
-        return $query->where('published', true)
-                     ->where('status', self::STATUS_PUBLISHED)
-                     ->whereNotNull('published_at')
+        $query->where('published', true);
+
+        if (\App\Services\AI\Support\AiSchemaManager::hasBlogStatusColumn()) {
+            $query->where('status', self::STATUS_PUBLISHED);
+        }
+
+        return $query->whereNotNull('published_at')
                      ->where('published_at', '<=', now())
                      ->orderBy('published_at', 'desc');
     }

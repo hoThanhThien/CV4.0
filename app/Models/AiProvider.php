@@ -59,6 +59,23 @@ class AiProvider extends Model
     }
 
     /**
+     * Check whether stored API key can be decrypted (returns true if empty, false only on DecryptException).
+     */
+    public function canDecryptApiKey(): bool
+    {
+        if (empty($this->api_key)) {
+            return true;
+        }
+
+        try {
+            Crypt::decryptString($this->api_key);
+            return true;
+        } catch (DecryptException $e) {
+            return false;
+        }
+    }
+
+    /**
      * Decrypt API key safely. Returns empty string if failed.
      */
     public function getDecryptedApiKey(): string
@@ -87,6 +104,10 @@ class AiProvider extends Model
      */
     public function getMaskedApiKeyAttribute(): string
     {
+        if (!empty($this->api_key) && !$this->canDecryptApiKey()) {
+            return '⚠ Lỗi giải mã (nhập lại Key)';
+        }
+
         $raw = $this->getDecryptedApiKey();
         if (empty($raw)) {
             return '— Chưa cấu hình —';

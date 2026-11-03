@@ -27,6 +27,8 @@ class BlogContentGenerator
         ?Carbon $scheduledAt = null,
         ?BlogAutomationRun $runLog = null
     ): array {
+        @set_time_limit(300);
+
         $provider = $config->getEffectiveProvider();
         if (!$provider || !$provider->is_active) {
             $err = 'Không tìm thấy AI Provider nào đang hoạt động cho cấu hình này.';

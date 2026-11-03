@@ -3,13 +3,13 @@ $zip = new ZipArchive();
 if ($zip->open('laravel_core.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
     $dir = new RecursiveDirectoryIterator('.');
     $ite = new RecursiveIteratorIterator($dir);
-    $exclude = ['node_modules', '.git', 'laravel_core.zip', 'public_html.zip', 'storage/framework/cache', 'storage/framework/sessions', 'storage/framework/views', '.env', 'public'];
+    $exclude = ['node_modules', '.git', 'laravel_core.zip', 'public_html.zip', 'storage/framework/cache', 'storage/framework/sessions', 'storage/framework/views', 'storage/logs', 'bootstrap/cache/packages.php', 'bootstrap/cache/services.php', 'bootstrap/cache/config.php', 'bootstrap/cache/routes', 'bootstrap/cache/events.php', 'database/database.sqlite', '.env', 'public'];
     
     $count = 0;
     foreach ($ite as $file) {
         $path = $file->getPathname();
-        $path = str_replace('.\\', '', $path);
-        $path = str_replace('./', '', $path);
+        $path = str_replace('\\', '/', $path);
+        $path = preg_replace('#^\./+#', '', $path);
         
         $skip = false;
         foreach($exclude as $ex) {
@@ -36,9 +36,8 @@ if ($zip->open('public_html.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE) ==
     $count = 0;
     foreach ($ite as $file) {
         if($file->isFile()) {
-            $path = $file->getPathname();
-            $localPath = str_replace('public\\', '', $path);
-            $localPath = str_replace('public/', '', $localPath);
+            $path = str_replace('\\', '/', $file->getPathname());
+            $localPath = preg_replace('#^public/+#', '', $path);
             $zip->addFile($file->getPathname(), $localPath);
             $count++;
         }

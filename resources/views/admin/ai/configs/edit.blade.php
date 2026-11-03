@@ -86,7 +86,7 @@
         <!-- Keywords -->
         <div style="margin-bottom:1.5rem">
             <label for="keywords" style="display:block; font-weight:600; margin-bottom:0.5rem">Danh sách từ khóa SEO (phân tách bằng dấu phẩy)</label>
-            <input type="text" id="keywords" name="keywords" class="form-control" value="{{ old('keywords', is_array($config->tags) ? implode(', ', $config->keywords_array) : $config->keywords) }}" style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">
+            <input type="text" id="keywords" name="keywords" class="form-control" value="{{ old('keywords', $config->keywords) }}" style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">
         </div>
 
         <!-- Content details grid -->

@@ -111,7 +111,13 @@ class BlogAutomationController extends Controller
 
     public function runNow($id)
     {
-        $automation = BlogAutomation::findOrFail($id);
+        @set_time_limit(300);
+
+        $automation = BlogAutomation::with('contentConfig')->findOrFail($id);
+
+        if (!$automation->contentConfig || !$automation->contentConfig->is_active) {
+            return back()->with('error', "Cấu hình nội dung gắn với Automation '{$automation->name}' không tồn tại hoặc đang bị tắt!");
+        }
 
         try {
             Artisan::call('blog:run-automations', [
@@ -119,9 +125,38 @@ class BlogAutomationController extends Controller
                 '--force' => true,
             ]);
 
+            $latestRun = \App\Models\BlogAutomationRun::where('automation_id', $automation->id)
+                ->latest('id')
+                ->first();
+
+            if ($latestRun && $latestRun->status === 'failed') {
+                return back()->with('error', "Automation '{$automation->name}' chạy thất bại: " . ($latestRun->error_details ?: 'Vui lòng kiểm tra Nhật ký hoạt động.'));
+            }
+
+            if ($latestRun && $latestRun->articles_created > 0) {
+                return back()->with('success', "Đã chạy Automation '{$automation->name}' thành công: tạo mới {$latestRun->articles_created} bài viết! Kiểm tra tại mục AI Blog Posts.");
+            }
+
             return back()->with('success', "Đã kích hoạt chạy Automation '{$automation->name}'. Vui lòng kiểm tra Nhật ký hoạt động hoặc Danh sách bài viết AI!");
         } catch (Throwable $e) {
             return back()->with('error', 'Lỗi khi kích hoạt: ' . $e->getMessage());
+        }
+    }
+
+    public function triggerDueNow()
+    {
+        @set_time_limit(300);
+
+        try {
+            Artisan::call('blog:publish-scheduled');
+            $pubOut = trim(Artisan::output());
+
+            Artisan::call('blog:run-automations');
+            $autoOut = trim(Artisan::output());
+
+            return back()->with('success', 'Đã quét và xử lý toàn bộ lịch hẹn đến hạn! (' . ($pubOut ?: 'OK') . ' | ' . ($autoOut ?: 'OK') . ')');
+        } catch (Throwable $e) {
+            return back()->with('error', 'Lỗi khi quét lịch hẹn: ' . $e->getMessage());
         }
     }
 }

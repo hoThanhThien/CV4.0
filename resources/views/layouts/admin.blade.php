@@ -13,7 +13,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/fa-purged.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         :root {
@@ -162,6 +162,8 @@
         .badge-danger { background: rgba(239,68,68,0.15); color: var(--danger); }
         .badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); }
         .badge-purple { background: rgba(124,58,237,0.15); color: var(--accent-light); }
+        .badge-secondary { background: rgba(100,116,139,0.14); color: var(--text-muted); }
+        .badge-info { background: rgba(6,182,212,0.15); color: #0891b2; }
 
         /* Buttons */
         .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; }
@@ -273,7 +275,15 @@
             </a>
             <a href="{{ route('admin.ai.posts.index') }}" class="{{ request()->routeIs('admin.ai.posts.*') ? 'active' : '' }}">
                 <i class="fas fa-robot"></i> AI Blog Posts
-                @php $pendingCount = \App\Models\BlogPost::where('ai_generated', true)->where('status', 'pending_review')->count(); @endphp
+                @php
+                    try {
+                        $pendingCount = \App\Services\AI\Support\AiSchemaManager::hasBlogStatusColumn()
+                            ? \App\Models\BlogPost::where('ai_generated', true)->where('status', 'pending_review')->count()
+                            : 0;
+                    } catch (\Throwable $e) {
+                        $pendingCount = 0;
+                    }
+                @endphp
                 @if($pendingCount > 0)
                     <span class="badge badge-warning" style="margin-left:auto; font-size:0.7rem; padding:0.15rem 0.45rem">{{ $pendingCount }}</span>
                 @endif

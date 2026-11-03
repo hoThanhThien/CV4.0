@@ -371,8 +371,10 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         // Clear and rebuild skills to match exact PDF specification
         Skill::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
         foreach ($skills as $skill) {
             Skill::create($skill);
         }
@@ -399,7 +401,9 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         Experience::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
         foreach ($experiences as $exp) {
             Experience::create($exp);
         }
@@ -477,8 +481,10 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         Project::truncate();
         \Illuminate\Support\Facades\DB::table('project_skill')->truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
         foreach ($projects as $projData) {
             $techNames = $projData['techs'];
@@ -505,36 +511,40 @@ class DatabaseSeeder extends Seeder
         }
 
         // ====== Blog Posts ======
-        BlogPost::truncate();
-        $posts = [
-            [
-                'title' => 'Mastering React Hooks & State Management',
-                'slug' => 'mastering-react-hooks',
-                'excerpt' => 'Learn how to utilize React Hooks effectively for scalable state management and functional components.',
-                'content' => "React Hooks have completely changed how we write React components. In this post, we'll dive deep into useState, useEffect, useCallback, and custom hooks to make your code cleaner, performant, and easily testable.",
-                'published' => true,
-                'published_at' => now()->subDays(10),
-            ],
-            [
-                'title' => 'Building Secure RESTful APIs with Spring Boot',
-                'slug' => 'building-restful-apis-with-spring-boot',
-                'excerpt' => 'A comprehensive guide to creating scalable, production-ready REST APIs using Java Spring Boot and JWT security.',
-                'content' => "Spring Boot makes it incredibly fast to get enterprise-grade applications running. In this guide, we cover designing clean endpoints, configuring Spring Security with JWT tokens, handling exceptions centrally, and optimizing database queries with Spring Data JPA.",
-                'published' => true,
-                'published_at' => now()->subDays(5),
-            ],
-            [
-                'title' => 'Building Document-Based RAG Systems with LLMs',
-                'slug' => 'building-document-based-rag-systems',
-                'excerpt' => 'How to design a retrieval-augmented generation pipeline using vector search, chunking, and modern LLMs.',
-                'content' => "Retrieval-Augmented Generation (RAG) allows LLMs to accurately answer questions based on private knowledge bases. We will walk through the full architecture: document ingestion, embedding generation, vector indexing, semantic search, and context prompt injection.",
-                'published' => true,
-                'published_at' => now()->subDays(2),
-            ],
-        ];
+        if (BlogPost::count() === 0) {
+            $posts = [
+                [
+                    'title' => 'Mastering React Hooks & State Management',
+                    'slug' => 'mastering-react-hooks',
+                    'excerpt' => 'Learn how to utilize React Hooks effectively for scalable state management and functional components.',
+                    'content' => "React Hooks have completely changed how we write React components. In this post, we'll dive deep into useState, useEffect, useCallback, and custom hooks to make your code cleaner, performant, and easily testable.",
+                    'published' => true,
+                    'status' => 'published',
+                    'published_at' => now()->subDays(10),
+                ],
+                [
+                    'title' => 'Building Secure RESTful APIs with Spring Boot',
+                    'slug' => 'building-restful-apis-with-spring-boot',
+                    'excerpt' => 'A comprehensive guide to creating scalable, production-ready REST APIs using Java Spring Boot and JWT security.',
+                    'content' => "Spring Boot makes it incredibly fast to get enterprise-grade applications running. In this guide, we cover designing clean endpoints, configuring Spring Security with JWT tokens, handling exceptions centrally, and optimizing database queries with Spring Data JPA.",
+                    'published' => true,
+                    'status' => 'published',
+                    'published_at' => now()->subDays(5),
+                ],
+                [
+                    'title' => 'Building Document-Based RAG Systems with LLMs',
+                    'slug' => 'building-document-based-rag-systems',
+                    'excerpt' => 'How to design a retrieval-augmented generation pipeline using vector search, chunking, and modern LLMs.',
+                    'content' => "Retrieval-Augmented Generation (RAG) allows LLMs to accurately answer questions based on private knowledge bases. We will walk through the full architecture: document ingestion, embedding generation, vector indexing, semantic search, and context prompt injection.",
+                    'published' => true,
+                    'status' => 'published',
+                    'published_at' => now()->subDays(2),
+                ],
+            ];
 
-        foreach ($posts as $post) {
-            BlogPost::create($post);
+            foreach ($posts as $post) {
+                BlogPost::create($post);
+            }
         }
 
         // ====== Certificates & Brochures ======

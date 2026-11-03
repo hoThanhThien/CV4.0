@@ -101,7 +101,7 @@ Route::get('/sitemap.xml', function () {
 
 Route::get('/robots.txt', function () {
     $sitemapUrl = url('/sitemap.xml');
-    $content = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin/\nDisallow: /setup-db\nDisallow: /setup-db/\n\nSitemap: {$sitemapUrl}\n";
+    $content = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin/\nDisallow: /setup-db\nDisallow: /setup-db/\nDisallow: /setup-migrate\nDisallow: /cron/\n\nSitemap: {$sitemapUrl}\n";
     return response($content, 200, ['Content-Type' => 'text/plain']);
 });
 Route::get('/lang/{locale}', function ($locale) {
@@ -110,6 +110,60 @@ Route::get('/lang/{locale}', function ($locale) {
     }
     return redirect()->back();
 })->name('lang.switch');
+
+Route::get('/setup-migrate', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \App\Services\AI\Support\AiSchemaManager::flushCache();
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'Database migrated and caches cleared successfully!',
+            'ai_schema_ready' => \App\Services\AI\Support\AiSchemaManager::isReady(),
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
+
+// Web-cron endpoint for cPanel Cron Jobs / GitHub Actions / Uptime monitors
+Route::get('/cron/schedule-run', function (\Illuminate\Http\Request $request) {
+    $configuredSecret = env('CRON_SECRET');
+    if (!empty($configuredSecret) && !hash_equals((string) $configuredSecret, (string) $request->query('token', ''))) {
+        abort(403, 'Invalid cron token.');
+    }
+
+    @set_time_limit(300);
+    @ignore_user_abort(true);
+
+    try {
+        if (!\App\Services\AI\Support\AiSchemaManager::isReady()) {
+            \App\Services\AI\Support\AiSchemaManager::ensureMigrated();
+        }
+
+        \Illuminate\Support\Facades\Artisan::call('blog:publish-scheduled');
+        $publishOutput = trim(\Illuminate\Support\Facades\Artisan::output());
+
+        \Illuminate\Support\Facades\Artisan::call('blog:run-automations');
+        $automationOutput = trim(\Illuminate\Support\Facades\Artisan::output());
+
+        return response()->json([
+            'status' => 'ok',
+            'timestamp_utc' => now()->toIso8601String(),
+            'timestamp_vn' => now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s'),
+            'publish_scheduled' => $publishOutput,
+            'run_automations' => $automationOutput,
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+})->name('cron.schedule-run');
 
 Route::get('/setup-db', function () {
     try {
@@ -184,6 +238,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('configs', App\Http\Controllers\Admin\AIContentConfigController::class)->except(['show']);
 
             // Automations
+            Route::post('automations/trigger-due', [App\Http\Controllers\Admin\BlogAutomationController::class, 'triggerDueNow'])->name('automations.trigger-due');
             Route::post('automations/{automation}/toggle-active', [App\Http\Controllers\Admin\BlogAutomationController::class, 'toggleActive'])->name('automations.toggle-active');
             Route::post('automations/{automation}/run-now', [App\Http\Controllers\Admin\BlogAutomationController::class, 'runNow'])->name('automations.run-now');
             Route::resource('automations', App\Http\Controllers\Admin\BlogAutomationController::class)->except(['show']);

@@ -127,16 +127,56 @@ class AIProviderTest extends TestCase
     {
         $gemini = new \App\Services\AI\Providers\GeminiProvider();
 
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('gemini-1.5-flash'));
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('models/gemini-1.5-flash'));
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('models/models/gemini-1.5-flash'));
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('Gemini 1.5 Flash'));
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel(' gemini-1.5-flash '));
-        $this->assertEquals('gemini-1.5-pro', $gemini->normalizeModel('models/gemini-1.5-pro'));
-        $this->assertEquals('gemini-1.5-pro', $gemini->normalizeModel('GEMINI 1.5 PRO'));
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('gemini'));
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel('Google Gemini'));
-        $this->assertEquals('gemini-1.5-flash', $gemini->normalizeModel(''));
+        // Active 2.5 / 2.0 models preserved cleanly
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('gemini-2.5-flash'));
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('models/gemini-2.5-flash'));
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('models/models/gemini-2.5-flash'));
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('Gemini 2.5 Flash'));
+        $this->assertEquals('gemini-2.5-pro', $gemini->normalizeModel('GEMINI 2.5 PRO'));
+        $this->assertEquals('gemini-2.0-flash', $gemini->normalizeModel('gemini-2.0-flash'));
+
+        // Retired 1.5 / 2.0-exp models automatically upgraded to 2.5 equivalents
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('gemini-1.5-flash'));
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel(' gemini-1.5-flash '));
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('gemini-2.0-flash-exp'));
+        $this->assertEquals('gemini-2.5-pro', $gemini->normalizeModel('models/gemini-1.5-pro'));
+
+        // Generic keywords default to gemini-2.5-flash
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('gemini'));
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel('Google Gemini'));
+        $this->assertEquals('gemini-2.5-flash', $gemini->normalizeModel(''));
+    }
+
+    public function test_gemini_automatic_fallback_when_model_returns_404()
+    {
+        Http::fake([
+            'generativelanguage.googleapis.com/v1beta/models/gemini-experimental-old:generateContent*' => Http::response([
+                'error' => [
+                    'code' => 404,
+                    'message' => 'models/gemini-experimental-old is not found for API version v1beta',
+                    'status' => 'NOT_FOUND',
+                ],
+            ], 404),
+            'generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent*' => Http::response([
+                'candidates' => [
+                    ['content' => ['parts' => [['text' => 'OK']]]],
+                ],
+            ], 200),
+        ]);
+
+        $provider = AiProvider::create([
+            'name' => 'Gemini Fallback Test',
+            'provider_type' => 'gemini',
+            'api_key' => 'AIzaSyFakeKeyFallback',
+            'model' => 'gemini-experimental-old',
+        ]);
+
+        $adapter = AIProviderFactory::make($provider);
+        $result = $adapter->testConnection($provider);
+
+        $this->assertTrue($result['success']);
+        $this->assertEquals('CONNECTED', $result['code']);
+        $this->assertEquals('gemini-2.5-flash', $provider->fresh()->model);
     }
 
     public function test_gemini_error_classification_for_unexpected_model_name_format()

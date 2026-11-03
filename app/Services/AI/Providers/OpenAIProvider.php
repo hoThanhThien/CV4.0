@@ -4,16 +4,46 @@ namespace App\Services\AI\Providers;
 
 use App\Models\AiProvider;
 use App\Services\AI\Contracts\AIProviderInterface;
-use Illuminate\Support\Facades\Http;
+use App\Services\AI\Support\JsonCleaner;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
 use Throwable;
 
 class OpenAIProvider implements AIProviderInterface
 {
     protected string $defaultBaseUrl = 'https://api.openai.com/v1';
 
+    protected function httpClient(string $apiKey, int $timeout): PendingRequest
+    {
+        $client = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Content-Type' => 'application/json',
+        ])->timeout($timeout);
+
+        if (defined('CURL_IPRESOLVE_V4') && defined('CURLOPT_IPRESOLVE')) {
+            $client = $client->withOptions([
+                'curl' => [
+                    CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+                ],
+            ]);
+        }
+
+        return $client;
+    }
+
     public function testConnection(AiProvider $provider): array
     {
+        if (!$provider->canDecryptApiKey()) {
+            return [
+                'success' => false,
+                'message' => 'Không thể giải mã API Key đã lưu (có thể APP_KEY trên server đã thay đổi). Vui lòng nhấn "Sửa" và nhập lại API Key.',
+                'code' => 'DECRYPT_ERROR',
+                'status_code' => 400,
+                'model_available' => false,
+            ];
+        }
+
         $apiKey = trim($provider->getDecryptedApiKey());
         if (empty($apiKey)) {
             return [
@@ -27,18 +57,15 @@ class OpenAIProvider implements AIProviderInterface
 
         $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
         $model = trim($provider->model ?: 'gpt-4o-mini');
-        $timeout = $provider->timeout ?: 30;
+        $timeout = max(15, (int) ($provider->timeout ?: 30));
 
         try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
-            ])->timeout($timeout)->post($baseUrl . '/chat/completions', [
+            $response = $this->httpClient($apiKey, $timeout)->post($baseUrl . '/chat/completions', [
                 'model' => $model,
                 'messages' => [
-                    ['role' => 'user', 'content' => 'Say hello in one word.']
+                    ['role' => 'user', 'content' => 'Say hello in one word.'],
                 ],
-                'max_tokens' => 5,
+                'max_tokens' => 16,
             ]);
 
             $statusCode = $response->status();
@@ -79,6 +106,21 @@ class OpenAIProvider implements AIProviderInterface
         string $userPrompt,
         ?string $modelOverride = null
     ): array {
+        @set_time_limit(300);
+
+        if (!$provider->canDecryptApiKey()) {
+            return [
+                'success' => false,
+                'raw_content' => null,
+                'data' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'Không thể giải mã API Key (APP_KEY thay đổi). Vui lòng nhập lại API Key.',
+                'error_code' => 'DECRYPT_ERROR',
+            ];
+        }
+
         $apiKey = trim($provider->getDecryptedApiKey());
         if (empty($apiKey)) {
             return [
@@ -95,9 +137,9 @@ class OpenAIProvider implements AIProviderInterface
 
         $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
         $model = trim($modelOverride ?: ($provider->model ?: 'gpt-4o-mini'));
-        $temperature = (float)($provider->temperature ?? 0.7);
-        $maxTokens = (int)($provider->max_tokens ?? 4000);
-        $timeout = (int)($provider->timeout ?? 90);
+        $temperature = (float) ($provider->temperature ?? 0.7);
+        $maxTokens = max(2000, (int) ($provider->max_tokens ?? 4096));
+        $timeout = max(90, (int) ($provider->timeout ?? 120));
 
         try {
             $payload = [
@@ -111,25 +153,46 @@ class OpenAIProvider implements AIProviderInterface
                 'response_format' => ['type' => 'json_object'],
             ];
 
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
-            ])->timeout($timeout)->post($baseUrl . '/chat/completions', $payload);
+            $response = $this->httpClient($apiKey, $timeout)->post($baseUrl . '/chat/completions', $payload);
+
+            // Fallback if custom OpenAI-compatible endpoint does not support response_format
+            if ($response->status() === 400 && str_contains(strtolower((string) $response->body()), 'response_format')) {
+                unset($payload['response_format']);
+                $response = $this->httpClient($apiKey, $timeout)->post($baseUrl . '/chat/completions', $payload);
+            }
 
             if ($response->successful()) {
                 $json = $response->json();
                 $content = $json['choices'][0]['message']['content'] ?? '';
+                $finishReason = strtolower((string) ($json['choices'][0]['finish_reason'] ?? ''));
                 $usage = $json['usage'] ?? [];
 
-                $decodedData = json_decode($content, true);
+                $decodedData = JsonCleaner::decode($content);
+
+                if (!is_array($decodedData) || empty($decodedData['title']) || empty($decodedData['content'])) {
+                    $errMsg = $finishReason === 'length'
+                        ? 'Bài viết bị cắt ngang do vượt giới hạn Max Output Tokens. Vui lòng tăng Max Output Tokens lên 8000.'
+                        : 'AI Provider trả về dữ liệu không đúng cấu trúc JSON bài viết.';
+
+                    return [
+                        'success' => false,
+                        'raw_content' => $content,
+                        'data' => null,
+                        'prompt_tokens' => (int) ($usage['prompt_tokens'] ?? 0),
+                        'completion_tokens' => (int) ($usage['completion_tokens'] ?? 0),
+                        'total_tokens' => (int) ($usage['total_tokens'] ?? 0),
+                        'error' => $errMsg,
+                        'error_code' => 'INVALID_JSON_OUTPUT',
+                    ];
+                }
 
                 return [
                     'success' => true,
                     'raw_content' => $content,
-                    'data' => is_array($decodedData) ? $decodedData : null,
-                    'prompt_tokens' => (int)($usage['prompt_tokens'] ?? 0),
-                    'completion_tokens' => (int)($usage['completion_tokens'] ?? 0),
-                    'total_tokens' => (int)($usage['total_tokens'] ?? 0),
+                    'data' => $decodedData,
+                    'prompt_tokens' => (int) ($usage['prompt_tokens'] ?? 0),
+                    'completion_tokens' => (int) ($usage['completion_tokens'] ?? 0),
+                    'total_tokens' => (int) ($usage['total_tokens'] ?? 0),
                     'error' => null,
                     'error_code' => null,
                 ];
@@ -174,7 +237,6 @@ class OpenAIProvider implements AIProviderInterface
     protected function classifyError(int $statusCode, ?array $bodyJson, string $rawBody, string $model): array
     {
         $apiMessage = $bodyJson['error']['message'] ?? '';
-        $apiType = $bodyJson['error']['type'] ?? '';
         $apiCode = $bodyJson['error']['code'] ?? '';
 
         if ($statusCode === 401) {

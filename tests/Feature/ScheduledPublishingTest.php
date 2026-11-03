@@ -173,4 +173,24 @@ class ScheduledPublishingTest extends TestCase
         $this->assertNotNull($automation->next_run_at);
         $this->assertTrue($automation->next_run_at->isFuture());
     }
+
+    public function test_web_cron_endpoint_triggers_due_scheduled_posts()
+    {
+        $duePost = BlogPost::create([
+            'title' => 'Cron Endpoint Published Post',
+            'slug' => 'cron-endpoint-published-post',
+            'content' => '<p>Published via web cron endpoint</p>',
+            'published' => false,
+            'status' => BlogPost::STATUS_SCHEDULED,
+            'published_at' => now()->subMinute(),
+            'scheduled_at' => now()->subMinute(),
+        ]);
+
+        $res = $this->get('/cron/schedule-run');
+        $res->assertStatus(200)->assertJson(['status' => 'ok']);
+
+        $duePost->refresh();
+        $this->assertEquals(BlogPost::STATUS_PUBLISHED, $duePost->status);
+        $this->assertTrue($duePost->published);
+    }
 }

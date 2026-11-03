@@ -88,6 +88,10 @@ jobs:
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
+
+            echo ">>> 4. Đảm bảo Cron Job Laravel Scheduler được đăng ký..."
+            (crontab -l 2>/dev/null | grep -v "public_html.*schedule:run"; echo "* * * * * cd /home/hothanht1/public_html && php artisan schedule:run >> /dev/null 2>&1") | crontab - || true
+
             echo ">>> Deploy hoàn tất thành công!"
 
   # ==========================================

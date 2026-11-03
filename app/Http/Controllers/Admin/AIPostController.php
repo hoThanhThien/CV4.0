@@ -77,13 +77,17 @@ class AIPostController extends Controller
         if ($validated['status'] === 'published') {
             $validated['published'] = true;
             $validated['published_at'] = $post->published_at ?: now();
+            $validated['scheduled_at'] = null;
         } elseif ($validated['status'] === 'scheduled') {
             $validated['published'] = false;
-            $validated['published_at'] = !empty($validated['scheduled_at']) ? Carbon::parse($validated['scheduled_at']) : now()->addHours(3);
+            $validated['published_at'] = !empty($validated['scheduled_at'])
+                ? Carbon::parse($validated['scheduled_at'], 'Asia/Ho_Chi_Minh')->setTimezone('UTC')
+                : now()->addHours(3);
             $validated['scheduled_at'] = $validated['published_at'];
         } else {
             $validated['published'] = false;
             $validated['published_at'] = null;
+            $validated['scheduled_at'] = null;
         }
 
         $post->update($validated);
@@ -119,19 +123,25 @@ class AIPostController extends Controller
         $post = BlogPost::findOrFail($id);
 
         $request->validate([
-            'scheduled_at' => 'required|date|after:now',
+            'scheduled_at' => 'required|date',
         ]);
 
-        $scheduledTime = Carbon::parse($request->input('scheduled_at'));
+        // Input from datetime-local is in Vietnam timezone (Asia/Ho_Chi_Minh)
+        $scheduledTimeVn = Carbon::parse($request->input('scheduled_at'), 'Asia/Ho_Chi_Minh');
+        $scheduledTimeUtc = $scheduledTimeVn->copy()->setTimezone('UTC');
+
+        if ($scheduledTimeUtc->lte(now())) {
+            return back()->with('error', 'Thời gian hẹn đăng phải lớn hơn thời điểm hiện tại (Giờ Việt Nam)!');
+        }
 
         $post->update([
             'status' => BlogPost::STATUS_SCHEDULED,
             'published' => false,
-            'published_at' => $scheduledTime,
-            'scheduled_at' => $scheduledTime,
+            'published_at' => $scheduledTimeUtc,
+            'scheduled_at' => $scheduledTimeUtc,
         ]);
 
-        return back()->with('success', "Đã lên lịch xuất bản bài viết vào lúc: " . $scheduledTime->format('d/m/Y H:i'));
+        return back()->with('success', "Đã lên lịch xuất bản bài viết vào lúc: " . $scheduledTimeVn->format('d/m/Y H:i') . ' (Giờ Việt Nam)');
     }
 
     public function cancelSchedule($id)
@@ -148,6 +158,8 @@ class AIPostController extends Controller
 
     public function regenerate(Request $request, $id, BlogContentGenerator $generator)
     {
+        @set_time_limit(300);
+
         $post = BlogPost::findOrFail($id);
 
         $config = $post->contentConfig;

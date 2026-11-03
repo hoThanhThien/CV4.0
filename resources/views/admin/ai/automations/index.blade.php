@@ -10,9 +10,17 @@
             Hệ thống tự động kích hoạt AI theo lịch trình, sinh bài viết và phân bổ lịch xuất bản theo giờ Việt Nam (Asia/Ho_Chi_Minh).
         </p>
     </div>
-    <a href="{{ route('admin.ai.automations.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Tạo Automation mới
-    </a>
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap">
+        <form method="POST" action="{{ route('admin.ai.automations.trigger-due') }}" onsubmit="const b=this.querySelector('button'); b.disabled=true; b.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Đang quét lịch...';">
+            @csrf
+            <button type="submit" class="btn btn-secondary" title="Kiểm tra và thực thi ngay các lịch đăng bài / automation đã đến giờ">
+                <i class="fas fa-sync-alt"></i> Quét lịch đến hạn
+            </button>
+        </form>
+        <a href="{{ route('admin.ai.automations.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tạo Automation mới
+        </a>
+    </div>
 </div>
 
 <div class="table-wrap">
@@ -96,7 +104,7 @@
                     <td>
                         <div style="display:flex; gap:0.35rem; align-items:center">
                             <!-- Nút Run Now -->
-                            <form method="POST" action="{{ route('admin.ai.automations.run-now', $auto->id) }}" onsubmit="return confirm('Kích hoạt chạy ngay Automation này?')">
+                            <form method="POST" action="{{ route('admin.ai.automations.run-now', $auto->id) }}" onsubmit="if(!confirm('Kích hoạt chạy ngay Automation này (mất khoảng 10–30 giây)?')) return false; const b=this.querySelector('button'); b.disabled=true; b.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Đang chạy...';">
                                 @csrf
                                 <button type="submit" class="btn btn-secondary btn-sm" style="color:var(--accent)" title="Chạy ngay lập tức">
                                     <i class="fas fa-bolt"></i> Chạy ngay
@@ -126,5 +134,15 @@
             @endforelse
         </tbody>
     </table>
+</div>
+
+<div style="margin-top:1.5rem; padding:1.25rem; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; font-size:0.86rem; color:var(--text-muted); line-height:1.65">
+    <div style="font-weight:700; color:var(--text); margin-bottom:0.35rem">
+        <i class="fas fa-check-circle" style="color:var(--success)"></i> Cơ chế tự động chạy nền (Auto-Scheduler & Web-Cron)
+    </div>
+    <div>
+        Hệ thống đã tích hợp sẵn <strong>Web-Cron tự động</strong> và endpoint kích hoạt lịch hẹn định kỳ. Để đảm bảo chính xác tới từng phút trên cPanel Hosting ngay cả khi ban đêm không có khách truy cập, bạn có thể thêm 1 dòng trong <strong>cPanel &rarr; Cron Jobs</strong> (chọn <em>Once Per Minute</em> <code>* * * * *</code>):
+    </div>
+    <code style="display:block; margin-top:0.5rem; padding:0.6rem 0.85rem; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--accent); word-break:break-all">curl -s "{{ route('cron.schedule-run') }}" >/dev/null 2>&1</code>
 </div>
 @endsection
