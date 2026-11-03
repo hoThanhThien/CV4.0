@@ -462,6 +462,39 @@
         color: #ef4444;
         transform: rotate(90deg);
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 860px) {
+        .cert-hero { padding: 3.5rem 0 2rem; }
+        .cert-grid {
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+            gap: 1.5rem;
+        }
+        .cert-modal-box {
+            width: 96vw;
+            height: 92vh;
+            max-height: 92vh;
+            border-radius: 16px;
+        }
+        .cert-modal-header {
+            padding: 0.75rem 1rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .cert-hero { padding: 2.75rem 0 1.5rem; }
+        .cert-filter-bar { gap: 0.45rem; margin-bottom: 2rem; }
+        .cert-filter-btn { padding: 0.45rem 0.85rem; font-size: 0.84rem; }
+        .cert-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+        .cert-card { border-radius: 16px; }
+        .cert-body { padding: 1.25rem; }
+    }
+
+    @media (max-width: 480px) {
+        .cert-action-btns { grid-template-columns: 1fr; gap: 0.5rem; }
+        .btn-modal-dl span, .btn-modal-ext span { display: none; }
+        .btn-modal-dl, .btn-modal-ext { padding: 0.5rem 0.75rem; }
+    }
 </style>
 @endsection
 

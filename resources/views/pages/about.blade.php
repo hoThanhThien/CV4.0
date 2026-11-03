@@ -63,8 +63,8 @@
     /* ===== KEY ACHIEVEMENTS (PRESTIGE EDITION) ===== */
     .achievements-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-        gap: 1.75rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
     }
     .achievement-card {
         background: #ffffff;
@@ -589,24 +589,66 @@
         color: var(--accent);
     }
 
+    @media (max-width: 991px) {
+        .about-intro { gap: 2rem; }
+        .about-avatar { width: 160px; height: 160px; font-size: 4rem; }
+    }
+
+    @media (max-width: 860px) {
+        .achievements-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+        .achievement-card:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            max-width: 580px;
+            margin: 0 auto;
+            width: 100%;
+        }
+    }
+
     @media (max-width: 768px) {
         .about-hero { padding: 3.5rem 0 2rem; }
-        .about-intro { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
-        .about-avatar { margin: 0 auto; width: 140px; height: 140px; font-size: 3.5rem; border-radius: 24px; }
+        .about-intro { grid-template-columns: 1fr; gap: 1.75rem; text-align: center; }
+        .about-avatar { margin: 0 auto; width: 130px; height: 130px; font-size: 3.2rem; border-radius: 22px; }
         .about-actions { justify-content: center; }
         .about-quick-meta { justify-content: center; }
-        .timeline { padding-left: 3rem; }
-        .timeline::before { left: 16px; }
-        .timeline-marker { left: -3rem; width: 34px; height: 34px; }
-        .timeline-marker-inner { width: 34px; height: 34px; font-size: 0.8rem; }
+        .timeline { padding-left: 2.75rem; }
+        .timeline::before { left: 14px; }
+        .timeline-marker { left: -2.75rem; width: 32px; height: 32px; }
+        .timeline-marker-inner { width: 32px; height: 32px; font-size: 0.75rem; }
         .timeline-card::before { left: -6px; width: 10px; height: 10px; top: 1.6rem; }
+    }
+
+    @media (max-width: 600px) {
+        .achievements-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        .achievement-card:last-child:nth-child(odd) {
+            max-width: 100%;
+        }
+        .skills-categories-grid {
+            grid-template-columns: 1fr;
+        }
+        .education-highlights {
+            grid-template-columns: 1fr;
+        }
     }
 
     @media (max-width: 480px) {
         .about-hero { padding: 2.75rem 0 1.5rem; }
         .about-actions { flex-direction: column; width: 100%; gap: 0.75rem; }
         .about-actions .btn { width: 100%; justify-content: center; }
-        .education-card { padding: 1.5rem 1.25rem; }
+        .about-quick-meta { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+        .about-meta-pill { justify-content: center; width: 100%; }
+        .education-card { padding: 1.25rem 1rem; }
+        .education-school { font-size: 1.15rem; }
+        .timeline { padding-left: 2.25rem; }
+        .timeline::before { left: 11px; }
+        .timeline-marker { left: -2.25rem; width: 26px; height: 26px; }
+        .timeline-marker-inner { width: 26px; height: 26px; font-size: 0.7rem; }
+        .timeline-card { padding: 1.15rem; }
     }
 </style>
 @endsection

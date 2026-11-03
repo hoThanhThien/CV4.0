@@ -71,7 +71,7 @@
     .project-meta-item a { color: var(--text-primary); text-decoration: none; word-break: break-all; }
     .project-meta-item a:hover { color: var(--accent); }
 
-    @media (max-width: 768px) {
+    @media (max-width: 960px) {
         .project-hero { padding: 3rem 0 1.5rem; }
         .project-detail { grid-template-columns: 1fr; gap: 2rem; }
         .project-image-full { min-height: auto; margin-bottom: 1.25rem; }

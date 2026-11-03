@@ -614,8 +614,29 @@
     /* ===== HOME CREDENTIALS SHOWCASE (REDESIGNED) ===== */
     .home-cert-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-        gap: 1.85rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    @media (max-width: 860px) {
+        .home-cert-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+        .home-cert-card:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            max-width: 580px;
+            margin: 0 auto;
+            width: 100%;
+        }
+    }
+    @media (max-width: 600px) {
+        .home-cert-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        .home-cert-card:last-child:nth-child(odd) {
+            max-width: 100%;
+        }
     }
     .home-cert-card {
         --cert-accent: #6366f1;

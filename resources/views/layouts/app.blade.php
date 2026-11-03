@@ -238,6 +238,8 @@
             letter-spacing: -0.02em;
             position: relative;
             z-index: 1002;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         /* Scroll Progress Bar */
@@ -253,10 +255,11 @@
 
         .nav-links a {
             color: var(--text-secondary);
-            text-decoration: none; padding: 0.5rem 1rem;
+            text-decoration: none; padding: 0.5rem 0.9rem;
             border-radius: 8px; font-size: 0.9rem; font-weight: 500;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
+            white-space: nowrap;
         }
 
         .nav-links a:not(.btn):not(.lang-btn):hover, .nav-links a:not(.btn):not(.lang-btn).active {
@@ -269,6 +272,7 @@
             padding: 0.5rem 1.25rem !important; border-radius: 8px !important;
             box-shadow: 0 4px 14px var(--accent-glow);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            white-space: nowrap;
         }
 
         .nav-cta:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35); }
@@ -280,6 +284,7 @@
             margin-left: 0.5rem;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
             transition: all 0.25s ease;
+            flex-shrink: 0;
         }
         .lang-switcher:hover {
             border-color: rgba(99, 102, 241, 0.35);
@@ -302,6 +307,7 @@
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
+            white-space: nowrap;
         }
         .lang-switcher .lang-btn:hover {
             color: var(--text-primary) !important;
@@ -323,10 +329,21 @@
             transform: scale(1.08);
         }
 
+        /* Desktop intermediate breakpoint adjustments (1025px - 1220px) */
+        @media (min-width: 1025px) and (max-width: 1220px) {
+            .navbar { padding: 0.85rem 1.25rem; }
+            .navbar.scrolled { padding: 0.7rem 1.25rem; }
+            .nav-links { gap: 0.15rem; }
+            .nav-links a { padding: 0.45rem 0.65rem; font-size: 0.85rem; }
+            .nav-cta { padding: 0.45rem 0.95rem !important; font-size: 0.85rem !important; }
+            .lang-switcher { margin-left: 0.3rem; }
+            .lang-switcher .lang-btn { padding: 0.3rem 0.5rem !important; font-size: 0.78rem; gap: 4px !important; }
+        }
+
         .hamburger {
             display: none; background: var(--bg-card); border: 1px solid var(--border);
-            color: var(--text-primary); width: 42px; height: 42px; border-radius: 10px;
-            align-items: center; justify-content: center; font-size: 1.15rem; cursor: pointer;
+            color: var(--text-primary); width: 44px; height: 44px; min-width: 44px; border-radius: 12px;
+            align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
             z-index: 1002;
@@ -538,8 +555,8 @@
             .gradient-text { animation: none !important; }
         }
 
-        /* Mobile adjustments & responsive rules */
-        @media (max-width: 768px) {
+        /* Mobile adjustments & responsive rules (Tablets & Mobile <= 1024px) */
+        @media (max-width: 1024px) {
             .navbar {
                 padding: 0.75rem 1.25rem;
             }
@@ -573,6 +590,7 @@
                 background: #f8fafc;
                 border: 1px solid transparent;
                 transition: all 0.2s ease;
+                white-space: normal;
             }
             .nav-links a:not(.btn):not(.lang-btn):hover, .nav-links a:not(.btn):not(.lang-btn).active {
                 color: var(--accent);
@@ -841,6 +859,13 @@
         // Close on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                toggleMenu(false);
+            }
+        });
+
+        // Auto-close mobile menu on desktop resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024 && navLinks.classList.contains('open')) {
                 toggleMenu(false);
             }
         });

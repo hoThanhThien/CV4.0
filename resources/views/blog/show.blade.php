@@ -91,7 +91,7 @@
     .post-sidebar .card { margin-bottom: 1rem; }
     .post-sidebar .card h4 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.75rem; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 960px) {
         .post-hero { padding: 3rem 0 1.5rem; }
         .post-layout { grid-template-columns: 1fr; gap: 2rem; }
         .post-title { font-size: clamp(1.6rem, 5.5vw, 2.3rem); }

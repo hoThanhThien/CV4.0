@@ -212,7 +212,7 @@
         .admin-backdrop.open { display: block; opacity: 1; }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .admin-hamburger { display: flex; }
             .sidebar { transform: translateX(-100%); box-shadow: 0 0 30px rgba(0,0,0,0.15); }
             .sidebar.open { transform: none; }

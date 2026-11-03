@@ -203,7 +203,7 @@
         font-size: 0.95rem;
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 960px) {
         .contact-hero { padding: 3.5rem 0 1.5rem; }
         .contact-layout {
             display: flex;
