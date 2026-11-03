@@ -140,12 +140,35 @@
         </div>
     </form>
 </div>
+
+<!-- Form độc lập để tạo Thumbnail & Ảnh OG bằng AI mà không lồng form -->
+<form id="quick-ai-image-form" method="POST" action="{{ route('admin.ai.posts.generate-image', $post->id) }}" style="display:none"
+    data-confirm-type="ai"
+    data-confirm-icon="fa-image"
+    data-confirm-title="Tạo Thumbnail & Ảnh OG bằng AI?"
+    data-confirm="AI sẽ sử dụng Prompt hình ảnh hiện tại để thiết kế mới bộ Thumbnail (16:9) và Ảnh OpenGraph (1200×630) cho bài viết."
+    data-confirm-btn="<i class='fas fa-magic'></i> Tạo ngay"
+    data-loading-title="AI đang thiết kế Thumbnail & Ảnh OG..."
+    data-loading-desc="Hệ thống đang tạo ảnh minh họa 16:9 và ảnh chia sẻ mạng xã hội OpenGraph 1200×630...">
+    @csrf
+    <input type="hidden" name="custom_prompt" id="quick_ai_custom_prompt">
+</form>
 @endsection
 
 @section('scripts')
 <script>
     function onStatusChange(status) {
         document.getElementById('scheduled_at_box').style.display = (status === 'scheduled') ? 'block' : 'none';
+    }
+
+    function submitQuickAiImage() {
+        const promptInput = document.getElementById('cover_image_prompt');
+        const hiddenPrompt = document.getElementById('quick_ai_custom_prompt');
+        const form = document.getElementById('quick-ai-image-form');
+        if (promptInput && hiddenPrompt) {
+            hiddenPrompt.value = promptInput.value;
+        }
+        window.openAdminConfirmForm(form);
     }
 </script>
 @endsection

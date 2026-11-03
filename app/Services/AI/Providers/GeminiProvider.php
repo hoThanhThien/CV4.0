@@ -1270,18 +1270,49 @@ class GeminiProvider implements AIProviderInterface
         $usr = "Article Title: {$title}\nCategory: {$category}\nVisual Style: {$style}\nVisual Concept: {$promptHint}\nReturn valid JSON matching the schema.";
 
         try {
-            if ($this->canUseInteractionsEndpoint($provider->base_url)) {
-                $resp = $this->httpClient(25, $apiKey)->post($this->resolveInteractionsUrl($provider->base_url), [
-                    'model' => $model,
-                    'system_instruction' => $sys,
-                    'input' => $usr,
-                    'response_mime_type' => 'application/json',
-                    'response_format' => $schema,
-                    'generation_config' => [
+            $candidateModels = [$model];
+            foreach ([0, 1] as $attempt) {
+                $activeModel = $candidateModels[$attempt] ?? null;
+                if ($activeModel === null || $activeModel === '') {
+                    break;
+                }
+
+                $lastStatus = 0;
+
+                if ($this->canUseInteractionsEndpoint($provider->base_url)) {
+                    $resp = $this->httpClient(25, $apiKey)->post($this->resolveInteractionsUrl($provider->base_url), [
+                        'model' => $activeModel,
+                        'system_instruction' => $sys,
+                        'input' => $usr,
+                        'response_mime_type' => 'application/json',
+                        'response_format' => $schema,
+                        'generation_config' => [
+                            'temperature' => 0.7,
+                            'max_output_tokens' => 2048,
+                        ],
+                    ]);
+                    $lastStatus = $resp->status();
+
+                    if ($resp->successful()) {
+                        $parsed = JsonCleaner::decode($this->extractResponseText($resp->json()));
+                        if (is_array($parsed) && !empty($parsed['accent_primary']) && !isset($parsed['content'])) {
+                            return $parsed;
+                        }
+                    }
+                }
+
+                $genUrl = $this->resolveEndpointUrl($apiKey, $provider->base_url, $activeModel);
+                $resp = $this->httpClient(25, $apiKey)->post($genUrl, [
+                    'systemInstruction' => ['parts' => [['text' => $sys]]],
+                    'contents' => [['role' => 'user', 'parts' => [['text' => $usr]]]],
+                    'generationConfig' => [
                         'temperature' => 0.7,
-                        'max_output_tokens' => 2048,
+                        'maxOutputTokens' => 2048,
+                        'responseMimeType' => 'application/json',
+                        'responseJsonSchema' => $schema,
                     ],
                 ]);
+                $lastStatus = $resp->status();
 
                 if ($resp->successful()) {
                     $parsed = JsonCleaner::decode($this->extractResponseText($resp->json()));
@@ -1289,24 +1320,13 @@ class GeminiProvider implements AIProviderInterface
                         return $parsed;
                     }
                 }
-            }
 
-            $genUrl = $this->resolveEndpointUrl($apiKey, $provider->base_url, $model);
-            $resp = $this->httpClient(25, $apiKey)->post($genUrl, [
-                'systemInstruction' => ['parts' => [['text' => $sys]]],
-                'contents' => [['role' => 'user', 'parts' => [['text' => $usr]]]],
-                'generationConfig' => [
-                    'temperature' => 0.7,
-                    'maxOutputTokens' => 2048,
-                    'responseMimeType' => 'application/json',
-                    'responseJsonSchema' => $schema,
-                ],
-            ]);
-
-            if ($resp->successful()) {
-                $parsed = JsonCleaner::decode($this->extractResponseText($resp->json()));
-                if (is_array($parsed) && !empty($parsed['accent_primary']) && !isset($parsed['content'])) {
-                    return $parsed;
+                if ($attempt === 0 && in_array($lastStatus, [404, 429, 503], true)) {
+                    $discovered = $this->discoverModels($apiKey, $provider->base_url);
+                    $fallbackModel = $discovered[0]['id'] ?? '';
+                    if ($fallbackModel !== '' && $fallbackModel !== $activeModel) {
+                        $candidateModels[] = $fallbackModel;
+                    }
                 }
             }
         } catch (Throwable $e) {

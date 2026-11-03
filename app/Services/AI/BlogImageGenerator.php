@@ -12,9 +12,11 @@ use Throwable;
 
 class BlogImageGenerator
 {
-    public function __construct(
-        protected VisualAssetRenderer $renderer = new VisualAssetRenderer()
-    ) {
+    protected VisualAssetRenderer $renderer;
+
+    public function __construct(?VisualAssetRenderer $renderer = null)
+    {
+        $this->renderer = $renderer ?? new VisualAssetRenderer();
     }
 
     /**

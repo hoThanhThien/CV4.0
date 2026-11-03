@@ -21,6 +21,8 @@ class AIContentGenerationTest extends TestCase
     {
         parent::setUp();
 
+        \Illuminate\Support\Facades\Storage::fake('public');
+
         $this->provider = AiProvider::create([
             'name' => 'OpenAI Test',
             'provider_type' => 'openai',
