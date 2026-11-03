@@ -104,7 +104,14 @@
                     <td>
                         <div style="display:flex; gap:0.35rem; align-items:center">
                             <!-- Nút Run Now -->
-                            <form method="POST" action="{{ route('admin.ai.automations.run-now', $auto->id) }}" onsubmit="if(!confirm('Kích hoạt chạy ngay Automation này (mất khoảng 10–30 giây)?')) return false; const b=this.querySelector('button'); b.disabled=true; b.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Đang chạy...';">
+                            <form method="POST" action="{{ route('admin.ai.automations.run-now', $auto->id) }}"
+                                data-confirm-type="ai"
+                                data-confirm-icon="fa-bolt"
+                                data-confirm-title="Kích hoạt chạy ngay Automation?"
+                                data-confirm="Hệ thống sẽ gọi AI tạo bài viết ngay theo lịch &quot;{{ $auto->name }}&quot; (mất khoảng 10–30 giây). Bạn có muốn bắt đầu?"
+                                data-confirm-btn="<i class='fas fa-bolt'></i> Chạy ngay"
+                                data-loading-title="AI đang chạy Automation..."
+                                data-loading-desc="Đang kết nối Google Gemini AI để phân tích chủ đề và biên soạn bài viết chuẩn SEO. Vui lòng giữ nguyên cửa sổ này...">
                                 @csrf
                                 <button type="submit" class="btn btn-secondary btn-sm" style="color:var(--accent)" title="Chạy ngay lập tức">
                                     <i class="fas fa-bolt"></i> Chạy ngay
@@ -115,7 +122,10 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <form method="POST" action="{{ route('admin.ai.automations.destroy', $auto->id) }}" onsubmit="return confirm('Bạn có chắc muốn xóa lịch tự động này?')">
+                            <form method="POST" action="{{ route('admin.ai.automations.destroy', $auto->id) }}"
+                                data-confirm-type="danger"
+                                data-confirm-title="Xóa lịch tự động?"
+                                data-confirm="Bạn có chắc chắn muốn xóa lịch tự động &quot;{{ $auto->name }}&quot;? Thao tác này không thể hoàn tác.">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
                                     <i class="fas fa-trash"></i>

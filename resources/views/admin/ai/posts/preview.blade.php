@@ -39,7 +39,10 @@
             @endif
 
             @if($post->status !== 'published')
-                <form method="POST" action="{{ route('admin.ai.posts.publish-now', $post->id) }}" onsubmit="return confirm('Xuất bản ngay bài viết này ra website?')">
+                <form method="POST" action="{{ route('admin.ai.posts.publish-now', $post->id) }}"
+                    data-confirm-type="publish"
+                    data-confirm-title="Xuất bản bài viết ngay?"
+                    data-confirm="Bài viết này sẽ được hiển thị công khai trên trang Blog ngay lập tức.">
                     @csrf
                     <button type="submit" class="btn btn-primary btn-sm" style="background:var(--success); border-color:var(--success)">
                         <i class="fas fa-globe"></i> Xuất bản ngay

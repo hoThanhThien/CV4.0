@@ -72,7 +72,14 @@
                     <td>
                         <div style="display:flex; gap:0.35rem; align-items:center">
                             <!-- Nút Test Generate Now -->
-                            <form method="POST" action="{{ route('admin.ai.configs.generate-now', $cfg->id) }}" onsubmit="if(!confirm('Hệ thống sẽ gọi AI tạo ngay 1 bài viết (mất khoảng 10–30 giây) để bạn xem trước và duyệt. Tiếp tục?')) return false; const b=this.querySelector('button'); b.disabled=true; b.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Đang tạo...';">
+                            <form method="POST" action="{{ route('admin.ai.configs.generate-now', $cfg->id) }}"
+                                data-confirm-type="ai"
+                                data-confirm-icon="fa-magic"
+                                data-confirm-title="Tạo thử bài viết bằng AI?"
+                                data-confirm="Hệ thống sẽ gọi AI tạo ngay 1 bài viết từ cấu hình &quot;{{ $cfg->name }}&quot; (khoảng 10–30 giây) để bạn xem trước và duyệt."
+                                data-confirm-btn="<i class='fas fa-magic'></i> Tạo bài ngay"
+                                data-loading-title="AI đang biên soạn bài viết..."
+                                data-loading-desc="Google Gemini AI đang tổng hợp dàn ý, viết nội dung HTML và tối ưu thẻ SEO cho bài viết mới...">
                                 @csrf
                                 <button type="submit" class="btn btn-secondary btn-sm" style="color:var(--accent); font-weight:600" title="Chạy thử nghiệm tạo 1 bài viết ngay">
                                     <i class="fas fa-magic"></i> Tạo thử
@@ -83,7 +90,10 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <form method="POST" action="{{ route('admin.ai.configs.destroy', $cfg->id) }}" onsubmit="return confirm('Bạn có chắc muốn xóa cấu hình này?')">
+                            <form method="POST" action="{{ route('admin.ai.configs.destroy', $cfg->id) }}"
+                                data-confirm-type="danger"
+                                data-confirm-title="Xóa cấu hình nội dung?"
+                                data-confirm="Bạn có chắc chắn muốn xóa cấu hình &quot;{{ $cfg->name }}&quot;?">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
                                     <i class="fas fa-trash"></i>

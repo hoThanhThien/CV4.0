@@ -611,99 +611,251 @@
         .cta-section .btn { width: 100%; justify-content: center; }
     }
 
-    /* ===== HOME CREDENTIALS SHOWCASE ===== */
+    /* ===== HOME CREDENTIALS SHOWCASE (REDESIGNED) ===== */
     .home-cert-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-        gap: 1.75rem;
+        gap: 1.85rem;
     }
     .home-cert-card {
+        --cert-accent: #6366f1;
+        --cert-accent-2: #06b6d4;
+        --cert-soft: rgba(99, 102, 241, 0.1);
+        --cert-border-hover: rgba(99, 102, 241, 0.4);
+        --cert-glow: rgba(99, 102, 241, 0.16);
         background: var(--bg-card);
         border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 1.6rem;
+        border-radius: 22px;
+        padding: 1.75rem;
         display: flex;
         flex-direction: column;
         transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 8px 26px -10px rgba(15, 23, 42, 0.06);
+    }
+    .home-cert-card.theme-indigo {
+        --cert-accent: #4f46e5;
+        --cert-accent-2: #7c3aed;
+        --cert-soft: rgba(99, 102, 241, 0.11);
+        --cert-border-hover: rgba(99, 102, 241, 0.42);
+        --cert-glow: rgba(99, 102, 241, 0.18);
+    }
+    .home-cert-card.theme-emerald {
+        --cert-accent: #059669;
+        --cert-accent-2: #10b981;
+        --cert-soft: rgba(16, 185, 129, 0.11);
+        --cert-border-hover: rgba(16, 185, 129, 0.42);
+        --cert-glow: rgba(16, 185, 129, 0.18);
+    }
+    .home-cert-card.theme-amber {
+        --cert-accent: #d97706;
+        --cert-accent-2: #ec4899;
+        --cert-soft: rgba(245, 158, 11, 0.12);
+        --cert-border-hover: rgba(245, 158, 11, 0.45);
+        --cert-glow: rgba(245, 158, 11, 0.18);
+    }
+    .home-cert-card.theme-cyan {
+        --cert-accent: #0284c7;
+        --cert-accent-2: #06b6d4;
+        --cert-soft: rgba(6, 182, 212, 0.12);
+        --cert-border-hover: rgba(6, 182, 212, 0.42);
+        --cert-glow: rgba(6, 182, 212, 0.18);
+    }
+    .home-cert-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--cert-accent), var(--cert-accent-2));
+    }
+    .home-cert-card::after {
+        content: '';
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--cert-soft) 0%, transparent 70%);
+        pointer-events: none;
+        transition: transform 0.4s ease;
     }
     .home-cert-card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(124, 58, 237, 0.35);
-        box-shadow: 0 16px 36px -8px var(--accent-glow);
+        transform: translateY(-7px);
+        border-color: var(--cert-border-hover);
+        box-shadow: 0 22px 44px -12px var(--cert-glow), 0 6px 18px -6px rgba(15, 23, 42, 0.06);
+    }
+    .home-cert-card:hover::after {
+        transform: scale(1.2);
     }
     .home-cert-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 1.1rem;
+        gap: 0.75rem;
+        margin-bottom: 1.15rem;
+        position: relative;
+        z-index: 1;
     }
     .home-cert-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
+        background: var(--cert-soft);
+        color: var(--cert-accent);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
-        border: 1px solid var(--border);
+        flex-shrink: 0;
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+    }
+    .home-cert-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    .home-cert-card:hover .home-cert-icon {
+        background: linear-gradient(135deg, var(--cert-accent), var(--cert-accent-2));
+        color: #ffffff;
+        transform: scale(1.06) rotate(-3deg);
+        border-color: transparent;
+        box-shadow: 0 10px 20px -6px var(--cert-glow);
+    }
+    .home-cert-badges {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.45rem;
     }
     .home-cert-cat {
-        font-size: 0.76rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.32rem 0.75rem;
+        border-radius: 50px;
+        background: var(--cert-soft);
+        color: var(--cert-accent);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        white-space: nowrap;
+    }
+    .home-cert-year {
+        font-size: 0.74rem;
         font-weight: 700;
         padding: 0.3rem 0.65rem;
         border-radius: 50px;
         background: var(--bg-secondary);
         border: 1px solid var(--border);
-        color: var(--accent-light);
+        color: var(--text-secondary);
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
+        white-space: nowrap;
+    }
+    .home-cert-year-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cert-accent);
     }
     .home-cert-title {
-        font-size: 1.15rem;
+        font-size: 1.14rem;
         font-weight: 800;
-        line-height: 1.4;
-        margin-bottom: 0.5rem;
+        line-height: 1.42;
+        min-height: 3.22rem;
+        margin-bottom: 0.65rem;
         color: var(--text-primary);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
     }
-    .home-cert-meta {
-        font-size: 0.82rem;
+    .home-cert-issuer {
+        font-size: 0.83rem;
+        font-weight: 600;
         color: var(--text-muted);
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.45rem;
         margin-bottom: 0.85rem;
+        padding: 0.4rem 0.7rem;
+        background: var(--bg-secondary);
+        border-radius: 10px;
+        border: 1px solid rgba(226, 232, 240, 0.7);
     }
-    .home-cert-meta i { color: var(--accent-light); }
+    .home-cert-issuer svg {
+        width: 15px;
+        height: 15px;
+        color: var(--cert-accent);
+        flex-shrink: 0;
+    }
+    .home-cert-issuer span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
     .home-cert-desc {
         color: var(--text-secondary);
         font-size: 0.9rem;
-        line-height: 1.6;
-        margin-bottom: 1.4rem;
+        line-height: 1.65;
+        margin-bottom: 1.35rem;
         flex: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     .home-cert-footer {
         padding-top: 1rem;
         margin-top: auto;
-        border-top: 1px solid var(--border);
+        border-top: 1px dashed var(--border);
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.85rem;
     }
     .home-cert-footer-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-size: 0.8rem;
+        gap: 0.5rem;
+        font-size: 0.78rem;
         color: var(--text-muted);
-        font-weight: 600;
+        font-weight: 700;
+    }
+    .home-cert-file-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.24rem 0.6rem;
+        border-radius: 7px;
+        background: rgba(239, 68, 68, 0.08);
+        color: #dc2626;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+    .home-cert-file-chip.is-img {
+        background: rgba(6, 182, 212, 0.1);
+        color: #0284c7;
+    }
+    .home-cert-verified {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        color: #059669;
+        font-size: 0.75rem;
+        font-weight: 700;
     }
     .home-cert-btns {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.55rem;
+        gap: 0.6rem;
         width: 100%;
     }
     .home-cert-btns .btn {
@@ -711,9 +863,93 @@
         justify-content: center;
         font-size: 0.85rem;
         font-weight: 700;
-        padding: 0.55rem 0.75rem;
-        border-radius: 10px;
+        padding: 0.6rem 0.8rem;
+        border-radius: 12px;
         gap: 0.45rem;
+        cursor: pointer;
+    }
+    .btn-home-cert-view {
+        background: linear-gradient(135deg, var(--cert-accent), var(--cert-accent-2));
+        color: #ffffff !important;
+        border: none;
+        box-shadow: 0 6px 16px -4px var(--cert-glow);
+    }
+    .btn-home-cert-view:hover {
+        filter: brightness(1.07);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px -4px var(--cert-glow);
+    }
+    .btn-home-cert-dl {
+        background: var(--bg-secondary);
+        color: var(--text-primary) !important;
+        border: 1px solid var(--border);
+    }
+    .btn-home-cert-dl:hover {
+        border-color: var(--cert-accent);
+        color: var(--cert-accent) !important;
+        background: var(--cert-soft);
+        transform: translateY(-2px);
+    }
+
+    /* Home Quick Preview Lightbox Modal */
+    .home-cert-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        background: rgba(15, 23, 42, 0.82);
+        backdrop-filter: blur(10px);
+    }
+    .home-cert-modal.active { display: flex; }
+    .home-cert-modal-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        width: 95vw;
+        max-width: 1120px;
+        height: 88vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.55);
+    }
+    .home-cert-modal-header {
+        padding: 0.95rem 1.35rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        background: var(--bg-primary);
+    }
+    .home-cert-modal-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+    }
+    .home-cert-modal-body {
+        flex: 1;
+        background: #0f172a;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .home-cert-modal-body iframe,
+    .home-cert-modal-body img {
+        width: 100%;
+        height: 100%;
+        border: none;
+        object-fit: contain;
     }
 </style>
 @endsection
@@ -1029,48 +1265,117 @@
 
         <div class="home-cert-grid">
             @foreach($certificates->take(3) as $cert)
-            <div class="home-cert-card reveal delay-{{ ($loop->index % 3) + 1 }}">
+            @php
+                $certTheme = match($cert->category) {
+                    'brochure' => 'theme-indigo',
+                    'degree' => 'theme-emerald',
+                    'award' => 'theme-amber',
+                    default => 'theme-cyan',
+                };
+            @endphp
+            <div class="home-cert-card {{ $certTheme }} reveal delay-{{ ($loop->index % 3) + 1 }}">
                 <div class="home-cert-top">
-                    <div class="home-cert-icon" style="color: {{ $cert->is_pdf ? '#ef4444' : '#06b6d4' }}; background: {{ $cert->is_pdf ? 'rgba(239,68,68,0.1)' : 'rgba(6,182,212,0.1)' }}">
-                        <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}"></i>
+                    <div class="home-cert-icon" aria-hidden="true">
+                        @if($cert->category === 'brochure')
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                <line x1="9" y1="7" x2="15" y2="7"></line>
+                                <line x1="9" y1="11" x2="15" y2="11"></line>
+                            </svg>
+                        @elseif($cert->category === 'degree')
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                            </svg>
+                        @elseif($cert->category === 'award')
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="6"></circle>
+                                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+                            </svg>
+                        @else
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="9" y1="15" x2="15" y2="15"></line>
+                            </svg>
+                        @endif
                     </div>
-                    <span class="home-cert-cat">
-                        <i class="{{ $cert->category_icon }}"></i> {{ $cert->category_label }}
-                    </span>
+
+                    <div class="home-cert-badges">
+                        <span class="home-cert-cat">
+                            <i class="{{ $cert->category_icon }}"></i> {{ $cert->category_label }}
+                        </span>
+                        @if($cert->issue_date)
+                            <span class="home-cert-year">
+                                <span class="home-cert-year-dot"></span> {{ $cert->issue_date }}
+                            </span>
+                        @endif
+                    </div>
                 </div>
-                <h3 class="home-cert-title">{{ $cert->title }}</h3>
-                <div class="home-cert-meta">
-                    @if($cert->issuer)
-                        <span><i class="fas fa-building"></i> {{ $cert->issuer }}</span>
-                    @endif
-                    @if($cert->issue_date)
-                        <span>&bull;</span>
-                        <span><i class="fas fa-calendar-alt"></i> {{ $cert->issue_date }}</span>
-                    @endif
+
+                <h3 class="home-cert-title" title="{{ $cert->title }}">{{ $cert->title }}</h3>
+
+                @if($cert->issuer)
+                <div class="home-cert-issuer" title="{{ $cert->issuer }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 21h18"></path>
+                        <path d="M5 21V7l8-4v18"></path>
+                        <path d="M19 21V11l-6-4"></path>
+                        <path d="M9 9h.01"></path>
+                        <path d="M9 13h.01"></path>
+                        <path d="M9 17h.01"></path>
+                    </svg>
+                    <span>{{ $cert->issuer }}</span>
                 </div>
-                <p class="home-cert-desc">{{ Str::limit($cert->description, 130) }}</p>
+                @endif
+
+                <p class="home-cert-desc">{{ $cert->description }}</p>
+
                 <div class="home-cert-footer">
                     <div class="home-cert-footer-top">
-                        <span>
-                            <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $cert->is_pdf ? '#ef4444' : '#06b6d4' }}"></i>
-                            {{ strtoupper($cert->file_type) }} &bull; {{ $cert->file_size ?? 'N/A' }}
+                        <span class="home-cert-file-chip {{ $cert->is_pdf ? '' : 'is-img' }}">
+                            @if($cert->is_pdf)
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                            @else
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            @endif
+                            {{ strtoupper($cert->file_type) }}{{ $cert->file_size ? ' • ' . $cert->file_size : '' }}
                         </span>
+
                         @if(count($cert->extra_files_with_urls) > 0)
                             <span style="color:var(--accent-light); font-size:0.75rem; font-weight:700">
                                 <i class="fas fa-paperclip"></i> +{{ count($cert->extra_files_with_urls) }} đính kèm
                             </span>
+                        @else
+                            <span class="home-cert-verified">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                {{ app()->getLocale() == 'vi' ? 'Đã xác thực' : 'Verified' }}
+                            </span>
                         @endif
                     </div>
+
                     <div class="home-cert-btns">
-                        <a href="{{ $cert->file_url }}" target="_blank" class="btn btn-primary btn-sm">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <button type="button" class="btn btn-home-cert-view btn-sm"
+                            onclick="openHomeCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->is_pdf ? 'pdf' : 'image' }}')">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                             <span>{{ __('View') }}</span>
-                        </a>
-                        <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm" style="border-color:rgba(99,102,241,0.3); background:rgba(99,102,241,0.06)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        </button>
+                        <a href="{{ $cert->file_url }}" download class="btn btn-home-cert-dl btn-sm">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -1083,13 +1388,71 @@
             @endforeach
         </div>
 
-        <div style="text-align:center; margin-top:2.5rem" class="reveal delay-2">
-            <a href="{{ route('certificates') }}" class="btn btn-outline">
-                <i class="fas fa-folder-open"></i> {{ __('All Documents') }} ({{ \App\Models\Certificate::count() }})
+        <div style="text-align:center; margin-top:2.75rem" class="reveal delay-2">
+            <a href="{{ route('certificates') }}" class="btn btn-outline" style="padding: 0.7rem 1.5rem; border-radius: 50px; font-weight: 700; gap: 0.55rem">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>{{ __('All Documents') }} ({{ \App\Models\Certificate::count() }})</span>
             </a>
         </div>
     </div>
 </section>
+
+<!-- Home Quick Document Viewer Pop-up Modal -->
+<div class="home-cert-modal" id="homeCertModal" onclick="if(event.target===this) closeHomeCertModal()">
+    <div class="home-cert-modal-box">
+        <div class="home-cert-modal-header">
+            <div class="home-cert-modal-title">
+                <i class="fas fa-file-pdf" style="color:#ef4444"></i>
+                <span id="homeCertModalTitle">Tài liệu</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.55rem; flex-shrink:0">
+                <a id="homeCertModalExt" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="border-radius:50px">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>{{ app()->getLocale() == 'vi' ? 'Mở tab mới' : 'Open Tab' }}</span>
+                </a>
+                <a id="homeCertModalDl" href="#" download class="btn btn-primary btn-sm" style="border-radius:50px">
+                    <i class="fas fa-download"></i>
+                    <span>{{ __('Download') }}</span>
+                </a>
+                <button type="button" onclick="closeHomeCertModal()" aria-label="Đóng"
+                    style="width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:1.1rem">
+                    &times;
+                </button>
+            </div>
+        </div>
+        <div class="home-cert-modal-body" id="homeCertModalBody"></div>
+    </div>
+</div>
+
+<script>
+    function openHomeCertModal(url, title, type) {
+        const modal = document.getElementById('homeCertModal');
+        const body = document.getElementById('homeCertModalBody');
+        document.getElementById('homeCertModalTitle').textContent = title;
+        document.getElementById('homeCertModalExt').href = url;
+        document.getElementById('homeCertModalDl').href = url;
+        body.innerHTML = type === 'pdf'
+            ? `<iframe src="${url}#toolbar=1" type="application/pdf"></iframe>`
+            : `<img src="${url}" alt="${title}">`;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeHomeCertModal() {
+        const modal = document.getElementById('homeCertModal');
+        const body = document.getElementById('homeCertModalBody');
+        if (!modal) return;
+        modal.classList.remove('active');
+        if (body) body.innerHTML = '';
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeHomeCertModal();
+    });
+</script>
 @endif
 
 <!-- ===== BLOG ===== -->

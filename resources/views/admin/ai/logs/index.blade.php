@@ -73,7 +73,13 @@
                             </a>
 
                             @if($run->status === 'failed' && $run->automation_id)
-                                <form method="POST" action="{{ route('admin.ai.logs.retry', $run->id) }}" onsubmit="return confirm('Thử lại lượt chạy này?')">
+                                <form method="POST" action="{{ route('admin.ai.logs.retry', $run->id) }}"
+                                    data-confirm-type="ai"
+                                    data-confirm-icon="fa-redo"
+                                    data-confirm-title="Thử chạy lại tác vụ AI?"
+                                    data-confirm="Hệ thống sẽ kích hoạt chạy lại lượt tạo bài viết này (khoảng 10–30 giây). Tiếp tục?"
+                                    data-confirm-btn="<i class='fas fa-redo'></i> Thử lại ngay"
+                                    data-loading-title="AI đang chạy lại tác vụ...">
                                     @csrf
                                     <button type="submit" class="btn btn-secondary btn-sm" style="color:var(--warning)" title="Thử lại">
                                         <i class="fas fa-redo"></i> Thử lại

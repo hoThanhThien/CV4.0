@@ -107,7 +107,10 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <form method="POST" action="{{ route('admin.ai.providers.destroy', $provider->id) }}" onsubmit="return confirm('Bạn có chắc muốn xóa Provider này?')">
+                            <form method="POST" action="{{ route('admin.ai.providers.destroy', $provider->id) }}"
+                                data-confirm-type="danger"
+                                data-confirm-title="Xóa nhà cung cấp AI?"
+                                data-confirm="Bạn có chắc chắn muốn xóa Provider &quot;{{ $provider->name }}&quot;?">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
                                     <i class="fas fa-trash"></i>

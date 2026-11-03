@@ -24,9 +24,9 @@ class CertificateSeeder extends Seeder
         Certificate::create([
             'title' => 'Brochure & Hồ sơ Năng lực Cá nhân (Portfolio Brochure)',
             'category' => 'brochure',
-            'issuer' => 'Hồ Thanh Thiện',
+            'issuer' => 'Hồ Thành Thiện',
             'issue_date' => '2026',
-            'description' => "Bản Brochure tổng hợp toàn diện hồ sơ năng lực cá nhân, kinh nghiệm làm việc thực chiến, các dự án tiêu biểu và kỹ năng chuyên sâu của Kỹ sư Hồ Thanh Thiện.",
+            'description' => "Bản Brochure tổng hợp toàn diện hồ sơ năng lực cá nhân, kinh nghiệm làm việc thực chiến, các dự án tiêu biểu và kỹ năng chuyên sâu của Kỹ sư Hồ Thành Thiện.",
             'file_path' => 'certificates/HoThanhThien_CV_Brochure.pdf',
             'file_type' => 'pdf',
             'file_size' => '402.15 KB',

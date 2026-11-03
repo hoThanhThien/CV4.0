@@ -20,7 +20,7 @@ class AiSchemaManager
         self::$readyInMemory = null;
         self::$hasStatusColInMemory = null;
         try {
-            Cache::forget('ai_schema_ready_v2');
+            Cache::forget('ai_schema_ready_v3');
             Cache::forget('blog_posts_has_status_col_v2');
         } catch (Throwable $e) {
             // Ignore cache errors
@@ -74,13 +74,13 @@ class AiSchemaManager
         }
 
         try {
-            if (Cache::get('ai_schema_ready_v2') === true) {
+            if (Cache::get('ai_schema_ready_v3') === true) {
                 return self::$readyInMemory = true;
             }
 
             $ready = self::checkDatabaseSchema();
             if ($ready) {
-                Cache::put('ai_schema_ready_v2', true, 86400);
+                Cache::put('ai_schema_ready_v3', true, 86400);
                 Cache::put('blog_posts_has_status_col_v2', true, 86400);
             }
 
@@ -122,13 +122,25 @@ class AiSchemaManager
     protected static function checkDatabaseSchema(): bool
     {
         try {
-            return Schema::hasTable('ai_providers')
+            $tablesReady = Schema::hasTable('ai_providers')
                 && Schema::hasTable('ai_content_configs')
                 && Schema::hasTable('blog_automations')
                 && Schema::hasTable('blog_automation_runs')
                 && Schema::hasTable('blog_posts')
                 && Schema::hasColumn('blog_posts', 'status')
                 && Schema::hasColumn('blog_posts', 'ai_generated');
+
+            if (!$tablesReady) {
+                return false;
+            }
+
+            if (!app()->runningUnitTests() && Schema::hasTable('migrations')) {
+                return \Illuminate\Support\Facades\DB::table('migrations')
+                    ->where('migration', '2026_11_03_223000_sync_default_uth_certificates')
+                    ->exists();
+            }
+
+            return true;
         } catch (Throwable $e) {
             return false;
         }

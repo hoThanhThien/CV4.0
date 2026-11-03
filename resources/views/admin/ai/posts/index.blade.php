@@ -111,7 +111,10 @@
                             @endif
 
                             @if($post->status !== 'published')
-                                <form method="POST" action="{{ route('admin.ai.posts.publish-now', $post->id) }}" onsubmit="return confirm('Xuất bản ngay bài viết này ra website công khai?')">
+                                <form method="POST" action="{{ route('admin.ai.posts.publish-now', $post->id) }}"
+                                    data-confirm-type="publish"
+                                    data-confirm-title="Xuất bản bài viết ngay?"
+                                    data-confirm="Bài viết sẽ được đăng công khai ngay lập tức trên trang Blog của bạn.">
                                     @csrf
                                     <button type="submit" class="btn btn-secondary btn-sm" style="color:var(--accent)" title="Đăng ngay lập tức">
                                         <i class="fas fa-globe"></i> Đăng ngay
@@ -123,7 +126,10 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <form method="POST" action="{{ route('admin.ai.posts.destroy', $post->id) }}" onsubmit="return confirm('Bạn có chắc muốn xóa bài viết này?')">
+                            <form method="POST" action="{{ route('admin.ai.posts.destroy', $post->id) }}"
+                                data-confirm-type="danger"
+                                data-confirm-title="Xóa bài viết AI?"
+                                data-confirm="Bạn có chắc chắn muốn xóa vĩnh viễn bài viết này?">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
                                     <i class="fas fa-trash"></i>
