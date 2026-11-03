@@ -14,7 +14,23 @@
     .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
     .page-hero p { color: var(--text-secondary); font-size: 1.1rem; }
 
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1.5rem; }
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+        gap: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+        .projects-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+    }
+    @media (max-width: 640px) {
+        .projects-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+    }
 
     .project-card {
         background: var(--bg-card); border: 1px solid var(--border);
@@ -42,8 +58,36 @@
     .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
     .project-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
     .project-desc { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
-    .project-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; }
-    .project-links .btn { flex: 1 1 calc(33.333% - 0.5rem); min-width: 80px; justify-content: center; font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+    .project-links {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: auto;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .project-links .btn {
+        height: 38px;
+        min-height: 38px;
+        padding: 0 0.75rem;
+        font-size: 0.83rem;
+        font-weight: 700;
+        border-radius: 10px;
+        gap: 0.4rem;
+        white-space: nowrap;
+        text-decoration: none;
+        flex: 1 1 calc(50% - 0.25rem);
+        justify-content: center;
+        transition: all 0.25s ease;
+    }
+    .project-links.has-3-links .btn:first-child,
+    .project-links:has(.btn:nth-child(3)) .btn:first-child {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+    .project-links.has-3-links .btn:not(:first-child),
+    .project-links:has(.btn:nth-child(3)) .btn:not(:first-child) {
+        flex: 1 1 calc(50% - 0.25rem);
+    }
 
     .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }
     .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.3; }
@@ -54,15 +98,15 @@
         .page-hero p { font-size: 1rem; }
     }
 
-    @media (max-width: 640px) {
-        .projects-grid { grid-template-columns: 1fr; }
-    }
-
     @media (max-width: 480px) {
         .page-hero { padding: 2.75rem 0 1.5rem; }
         .project-image { height: 180px; }
         .project-body { padding: 1.1rem; }
-        .project-links .btn { min-width: 70px; flex: 1; }
+        .project-links .btn { min-width: 0; }
+        .project-links.has-3-links .btn:first-child,
+        .project-links:has(.btn:nth-child(3)) .btn:first-child { flex: 1 1 100%; width: 100%; }
+        .project-links.has-3-links .btn:not(:first-child),
+        .project-links:has(.btn:nth-child(3)) .btn:not(:first-child) { flex: 1 1 calc(50% - 0.25rem); }
     }
 </style>
 @endsection
@@ -98,8 +142,9 @@
                         @endforeach
                     </div>
                     <div class="project-title">{{ $project->title }}</div>
-                    <p class="project-desc">{{ Str::limit(preg_replace('/\s+/', ' ', $project->description), 140) }}</p>
-                    <div class="project-links">
+                    <p class="project-desc">{{ Str::limit(strip_tags($project->clean_description ?? $project->description), 130) }}</p>
+                    @php $has3Links = !empty($project->github_url) && !empty($project->demo_url); @endphp
+                    <div class="project-links {{ $has3Links ? 'has-3-links' : '' }}">
                         <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i> {{ __('Details') }}
                         </a>

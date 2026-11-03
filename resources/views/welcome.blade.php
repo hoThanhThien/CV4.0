@@ -542,7 +542,23 @@
     }
 
     /* ===== PROJECTS ===== */
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1.5rem; }
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+        gap: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+        .projects-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+    }
+    @media (max-width: 640px) {
+        .projects-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+    }
     .project-card {
         background: var(--bg-card); border: 1px solid var(--border);
         border-radius: 16px; overflow: hidden;
@@ -565,8 +581,36 @@
     .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
     .project-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; }
     .project-desc { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
-    .project-links { display: flex; gap: 0.5rem; margin-top: auto; flex-wrap: wrap; }
-    .project-links .btn { flex: 1 1 calc(33.333% - 0.5rem); min-width: 80px; justify-content: center; font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+    .project-links {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: auto;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .project-links .btn {
+        height: 38px;
+        min-height: 38px;
+        padding: 0 0.75rem;
+        font-size: 0.83rem;
+        font-weight: 700;
+        border-radius: 10px;
+        gap: 0.4rem;
+        white-space: nowrap;
+        text-decoration: none;
+        flex: 1 1 calc(50% - 0.25rem);
+        justify-content: center;
+        transition: all 0.25s ease;
+    }
+    .project-links.has-3-links .btn:first-child,
+    .project-links:has(.btn:nth-child(3)) .btn:first-child {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+    .project-links.has-3-links .btn:not(:first-child),
+    .project-links:has(.btn:nth-child(3)) .btn:not(:first-child) {
+        flex: 1 1 calc(50% - 0.25rem);
+    }
 
     /* ===== BLOG ===== */
     .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
@@ -607,7 +651,11 @@
         .hero-actions .btn { width: 100%; justify-content: center; }
         .project-image { height: 180px; }
         .project-body { padding: 1.1rem; }
-        .project-links .btn { min-width: 70px; flex: 1; }
+        .project-links .btn { min-width: 0; }
+        .project-links.has-3-links .btn:first-child,
+        .project-links:has(.btn:nth-child(3)) .btn:first-child { flex: 1 1 100%; width: 100%; }
+        .project-links.has-3-links .btn:not(:first-child),
+        .project-links:has(.btn:nth-child(3)) .btn:not(:first-child) { flex: 1 1 calc(50% - 0.25rem); }
         .cta-section .btn { width: 100%; justify-content: center; }
     }
 
@@ -1266,8 +1314,9 @@
                         @endforeach
                     </div>
                     <div class="project-title">{{ $project->title }}</div>
-                    <p class="project-desc">{{ Str::limit(strip_tags($project->description), 130) }}</p>
-                    <div class="project-links">
+                    <p class="project-desc">{{ Str::limit(strip_tags($project->clean_description ?? $project->description), 130) }}</p>
+                    @php $has3Links = !empty($project->github_url) && !empty($project->demo_url); @endphp
+                    <div class="project-links {{ $has3Links ? 'has-3-links' : '' }}">
                         <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i> {{ __('View') }}
                         </a>

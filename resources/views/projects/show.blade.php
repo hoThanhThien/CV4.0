@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $project->title . ' | ' . __('Hồ Thành Thiện'))
-@section('description', Str::limit(strip_tags($project->description), 155))
+@section('description', Str::limit(strip_tags($project->clean_description ?? $project->description), 155))
 @section('og_type', 'article')
 @section('og_image', $project->image ? asset('storage/' . $project->image) : asset('images/og-image.webp'))
 
@@ -11,7 +11,7 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "{{ e($project->title) }}",
-  "description": "{{ e(Str::limit(strip_tags($project->description), 200)) }}",
+  "description": "{{ e(Str::limit(strip_tags($project->clean_description ?? $project->description), 200)) }}",
   "applicationCategory": "WebApplication",
   "operatingSystem": "All",
   "author": {
