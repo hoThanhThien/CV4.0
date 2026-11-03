@@ -251,7 +251,7 @@ class VisualAssetRenderer
         $badgeWidth = max(140, min(340, (mb_strlen($s['badge'], 'UTF-8') * 12) + 46));
 
         return <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {$width} {$height}" width="{$width}" height="{$height}">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {$width} {$height}" width="100%" height="auto" preserveAspectRatio="xMidYMid meet">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="{$bgFrom}"/>

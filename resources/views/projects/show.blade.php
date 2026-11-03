@@ -42,7 +42,17 @@
     .project-hero .breadcrumb a:hover { text-decoration: underline; }
 
     .project-detail {
-        display: grid; grid-template-columns: 1fr 350px; gap: 3rem; align-items: start;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 350px;
+        gap: 2.5rem;
+        align-items: start;
+        width: 100%;
+        max-width: 100%;
+    }
+    .project-detail > div:first-child {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
     }
 
     .project-image-full {
@@ -50,13 +60,18 @@
         border: 1px solid var(--border);
         background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
         min-height: 280px; display: flex; align-items: center; justify-content: center;
+        width: 100%; max-width: 100%;
     }
-    .project-image-full img { width: 100%; height: auto; max-height: 480px; object-fit: cover; display: block; }
+    .project-image-full img { width: 100%; max-width: 100%; height: auto; max-height: 480px; object-fit: cover; display: block; }
     .project-image-full .placeholder { font-size: 5rem; opacity: 0.3; }
 
-    .project-title { font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 900; margin-bottom: 1rem; letter-spacing: -0.02em; word-break: break-word; }
-    .project-desc { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.85; word-break: break-word; white-space: pre-line; }
+    .project-title { font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 900; margin-bottom: 1rem; letter-spacing: -0.02em; word-break: break-word; overflow-wrap: break-word; }
+    .project-desc { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.85; word-break: break-word; overflow-wrap: break-word; white-space: pre-line; min-width: 0; }
 
+    .project-sidebar {
+        min-width: 0;
+        width: 100%;
+    }
     .project-sidebar .card { margin-bottom: 1.25rem; }
     .project-sidebar .card h4 { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
 
@@ -73,7 +88,7 @@
 
     @media (max-width: 960px) {
         .project-hero { padding: 3rem 0 1.5rem; }
-        .project-detail { grid-template-columns: 1fr; gap: 2rem; }
+        .project-detail { grid-template-columns: 100%; gap: 2rem; }
         .project-image-full { min-height: auto; margin-bottom: 1.25rem; }
     }
 
