@@ -38,11 +38,19 @@
         <div>
             <div class="form-card" style="margin-bottom:1.5rem">
                 <div class="form-group">
-                    <label class="form-label" for="image">Cover Image</label>
+                    <label class="form-label" for="image">Cover Image (16:9)</label>
                     <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="previewImage(this)">
                     <div id="image-preview" style="margin-top:0.75rem; display:none">
                         <img id="preview-img" style="width:100%; border-radius:10px; border:1px solid var(--border)">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="og_image">OpenGraph Image (1200×630, optional)</label>
+                    <input type="file" id="og_image" name="og_image" class="form-control" accept="image/*">
+                </div>
+                <div class="form-check" style="margin-bottom:0.75rem">
+                    <input type="checkbox" id="auto_generate_ai_image" name="auto_generate_ai_image" value="1" {{ old('auto_generate_ai_image', true) ? 'checked' : '' }}>
+                    <label for="auto_generate_ai_image"><i class="fas fa-magic" style="color:var(--accent)"></i> Tự tạo Thumbnail & Ảnh OG bằng AI (nếu chưa tải ảnh)</label>
                 </div>
                 <div class="form-check">
                     <input type="checkbox" id="published" name="published" value="1" {{ old('published') ? 'checked' : '' }}>

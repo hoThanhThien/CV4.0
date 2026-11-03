@@ -21,7 +21,7 @@
 </div>
 
 <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:2rem; max-width:1000px">
-    <form method="POST" action="{{ route('admin.ai.posts.update', $post->id) }}">
+    <form method="POST" action="{{ route('admin.ai.posts.update', $post->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -43,6 +43,45 @@
         <div style="margin-bottom:1.5rem">
             <label for="content" style="display:block; font-weight:600; margin-bottom:0.5rem">Nội dung bài viết (HTML) <span style="color:var(--danger)">*</span></label>
             <textarea id="content" name="content" rows="18" class="form-control" required style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px; font-family:monospace; font-size:0.9rem; line-height:1.5">{{ old('content', $post->content) }}</textarea>
+        </div>
+
+        <!-- Thumbnail & OpenGraph Visual Assets -->
+        <div style="margin-bottom:1.5rem; padding:1.25rem; background:linear-gradient(135deg, rgba(99,102,241,0.05), rgba(6,182,212,0.05)); border:1px solid rgba(99,102,241,0.22); border-radius:10px">
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem">
+                <h4 style="font-size:0.95rem; font-weight:800; margin:0; color:var(--accent)">
+                    <i class="fas fa-images"></i> Thumbnail bài viết (16:9) & Ảnh OpenGraph (1200×630)
+                </h4>
+                <button type="button" class="btn btn-primary btn-sm" onclick="submitQuickAiImage()">
+                    <i class="fas fa-magic"></i> Tạo mới bằng AI ngay
+                </button>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.25rem; margin-bottom:1rem">
+                <!-- Thumbnail 16:9 -->
+                <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:0.9rem">
+                    <div style="font-weight:700; font-size:0.84rem; margin-bottom:0.5rem">1. Thumbnail bài viết (16:9)</div>
+                    @if($post->thumbnail_url)
+                        <img src="{{ $post->thumbnail_url }}" alt="Thumbnail" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; border:1px solid var(--border); margin-bottom:0.6rem">
+                    @else
+                        <div style="width:100%; aspect-ratio:16/9; border-radius:8px; border:1px dashed var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.82rem; margin-bottom:0.6rem">Chưa có Thumbnail</div>
+                    @endif
+                    <label style="display:block; font-size:0.78rem; color:var(--text-muted); margin-bottom:0.25rem">Tải ảnh thay thế thủ công (tùy chọn):</label>
+                    <input type="file" name="image" accept="image/*" class="form-control" style="font-size:0.82rem">
+                </div>
+
+                <!-- OG Image 1200x630 -->
+                <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:0.9rem">
+                    <div style="font-weight:700; font-size:0.84rem; margin-bottom:0.5rem">2. Ảnh OpenGraph mạng xã hội (1200×630)</div>
+                    <img src="{{ $post->og_image_url }}" alt="OG Image" style="width:100%; aspect-ratio:1200/630; object-fit:cover; border-radius:8px; border:1px solid var(--border); margin-bottom:0.6rem">
+                    <label style="display:block; font-size:0.78rem; color:var(--text-muted); margin-bottom:0.25rem">Tải ảnh OG thay thế thủ công (tùy chọn):</label>
+                    <input type="file" name="og_image" accept="image/*" class="form-control" style="font-size:0.82rem">
+                </div>
+            </div>
+
+            <div>
+                <label for="cover_image_prompt" style="display:block; font-weight:600; margin-bottom:0.35rem; font-size:0.85rem">Prompt mô tả hình ảnh cho AI (Cover Image Prompt)</label>
+                <textarea id="cover_image_prompt" name="cover_image_prompt" rows="2" class="form-control" placeholder="Mô tả ý tưởng hình ảnh minh họa để AI sinh Thumbnail & Ảnh OG..." style="width:100%; padding:0.6rem; border:1px solid var(--border); border-radius:8px; font-size:0.85rem">{{ old('cover_image_prompt', $post->cover_image_prompt) }}</textarea>
+            </div>
         </div>
 
         <!-- SEO Section -->

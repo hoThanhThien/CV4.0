@@ -329,6 +329,10 @@
                         AI sẽ viết lại bài này dựa trên cấu hình nội dung đã gán. Tiêu đề và nội dung cũ sẽ được làm mới hoàn toàn. Bạn có muốn tiếp tục?
                     </p>
                 @endif
+                <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:600; font-size:0.88rem; margin-top:1rem; padding-top:0.85rem; border-top:1px solid var(--border)">
+                    <input type="checkbox" name="regenerate_image" value="1" checked>
+                    <span>Đồng thời tạo mới bộ Thumbnail (16:9) & Ảnh OG (1200×630)</span>
+                </label>
             </div>
             <div style="padding:1rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:0.5rem">
                 <button type="button" class="btn btn-secondary" onclick="closeRegenerateModal()">Hủy</button>
@@ -353,6 +357,58 @@
     }
     function closeRegenerateModal() {
         document.getElementById('regenerate-modal').style.display = 'none';
+    }
+
+    function openAiImageModal() {
+        document.getElementById('ai-image-modal').style.display = 'flex';
+    }
+    function closeAiImageModal() {
+        document.getElementById('ai-image-modal').style.display = 'none';
+    }
+
+    async function fetchModalImageModels() {
+        const btn = document.getElementById('btnModalFetchImgModels');
+        const providerSelect = document.getElementById('modal_ai_provider_id');
+        const list = document.getElementById('modal_image_model_list');
+        const input = document.getElementById('modal_image_model');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải...';
+
+        try {
+            const resp = await fetch(@json(route('admin.ai.providers.fetch-models')), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    provider_id: providerSelect.value ? parseInt(providerSelect.value, 10) : null,
+                    capability: 'image'
+                })
+            });
+
+            const data = await resp.json();
+            list.innerHTML = '';
+            if (data.success && Array.isArray(data.models) && data.models.length > 0) {
+                data.models.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.id;
+                    opt.label = m.display_name || m.id;
+                    list.appendChild(opt);
+                });
+                if (!input.value) input.value = data.models[0].id;
+                window.showAdminToast(data.message, 'success');
+            } else {
+                window.showAdminToast(data.message || 'Không tìm thấy model ảnh riêng.', 'error');
+            }
+        } catch (err) {
+            window.showAdminToast('Không thể kết nối API lấy danh sách model ảnh.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sync-alt"></i> Lấy danh sách từ API';
+        }
     }
 </script>
 @endsection
