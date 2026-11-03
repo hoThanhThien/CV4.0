@@ -44,4 +44,27 @@ interface AIProviderInterface
         string $userPrompt,
         ?string $modelOverride = null
     ): array;
+
+    /**
+     * Generate a cover/thumbnail raster image from a visual prompt using dynamically discovered image models.
+     *
+     * @param AiProvider $provider
+     * @param string $prompt
+     * @param string|null $modelOverride
+     * @param string $aspectRatio
+     * @return array [
+     *     'success' => bool,
+     *     'binary' => string|null,
+     *     'mime_type' => string|null,
+     *     'model_used' => string|null,
+     *     'error' => string|null,
+     *     'error_code' => string|null
+     * ]
+     */
+    public function generateImage(
+        AiProvider $provider,
+        string $prompt,
+        ?string $modelOverride = null,
+        string $aspectRatio = '16:9'
+    ): array;
 }

@@ -34,5 +34,18 @@ return [
         ],
     ],
 
+    'image' => [
+        'disk' => env('AI_IMAGE_DISK', 'public'),
+        'thumbnail_dir' => env('AI_THUMBNAIL_DIR', 'blog/thumbnails'),
+        'og_dir' => env('AI_OG_IMAGE_DIR', 'blog/og'),
+        'aspect_ratio' => env('AI_IMAGE_ASPECT_RATIO', '16:9'),
+        'thumbnail_width' => (int) env('AI_THUMBNAIL_WIDTH', 1280),
+        'thumbnail_height' => (int) env('AI_THUMBNAIL_HEIGHT', 720),
+        'og_width' => (int) env('AI_OG_WIDTH', 1200),
+        'og_height' => (int) env('AI_OG_HEIGHT', 630),
+        'enable_smart_fallback' => (bool) env('AI_IMAGE_SMART_FALLBACK', true),
+        'font_path' => env('AI_IMAGE_FONT_PATH', ''),
+    ],
+
 ];
 

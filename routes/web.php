@@ -187,11 +187,18 @@ Route::get('/setup-storage', function () {
 
 // Fallback direct storage route if symlink is missing on hosting
 Route::get('/storage/{path}', function ($path) {
-    $filePath = storage_path('app/public/' . $path);
-    if (!file_exists($filePath)) {
+    if (str_contains($path, '..')) {
         abort(404);
     }
-    return response()->file($filePath);
+    $filePath = storage_path('app/public/' . ltrim($path, '/'));
+    if (!file_exists($filePath) || !is_file($filePath)) {
+        abort(404);
+    }
+    $headers = [];
+    if (str_ends_with(strtolower($filePath), '.svg')) {
+        $headers['Content-Type'] = 'image/svg+xml';
+    }
+    return response()->file($filePath, $headers);
 })->where('path', '.*');
 
 /*
@@ -215,6 +222,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('projects', App\Http\Controllers\Admin\ProjectController::class)->except(['show']);
         Route::post('technologies/quick', [App\Http\Controllers\Admin\TechnologyController::class, 'quick'])->name('technologies.quick');
         Route::resource('technologies', App\Http\Controllers\Admin\TechnologyController::class)->except(['show']);
+        Route::post('blog/{blog}/generate-image', [App\Http\Controllers\Admin\BlogController::class, 'generateImage'])->name('blog.generate-image');
         Route::resource('blog', App\Http\Controllers\Admin\BlogController::class);
         Route::post('skills/quick', [App\Http\Controllers\Admin\SkillController::class, 'quick'])->name('skills.quick');
         Route::resource('skills', App\Http\Controllers\Admin\SkillController::class)->except(['show']);
@@ -254,6 +262,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('posts/{post}/schedule', [App\Http\Controllers\Admin\AIPostController::class, 'schedule'])->name('posts.schedule');
             Route::post('posts/{post}/cancel-schedule', [App\Http\Controllers\Admin\AIPostController::class, 'cancelSchedule'])->name('posts.cancel-schedule');
             Route::post('posts/{post}/regenerate', [App\Http\Controllers\Admin\AIPostController::class, 'regenerate'])->name('posts.regenerate');
+            Route::post('posts/{post}/generate-image', [App\Http\Controllers\Admin\AIPostController::class, 'generateImage'])->name('posts.generate-image');
             Route::delete('posts/{post}', [App\Http\Controllers\Admin\AIPostController::class, 'destroy'])->name('posts.destroy');
 
             // Logs

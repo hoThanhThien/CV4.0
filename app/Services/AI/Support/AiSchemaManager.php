@@ -21,6 +21,7 @@ class AiSchemaManager
         self::$hasStatusColInMemory = null;
         try {
             Cache::forget('ai_schema_ready_v3');
+            Cache::forget('ai_schema_ready_v4');
             Cache::forget('blog_posts_has_status_col_v2');
         } catch (Throwable $e) {
             // Ignore cache errors
@@ -74,13 +75,13 @@ class AiSchemaManager
         }
 
         try {
-            if (Cache::get('ai_schema_ready_v3') === true) {
+            if (Cache::get('ai_schema_ready_v4') === true) {
                 return self::$readyInMemory = true;
             }
 
             $ready = self::checkDatabaseSchema();
             if ($ready) {
-                Cache::put('ai_schema_ready_v3', true, 86400);
+                Cache::put('ai_schema_ready_v4', true, 86400);
                 Cache::put('blog_posts_has_status_col_v2', true, 86400);
             }
 
@@ -128,7 +129,10 @@ class AiSchemaManager
                 && Schema::hasTable('blog_automation_runs')
                 && Schema::hasTable('blog_posts')
                 && Schema::hasColumn('blog_posts', 'status')
-                && Schema::hasColumn('blog_posts', 'ai_generated');
+                && Schema::hasColumn('blog_posts', 'ai_generated')
+                && Schema::hasColumn('blog_posts', 'og_image')
+                && Schema::hasColumn('ai_content_configs', 'auto_generate_image')
+                && Schema::hasColumn('ai_content_configs', 'image_model');
 
             if (!$tablesReady) {
                 return false;

@@ -25,6 +25,7 @@ class BlogPost extends Model
         'content',
         'excerpt',
         'image',
+        'og_image',
         'published',
         'published_at',
         'status',
@@ -136,6 +137,46 @@ class BlogPost extends Model
     public function isPendingReview(): bool
     {
         return $this->status === self::STATUS_PENDING_REVIEW;
+    }
+
+    /**
+     * Public URL for the article's cover thumbnail image.
+     */
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if (empty($this->image)) {
+            return null;
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        return asset('storage/' . ltrim($this->image, '/'));
+    }
+
+    /**
+     * Public URL for the dedicated 1200x630 OpenGraph social preview image (always raster-safe).
+     */
+    public function getOgImageUrlAttribute(): string
+    {
+        if (!empty($this->og_image)) {
+            if (str_starts_with($this->og_image, 'http://') || str_starts_with($this->og_image, 'https://')) {
+                return $this->og_image;
+            }
+
+            return asset('storage/' . ltrim($this->og_image, '/'));
+        }
+
+        if (!empty($this->image) && !str_ends_with(strtolower($this->image), '.svg')) {
+            if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+                return $this->image;
+            }
+
+            return asset('storage/' . ltrim($this->image, '/'));
+        }
+
+        return asset('images/og-image.webp');
     }
 
     /**

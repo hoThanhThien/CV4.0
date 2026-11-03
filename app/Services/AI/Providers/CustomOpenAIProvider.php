@@ -59,6 +59,35 @@ class CustomOpenAIProvider extends OpenAIProvider
         return parent::generateBlogContent($provider, $systemPrompt, $userPrompt, $modelOverride);
     }
 
+    public function generateImage(
+        AiProvider $provider,
+        string $prompt,
+        ?string $modelOverride = null,
+        string $aspectRatio = '16:9'
+    ): array {
+        if (empty($provider->base_url) || !$this->isSafeUrl($provider->base_url)) {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'Base URL không an toàn hoặc chưa được cấu hình.',
+                'error_code' => 'UNSAFE_BASE_URL',
+            ];
+        }
+
+        return parent::generateImage($provider, $prompt, $modelOverride, $aspectRatio);
+    }
+
+    public function generateVisualDesignSpec(AiProvider $provider, array $articleContext, ?string $modelOverride = null): ?array
+    {
+        if (empty($provider->base_url) || !$this->isSafeUrl($provider->base_url)) {
+            return null;
+        }
+
+        return parent::generateVisualDesignSpec($provider, $articleContext, $modelOverride);
+    }
+
     /**
      * Validate against basic SSRF vulnerabilities
      */

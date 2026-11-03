@@ -3,7 +3,7 @@
 @section('title', $post->title . ' | ' . __('Hồ Thành Thiện'))
 @section('description', $post->excerpt ? Str::limit(strip_tags($post->excerpt), 155) : Str::limit(strip_tags($post->content), 155))
 @section('og_type', 'article')
-@section('og_image', $post->image ? asset('storage/' . $post->image) : asset('images/og-image.webp'))
+@section('og_image', $post->og_image_url)
 
 @section('structured_data')
 <script type="application/ld+json">
@@ -27,10 +27,8 @@
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "{{ url()->current() }}"
-  }
-  @if($post->image)
-  ,"image": "{{ asset('storage/' . $post->image) }}"
-  @endif
+  },
+  "image": "{{ $post->og_image_url }}"
 }
 </script>
 @endsection
@@ -133,9 +131,9 @@
                     <span><i class="fas fa-clock"></i> {{ ceil(str_word_count(strip_tags($post->content)) / 200) }} {{ __('min read') }}</span>
                 </div>
 
-                @if($post->image)
+                @if($post->thumbnail_url)
                 <div class="post-image">
-                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
+                    <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
                 </div>
                 @endif
 

@@ -189,6 +189,8 @@ class GeminiProvider implements AIProviderInterface
                 $excludedKeywords = [
                     'embedding',
                     'imagen',
+                    'image',
+                    'banana',
                     'veo',
                     'tts',
                     'audio',
@@ -196,8 +198,6 @@ class GeminiProvider implements AIProviderInterface
                     'aqa',
                     'bisheng',
                     'computer-use',
-                    'image-generation',
-                    'image-preview',
                     'native-audio',
                     'learnlm',
                 ];
@@ -359,6 +359,142 @@ class GeminiProvider implements AIProviderInterface
         }
 
         return array_slice($ordered, 0, 5);
+    }
+
+    /**
+     * Dynamically discover image-capable models from Google's live `/models` catalog.
+     * Zero hardcoded model names: detects image capability from live API metadata & supported methods.
+     *
+     * @return array<int, array{id: string, display_name: string, methods: array<int, string>}>
+     */
+    public function discoverImageModels(string $apiKey, ?string $configuredBaseUrl = null, bool $forceRefresh = false): array
+    {
+        $apiKey = trim($apiKey);
+        if ($apiKey === '' || $this->isExplicitVertexUrl($configuredBaseUrl)) {
+            return [];
+        }
+
+        $modelsUrl = $this->resolveModelsListUrl($configuredBaseUrl);
+        $cacheKey = 'gemini_live_image_models_' . substr(hash('sha256', $apiKey . '|' . $modelsUrl), 0, 24);
+        $ttl = max(60, (int) config('ai.providers.gemini.models_cache_ttl', 1800));
+
+        if ($forceRefresh) {
+            Cache::forget($cacheKey);
+        }
+
+        $cached = Cache::get($cacheKey);
+        if (is_array($cached) && !empty($cached)) {
+            return $cached;
+        }
+
+        try {
+            $resp = $this->httpClient(15, $apiKey)->get($modelsUrl, ['pageSize' => 100]);
+            if (!$resp->successful()) {
+                return [];
+            }
+
+            $rawModels = $resp->json('models');
+            if (!is_array($rawModels) || empty($rawModels)) {
+                return [];
+            }
+
+            $nonImageExclusions = ['embedding', 'veo', 'tts', 'audio', 'robotics', 'aqa', 'learnlm', 'computer-use'];
+            $candidates = [];
+
+            foreach ($rawModels as $item) {
+                if (!is_array($item) || empty($item['name'])) {
+                    continue;
+                }
+
+                $id = $this->normalizeModel((string) $item['name']);
+                if ($id === '') {
+                    continue;
+                }
+
+                $displayName = (string) ($item['displayName'] ?? $id);
+                $methods = is_array($item['supportedGenerationMethods'] ?? null)
+                    ? array_values($item['supportedGenerationMethods'])
+                    : ['generateContent'];
+
+                if (!in_array('generateContent', $methods, true) && !in_array('predict', $methods, true)) {
+                    continue;
+                }
+
+                $haystack = strtolower($id . ' ' . $displayName);
+                $isImageModel = str_contains($haystack, 'image')
+                    || str_contains($haystack, 'imagen')
+                    || str_contains($haystack, 'banana');
+
+                if (!$isImageModel) {
+                    continue;
+                }
+
+                $excluded = false;
+                foreach ($nonImageExclusions as $ex) {
+                    if (str_contains($id, $ex)) {
+                        $excluded = true;
+                        break;
+                    }
+                }
+                if ($excluded) {
+                    continue;
+                }
+
+                $candidates[$id] = [
+                    'id' => $id,
+                    'display_name' => $displayName,
+                    'methods' => $methods,
+                    '_score' => $this->scoreDiscoveredImageModel($id),
+                ];
+            }
+
+            if (empty($candidates)) {
+                return [];
+            }
+
+            $list = array_values($candidates);
+            usort($list, fn (array $a, array $b) => $b['_score'] <=> $a['_score']);
+
+            $clean = array_map(function (array $m): array {
+                unset($m['_score']);
+                return $m;
+            }, $list);
+
+            Cache::put($cacheKey, $clean, $ttl);
+
+            return $clean;
+        } catch (Throwable $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Rank discovered image models algorithmically by version, speed tier, and release stability.
+     */
+    protected function scoreDiscoveredImageModel(string $id): int
+    {
+        $score = 0;
+
+        if (preg_match('/(\d+)(?:\.(\d+))?/', $id, $m)) {
+            $major = (int) $m[1];
+            $minor = isset($m[2]) && $m[2] !== '' ? (int) $m[2] : 0;
+            $score += ($major * 80) + ($minor * 10);
+        }
+
+        if (str_contains($id, 'flash') || str_contains($id, 'banana')) {
+            $score += 180;
+        }
+        if (str_contains($id, 'lite')) {
+            $score += 35;
+        }
+        if (str_contains($id, 'imagen')) {
+            $score += 150;
+        }
+        if (!str_contains($id, 'preview') && !str_contains($id, 'exp')) {
+            $score += 30;
+        }
+
+        return $score;
     }
 
     /**
@@ -845,6 +981,426 @@ class GeminiProvider implements AIProviderInterface
                 'error_code' => 'RUNTIME_ERROR',
             ];
         }
+    }
+
+    /**
+     * Generate a cover/thumbnail raster image via Google AI Studio Interactions API (or generateContent / predict).
+     * Dynamically discovers active image-capable models from `/models` without hardcoding model IDs.
+     */
+    public function generateImage(
+        AiProvider $provider,
+        string $prompt,
+        ?string $modelOverride = null,
+        string $aspectRatio = '16:9'
+    ): array {
+        @set_time_limit(180);
+
+        if (!$provider->canDecryptApiKey()) {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'Không thể giải mã API Key Gemini.',
+                'error_code' => 'DECRYPT_ERROR',
+            ];
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        if ($apiKey === '') {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'API Key Gemini chưa được cấu hình.',
+                'error_code' => 'MISSING_API_KEY',
+            ];
+        }
+
+        $timeout = max(45, (int) ($provider->timeout ?? 90));
+        $requestedImageModel = $this->normalizeModel($modelOverride);
+        $discoveredImageModels = $this->discoverImageModels($apiKey, $provider->base_url);
+
+        $methodsByModel = [];
+        foreach ($discoveredImageModels as $dm) {
+            $methodsByModel[$dm['id']] = $dm['methods'] ?? ['generateContent'];
+        }
+
+        $modelsToTry = [];
+        if ($requestedImageModel !== '') {
+            $modelsToTry[] = $requestedImageModel;
+        }
+
+        // Add up to 2 diverse discovered image models (standard + lite/predict)
+        $addedStandard = false;
+        $addedLiteOrPredict = false;
+        foreach ($discoveredImageModels as $dm) {
+            $id = $dm['id'];
+            if (in_array($id, $modelsToTry, true)) {
+                continue;
+            }
+            $isLiteOrPredict = str_contains($id, 'lite') || in_array('predict', $dm['methods'] ?? [], true);
+            if ($isLiteOrPredict && !$addedLiteOrPredict) {
+                $modelsToTry[] = $id;
+                $addedLiteOrPredict = true;
+            } elseif (!$isLiteOrPredict && !$addedStandard) {
+                $modelsToTry[] = $id;
+                $addedStandard = true;
+            }
+            if (count($modelsToTry) >= 3) {
+                break;
+            }
+        }
+
+        if (empty($modelsToTry) && !empty($discoveredImageModels)) {
+            $modelsToTry[] = $discoveredImageModels[0]['id'];
+        }
+
+        if (empty($modelsToTry)) {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'Tài khoản Google AI hiện chưa có model tạo ảnh khả dụng trên endpoint /models.',
+                'error_code' => 'IMAGE_MODEL_UNAVAILABLE',
+            ];
+        }
+
+        try {
+            $lastStatusCode = 500;
+            $lastJson = null;
+            $freeTierZeroHits = 0;
+
+            $cleanBase = rtrim(trim((string) $provider->base_url), '/');
+            $apiBase = $cleanBase !== '' ? $cleanBase : $this->defaultBaseUrl();
+            if (str_ends_with(strtolower($apiBase), '/interactions')) {
+                $apiBase = substr($apiBase, 0, -strlen('/interactions'));
+            }
+
+            foreach ($modelsToTry as $candidateModel) {
+                $methods = $methodsByModel[$candidateModel] ?? ['generateContent'];
+                $response = null;
+
+                if (in_array('predict', $methods, true) && !in_array('generateContent', $methods, true)) {
+                    $predictUrl = "{$apiBase}/models/{$candidateModel}:predict";
+                    $response = $this->httpClient($timeout, $apiKey)->post($predictUrl, [
+                        'instances' => [
+                            ['prompt' => $prompt],
+                        ],
+                        'parameters' => [
+                            'sampleCount' => 1,
+                            'aspectRatio' => $aspectRatio,
+                        ],
+                    ]);
+                } else {
+                    // 1. Primary: Google AI Studio Interactions API (/v1beta/interactions)
+                    if ($this->canUseInteractionsEndpoint($provider->base_url)) {
+                        $interactionsUrl = $this->resolveInteractionsUrl($provider->base_url);
+                        $interResp = $this->httpClient($timeout, $apiKey)->post($interactionsUrl, [
+                            'model' => $candidateModel,
+                            'input' => $prompt,
+                            'response_format' => [
+                                'type' => 'image',
+                                'aspect_ratio' => $aspectRatio,
+                            ],
+                        ]);
+
+                        if ($interResp->successful()) {
+                            $extracted = $this->extractResponseImage($interResp->json());
+                            if ($extracted !== null) {
+                                return [
+                                    'success' => true,
+                                    'binary' => $extracted['binary'],
+                                    'mime_type' => $extracted['mime_type'],
+                                    'model_used' => $candidateModel,
+                                    'error' => null,
+                                    'error_code' => null,
+                                ];
+                            }
+                        }
+
+                        if (!in_array($interResp->status(), [200, 400, 404], true)) {
+                            $response = $interResp;
+                        }
+                    }
+
+                    // 2. Fallback: models/{model}:generateContent with responseModalities: ["IMAGE"]
+                    if ($response === null) {
+                        $genUrl = $this->resolveEndpointUrl($apiKey, $provider->base_url, $candidateModel);
+                        $response = $this->httpClient($timeout, $apiKey)->post($genUrl, [
+                            'contents' => [
+                                [
+                                    'role' => 'user',
+                                    'parts' => [['text' => $prompt]],
+                                ],
+                            ],
+                            'generationConfig' => [
+                                'responseModalities' => ['IMAGE'],
+                                'imageConfig' => [
+                                    'aspectRatio' => $aspectRatio,
+                                ],
+                            ],
+                        ]);
+                    }
+                }
+
+                if ($response->successful()) {
+                    $extracted = $this->extractResponseImage($response->json());
+                    if ($extracted !== null) {
+                        return [
+                            'success' => true,
+                            'binary' => $extracted['binary'],
+                            'mime_type' => $extracted['mime_type'],
+                            'model_used' => $candidateModel,
+                            'error' => null,
+                            'error_code' => null,
+                        ];
+                    }
+                }
+
+                $lastStatusCode = $response->status();
+                $lastJson = $response->json();
+                $errMessageLower = strtolower((string) ($lastJson['error']['message'] ?? ''));
+
+                if ($lastStatusCode === 429 && (str_contains($errMessageLower, 'limit: 0') || str_contains($errMessageLower, 'free tier'))) {
+                    $freeTierZeroHits++;
+                    if ($freeTierZeroHits >= 2) {
+                        return [
+                            'success' => false,
+                            'binary' => null,
+                            'mime_type' => null,
+                            'model_used' => $candidateModel,
+                            'error' => 'API Key Google Gemini hiện ở gói Free Tier (hạn mức tạo ảnh gốc là 0 lượt/phút trên Google AI Studio).',
+                            'error_code' => 'FREE_TIER_IMAGE_RESTRICTED',
+                        ];
+                    }
+                    continue;
+                }
+
+                if (!in_array($lastStatusCode, [404, 429, 503], true)) {
+                    break;
+                }
+            }
+
+            if ($freeTierZeroHits > 0) {
+                return [
+                    'success' => false,
+                    'binary' => null,
+                    'mime_type' => null,
+                    'model_used' => $modelsToTry[0] ?? null,
+                    'error' => 'API Key Google Gemini hiện ở gói Free Tier (hạn mức tạo ảnh gốc là 0 lượt/phút trên Google AI Studio).',
+                    'error_code' => 'FREE_TIER_IMAGE_RESTRICTED',
+                ];
+            }
+
+            $classified = $this->classifyError($lastStatusCode, $lastJson, $modelsToTry[0] ?? 'gemini-image');
+
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => $modelsToTry[0] ?? null,
+                'error' => $classified['message'],
+                'error_code' => $classified['code'],
+            ];
+        } catch (Throwable $e) {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'Lỗi gọi API tạo ảnh Gemini: ' . $e->getMessage(),
+                'error_code' => 'RUNTIME_ERROR',
+            ];
+        }
+    }
+
+    /**
+     * Ask Gemini's active LLM to art-direct a bespoke visual composition & safe SVG vector scene for an article
+     * (used when native raster image models are restricted on Free Tier or unavailable).
+     */
+    public function generateVisualDesignSpec(AiProvider $provider, array $articleContext, ?string $modelOverride = null): ?array
+    {
+        if (!$provider->canDecryptApiKey()) {
+            return null;
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        if ($apiKey === '') {
+            return null;
+        }
+
+        $model = $this->normalizeModel($modelOverride ?: $provider->model);
+        if ($model === '') {
+            $discovered = $this->discoverModels($apiKey, $provider->base_url);
+            $model = $discovered[0]['id'] ?? '';
+        }
+        if ($model === '') {
+            return null;
+        }
+
+        $schema = [
+            'type' => 'object',
+            'properties' => [
+                'bg_from' => ['type' => 'string'],
+                'bg_to' => ['type' => 'string'],
+                'accent_primary' => ['type' => 'string'],
+                'accent_secondary' => ['type' => 'string'],
+                'badge' => ['type' => 'string'],
+                'headline' => ['type' => 'string'],
+                'subtitle' => ['type' => 'string'],
+                'motif' => ['type' => 'string'],
+                'svg_elements' => ['type' => 'string'],
+            ],
+            'required' => ['bg_from', 'bg_to', 'accent_primary', 'accent_secondary', 'badge', 'headline', 'subtitle', 'motif', 'svg_elements'],
+        ];
+
+        $title = (string) ($articleContext['title'] ?? '');
+        $category = (string) ($articleContext['category'] ?? 'Technology');
+        $style = (string) ($articleContext['style'] ?? 'modern_tech');
+        $promptHint = (string) ($articleContext['prompt'] ?? '');
+
+        $sys = 'You are a Principal Brand & Tech Editorial Illustrator. Design a striking, high-contrast dark/rich visual cover composition JSON for a software engineering blog post. '
+            . 'Choose hex colors (#RRGGBB) tailored to the topic & style (bg_from and bg_to MUST be rich dark shades for high contrast; accent_primary and accent_secondary MUST be vibrant harmonious neon/pastel accents). '
+            . 'Set motif to one of: cloud_nodes, neural_net, code_matrix, shield_security, microservices, database_cluster. '
+            . 'For svg_elements, write crisp decorative vector illustration primitives ONLY (<circle>, <rect>, <path>, <line>, <polygon>, <g>) positioned inside a 420x420 coordinate box (x: 0..420, y: 0..420) representing the article topic visually (isometric cubes, circuit nodes, glowing rings, server stacks, or neural links — NO <svg> wrapper, NO <text>, NO <script>, NO external URLs).';
+
+        $usr = "Article Title: {$title}\nCategory: {$category}\nVisual Style: {$style}\nVisual Concept: {$promptHint}\nReturn valid JSON matching the schema.";
+
+        try {
+            if ($this->canUseInteractionsEndpoint($provider->base_url)) {
+                $resp = $this->httpClient(25, $apiKey)->post($this->resolveInteractionsUrl($provider->base_url), [
+                    'model' => $model,
+                    'system_instruction' => $sys,
+                    'input' => $usr,
+                    'response_mime_type' => 'application/json',
+                    'response_format' => $schema,
+                    'generation_config' => [
+                        'temperature' => 0.7,
+                        'max_output_tokens' => 2048,
+                    ],
+                ]);
+
+                if ($resp->successful()) {
+                    $parsed = JsonCleaner::decode($this->extractResponseText($resp->json()));
+                    if (is_array($parsed) && !empty($parsed['accent_primary']) && !isset($parsed['content'])) {
+                        return $parsed;
+                    }
+                }
+            }
+
+            $genUrl = $this->resolveEndpointUrl($apiKey, $provider->base_url, $model);
+            $resp = $this->httpClient(25, $apiKey)->post($genUrl, [
+                'systemInstruction' => ['parts' => [['text' => $sys]]],
+                'contents' => [['role' => 'user', 'parts' => [['text' => $usr]]]],
+                'generationConfig' => [
+                    'temperature' => 0.7,
+                    'maxOutputTokens' => 2048,
+                    'responseMimeType' => 'application/json',
+                    'responseJsonSchema' => $schema,
+                ],
+            ]);
+
+            if ($resp->successful()) {
+                $parsed = JsonCleaner::decode($this->extractResponseText($resp->json()));
+                if (is_array($parsed) && !empty($parsed['accent_primary']) && !isset($parsed['content'])) {
+                    return $parsed;
+                }
+            }
+        } catch (Throwable $e) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Extract decoded binary image bytes & MIME type from Interactions API, generateContent, or predict JSON.
+     *
+     * @return array{binary: string, mime_type: string}|null
+     */
+    protected function extractResponseImage(?array $json): ?array
+    {
+        if (!is_array($json)) {
+            return null;
+        }
+
+        // 1. Interactions API: outputs[] or steps[]
+        $blocks = $json['outputs'] ?? $json['steps'] ?? null;
+        if (is_array($blocks)) {
+            foreach ($blocks as $block) {
+                if (!is_array($block) || ($block['type'] ?? '') === 'thought') {
+                    continue;
+                }
+
+                if (($block['type'] ?? '') === 'image' && !empty($block['data']) && is_string($block['data'])) {
+                    $bin = base64_decode($block['data'], true);
+                    if (is_string($bin) && strlen($bin) > 64) {
+                        return [
+                            'binary' => $bin,
+                            'mime_type' => (string) ($block['mime_type'] ?? $block['mimeType'] ?? 'image/png'),
+                        ];
+                    }
+                }
+
+                foreach (($block['content'] ?? []) as $item) {
+                    if (!is_array($item) || ($item['type'] ?? '') === 'thought') {
+                        continue;
+                    }
+                    $b64 = $item['data'] ?? $item['inline_data']['data'] ?? $item['inlineData']['data'] ?? null;
+                    if (is_string($b64) && $b64 !== '') {
+                        $bin = base64_decode($b64, true);
+                        if (is_string($bin) && strlen($bin) > 64) {
+                            $mime = $item['mime_type']
+                                ?? $item['mimeType']
+                                ?? $item['inline_data']['mime_type']
+                                ?? $item['inlineData']['mimeType']
+                                ?? 'image/png';
+                            return [
+                                'binary' => $bin,
+                                'mime_type' => (string) $mime,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. generateContent API: candidates[0].content.parts[*].inlineData
+        $parts = $json['candidates'][0]['content']['parts'] ?? null;
+        if (is_array($parts)) {
+            foreach ($parts as $part) {
+                if (!is_array($part) || !empty($part['thought'])) {
+                    continue;
+                }
+                $inline = $part['inlineData'] ?? $part['inline_data'] ?? null;
+                if (is_array($inline) && !empty($inline['data']) && is_string($inline['data'])) {
+                    $bin = base64_decode($inline['data'], true);
+                    if (is_string($bin) && strlen($bin) > 64) {
+                        return [
+                            'binary' => $bin,
+                            'mime_type' => (string) ($inline['mimeType'] ?? $inline['mime_type'] ?? 'image/png'),
+                        ];
+                    }
+                }
+            }
+        }
+
+        // 3. Imagen predict API: predictions[0].bytesBase64Encoded
+        $pred = $json['predictions'][0] ?? null;
+        if (is_array($pred) && !empty($pred['bytesBase64Encoded']) && is_string($pred['bytesBase64Encoded'])) {
+            $bin = base64_decode($pred['bytesBase64Encoded'], true);
+            if (is_string($bin) && strlen($bin) > 64) {
+                return [
+                    'binary' => $bin,
+                    'mime_type' => (string) ($pred['mimeType'] ?? 'image/png'),
+                ];
+            }
+        }
+
+        return null;
     }
 
     /**

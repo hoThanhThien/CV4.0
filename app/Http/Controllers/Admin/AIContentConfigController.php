@@ -29,6 +29,7 @@ class AIContentConfigController extends Controller
             'name' => 'required|string|max:150',
             'ai_provider_id' => 'nullable|exists:ai_providers,id',
             'model_override' => 'nullable|string|max:100',
+            'image_model' => 'nullable|string|max:100',
             'topic_mode' => 'required|in:admin_topic,ai_select,ai_research',
             'main_topic' => 'required|string|max:255',
             'keywords' => 'nullable|string',
@@ -41,12 +42,17 @@ class AIContentConfigController extends Controller
             'custom_instructions' => 'nullable|string',
             'include_faq' => 'boolean',
             'include_sources' => 'boolean',
+            'auto_generate_image' => 'boolean',
+            'image_style' => 'nullable|in:modern_tech,3d_isometric,minimalist_gradient,editorial_illustration,cyberpunk_neon',
             'is_active' => 'boolean',
         ]);
 
-        $validated['include_faq'] = $request->boolean('include_faq', true);
+        $validated['include_faq'] = $request->boolean('include_faq', false);
         $validated['include_sources'] = $request->boolean('include_sources', false);
-        $validated['is_active'] = $request->boolean('is_active', true);
+        $validated['auto_generate_image'] = $request->boolean('auto_generate_image', false);
+        $validated['image_style'] = $validated['image_style'] ?? 'modern_tech';
+        $validated['image_model'] = !empty($validated['image_model']) ? trim($validated['image_model']) : null;
+        $validated['is_active'] = $request->boolean('is_active', false);
 
         // Convert tags from comma-separated string to array
         if (!empty($validated['tags'])) {
@@ -75,6 +81,7 @@ class AIContentConfigController extends Controller
             'name' => 'required|string|max:150',
             'ai_provider_id' => 'nullable|exists:ai_providers,id',
             'model_override' => 'nullable|string|max:100',
+            'image_model' => 'nullable|string|max:100',
             'topic_mode' => 'required|in:admin_topic,ai_select,ai_research',
             'main_topic' => 'required|string|max:255',
             'keywords' => 'nullable|string',
@@ -87,12 +94,17 @@ class AIContentConfigController extends Controller
             'custom_instructions' => 'nullable|string',
             'include_faq' => 'boolean',
             'include_sources' => 'boolean',
+            'auto_generate_image' => 'boolean',
+            'image_style' => 'nullable|in:modern_tech,3d_isometric,minimalist_gradient,editorial_illustration,cyberpunk_neon',
             'is_active' => 'boolean',
         ]);
 
-        $validated['include_faq'] = $request->boolean('include_faq', true);
+        $validated['include_faq'] = $request->boolean('include_faq', false);
         $validated['include_sources'] = $request->boolean('include_sources', false);
-        $validated['is_active'] = $request->boolean('is_active', true);
+        $validated['auto_generate_image'] = $request->boolean('auto_generate_image', false);
+        $validated['image_style'] = $validated['image_style'] ?? 'modern_tech';
+        $validated['image_model'] = !empty($validated['image_model']) ? trim($validated['image_model']) : null;
+        $validated['is_active'] = $request->boolean('is_active', false);
 
         if (!empty($validated['tags'])) {
             $validated['tags'] = array_values(array_filter(array_map('trim', explode(',', $validated['tags']))));

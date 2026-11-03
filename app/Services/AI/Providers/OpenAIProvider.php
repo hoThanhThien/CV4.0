@@ -45,13 +45,65 @@ class OpenAIProvider implements AIProviderInterface
             $models = [];
             foreach ($items as $item) {
                 $id = trim((string) ($item['id'] ?? ''));
-                if ($id === '' || str_contains($id, 'embedding') || str_contains($id, 'whisper') || str_contains($id, 'tts') || str_contains($id, 'dall-e')) {
+                if ($id === '' || str_contains($id, 'embedding') || str_contains($id, 'whisper') || str_contains($id, 'tts') || str_contains($id, 'dall-e') || str_contains($id, 'image')) {
                     continue;
                 }
                 $models[] = [
                     'id' => $id,
                     'display_name' => $id,
                 ];
+            }
+
+            return $models;
+        } catch (Throwable $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Dynamically discover image generation models from an OpenAI-compatible `/models` endpoint.
+     *
+     * @return array<int, array{id: string, display_name: string}>
+     */
+    public function discoverImageModels(string $apiKey, ?string $configuredBaseUrl = null): array
+    {
+        $apiKey = trim($apiKey);
+        if ($apiKey === '') {
+            return [];
+        }
+
+        $baseUrl = rtrim($configuredBaseUrl ?: $this->defaultBaseUrl(), '/');
+
+        try {
+            $resp = $this->httpClient($apiKey, 15)->get($baseUrl . '/models');
+            if (!$resp->successful()) {
+                return [];
+            }
+
+            $items = $resp->json('data');
+            if (!is_array($items)) {
+                return [];
+            }
+
+            $models = [];
+            foreach ($items as $item) {
+                $id = trim((string) ($item['id'] ?? ''));
+                $lower = strtolower($id);
+                if (
+                    $id !== ''
+                    && (
+                        str_contains($lower, 'image')
+                        || str_contains($lower, 'dall-e')
+                        || str_contains($lower, 'flux')
+                        || str_contains($lower, 'sdxl')
+                        || str_contains($lower, 'stable-diffusion')
+                    )
+                ) {
+                    $models[] = [
+                        'id' => $id,
+                        'display_name' => $id,
+                    ];
+                }
             }
 
             return $models;
@@ -286,6 +338,214 @@ class OpenAIProvider implements AIProviderInterface
                 'error_code' => 'RUNTIME_ERROR',
             ];
         }
+    }
+
+    /**
+     * Generate a cover/thumbnail raster image via an OpenAI-compatible `/images/generations` endpoint.
+     * Dynamically discovers active image models from `/models` without hardcoding model IDs.
+     */
+    public function generateImage(
+        AiProvider $provider,
+        string $prompt,
+        ?string $modelOverride = null,
+        string $aspectRatio = '16:9'
+    ): array {
+        @set_time_limit(180);
+
+        if (!$provider->canDecryptApiKey()) {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'Không thể giải mã API Key.',
+                'error_code' => 'DECRYPT_ERROR',
+            ];
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        if ($apiKey === '') {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'API Key chưa được cấu hình.',
+                'error_code' => 'MISSING_API_KEY',
+            ];
+        }
+
+        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl(), '/');
+        $imageModel = trim((string) $modelOverride);
+        if ($imageModel === '') {
+            $discovered = $this->discoverImageModels($apiKey, $baseUrl);
+            $imageModel = $discovered[0]['id'] ?? '';
+        }
+
+        if ($imageModel === '') {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => null,
+                'error' => 'Nhà cung cấp hiện tại không có model tạo ảnh khả dụng trên endpoint /models.',
+                'error_code' => 'IMAGE_MODEL_UNAVAILABLE',
+            ];
+        }
+
+        $timeout = max(45, (int) ($provider->timeout ?? 90));
+        $preferredSize = $aspectRatio === '16:9' ? '1792x1024' : '1024x1024';
+
+        try {
+            $payload = [
+                'model' => $imageModel,
+                'prompt' => $prompt,
+                'n' => 1,
+                'size' => $preferredSize,
+                'response_format' => 'b64_json',
+            ];
+
+            $response = $this->httpClient($apiKey, $timeout)->post($baseUrl . '/images/generations', $payload);
+
+            // Retry with more universal parameters if the specific image model uses standard size or omits response_format
+            if ($response->status() === 400) {
+                $bodyLower = strtolower((string) $response->body());
+                if (str_contains($bodyLower, 'response_format')) {
+                    unset($payload['response_format']);
+                }
+                if (str_contains($bodyLower, 'size') || str_contains($bodyLower, '1792x1024')) {
+                    $payload['size'] = $aspectRatio === '16:9' ? '1536x1024' : '1024x1024';
+                }
+                $response = $this->httpClient($apiKey, $timeout)->post($baseUrl . '/images/generations', $payload);
+
+                if ($response->status() === 400 && ($payload['size'] ?? '') !== '1024x1024') {
+                    $payload['size'] = '1024x1024';
+                    $response = $this->httpClient($apiKey, $timeout)->post($baseUrl . '/images/generations', $payload);
+                }
+            }
+
+            if ($response->successful()) {
+                $item = $response->json('data.0');
+                if (is_array($item)) {
+                    if (!empty($item['b64_json']) && is_string($item['b64_json'])) {
+                        $binary = base64_decode($item['b64_json'], true);
+                        if (is_string($binary) && strlen($binary) > 64) {
+                            return [
+                                'success' => true,
+                                'binary' => $binary,
+                                'mime_type' => 'image/png',
+                                'model_used' => $imageModel,
+                                'error' => null,
+                                'error_code' => null,
+                            ];
+                        }
+                    }
+
+                    if (!empty($item['url']) && is_string($item['url']) && str_starts_with($item['url'], 'https://')) {
+                        $dl = Http::timeout(30)->get($item['url']);
+                        if ($dl->successful() && strlen($dl->body()) > 64) {
+                            return [
+                                'success' => true,
+                                'binary' => $dl->body(),
+                                'mime_type' => (string) ($dl->header('Content-Type') ?: 'image/png'),
+                                'model_used' => $imageModel,
+                                'error' => null,
+                                'error_code' => null,
+                            ];
+                        }
+                    }
+                }
+            }
+
+            $classified = $this->classifyError($response->status(), $response->json(), $response->body(), $imageModel);
+
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => $imageModel,
+                'error' => $classified['message'],
+                'error_code' => $classified['code'],
+            ];
+        } catch (Throwable $e) {
+            return [
+                'success' => false,
+                'binary' => null,
+                'mime_type' => null,
+                'model_used' => $imageModel,
+                'error' => 'Lỗi gọi API tạo ảnh: ' . $e->getMessage(),
+                'error_code' => 'RUNTIME_ERROR',
+            ];
+        }
+    }
+
+    /**
+     * Ask an OpenAI-compatible LLM to art-direct a bespoke visual composition & safe SVG vector scene.
+     */
+    public function generateVisualDesignSpec(AiProvider $provider, array $articleContext, ?string $modelOverride = null): ?array
+    {
+        if (!$provider->canDecryptApiKey()) {
+            return null;
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        if ($apiKey === '') {
+            return null;
+        }
+
+        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl(), '/');
+        $model = trim((string) ($modelOverride ?: $provider->model));
+        if ($model === '') {
+            $discovered = $this->discoverModels($apiKey, $baseUrl);
+            $model = $discovered[0]['id'] ?? '';
+        }
+        if ($model === '') {
+            return null;
+        }
+
+        $title = (string) ($articleContext['title'] ?? '');
+        $category = (string) ($articleContext['category'] ?? 'Technology');
+        $style = (string) ($articleContext['style'] ?? 'modern_tech');
+        $promptHint = (string) ($articleContext['prompt'] ?? '');
+
+        $sys = 'You are a Principal Brand & Tech Editorial Illustrator. Return ONLY a JSON object with keys: '
+            . 'bg_from (#RRGGBB dark color), bg_to (#RRGGBB dark color), accent_primary (#RRGGBB vibrant color), accent_secondary (#RRGGBB vibrant color), '
+            . 'badge (short uppercase tag), headline (concise visual headline), subtitle (short takeaway), '
+            . 'motif (one of: cloud_nodes, neural_net, code_matrix, shield_security, microservices, database_cluster), '
+            . 'svg_elements (clean SVG primitives <circle>, <rect>, <path>, <line>, <polygon>, <g> inside a 420x420 box without <svg> or <script>).';
+
+        $usr = "Article Title: {$title}\nCategory: {$category}\nVisual Style: {$style}\nVisual Concept: {$promptHint}";
+
+        try {
+            $payload = [
+                'model' => $model,
+                'messages' => [
+                    ['role' => 'system', 'content' => $sys],
+                    ['role' => 'user', 'content' => $usr],
+                ],
+                'temperature' => 0.7,
+                'max_tokens' => 1200,
+                'response_format' => ['type' => 'json_object'],
+            ];
+
+            $resp = $this->httpClient($apiKey, 25)->post($baseUrl . '/chat/completions', $payload);
+            if ($resp->status() === 400 && str_contains(strtolower((string) $resp->body()), 'response_format')) {
+                unset($payload['response_format']);
+                $resp = $this->httpClient($apiKey, 25)->post($baseUrl . '/chat/completions', $payload);
+            }
+
+            if ($resp->successful()) {
+                $content = (string) ($resp->json('choices.0.message.content') ?? '');
+                $parsed = JsonCleaner::decode($content);
+                if (is_array($parsed) && !empty($parsed['accent_primary']) && !isset($parsed['content'])) {
+                    return $parsed;
+                }
+            }
+        } catch (Throwable $e) {
+            return null;
+        }
+
+        return null;
     }
 
     protected function classifyError(int $statusCode, ?array $bodyJson, string $rawBody, string $model): array

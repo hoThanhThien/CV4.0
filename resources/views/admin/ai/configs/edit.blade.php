@@ -132,6 +132,40 @@
             <textarea id="custom_instructions" name="custom_instructions" rows="3" class="form-control" style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">{{ old('custom_instructions', $config->custom_instructions) }}</textarea>
         </div>
 
+        <!-- AI Image & OpenGraph Settings -->
+        <div style="margin-bottom:1.5rem; padding:1.25rem; background:linear-gradient(135deg, rgba(99,102,241,0.06), rgba(6,182,212,0.06)); border:1px solid rgba(99,102,241,0.22); border-radius:10px">
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem">
+                <h4 style="font-size:0.95rem; font-weight:800; color:var(--accent); margin:0">
+                    <i class="fas fa-image"></i> AI Tạo Thumbnail (16:9) & Ảnh OpenGraph (1200×630)
+                </h4>
+                <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:700; font-size:0.9rem">
+                    <input type="checkbox" name="auto_generate_image" value="1" {{ old('auto_generate_image', $config->auto_generate_image ?? true) ? 'checked' : '' }}>
+                    <span>Tự động sinh Thumbnail & Ảnh OG khi tạo bài</span>
+                </label>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem">
+                <div>
+                    <label for="image_style" style="display:block; font-weight:600; margin-bottom:0.4rem; font-size:0.86rem">Phong cách đồ họa (Visual Style)</label>
+                    <select id="image_style" name="image_style" class="form-control" style="width:100%; padding:0.65rem; border:1px solid var(--border); border-radius:8px">
+                        @foreach(\App\Services\AI\BlogImageGenerator::stylePresets() as $styleKey => $styleLabel)
+                            <option value="{{ $styleKey }}" {{ old('image_style', $config->image_style ?: 'modern_tech') === $styleKey ? 'selected' : '' }}>{{ $styleLabel }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.4rem; gap:0.5rem">
+                        <label for="image_model" style="font-weight:600; font-size:0.86rem; margin:0">Model tạo ảnh (tùy chọn)</label>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="fetchConfigImageModels()" id="btnFetchImgModels" style="padding:0.2rem 0.55rem; font-size:0.75rem">
+                            <i class="fas fa-sync-alt"></i> Lấy từ API
+                        </button>
+                    </div>
+                    <input type="text" id="image_model" name="image_model" list="image_model_list" class="form-control" value="{{ old('image_model', $config->image_model) }}" placeholder="Để trống = Tự động khám phá từ Provider API" style="width:100%; padding:0.65rem; border:1px solid var(--border); border-radius:8px">
+                    <datalist id="image_model_list"></datalist>
+                </div>
+            </div>
+        </div>
+
         <!-- Options Checkboxes -->
         <div style="display:flex; gap:2rem; margin-bottom:2rem; padding:1rem; background:var(--bg); border:1px solid var(--border); border-radius:8px; flex-wrap:wrap">
             <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer">
@@ -156,4 +190,53 @@
         </div>
     </form>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    async function fetchConfigImageModels() {
+        const btn = document.getElementById('btnFetchImgModels');
+        const providerSelect = document.getElementById('ai_provider_id');
+        const list = document.getElementById('image_model_list');
+        const input = document.getElementById('image_model');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải...';
+
+        try {
+            const resp = await fetch(@json(route('admin.ai.providers.fetch-models')), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    provider_id: providerSelect.value ? parseInt(providerSelect.value, 10) : null,
+                    capability: 'image'
+                })
+            });
+
+            const data = await resp.json();
+            list.innerHTML = '';
+            if (data.success && Array.isArray(data.models) && data.models.length > 0) {
+                data.models.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.id;
+                    opt.label = m.display_name || m.id;
+                    list.appendChild(opt);
+                });
+                if (!input.value) input.value = data.models[0].id;
+                window.showAdminToast(data.message, 'success');
+            } else {
+                window.showAdminToast(data.message || 'Không tìm thấy model ảnh riêng.', 'error');
+            }
+        } catch (err) {
+            window.showAdminToast('Không thể kết nối API lấy danh sách model ảnh.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sync-alt"></i> Lấy từ API';
+        }
+    }
+</script>
 @endsection

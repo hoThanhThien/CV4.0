@@ -9,10 +9,16 @@ class AiContentConfig extends Model
 {
     use HasFactory;
 
+    protected $attributes = [
+        'auto_generate_image' => true,
+        'image_style' => 'modern_tech',
+    ];
+
     protected $fillable = [
         'name',
         'ai_provider_id',
         'model_override',
+        'image_model',
         'topic_mode',
         'main_topic',
         'keywords',
@@ -25,12 +31,15 @@ class AiContentConfig extends Model
         'custom_instructions',
         'include_faq',
         'include_sources',
+        'auto_generate_image',
+        'image_style',
         'is_active',
     ];
 
     protected $casts = [
         'include_faq' => 'boolean',
         'include_sources' => 'boolean',
+        'auto_generate_image' => 'boolean',
         'is_active' => 'boolean',
         'tags' => 'array',
     ];

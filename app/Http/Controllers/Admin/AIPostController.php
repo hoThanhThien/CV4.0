@@ -7,7 +7,9 @@ use App\Models\BlogPost;
 use App\Models\AiProvider;
 use App\Models\AiContentConfig;
 use App\Services\AI\BlogContentGenerator;
+use App\Services\AI\BlogImageGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Throwable;
 
@@ -38,14 +40,16 @@ class AIPostController extends Controller
 
     public function preview($id)
     {
-        $post = BlogPost::findOrFail($id);
-        return view('admin.ai.posts.preview', compact('post'));
+        $post = BlogPost::with(['provider', 'contentConfig'])->findOrFail($id);
+        $providers = AiProvider::active()->get();
+        return view('admin.ai.posts.preview', compact('post', 'providers'));
     }
 
     public function edit($id)
     {
-        $post = BlogPost::findOrFail($id);
-        return view('admin.ai.posts.edit', compact('post'));
+        $post = BlogPost::with(['provider', 'contentConfig'])->findOrFail($id);
+        $providers = AiProvider::active()->get();
+        return view('admin.ai.posts.edit', compact('post', 'providers'));
     }
 
     public function update(Request $request, $id)
@@ -57,6 +61,9 @@ class AIPostController extends Controller
             'slug' => 'required|string|max:255|unique:blog_posts,slug,' . $post->id,
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|max:4096',
+            'og_image' => 'nullable|image|max:4096',
+            'cover_image_prompt' => 'nullable|string|max:1500',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'keywords' => 'nullable|string',
@@ -65,6 +72,24 @@ class AIPostController extends Controller
             'status' => 'required|in:draft,pending_review,scheduled,published',
             'scheduled_at' => 'nullable|date',
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($post->image && !str_starts_with($post->image, 'http')) {
+                Storage::disk('public')->delete($post->image);
+            }
+            $validated['image'] = $request->file('image')->store('blog/thumbnails', 'public');
+        } else {
+            unset($validated['image']);
+        }
+
+        if ($request->hasFile('og_image')) {
+            if ($post->og_image && !str_starts_with($post->og_image, 'http')) {
+                Storage::disk('public')->delete($post->og_image);
+            }
+            $validated['og_image'] = $request->file('og_image')->store('blog/og', 'public');
+        } else {
+            unset($validated['og_image']);
+        }
 
         if (!empty($validated['tags'])) {
             $validated['tags'] = array_values(array_filter(array_map('trim', explode(',', $validated['tags']))));
@@ -156,7 +181,7 @@ class AIPostController extends Controller
         return back()->with('success', "Đã hủy lịch xuất bản bài viết. Đã chuyển về bản Nháp.");
     }
 
-    public function regenerate(Request $request, $id, BlogContentGenerator $generator)
+    public function regenerate(Request $request, $id, BlogContentGenerator $generator, BlogImageGenerator $imageGenerator)
     {
         @set_time_limit(300);
 
@@ -207,15 +232,67 @@ class AIPostController extends Controller
                 'last_edited_by_admin' => false,
             ]);
 
-            return back()->with('success', "Đã tạo lại nội dung bài viết thành công!");
+            if ($request->boolean('regenerate_image', (bool) ($config->auto_generate_image ?? true))) {
+                $imageGenerator->generateForPost(
+                    $post->fresh(),
+                    $provider,
+                    $config->image_model,
+                    $config->image_style ?: 'modern_tech',
+                    $data['cover_image_prompt'] ?? $post->cover_image_prompt
+                );
+            }
+
+            return back()->with('success', 'Đã tạo lại nội dung & ảnh bài viết thành công!');
         } catch (Throwable $e) {
             return back()->with('error', 'Lỗi ngoại lệ khi tạo lại: ' . $e->getMessage());
         }
     }
 
+    /**
+     * Generate or regenerate AI Thumbnail (16:9) & OpenGraph Social Image (1200x630) for an existing post.
+     */
+    public function generateImage(Request $request, $id, BlogImageGenerator $imageGenerator)
+    {
+        $post = BlogPost::with(['provider', 'contentConfig'])->findOrFail($id);
+
+        $validated = $request->validate([
+            'ai_provider_id' => 'nullable|exists:ai_providers,id',
+            'image_model' => 'nullable|string|max:100',
+            'image_style' => 'nullable|in:modern_tech,3d_isometric,minimalist_gradient,editorial_illustration,cyberpunk_neon',
+            'custom_prompt' => 'nullable|string|max:1500',
+        ]);
+
+        $provider = !empty($validated['ai_provider_id']) ? AiProvider::find($validated['ai_provider_id']) : null;
+        $result = $imageGenerator->generateForPost(
+            $post,
+            $provider,
+            $validated['image_model'] ?? null,
+            $validated['image_style'] ?? ($post->contentConfig?->image_style ?: 'modern_tech'),
+            $validated['custom_prompt'] ?? null
+        );
+
+        if ($request->wantsJson()) {
+            return response()->json($result, $result['success'] ? 200 : 422);
+        }
+
+        if ($result['success']) {
+            return back()->with('success', $result['message']);
+        }
+
+        return back()->with('error', $result['message']);
+    }
+
     public function destroy($id)
     {
         $post = BlogPost::findOrFail($id);
+
+        if ($post->image && !str_starts_with($post->image, 'http')) {
+            Storage::disk('public')->delete($post->image);
+        }
+        if ($post->og_image && $post->og_image !== $post->image && !str_starts_with($post->og_image, 'http')) {
+            Storage::disk('public')->delete($post->og_image);
+        }
+
         $post->delete();
 
         return redirect()->route('admin.ai.posts.index')->with('success', 'Đã xóa bài viết AI thành công!');

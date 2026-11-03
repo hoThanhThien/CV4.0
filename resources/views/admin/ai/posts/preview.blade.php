@@ -71,6 +71,11 @@
                 <i class="fas fa-edit"></i> Chỉnh sửa
             </a>
 
+            <!-- Nút Tạo Thumbnail & Ảnh OG bằng AI -->
+            <button type="button" class="btn btn-secondary btn-sm" onclick="openAiImageModal()" style="color:#0891b2; border-color:rgba(6,182,212,0.35); background:rgba(6,182,212,0.08); font-weight:700">
+                <i class="fas fa-image"></i> {{ $post->image ? 'Tạo lại Thumbnail & OG (AI)' : 'Tạo Thumbnail & OG bằng AI' }}
+            </button>
+
             <!-- Nút Regenerate -->
             <button type="button" class="btn btn-secondary btn-sm" onclick="openRegenerateModal()" style="color:var(--accent)">
                 <i class="fas fa-sync-alt"></i> Tạo lại bằng AI
@@ -104,11 +109,35 @@
         </div>
     @endif
 
+    <!-- Cover Thumbnail Preview -->
+    @if($post->thumbnail_url)
+        <div style="margin-bottom:2rem; border-radius:14px; overflow:hidden; border:1px solid var(--border); box-shadow:0 8px 20px -6px rgba(0,0,0,0.12); position:relative">
+            <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" style="width:100%; height:auto; display:block; object-fit:cover">
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; padding:0.65rem 1rem; background:var(--bg); border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-muted)">
+                <span><i class="fas fa-check-circle" style="color:var(--success)"></i> <strong>Thumbnail bài viết (16:9)</strong> — Đang sử dụng trên danh sách & đầu bài Blog</span>
+                <div style="display:flex; gap:0.5rem">
+                    <a href="{{ $post->thumbnail_url }}" target="_blank" rel="noopener" style="color:var(--accent); font-weight:600; text-decoration:none"><i class="fas fa-external-link-alt"></i> Mở ảnh gốc</a>
+                    <button type="button" onclick="openAiImageModal()" style="background:none; border:none; color:#0891b2; font-weight:700; cursor:pointer; padding:0"><i class="fas fa-magic"></i> Tạo lại bằng AI</button>
+                </div>
+            </div>
+        </div>
+    @else
+        <div style="margin-bottom:2rem; padding:1.35rem; background:linear-gradient(135deg, rgba(99,102,241,0.06), rgba(6,182,212,0.06)); border:1px dashed var(--accent); border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem">
+            <div>
+                <div style="font-weight:800; color:var(--text); font-size:0.95rem"><i class="fas fa-image" style="color:var(--accent)"></i> Bài viết chưa có Thumbnail & Ảnh OG riêng</div>
+                <div style="font-size:0.83rem; color:var(--text-muted); margin-top:0.2rem">Bấm nút bên cạnh để AI tự động thiết kế bộ Thumbnail (16:9) và Ảnh OpenGraph (1200×630) theo đúng chủ đề bài viết.</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="openAiImageModal()">
+                <i class="fas fa-magic"></i> Tạo Thumbnail & Ảnh OG bằng AI
+            </button>
+        </div>
+    @endif
+
     <!-- Cover image prompt if available -->
     @if($post->cover_image_prompt)
         <div style="margin-bottom:2rem; padding:1rem; background:rgba(99,102,241,0.05); border:1px dashed var(--accent); border-radius:10px; font-size:0.85rem">
-            <strong><i class="fas fa-paint-brush" style="color:var(--accent)"></i> Gợi ý prompt tạo ảnh đại diện của AI (Image Prompt):</strong>
-            <p style="margin-top:0.35rem; color:var(--text-muted); font-family:monospace">{{ $post->cover_image_prompt }}</p>
+            <strong><i class="fas fa-paint-brush" style="color:var(--accent)"></i> Prompt ý tưởng hình ảnh AI (Image Prompt):</strong>
+            <p style="margin-top:0.35rem; margin-bottom:0; color:var(--text-muted); font-family:monospace">{{ $post->cover_image_prompt }}</p>
         </div>
     @endif
 
@@ -146,16 +175,108 @@
         </div>
     @endif
 
-    <!-- SEO Meta summary box -->
-    <div style="margin-top:3rem; padding:1.25rem; background:var(--bg); border:1px solid var(--border); border-radius:10px; font-size:0.85rem">
-        <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted)">
-            <i class="fas fa-search"></i> SEO Meta Preview
-        </h4>
-        <div><strong>SEO Title:</strong> {{ $post->meta_title ?? $post->title }}</div>
-        <div style="margin-top:0.25rem"><strong>SEO Description:</strong> {{ $post->meta_description ?? $post->excerpt }}</div>
-        @if($post->keywords)
-            <div style="margin-top:0.25rem"><strong>Keywords:</strong> {{ $post->keywords }}</div>
-        @endif
+    <!-- SEO & OpenGraph Social Card Preview -->
+    <div style="margin-top:3rem; padding:1.5rem; background:var(--bg); border:1px solid var(--border); border-radius:12px; font-size:0.85rem">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem">
+            <h4 style="font-size:0.9rem; font-weight:800; margin:0; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted)">
+                <i class="fas fa-share-alt" style="color:var(--accent)"></i> SEO Meta & OpenGraph Social Card (1200×630)
+            </h4>
+            @if($post->og_image)
+                <a href="{{ $post->og_image_url }}" target="_blank" rel="noopener" class="badge badge-success" style="text-decoration:none">
+                    <i class="fas fa-check-circle"></i> Xem file OG PNG/WebP 1200×630
+                </a>
+            @endif
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; align-items:start">
+            <div>
+                <div style="margin-bottom:0.5rem"><strong>SEO Title:</strong> {{ $post->meta_title ?? $post->title }}</div>
+                <div style="margin-bottom:0.5rem"><strong>SEO Description:</strong> {{ $post->meta_description ?? $post->excerpt }}</div>
+                @if($post->keywords)
+                    <div style="margin-bottom:0.5rem"><strong>Keywords:</strong> {{ $post->keywords }}</div>
+                @endif
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.75rem">
+                    Thẻ <code>og:image</code> và <code>twitter:image</code> tự động trỏ tới file ảnh chuẩn tỷ lệ <strong>1200×630</strong> giúp hiển thị sắc nét khi chia sẻ lên Facebook, Zalo, LinkedIn, Discord và X.
+                </div>
+            </div>
+
+            <!-- Simulated Facebook / LinkedIn Link Share Card -->
+            <div style="border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg-card); box-shadow:0 4px 12px rgba(0,0,0,0.06)">
+                <div style="aspect-ratio: 1200 / 630; width:100%; overflow:hidden; background:#0f172a">
+                    <img src="{{ $post->og_image_url }}" alt="OG Preview" style="width:100%; height:100%; object-fit:cover; display:block">
+                </div>
+                <div style="padding:0.85rem 1rem; border-top:1px solid var(--border)">
+                    <div style="font-size:0.72rem; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.04em">{{ parse_url(config('app.url'), PHP_URL_HOST) ?: 'hothanhthien.io.vn' }}</div>
+                    <div style="font-weight:800; font-size:0.92rem; color:var(--text); margin-top:0.2rem; line-height:1.35">{{ Str::limit($post->meta_title ?? $post->title, 68) }}</div>
+                    <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem">{{ Str::limit($post->meta_description ?? $post->excerpt, 95) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal AI Image Studio (Tạo Thumbnail & Ảnh OG bằng AI) -->
+<div id="ai-image-modal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.58); backdrop-filter:blur(5px); z-index:9997; align-items:center; justify-content:center; padding:1.25rem">
+    <div style="background:var(--bg-card); max-width:560px; width:100%; border-radius:16px; border:1px solid var(--border); box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); overflow:hidden">
+        <form method="POST" action="{{ route('admin.ai.posts.generate-image', $post->id) }}"
+            data-confirm-type="ai"
+            data-confirm-icon="fa-image"
+            data-confirm-title="Bắt đầu tạo Thumbnail & Ảnh OG?"
+            data-confirm="AI sẽ sinh mới đồng thời ảnh Thumbnail (16:9) cho trang Blog và ảnh OpenGraph (1200×630) cho chia sẻ mạng xã hội."
+            data-confirm-btn="<i class='fas fa-magic'></i> Tạo ngay"
+            data-loading-title="AI đang thiết kế Thumbnail & Ảnh OG..."
+            data-loading-desc="Hệ thống đang tạo ảnh minh họa 16:9 và xuất bản chuẩn OpenGraph 1200×630...">
+            @csrf
+            <div style="padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between">
+                <h3 style="font-size:1.1rem; font-weight:800; margin:0; color:var(--text)">
+                    <i class="fas fa-magic" style="color:var(--accent)"></i> AI Studio — Tạo Thumbnail & Ảnh OG
+                </h3>
+                <button type="button" onclick="closeAiImageModal()" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--text-muted)">&times;</button>
+            </div>
+            <div style="padding:1.5rem; display:flex; flex-direction:column; gap:1rem">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.85rem">
+                    <div>
+                        <label style="display:block; font-weight:600; font-size:0.85rem; margin-bottom:0.35rem">AI Provider</label>
+                        <select id="modal_ai_provider_id" name="ai_provider_id" class="form-control" style="width:100%; padding:0.65rem; border:1px solid var(--border); border-radius:8px">
+                            <option value="">— Theo cấu hình bài viết —</option>
+                            @foreach($providers ?? [] as $p)
+                                <option value="{{ $p->id }}" {{ ($post->ai_provider_id == $p->id) ? 'selected' : '' }}>{{ $p->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block; font-weight:600; font-size:0.85rem; margin-bottom:0.35rem">Phong cách đồ họa</label>
+                        <select name="image_style" class="form-control" style="width:100%; padding:0.65rem; border:1px solid var(--border); border-radius:8px">
+                            @foreach(\App\Services\AI\BlogImageGenerator::stylePresets() as $sKey => $sLabel)
+                                <option value="{{ $sKey }}" {{ ($post->contentConfig?->image_style ?? 'modern_tech') === $sKey ? 'selected' : '' }}>{{ $sLabel }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.35rem">
+                        <label style="font-weight:600; font-size:0.85rem; margin:0">Model tạo ảnh (tùy chọn)</label>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btnModalFetchImgModels" onclick="fetchModalImageModels()" style="padding:0.18rem 0.55rem; font-size:0.74rem">
+                            <i class="fas fa-sync-alt"></i> Lấy danh sách từ API
+                        </button>
+                    </div>
+                    <input type="text" id="modal_image_model" name="image_model" list="modal_image_model_list" class="form-control" value="{{ $post->contentConfig?->image_model }}" placeholder="Để trống = Tự động khám phá model khả dụng từ API" style="width:100%; padding:0.65rem; border:1px solid var(--border); border-radius:8px">
+                    <datalist id="modal_image_model_list"></datalist>
+                </div>
+
+                <div>
+                    <label style="display:block; font-weight:600; font-size:0.85rem; margin-bottom:0.35rem">Mô tả ý tưởng hình ảnh (Image Prompt)</label>
+                    <textarea name="custom_prompt" rows="3" class="form-control" placeholder="Để trống để AI tự tổng hợp từ tiêu đề và nội dung bài viết..." style="width:100%; padding:0.65rem; border:1px solid var(--border); border-radius:8px; font-size:0.88rem">{{ $post->cover_image_prompt }}</textarea>
+                </div>
+            </div>
+            <div style="padding:1rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:0.6rem">
+                <button type="button" class="btn btn-secondary" onclick="closeAiImageModal()">Đóng</button>
+                <button type="submit" class="btn btn-primary" onclick="closeAiImageModal()">
+                    <i class="fas fa-magic"></i> Tạo Thumbnail & Ảnh OG
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 

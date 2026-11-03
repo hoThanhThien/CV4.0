@@ -125,50 +125,71 @@ class AIProviderController extends Controller
     public function fetchModels(Request $request)
     {
         $validated = $request->validate([
-            'provider_type' => 'required|in:openai,gemini,deepseek,custom',
+            'provider_type' => 'nullable|in:openai,gemini,deepseek,custom',
             'api_key' => 'nullable|string',
             'provider_id' => 'nullable|integer|exists:ai_providers,id',
             'base_url' => 'nullable|url|max:255',
+            'capability' => 'nullable|in:text,image',
         ]);
 
         $apiKey = trim((string) ($validated['api_key'] ?? ''));
         $baseUrl = !empty($validated['base_url']) ? trim($validated['base_url']) : null;
+        $type = $validated['provider_type'] ?? null;
+        $capability = $validated['capability'] ?? 'text';
 
-        if ($apiKey === '' && !empty($validated['provider_id'])) {
+        $existing = null;
+        if (!empty($validated['provider_id'])) {
             $existing = AiProvider::find($validated['provider_id']);
-            if ($existing && $existing->canDecryptApiKey()) {
+        } elseif ($apiKey === '' && $type === null) {
+            $existing = AiProvider::active()->default()->first() ?? AiProvider::active()->first();
+        }
+
+        if ($existing) {
+            if ($type === null) {
+                $type = $existing->provider_type;
+            }
+            if ($apiKey === '' && $existing->canDecryptApiKey()) {
                 $apiKey = trim((string) $existing->getDecryptedApiKey());
-                if ($baseUrl === null && !empty($existing->base_url)) {
-                    $baseUrl = $existing->base_url;
-                }
+            }
+            if ($baseUrl === null && !empty($existing->base_url)) {
+                $baseUrl = $existing->base_url;
             }
         }
 
-        if ($apiKey === '') {
+        if (empty($type) || $apiKey === '') {
             return response()->json([
                 'success' => false,
-                'message' => 'Vui lòng nhập API Key trước khi tải danh sách Model từ nhà cung cấp.',
+                'message' => 'Vui lòng chọn AI Provider hoặc nhập API Key trước khi tải danh sách Model từ nhà cung cấp.',
                 'models' => [],
             ], 422);
         }
 
-        $type = $validated['provider_type'];
-
         if ($type === 'gemini') {
             $gemini = new \App\Services\AI\Providers\GeminiProvider();
-            $models = $gemini->discoverModels($apiKey, $baseUrl, true);
+            $models = $capability === 'image'
+                ? $gemini->discoverImageModels($apiKey, $baseUrl, true)
+                : $gemini->discoverModels($apiKey, $baseUrl, true);
         } elseif ($type === 'deepseek') {
             $ds = new \App\Services\AI\Providers\DeepSeekProvider();
-            $models = $ds->discoverModels($apiKey, $baseUrl ?: config('ai.providers.deepseek.base_url'));
+            $effectiveBase = $baseUrl ?: config('ai.providers.deepseek.base_url');
+            $models = $capability === 'image'
+                ? $ds->discoverImageModels($apiKey, $effectiveBase)
+                : $ds->discoverModels($apiKey, $effectiveBase);
         } else {
             $oa = new \App\Services\AI\Providers\OpenAIProvider();
-            $models = $oa->discoverModels($apiKey, $baseUrl);
+            $models = $capability === 'image'
+                ? $oa->discoverImageModels($apiKey, $baseUrl)
+                : $oa->discoverModels($apiKey, $baseUrl);
         }
 
         if (empty($models)) {
+            $emptyMsg = $capability === 'image'
+                ? 'Nhà cung cấp này không trả về model tạo ảnh riêng biệt nào trên /models (hệ thống vẫn hỗ trợ tự động thiết kế Thumbnail & Ảnh OG bằng AI).'
+                : 'Không lấy được danh sách Model từ API (kiểm tra lại API Key hoặc Base URL).';
+
             return response()->json([
                 'success' => false,
-                'message' => 'Không lấy được danh sách Model từ API (kiểm tra lại API Key hoặc Base URL).',
+                'message' => $emptyMsg,
                 'models' => [],
             ], 400);
         }

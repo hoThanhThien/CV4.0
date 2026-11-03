@@ -122,6 +122,27 @@ class BlogContentGenerator
                 'cover_image_prompt' => $data['cover_image_prompt'] ?? null,
             ]);
 
+            // 8. Automatically generate AI Cover Thumbnail (16:9) & OpenGraph Social Image (1200x630) if enabled
+            $imageResult = null;
+            if ((bool) ($config->auto_generate_image ?? true)) {
+                try {
+                    $imageGenerator = app(BlogImageGenerator::class);
+                    $imageResult = $imageGenerator->generateForPost(
+                        $post,
+                        $provider,
+                        $config->image_model,
+                        $config->image_style ?: 'modern_tech',
+                        $post->cover_image_prompt
+                    );
+                    $post->refresh();
+                } catch (Throwable $imgEx) {
+                    \Illuminate\Support\Facades\Log::warning('Auto AI image generation skipped after post creation', [
+                        'post_id' => $post->id,
+                        'error' => $imgEx->getMessage(),
+                    ]);
+                }
+            }
+
             // Update run log
             if ($runLog) {
                 $createdIds = (array)($runLog->created_post_ids ?: []);
@@ -138,7 +159,12 @@ class BlogContentGenerator
                 ]);
             }
 
-            return ['success' => true, 'post' => $post, 'error' => null];
+            return [
+                'success' => true,
+                'post' => $post,
+                'image_result' => $imageResult,
+                'error' => null,
+            ];
         } catch (Throwable $e) {
             $err = 'Lỗi lưu bài viết vào database: ' . $e->getMessage();
             $this->updateRunLogFailure($runLog, $err);

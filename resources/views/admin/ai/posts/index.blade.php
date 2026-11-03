@@ -55,11 +55,27 @@
                 <tr>
                     <td style="color:var(--text-muted)">{{ $post->id }}</td>
                     <td>
-                        <div style="font-weight:700; max-width:320px">{{ Str::limit($post->title, 60) }}</div>
-                        <code style="font-size:0.75rem; color:var(--accent-light); background:rgba(99,102,241,0.1); padding:0.15rem 0.4rem; border-radius:4px">/{{ $post->slug }}</code>
-                        @if($post->last_edited_by_admin)
-                            <span class="badge" style="background:rgba(245,158,11,0.15); color:var(--warning); font-size:0.65rem">Đã sửa tay</span>
-                        @endif
+                        <div style="display:flex; align-items:center; gap:0.75rem">
+                            @if($post->thumbnail_url)
+                                <img src="{{ $post->thumbnail_url }}" alt="Thumb" style="width:68px; height:38px; object-fit:cover; border-radius:6px; border:1px solid var(--border); flex-shrink:0">
+                            @else
+                                <div style="width:68px; height:38px; border-radius:6px; border:1px dashed var(--border); background:var(--bg); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.8rem; flex-shrink:0" title="Chưa có Thumbnail">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                            @endif
+                            <div>
+                                <div style="font-weight:700; max-width:300px">{{ Str::limit($post->title, 58) }}</div>
+                                <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap; margin-top:0.15rem">
+                                    <code style="font-size:0.73rem; color:var(--accent-light); background:rgba(99,102,241,0.1); padding:0.1rem 0.4rem; border-radius:4px">/{{ Str::limit($post->slug, 34) }}</code>
+                                    @if($post->og_image)
+                                        <span class="badge" style="background:rgba(16,185,129,0.12); color:var(--success); font-size:0.65rem" title="Đã có ảnh OpenGraph 1200×630">OG 1200×630</span>
+                                    @endif
+                                    @if($post->last_edited_by_admin)
+                                        <span class="badge" style="background:rgba(245,158,11,0.15); color:var(--warning); font-size:0.65rem">Đã sửa tay</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </td>
                     <td>
                         <div style="font-weight:600; font-size:0.85rem">{{ $post->provider->name ?? 'AI' }}</div>
@@ -100,6 +116,20 @@
                             <a href="{{ route('admin.ai.posts.preview', $post->id) }}" class="btn btn-secondary btn-sm" title="Xem trước và duyệt">
                                 <i class="fas fa-eye"></i> Xem trước
                             </a>
+
+                            <form method="POST" action="{{ route('admin.ai.posts.generate-image', $post->id) }}"
+                                data-confirm-type="ai"
+                                data-confirm-icon="fa-image"
+                                data-confirm-title="Tạo Thumbnail & Ảnh OG bằng AI?"
+                                data-confirm="AI sẽ tự động thiết kế bộ Thumbnail (16:9) và Ảnh OpenGraph chuẩn 1200×630 cho bài viết này."
+                                data-confirm-btn="<i class='fas fa-magic'></i> Tạo ảnh ngay"
+                                data-loading-title="AI đang thiết kế Thumbnail & Ảnh OG..."
+                                data-loading-desc="Hệ thống đang tạo bộ ảnh đại diện 16:9 và ảnh chia sẻ mạng xã hội OpenGraph 1200×630...">
+                                @csrf
+                                <button type="submit" class="btn btn-secondary btn-sm" style="color:#0891b2" title="Tạo / Tạo lại Thumbnail & Ảnh OG bằng AI">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                            </form>
 
                             @if($post->status === 'pending_review')
                                 <form method="POST" action="{{ route('admin.ai.posts.approve', $post->id) }}">

@@ -42,4 +42,28 @@ class DeepSeekProvider extends OpenAIProvider
 
         return parent::generateBlogContent($providerCopy, $systemPrompt, $userPrompt, $modelOverride);
     }
+
+    public function generateImage(
+        AiProvider $provider,
+        string $prompt,
+        ?string $modelOverride = null,
+        string $aspectRatio = '16:9'
+    ): array {
+        $providerCopy = clone $provider;
+        if (empty($providerCopy->base_url)) {
+            $providerCopy->base_url = $this->defaultBaseUrl();
+        }
+
+        return parent::generateImage($providerCopy, $prompt, $modelOverride, $aspectRatio);
+    }
+
+    public function generateVisualDesignSpec(AiProvider $provider, array $articleContext, ?string $modelOverride = null): ?array
+    {
+        $providerCopy = clone $provider;
+        if (empty($providerCopy->base_url)) {
+            $providerCopy->base_url = $this->defaultBaseUrl();
+        }
+
+        return parent::generateVisualDesignSpec($providerCopy, $articleContext, $modelOverride);
+    }
 }
