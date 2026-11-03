@@ -199,25 +199,29 @@ class BlogContentGenerator
             : '';
 
         $keywordsStr = implode(', ', $config->keywords_array);
+        $authorName = trim((string) config('ai.author_name', config('app.name', 'Tech Blog')));
+        $siteUrl = trim((string) config('ai.site_url', config('app.url', '')));
+        $blogIdentity = $siteUrl !== '' ? "{$authorName} ({$siteUrl})" : $authorName;
 
         $systemPrompt = <<<PROMPT
-You are a Senior Technical Writer, Software Architect, and SEO Specialist for the personal portfolio & tech blog of Hồ Thành Thiện (https://hothanhthien.io.vn/).
+You are a Senior Technical Writer, Software Architect, and SEO Specialist for the personal portfolio & tech blog of {$blogIdentity}.
 
 Your mission:
 Write an authoritative, engaging, and in-depth tech blog post based on the configuration provided.
 
 CRITICAL INSTRUCTIONS:
-1. You MUST output ONLY valid JSON without any markdown code fences (no ```json).
+1. You MUST output ONLY a single valid RFC 8259 JSON object without any markdown code fences (never wrap in ```json, and never use ``` inside the HTML `content` field).
 2. The language of the article MUST be {$langName}.
 3. Tone of voice: {$config->writing_tone}.
 4. Target audience: {$config->target_audience}.
 5. Content length: {$lengthDesc}.
 6. Content structure:
    - Must use clean semantic HTML for the `content` field.
+   - Inside HTML attributes in `content`, prefer single quotes (e.g. `<a href='https://...'>`, `<code class='language-php'>`) and properly escape any backslashes (`\\\\`) or double quotes (`\\\"`) so the JSON string is 100% valid.
    - Use `<h2>` for main sections, `<h3>` for subsections.
    - Use `<p>` for paragraphs.
    - Use `<ul>` or `<ol>` with `<li>` for key takeaways and lists.
-   - Use `<pre><code>` for code snippets (specify clean code examples).
+   - Use `<pre><code>` for code snippets (specify clean code examples; HTML-escape `<` and `>` inside `<code>` when needed).
    - Use `<blockquote>` for important notes or quotes.
    - DO NOT include `<h1>`, `<html>`, `<head>`, `<body>`, `<script>`, or `<iframe>`.
 7. SEO requirements:

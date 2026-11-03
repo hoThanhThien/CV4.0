@@ -6,21 +6,20 @@ use App\Models\AiProvider;
 
 class DeepSeekProvider extends OpenAIProvider
 {
-    protected string $defaultBaseUrl = 'https://api.deepseek.com';
+    protected function defaultBaseUrl(): string
+    {
+        return rtrim((string) config('ai.providers.deepseek.base_url', 'https://api.deepseek.com'), '/');
+    }
 
     public function testConnection(AiProvider $provider): array
     {
         $providerCopy = clone $provider;
         if (empty($providerCopy->base_url)) {
-            $providerCopy->base_url = $this->defaultBaseUrl;
-        }
-        if (empty($providerCopy->model)) {
-            $providerCopy->model = 'deepseek-chat';
+            $providerCopy->base_url = $this->defaultBaseUrl();
         }
 
         $result = parent::testConnection($providerCopy);
 
-        // Customize message for DeepSeek
         if ($result['success']) {
             $result['message'] = "Kết nối DeepSeek thành công! Model '{$providerCopy->model}' khả dụng.";
         } else {
@@ -38,10 +37,7 @@ class DeepSeekProvider extends OpenAIProvider
     ): array {
         $providerCopy = clone $provider;
         if (empty($providerCopy->base_url)) {
-            $providerCopy->base_url = $this->defaultBaseUrl;
-        }
-        if (empty($providerCopy->model)) {
-            $providerCopy->model = 'deepseek-chat';
+            $providerCopy->base_url = $this->defaultBaseUrl();
         }
 
         return parent::generateBlogContent($providerCopy, $systemPrompt, $userPrompt, $modelOverride);

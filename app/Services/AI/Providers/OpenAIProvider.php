@@ -12,7 +12,53 @@ use Throwable;
 
 class OpenAIProvider implements AIProviderInterface
 {
-    protected string $defaultBaseUrl = 'https://api.openai.com/v1';
+    protected function defaultBaseUrl(): string
+    {
+        return rtrim((string) config('ai.providers.openai.base_url', 'https://api.openai.com/v1'), '/');
+    }
+
+    /**
+     * Dynamically fetch available models from an OpenAI-compatible `/models` endpoint.
+     *
+     * @return array<int, array{id: string, display_name: string}>
+     */
+    public function discoverModels(string $apiKey, ?string $configuredBaseUrl = null): array
+    {
+        $apiKey = trim($apiKey);
+        if ($apiKey === '') {
+            return [];
+        }
+
+        $baseUrl = rtrim($configuredBaseUrl ?: $this->defaultBaseUrl(), '/');
+
+        try {
+            $resp = $this->httpClient($apiKey, 15)->get($baseUrl . '/models');
+            if (!$resp->successful()) {
+                return [];
+            }
+
+            $items = $resp->json('data');
+            if (!is_array($items)) {
+                return [];
+            }
+
+            $models = [];
+            foreach ($items as $item) {
+                $id = trim((string) ($item['id'] ?? ''));
+                if ($id === '' || str_contains($id, 'embedding') || str_contains($id, 'whisper') || str_contains($id, 'tts') || str_contains($id, 'dall-e')) {
+                    continue;
+                }
+                $models[] = [
+                    'id' => $id,
+                    'display_name' => $id,
+                ];
+            }
+
+            return $models;
+        } catch (Throwable $e) {
+            return [];
+        }
+    }
 
     protected function httpClient(string $apiKey, int $timeout): PendingRequest
     {
@@ -55,8 +101,12 @@ class OpenAIProvider implements AIProviderInterface
             ];
         }
 
-        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
-        $model = trim($provider->model ?: 'gpt-4o-mini');
+        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl(), '/');
+        $model = trim((string) $provider->model);
+        if ($model === '') {
+            $discovered = $this->discoverModels($apiKey, $baseUrl);
+            $model = $discovered[0]['id'] ?? '';
+        }
         $timeout = max(15, (int) ($provider->timeout ?: 30));
 
         try {
@@ -135,8 +185,12 @@ class OpenAIProvider implements AIProviderInterface
             ];
         }
 
-        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl, '/');
-        $model = trim($modelOverride ?: ($provider->model ?: 'gpt-4o-mini'));
+        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl(), '/');
+        $model = trim((string) ($modelOverride ?: $provider->model));
+        if ($model === '') {
+            $discovered = $this->discoverModels($apiKey, $baseUrl);
+            $model = $discovered[0]['id'] ?? '';
+        }
         $temperature = (float) ($provider->temperature ?? 0.7);
         $maxTokens = max(2000, (int) ($provider->max_tokens ?? 4096));
         $timeout = max(90, (int) ($provider->timeout ?? 120));

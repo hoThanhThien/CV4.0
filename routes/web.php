@@ -228,6 +228,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\AIDashboardController::class, 'index'])->name('dashboard');
 
             // Providers
+            Route::post('providers/fetch-models', [App\Http\Controllers\Admin\AIProviderController::class, 'fetchModels'])->name('providers.fetch-models');
             Route::post('providers/{provider}/test', [App\Http\Controllers\Admin\AIProviderController::class, 'testConnection'])->name('providers.test');
             Route::post('providers/{provider}/set-default', [App\Http\Controllers\Admin\AIProviderController::class, 'setDefault'])->name('providers.set-default');
             Route::post('providers/{provider}/toggle-active', [App\Http\Controllers\Admin\AIProviderController::class, 'toggleActive'])->name('providers.toggle-active');
