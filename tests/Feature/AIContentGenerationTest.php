@@ -287,4 +287,36 @@ class AIContentGenerationTest extends TestCase
                 && ($request['response_format']['type'] ?? null) === 'object';
         });
     }
+
+    public function test_json_cleaner_repairs_php_namespaces_inner_code_fences_and_unescaped_html_quotes()
+    {
+        // Reproduces exact failure mode on long PHP/Laravel articles (finishReason: STOP):
+        // - Unescaped PHP backslashes (\A, \S, \U in App\Services\Users, \$service, \d+)
+        // - Inner ```php code fences inside content (must NOT truncate outer JSON!)
+        // - Unescaped HTML attribute double quotes (<h2 class="section">)
+        $malformedStopJson = <<<'RAW'
+{
+  "title": "Kiến trúc Laravel thực chiến với AI Service Layer",
+  "slug": "kien-truc-laravel-thuc-chien-ai-service",
+  "excerpt": "Hướng dẫn tổ chức Service Layer trong Laravel.",
+  "content": "<h2 class="intro">1. Cấu trúc Namespace</h2><p>Ví dụ:</p><pre><code>```php
+namespace App\Services\Users;
+use Illuminate\Support\Facades\Http;
+$pattern = '/\d+/';
+```</code></pre>",
+  "meta_title": "Kiến trúc Laravel AI",
+  "meta_description": "Hướng dẫn thực chiến Laravel Service Layer.",
+  "keywords": ["Laravel", "Architecture"],
+  "category": "Technology",
+  "tags": ["Laravel", "PHP"],
+}
+RAW;
+
+        $decoded = \App\Services\AI\Support\JsonCleaner::decode($malformedStopJson);
+
+        $this->assertIsArray($decoded);
+        $this->assertEquals('Kiến trúc Laravel thực chiến với AI Service Layer', $decoded['title']);
+        $this->assertStringContainsString('App\Services\Users', $decoded['content']);
+        $this->assertStringContainsString('Illuminate\Support\Facades\Http', $decoded['content']);
+    }
 }

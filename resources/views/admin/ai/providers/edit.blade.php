@@ -80,12 +80,17 @@
 
         <!-- Model -->
         <div style="margin-bottom:1.5rem">
-            <label for="model" style="display:block; font-weight:600; margin-bottom:0.5rem">Model AI sử dụng <span style="color:var(--danger)">*</span></label>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.75rem; margin-bottom:0.5rem; flex-wrap:wrap">
+                <label for="model" style="font-weight:600; margin:0">Model AI sử dụng <span style="color:var(--danger)">*</span></label>
+                <button type="button" id="btnFetchModels" onclick="fetchLiveModels()" class="btn btn-secondary" style="padding:0.35rem 0.75rem; font-size:0.8rem">
+                    <i class="fas fa-sync-alt" id="fetchModelsIcon"></i> Lấy danh sách Model từ API
+                </button>
+            </div>
             <input type="text" id="model" name="model" class="form-control" value="{{ old('model', $provider->model) }}" required style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px">
             <div id="model-suggestions" style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap">
             </div>
             <small id="model-help" style="color:var(--text-muted); display:block; margin-top:0.4rem; font-size:0.83rem">
-                <i class="fas fa-info-circle"></i> Nhập chính xác mã model (VD với Gemini khuyên dùng: <code>gemini-3.5-flash</code>, <code>gemini-3.8-flash</code> hoặc <code>gemini-3.5-flash-lite</code>). Chuẩn Google AI Studio <code>Interactions API (/v1beta/interactions)</code> với xác thực header <code>x-goog-api-key</code>.
+                <i class="fas fa-info-circle"></i> Bấm <strong>Lấy danh sách Model từ API</strong> để tải trực tiếp các model đang khả dụng trên tài khoản của bạn (không hardcode).
             </small>
         </div>
 
@@ -135,39 +140,66 @@
 
 @section('scripts')
 <script>
-    const modelSuggestions = {
-        openai: ['gpt-4o-mini', 'gpt-4o', 'gpt-4.1-mini'],
-        gemini: ['gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
-        deepseek: ['deepseek-chat', 'deepseek-reasoner'],
-        custom: ['llama-3.3-70b-versatile', 'qwen-qwq-32b']
-    };
-
     function onProviderTypeChange(type) {
         const baseUrlGroup = document.getElementById('base_url_group');
         const suggestionsBox = document.getElementById('model-suggestions');
 
-        if (type === 'custom') {
-            baseUrlGroup.style.display = 'block';
-        } else {
-            baseUrlGroup.style.display = 'none';
+        baseUrlGroup.style.display = (type === 'custom') ? 'block' : 'none';
+        if (suggestionsBox) {
+            suggestionsBox.innerHTML = '';
         }
-
-        const list = modelSuggestions[type] || [];
-        suggestionsBox.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted)">Gợi ý mã model:</span> ' +
-            list.map(m => `<button type="button" onclick="selectModel('${m}')" class="badge" style="cursor:pointer; background:rgba(99,102,241,0.1); color:var(--accent); border:1px solid rgba(99,102,241,0.2); padding:0.3rem 0.6rem; border-radius:6px; font-family:monospace; margin-right:4px">${m}</button>`).join(' ');
     }
 
     function selectModel(m) {
         document.getElementById('model').value = m;
     }
 
-    // Auto-clean model input on blur
+    async function fetchLiveModels() {
+        const type = document.querySelector('input[name="provider_type"]:checked')?.value || '{{ $provider->provider_type }}';
+        const apiKey = document.getElementById('api_key').value.trim();
+        const baseUrl = document.getElementById('base_url')?.value.trim() || '';
+        const suggestionsBox = document.getElementById('model-suggestions');
+        const icon = document.getElementById('fetchModelsIcon');
+
+        icon.classList.add('fa-spin');
+        suggestionsBox.innerHTML = '<span style="font-size:0.82rem; color:var(--text-muted)">Đang truy vấn danh sách Model trực tiếp từ API...</span>';
+
+        try {
+            const resp = await fetch("{{ route('admin.ai.providers.fetch-models') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    provider_id: {{ (int) $provider->id }},
+                    provider_type: type,
+                    api_key: apiKey || null,
+                    base_url: baseUrl || null
+                })
+            });
+            const data = await resp.json();
+
+            if (!resp.ok || !data.success || !Array.isArray(data.models)) {
+                suggestionsBox.innerHTML = `<span style="font-size:0.82rem; color:var(--danger)">${data.message || 'Không thể tải danh sách model.'}</span>`;
+                return;
+            }
+
+            suggestionsBox.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted); width:100%">Model khả dụng trên API (' + data.models.length + '):</span> ' +
+                data.models.slice(0, 12).map(m => `<button type="button" onclick="selectModel('${m.id}')" title="${m.display_name || m.id}" class="badge" style="cursor:pointer; background:rgba(99,102,241,0.1); color:var(--accent); border:1px solid rgba(99,102,241,0.2); padding:0.3rem 0.6rem; border-radius:6px; font-family:monospace">${m.id}</button>`).join(' ');
+        } catch (err) {
+            suggestionsBox.innerHTML = '<span style="font-size:0.82rem; color:var(--danger)">Lỗi kết nối khi truy vấn danh sách Model.</span>';
+        } finally {
+            icon.classList.remove('fa-spin');
+        }
+    }
+
     document.getElementById('model').addEventListener('blur', function() {
         const type = document.querySelector('input[name="provider_type"]:checked')?.value;
         let val = this.value.trim();
-        if (type === 'gemini') {
+        if (type === 'gemini' && val) {
             val = val.replace(/^models\//i, '').replace(/^\/+/, '').trim().toLowerCase().replace(/\s+/g, '-');
-            if (['', 'gemini', 'google-gemini', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-exp', 'gemini-1.5-pro'].includes(val)) val = 'gemini-3.5-flash';
         }
         this.value = val;
     });

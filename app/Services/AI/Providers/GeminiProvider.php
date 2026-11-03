@@ -198,7 +198,7 @@ class GeminiProvider implements AIProviderInterface
                     'computer-use',
                     'image-generation',
                     'image-preview',
-                    'live',
+                    'native-audio',
                     'learnlm',
                 ];
 
@@ -288,11 +288,11 @@ class GeminiProvider implements AIProviderInterface
             $score += ($major * 100) + ($minor * 10);
         }
 
-        // Prefer fast general-purpose Flash models for reliable blog generation & lower latency
+        // Strongly prefer standard general-purpose Flash / Pro text models over experimental code-named variants
         if (str_contains($id, 'flash')) {
-            $score += 35;
+            $score += 250;
         } elseif (str_contains($id, 'pro')) {
-            $score += 20;
+            $score += 200;
         }
 
         // Prefer stable releases over preview/experimental snapshots

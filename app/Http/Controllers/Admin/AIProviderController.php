@@ -103,14 +103,81 @@ class AIProviderController extends Controller
         }
 
         $type = $validated['provider_type'];
-        $model = trim($validated['model']);
+        $model = trim((string) ($validated['model'] ?? ''));
 
         if ($type === 'gemini') {
-            $model = (new \App\Services\AI\Providers\GeminiProvider())->normalizeModel($model);
+            $gemini = new \App\Services\AI\Providers\GeminiProvider();
+            $normalized = $gemini->normalizeModel($model);
+            if ($normalized === '' && !empty($validated['api_key'])) {
+                $discovered = $gemini->discoverModels($validated['api_key'], $validated['base_url'] ?? null);
+                $normalized = $discovered[0]['id'] ?? '';
+            }
+            $model = $normalized !== '' ? $normalized : $model;
         }
 
         $validated['model'] = $model;
         return $validated;
+    }
+
+    /**
+     * Dynamically fetch available models from the selected AI Provider API using the supplied or saved API key.
+     */
+    public function fetchModels(Request $request)
+    {
+        $validated = $request->validate([
+            'provider_type' => 'required|in:openai,gemini,deepseek,custom',
+            'api_key' => 'nullable|string',
+            'provider_id' => 'nullable|integer|exists:ai_providers,id',
+            'base_url' => 'nullable|url|max:255',
+        ]);
+
+        $apiKey = trim((string) ($validated['api_key'] ?? ''));
+        $baseUrl = !empty($validated['base_url']) ? trim($validated['base_url']) : null;
+
+        if ($apiKey === '' && !empty($validated['provider_id'])) {
+            $existing = AiProvider::find($validated['provider_id']);
+            if ($existing && $existing->canDecryptApiKey()) {
+                $apiKey = trim((string) $existing->getDecryptedApiKey());
+                if ($baseUrl === null && !empty($existing->base_url)) {
+                    $baseUrl = $existing->base_url;
+                }
+            }
+        }
+
+        if ($apiKey === '') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vui lòng nhập API Key trước khi tải danh sách Model từ nhà cung cấp.',
+                'models' => [],
+            ], 422);
+        }
+
+        $type = $validated['provider_type'];
+
+        if ($type === 'gemini') {
+            $gemini = new \App\Services\AI\Providers\GeminiProvider();
+            $models = $gemini->discoverModels($apiKey, $baseUrl, true);
+        } elseif ($type === 'deepseek') {
+            $ds = new \App\Services\AI\Providers\DeepSeekProvider();
+            $models = $ds->discoverModels($apiKey, $baseUrl ?: config('ai.providers.deepseek.base_url'));
+        } else {
+            $oa = new \App\Services\AI\Providers\OpenAIProvider();
+            $models = $oa->discoverModels($apiKey, $baseUrl);
+        }
+
+        if (empty($models)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không lấy được danh sách Model từ API (kiểm tra lại API Key hoặc Base URL).',
+                'models' => [],
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã tải ' . count($models) . ' model khả dụng trực tiếp từ API.',
+            'models' => $models,
+        ]);
     }
 
     public function destroy($id)
