@@ -363,7 +363,8 @@
     .project-meta-top {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.55rem;
         margin-bottom: 0.85rem;
     }
     .project-index-code {
@@ -372,6 +373,19 @@
         color: var(--accent-lime);
         font-weight: 700;
         letter-spacing: 0.06em;
+        margin-right: auto;
+    }
+    .project-meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: var(--radius-sm);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        color: #CBD5E1;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
     }
     .project-featured-tag {
         font-family: var(--font-mono);
@@ -1174,14 +1188,14 @@
         <div class="projects-case-stack" data-stagger>
             @foreach($featuredProjects->take(3) as $index => $project)
                 @php
-                    $cleanDesc = $project->clean_description ? $project->summary : $project->description;
+                    $cleanDesc = $project->summary ?: Str::limit($project->clean_description, 160);
                     $hostLabel = $project->demo_url
                         ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
                         : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'project.spec');
                     $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
                     $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
                     $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
-                    $hasCustomImage = $project->image && !str_contains($project->image, 'placeholder') && !str_contains($project->image, 'stock') && file_exists(public_path('storage/' . $project->image));
+                    $hasCustomImage = $project->has_real_image;
                 @endphp
                 <article class="project-showcase-row {{ $index % 2 === 1 ? 'is-reversed' : '' }}" data-reveal>
                     <a href="{{ route('projects.show', $project->id) }}" class="project-showcase-media" aria-label="{{ $project->title }}">
@@ -1276,6 +1290,12 @@
                     <div class="project-showcase-info">
                         <div class="project-meta-top">
                             <span class="project-index-code">CASE STUDY // {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                            @if($project->period)
+                                <span class="project-meta-pill"><i class="fas fa-calendar-alt"></i> {{ $project->period }}</span>
+                            @endif
+                            @if($project->role)
+                                <span class="project-meta-pill"><i class="fas fa-user-tag"></i> {{ $project->role }}</span>
+                            @endif
                             @if($project->featured)
                                 <span class="project-featured-tag">{{ __('Featured') }}</span>
                             @endif
@@ -1288,6 +1308,17 @@
                         <p class="project-showcase-desc">
                             {{ $cleanDesc }}
                         </p>
+
+                        @if(count($project->highlights) > 1)
+                        <ul class="project-highlights-list" style="list-style:none; padding:0; margin:0 0 1.15rem; display:flex; flex-direction:column; gap:0.4rem;">
+                            @foreach(array_slice($project->highlights, 1, 2) as $highlight)
+                                <li style="display:flex; align-items:flex-start; gap:0.5rem; font-size:0.84rem; line-height:1.5; color:#CBD5E1;">
+                                    <i class="fas fa-chevron-right" style="color:var(--accent-lime); font-size:0.68rem; margin-top:0.35rem; flex-shrink:0;"></i>
+                                    <span>{{ $highlight }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                        @endif
 
                         @if($project->technologies->count())
                         <div class="project-showcase-tags">

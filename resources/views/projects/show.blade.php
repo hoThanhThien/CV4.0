@@ -163,7 +163,7 @@
     $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
     $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
     $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
-    $hasCustomImage = $project->image && !str_contains($project->image, 'placeholder') && !str_contains($project->image, 'stock') && file_exists(public_path('storage/' . $project->image));
+    $hasCustomImage = $project->has_real_image;
 @endphp
 
 <section class="project-hero">
@@ -269,6 +269,25 @@
                                 </div>
                             </div>
                         </div>
+                    @endif
+                </div>
+
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:0.55rem; margin-bottom:0.85rem; font-family:var(--font-mono); font-size:0.76rem;">
+                    @if($project->period)
+                        <span style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.55rem; border-radius:var(--radius-sm); background:rgba(255,255,255,0.03); border:1px solid var(--border); color:#CBD5E1;">
+                            <i class="fas fa-calendar-alt"></i> {{ $project->period }}
+                        </span>
+                    @endif
+                    @if($project->role)
+                        <span style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.55rem; border-radius:var(--radius-sm); background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--text-primary);">
+                            <i class="fas fa-user-tag"></i> {{ $project->role }}
+                        </span>
+                    @endif
+                    @if($project->featured)
+                        <span style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.55rem; border-radius:var(--radius-sm); background:rgba(198,244,50,0.12); border:1px solid rgba(198,244,50,0.3); color:var(--accent-lime); font-weight:700;">
+                            <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--accent-lime);"></span>
+                            {{ __('Featured') }}
+                        </span>
                     @endif
                 </div>
 

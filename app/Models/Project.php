@@ -75,6 +75,58 @@ class Project extends Model
     }
 
     /**
+     * Clean parsed period (e.g. 08/2026 — 10/2026).
+     */
+    public function getPeriodAttribute(): ?string
+    {
+        $desc = (string) $this->description;
+        if (preg_match('/(?:\|\s*)?(\d{2}\/\d{4}\s*-\s*(?:\d{2}\/\d{4}|Present))/i', $desc, $m)) {
+            return str_replace('-', '—', trim($m[1]));
+        }
+        return null;
+    }
+
+    /**
+     * Clean parsed engineering role.
+     */
+    public function getRoleAttribute(): ?string
+    {
+        $desc = (string) $this->description;
+        $lines = preg_split('/\r\n|\r|\n/', $desc);
+        foreach ($lines as $line) {
+            $trimmed = trim($line);
+            if (preg_match('/^(Fullstack\s*Developer|Backend|Back\s*End|Frontend|Front\s*End|Software\s*Engineer|Developer)/i', $trimmed, $m)) {
+                $role = trim($m[1]);
+                if (strtolower($role) === 'back end') return 'Backend Engineer';
+                if (strtolower($role) === 'front end') return 'Frontend Engineer';
+                return $role;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Determine if project has a verified real screenshot (not a generic stock laptop placeholder).
+     */
+    public function getHasRealImageAttribute(): bool
+    {
+        if (empty($this->image)) {
+            return false;
+        }
+
+        $lower = strtolower($this->image);
+        $banned = ['placeholder', 'stock', 'og-image', 'programmer', 'solution', 'banner', 'default', 'laptop', 'sample'];
+        foreach ($banned as $needle) {
+            if (str_contains($lower, $needle)) {
+                return false;
+            }
+        }
+
+        $fullPath = public_path('storage/' . ltrim($this->image, '/'));
+        return is_file($fullPath);
+    }
+
+    /**
      * First concise summary sentence for cards and previews.
      */
     public function getSummaryAttribute(): string
