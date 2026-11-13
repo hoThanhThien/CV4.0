@@ -120,7 +120,15 @@
             width: 34px; height: 34px; border-radius: 7px;
             background: var(--text); color: #ffffff;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.86rem;
+            font-weight: 700; font-size: 0.86rem; text-decoration: none;
+            border: 1px solid var(--text);
+            transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.15s ease, box-shadow 0.16s ease;
+        }
+        .topbar-avatar:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
         }
 
         /* Content area */
@@ -500,6 +508,9 @@
             <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-chart-pie"></i> Dashboard
             </a>
+            <a href="{{ route('admin.profile.index') }}" class="{{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
+                <i class="fas fa-user-shield"></i> Admin Profile
+            </a>
 
             <div class="nav-section-title" style="margin-top:1rem">Content</div>
             <a href="{{ route('admin.projects.index') }}" class="{{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
@@ -594,7 +605,9 @@
                 <a href="{{ route('home') }}" target="_blank" class="btn btn-secondary btn-sm">
                     <i class="fas fa-external-link-alt"></i> View Site
                 </a>
-                <div class="topbar-avatar">A</div>
+                <a href="{{ route('admin.profile.index') }}" class="topbar-avatar" title="Admin Profile ({{ Auth::user()->email ?? 'Admin' }})">
+                    {{ strtoupper(mb_substr(Auth::user()->name ?? 'A', 0, 1)) }}
+                </a>
             </div>
         </header>
 

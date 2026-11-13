@@ -219,6 +219,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Protected admin routes
     Route::middleware('admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
+        Route::put('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::delete('/profile/tokens/{token}', [App\Http\Controllers\Admin\ProfileController::class, 'destroyToken'])->name('profile.tokens.destroy');
         Route::resource('projects', App\Http\Controllers\Admin\ProjectController::class)->except(['show']);
         Route::post('technologies/quick', [App\Http\Controllers\Admin\TechnologyController::class, 'quick'])->name('technologies.quick');
         Route::resource('technologies', App\Http\Controllers\Admin\TechnologyController::class)->except(['show']);
