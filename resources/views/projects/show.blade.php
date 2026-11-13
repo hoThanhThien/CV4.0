@@ -32,19 +32,22 @@
 @section('styles')
 <style>
     .project-hero {
-        padding: 2.5rem 0 1.25rem;
+        padding: 2rem 0 1.25rem;
         border-bottom: 1px solid var(--border);
         background: var(--bg-primary);
     }
     .project-hero .breadcrumb {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
         color: var(--text-muted);
-        font-size: 0.86rem;
-        word-break: break-word;
     }
     .project-hero .breadcrumb a {
         color: var(--text-secondary);
         text-decoration: none;
-        font-weight: 500;
     }
     .project-hero .breadcrumb a:hover {
         color: var(--accent);
@@ -53,8 +56,8 @@
 
     .project-detail {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 320px;
-        gap: 2.75rem;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        gap: clamp(1.75rem, 4vw, 3.25rem);
         align-items: start;
         width: 100%;
     }
@@ -64,37 +67,36 @@
     }
 
     .project-image-full {
-        border-radius: 10px;
+        border-radius: var(--radius-lg);
         overflow: hidden;
         margin-bottom: 2rem;
-        border: 1px solid var(--border);
-        background: var(--bg-secondary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border: 1px solid var(--border-strong);
+        background: var(--surface-ink);
+        aspect-ratio: 16 / 9;
         width: 100%;
+        box-shadow: var(--shadow-md);
     }
     .project-image-full img {
         width: 100%;
-        height: auto;
-        max-height: 460px;
+        height: 100%;
         object-fit: cover;
         display: block;
     }
 
     .project-title {
-        font-size: clamp(1.75rem, 3.8vw, 2.45rem);
-        font-weight: 700;
+        font-family: var(--font-display);
+        font-size: clamp(1.85rem, 3.8vw, 2.75rem);
+        font-weight: 800;
         color: var(--text-primary);
         margin-bottom: 1.15rem;
-        letter-spacing: -0.025em;
-        line-height: 1.22;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
         word-break: break-word;
     }
     .project-desc {
         color: var(--text-secondary);
-        font-size: 1rem;
-        line-height: 1.78;
+        font-size: 1.02rem;
+        line-height: 1.8;
         max-width: 68ch;
         word-break: break-word;
         overflow-wrap: break-word;
@@ -104,19 +106,22 @@
     .project-sidebar {
         min-width: 0;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
     @media (min-width: 961px) {
         .project-sidebar {
             position: sticky;
-            top: 88px;
+            top: 90px;
         }
     }
     .project-sidebar .card {
-        margin-bottom: 1.15rem;
-        padding: 1.25rem;
+        padding: 1.3rem;
     }
     .project-sidebar .card h4 {
-        font-size: 0.86rem;
+        font-family: var(--font-mono);
+        font-size: 0.76rem;
         font-weight: 600;
         color: var(--text-muted);
         margin-bottom: 0.85rem;
@@ -135,29 +140,35 @@
         display: flex;
         align-items: center;
         gap: 0.6rem;
-        padding: 0.6rem 0;
+        padding: 0.65rem 0;
         border-bottom: 1px solid var(--border);
-        font-size: 0.9rem;
+        font-size: 0.92rem;
     }
     .project-meta-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .project-meta-item i { color: var(--text-muted); width: 16px; text-align: center; flex-shrink: 0; }
-    .project-meta-item a { color: var(--text-primary); text-decoration: none; font-weight: 500; word-break: break-word; }
+    .project-meta-item i { color: var(--accent); width: 16px; text-align: center; flex-shrink: 0; }
+    .project-meta-item a { color: var(--text-primary); text-decoration: none; font-weight: 600; word-break: break-word; }
     .project-meta-item a:hover { color: var(--accent); text-decoration: underline; }
 
     @media (max-width: 960px) {
-        .project-hero { padding: 2rem 0 1rem; }
         .project-detail { grid-template-columns: 100%; gap: 2rem; }
-        .project-image-full { margin-bottom: 1.5rem; }
     }
 </style>
 @endsection
 
 @section('content')
+@php
+    $hostLabel = $project->demo_url
+        ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
+        : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'architecture.spec');
+@endphp
+
 <section class="project-hero">
     <div class="container">
         <div class="breadcrumb">
-            <a href="{{ route('home') }}">{{ __('Home') }}</a> /
-            <a href="{{ route('projects.index') }}">{{ __('Projects') }}</a> /
+            <a href="{{ route('home') }}">{{ __('Home') }}</a>
+            <span>/</span>
+            <a href="{{ route('projects.index') }}">{{ __('Projects') }}</a>
+            <span>/</span>
             <span>{{ $project->title }}</span>
         </div>
     </div>
@@ -170,9 +181,38 @@
             <div>
                 <div class="project-image-full">
                     @if($project->image)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="specimen-plate" style="display:none;">
+                            <div class="specimen-topbar">
+                                <span class="specimen-dots"><span></span><span></span><span></span></span>
+                                <span class="specimen-host">{{ $hostLabel }}</span>
+                            </div>
+                            <div class="specimen-center">
+                                <div class="specimen-index">CASE STUDY // #{{ $project->id }}</div>
+                                <div class="specimen-title">{{ $project->title }}</div>
+                            </div>
+                            <div class="specimen-footer">
+                                @foreach($project->technologies->take(6) as $t)
+                                    <span class="specimen-pill">{{ $t->name }}</span>
+                                @endforeach
+                            </div>
+                        </div>
                     @else
-                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} Thumbnail" loading="lazy" decoding="async">
+                        <div class="specimen-plate">
+                            <div class="specimen-topbar">
+                                <span class="specimen-dots"><span></span><span></span><span></span></span>
+                                <span class="specimen-host">{{ $hostLabel }}</span>
+                            </div>
+                            <div class="specimen-center">
+                                <div class="specimen-index">CASE STUDY // #{{ $project->id }}</div>
+                                <div class="specimen-title">{{ $project->title }}</div>
+                            </div>
+                            <div class="specimen-footer">
+                                @foreach($project->technologies->take(6) as $t)
+                                    <span class="specimen-pill">{{ $t->name }}</span>
+                                @endforeach
+                            </div>
+                        </div>
                     @endif
                 </div>
 
@@ -220,7 +260,11 @@
                 </div>
                 @endif
 
-                <a href="{{ route('projects.index') }}" class="btn btn-outline" style="width:100%; justify-content:center">
+                <a href="{{ route('contact') }}" class="btn btn-primary" style="width:100%;">
+                    <i class="fas fa-paper-plane"></i> {{ __('Contact Me') }}
+                </a>
+
+                <a href="{{ route('projects.index') }}" class="btn btn-outline" style="width:100%;">
                     <i class="fas fa-arrow-left"></i> {{ __('Back to Projects') }}
                 </a>
             </aside>

@@ -1,524 +1,500 @@
 @extends('layouts.app')
 
 @section('title', __('About Me') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.'))
-@section('keywords', app()->getLocale() == 'vi' ? 'Về Hồ Thành Thiện, Hồ Thành Thiện Full-Stack Developer, Kinh nghiệm lập trình, Kỹ năng Web Developer, UTH, Odoo Developer, RAG LLM' : 'About Ho Thanh Thien, Full-Stack Developer Experience, Web Developer Skills, Laravel Software Engineer, UTH, Odoo Developer, RAG LLM')
+@section('description', app()->getLocale() == 'vi' ? 'Tìm hiểu về Hồ Thành Thiện — Kỹ sư Full-Stack Web Developer (ĐH GTVT TP.HCM), thành tích GPA 4.0/4.0, tốt nghiệp Xuất sắc, giải thưởng thiết kế logo và kinh nghiệm lập trình.' : 'Learn more about Ho Thanh Thien — Full-Stack Web Developer (UTH), academic honors (4.0 GPA, Excellent Graduation), design award, and engineering experience.')
+@section('keywords', app()->getLocale() == 'vi' ? 'Về Hồ Thành Thiện, Hồ Thành Thiện UTH, Google Developer Chapter UTH, Kỹ sư phần mềm Full-Stack' : 'About Ho Thanh Thien, UTH IT Engineer, Google Developer Chapter, Full-Stack Developer Profile')
 
 @section('styles')
 <style>
-    .about-header {
-        padding: 3.75rem 0 3rem;
-        background: var(--bg-secondary, #eef1f5);
-        border-bottom: 1px solid var(--border, #dce1e9);
+    .about-hero {
+        padding: clamp(2.75rem, 5vw, 4.25rem) 0 clamp(2.5rem, 4.5vw, 3.5rem);
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-strong);
     }
-    .about-intro {
+
+    .about-hero-grid {
         display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 2.5rem;
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: clamp(1.75rem, 4vw, 3.5rem);
         align-items: start;
     }
-    .about-monogram {
-        width: 112px;
-        height: 112px;
-        border-radius: 12px;
-        background: var(--text-primary, #12161f);
-        color: #ffffff;
+
+    .about-monogram-plate {
+        background: var(--surface-ink);
+        color: #FFFFFF;
+        border: 1px solid #232938;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem 1.25rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        border: 1px solid var(--text-primary, #12161f);
-        box-shadow: 0 8px 24px rgba(18, 22, 31, 0.08);
+        text-align: center;
+        box-shadow: var(--shadow-md);
     }
-    .about-monogram .initials {
-        font-size: 2.35rem;
-        font-weight: 700;
-        letter-spacing: -0.04em;
+    .about-monogram-initials {
+        font-family: var(--font-display);
+        font-size: 3.1rem;
+        font-weight: 800;
         line-height: 1;
+        letter-spacing: -0.05em;
+        color: #FFFFFF;
+        margin-bottom: 0.55rem;
     }
-    .about-monogram .monogram-tag {
-        margin-top: 0.35rem;
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 0.7rem;
-        color: #9aa5b8;
+    .about-monogram-tag {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: #93C5FD;
+        padding: 0.2rem 0.6rem;
+        border: 1px solid rgba(147, 197, 253, 0.25);
+        border-radius: var(--radius-sm);
+    }
+    .about-monogram-meta {
+        margin-top: 1.15rem;
+        padding-top: 0.9rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        width: 100%;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: #9CA3AF;
+        line-height: 1.5;
     }
 
-    .about-text h1 {
-        font-size: clamp(1.9rem, 4vw, 2.75rem);
-        font-weight: 700;
-        letter-spacing: -0.025em;
-        color: var(--text-primary, #12161f);
-        line-height: 1.15;
-        margin-bottom: 0.45rem;
+    .about-hero-text h1 {
+        font-size: clamp(2rem, 4.4vw, 3.3rem);
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -0.035em;
+        margin-bottom: 0.5rem;
     }
-    .about-role {
-        font-size: 1.05rem;
+    .about-role-line {
+        font-family: var(--font-mono);
+        font-size: 0.88rem;
         font-weight: 600;
-        color: var(--accent, #1e40af);
-        margin-bottom: 1rem;
+        color: var(--accent);
+        margin-bottom: 1.15rem;
     }
-    .about-bio {
-        font-size: 1rem;
-        color: var(--text-secondary, #434d5e);
-        line-height: 1.7;
-        max-width: 65ch;
-        margin-bottom: 1.35rem;
+    .about-lead-bio {
+        font-size: 1.04rem;
+        color: var(--text-secondary);
+        line-height: 1.72;
+        max-width: 64ch;
+        margin-bottom: 1.4rem;
     }
 
-    .about-quick-meta {
+    .about-meta-strip {
         display: flex;
         flex-wrap: wrap;
         gap: 0.55rem;
-        margin-bottom: 1.6rem;
+        margin-bottom: 1.5rem;
     }
     .about-meta-chip {
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
-        padding: 0.4rem 0.8rem;
-        background: var(--bg-card, #ffffff);
-        border: 1px solid var(--border, #dce1e9);
-        border-radius: 6px;
+        gap: 0.42rem;
+        padding: 0.34rem 0.72rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
         font-size: 0.84rem;
-        color: var(--text-secondary, #434d5e);
+        color: var(--text-secondary);
         text-decoration: none;
-        transition: border-color 0.15s ease, color 0.15s ease;
-    }
-    a.about-meta-chip:hover {
-        border-color: var(--text-primary, #12161f);
-        color: var(--text-primary, #12161f);
+        transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
     }
     .about-meta-chip i {
-        color: var(--accent, #1e40af);
-        font-size: 0.82rem;
+        color: var(--accent);
+        font-size: 0.8rem;
+    }
+    a.about-meta-chip:hover {
+        border-color: var(--text-primary);
+        color: var(--text-primary);
     }
 
-    .about-actions {
+    .about-cta-row {
         display: flex;
         flex-wrap: wrap;
         gap: 0.65rem;
-        align-items: center;
     }
 
-    @media (max-width: 768px) {
-        .about-intro {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-        .about-monogram {
-            width: 84px;
-            height: 84px;
-        }
-        .about-monogram .initials {
-            font-size: 1.85rem;
-        }
+    /* Engineering Principles & Narrative */
+    .story-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: clamp(1.75rem, 4vw, 3.5rem);
+        align-items: start;
     }
-
-    /* Section Headers */
-    .about-section {
-        padding: 4rem 0;
-    }
-    .about-section--tinted {
-        background: var(--bg-secondary, #eef1f5);
-        border-top: 1px solid var(--border, #dce1e9);
-        border-bottom: 1px solid var(--border, #dce1e9);
-    }
-    .about-section-head {
-        margin-bottom: 2rem;
-    }
-    .about-section-head h2 {
-        font-size: clamp(1.5rem, 3vw, 2rem);
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        color: var(--text-primary, #12161f);
-        margin-bottom: 0.35rem;
-    }
-    .about-section-head p {
-        font-size: 0.96rem;
-        color: var(--text-secondary, #434d5e);
+    .story-narrative p {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        line-height: 1.78;
+        margin-bottom: 1.1rem;
         max-width: 60ch;
     }
+    .story-pillars {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+    .pillar-row {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 1.15rem 1.25rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.9rem;
+    }
+    .pillar-num {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--accent);
+        background: var(--accent-soft);
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+    }
+    .pillar-title {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.2rem;
+    }
+    .pillar-desc {
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        line-height: 1.55;
+    }
 
-    /* Achievements Grid (Unified Calm Monochrome) */
+    /* Achievements Editorial Cards */
     .achievements-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.35rem;
+        gap: 1.25rem;
     }
-    @media (max-width: 1024px) {
-        .achievements-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-    }
-    @media (max-width: 640px) {
-        .achievements-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-    .achievement-card {
-        background: var(--bg-card, #ffffff);
-        border: 1px solid var(--border, #dce1e9);
-        border-radius: 10px;
+    .ach-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        transition: border-color var(--duration-fast, 160ms) ease, box-shadow var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), transform var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
     }
-    .achievement-card:hover {
-        border-color: var(--border-strong, #b8c2d1);
-        box-shadow: var(--shadow-md, 0 10px 24px -8px rgba(18, 22, 31, 0.1));
-        transform: translateY(-2px);
-    }
-    .achievement-top {
+    .ach-card-top {
         display: flex;
-        align-items: center;
+        align-items: baseline;
         justify-content: space-between;
-        margin-bottom: 1rem;
+        gap: 0.75rem;
+        padding-bottom: 0.9rem;
+        margin-bottom: 0.9rem;
+        border-bottom: 1px solid var(--border);
     }
-    .achievement-icon-wrap {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        background: var(--bg-secondary, #eef1f5);
-        border: 1px solid var(--border, #dce1e9);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent, #1e40af);
+    .ach-metric {
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        letter-spacing: -0.04em;
+        line-height: 1;
     }
-    .achievement-icon-wrap svg {
-        width: 20px;
-        height: 20px;
-    }
-    .achievement-year {
-        font-size: 0.8rem;
+    .ach-year {
+        font-family: var(--font-mono);
+        font-size: 0.76rem;
+        color: var(--accent);
         font-weight: 600;
-        color: var(--text-muted, #687385);
-        background: var(--bg-primary, #f7f8fa);
-        border: 1px solid var(--border, #dce1e9);
-        padding: 0.2rem 0.6rem;
-        border-radius: 5px;
     }
-    .achievement-subtitle {
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: var(--accent, #1e40af);
-        margin-bottom: 0.45rem;
-    }
-    .achievement-title {
-        font-size: 1.06rem;
+    .ach-title {
+        font-family: var(--font-display);
+        font-size: 1.08rem;
         font-weight: 700;
-        color: var(--text-primary, #12161f);
-        line-height: 1.4;
-        margin-bottom: 0.6rem;
+        color: var(--text-primary);
+        line-height: 1.35;
+        margin-bottom: 0.55rem;
     }
-    .achievement-desc {
+    .ach-desc {
         font-size: 0.9rem;
-        color: var(--text-secondary, #434d5e);
+        color: var(--text-secondary);
         line-height: 1.6;
-        margin-bottom: 1.15rem;
+        margin-bottom: 1rem;
         flex: 1;
     }
-    .achievement-tags {
+    .ach-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.4rem;
-        padding-top: 0.9rem;
-        border-top: 1px solid #eef1f5;
-    }
-    .achievement-tag {
-        font-size: 0.76rem;
-        font-weight: 500;
-        color: var(--text-secondary, #434d5e);
-        background: var(--bg-primary, #f7f8fa);
-        border: 1px solid var(--border, #dce1e9);
-        padding: 0.2rem 0.55rem;
-        border-radius: 4px;
+        gap: 0.35rem;
     }
 
     /* Education Ledger Card */
-    .education-card {
-        background: var(--bg-card, #ffffff);
-        border: 1px solid var(--border, #dce1e9);
-        border-radius: 10px;
-        padding: 2rem;
+    .education-plate {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: clamp(1.4rem, 3vw, 2rem);
     }
-    .education-header {
+    .education-head {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 1rem;
         flex-wrap: wrap;
-        padding-bottom: 1.35rem;
-        margin-bottom: 1.35rem;
-        border-bottom: 1px solid var(--border, #dce1e9);
+        gap: 1rem;
+        padding-bottom: 1.25rem;
+        margin-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border);
     }
     .education-school {
-        font-size: 1.25rem;
+        font-family: var(--font-display);
+        font-size: 1.3rem;
         font-weight: 700;
-        color: var(--text-primary, #12161f);
-        margin-bottom: 0.35rem;
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
-    }
-    .education-school i {
-        color: var(--accent, #1e40af);
+        color: var(--text-primary);
+        margin-bottom: 0.3rem;
     }
     .education-degree {
         font-size: 0.96rem;
-        font-weight: 500;
-        color: var(--text-secondary, #434d5e);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--accent);
     }
     .education-period {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.35rem 0.75rem;
-        background: var(--bg-primary, #f7f8fa);
-        border: 1px solid var(--border, #dce1e9);
-        border-radius: 6px;
-        font-size: 0.84rem;
-        font-weight: 600;
-        color: var(--text-primary, #12161f);
-        white-space: nowrap;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        padding: 0.32rem 0.75rem;
+        border-radius: var(--radius-sm);
     }
     .education-metrics {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.15rem 2rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
     }
-    @media (max-width: 640px) {
-        .education-card {
-            padding: 1.35rem;
-        }
-        .education-metrics {
-            grid-template-columns: 1fr;
-        }
-        .about-meta-chip {
-            max-width: 100%;
-            overflow-wrap: anywhere;
-        }
+    .edu-metric-box {
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 0.95rem 1.1rem;
     }
-    .education-metric-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
+    .edu-metric-label {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
     }
-    .education-metric-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 7px;
-        background: var(--bg-secondary, #eef1f5);
-        border: 1px solid var(--border, #dce1e9);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent, #1e40af);
-        flex-shrink: 0;
-        margin-top: 2px;
-    }
-    .education-metric-label {
-        font-size: 0.82rem;
-        font-weight: 500;
-        color: var(--text-muted, #687385);
-        margin-bottom: 0.15rem;
-    }
-    .education-metric-val {
+    .edu-metric-val {
+        font-family: var(--font-display);
         font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-primary, #12161f);
+        font-weight: 700;
+        color: var(--text-primary);
     }
 
-    /* Skills Index Grid */
-    .skills-categories-grid {
+    /* Grouped Skills 8-Domain Grid */
+    .about-skills-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.35rem;
+        gap: 1.25rem;
     }
-    @media (max-width: 768px) {
-        .skills-categories-grid {
-            grid-template-columns: 1fr;
-        }
+    .about-skill-panel {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 1.35rem 1.45rem;
     }
-    .skill-category-panel {
-        background: var(--bg-card, #ffffff);
-        border: 1px solid var(--border, #dce1e9);
-        border-radius: 10px;
-        padding: 1.5rem;
+    .about-skill-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 0.75rem;
+        margin-bottom: 0.85rem;
+        border-bottom: 1px solid var(--border);
     }
-    .skill-category-head {
+    .about-skill-title {
         display: flex;
         align-items: center;
         gap: 0.55rem;
-        font-size: 1.02rem;
+        font-family: var(--font-display);
+        font-size: 1.04rem;
         font-weight: 700;
-        color: var(--text-primary, #12161f);
-        padding-bottom: 0.85rem;
-        margin-bottom: 0.9rem;
-        border-bottom: 1px solid var(--border, #dce1e9);
+        color: var(--text-primary);
     }
-    .skill-category-head i {
-        color: var(--accent, #1e40af);
-        font-size: 0.92rem;
+    .about-skill-title i {
+        color: var(--accent);
+        font-size: 0.9rem;
     }
-    .skill-rows {
+    .about-skill-rows {
         display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
+        flex-wrap: wrap;
+        gap: 0.42rem;
+        margin-bottom: 0.65rem;
     }
-    .skill-row {
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid #f1f3f7;
-    }
-    .skill-row:last-child {
-        padding-bottom: 0;
-        border-bottom: none;
-    }
-    .skill-row-name {
-        display: flex;
+    .about-skill-chip {
+        display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
-        font-size: 0.93rem;
-        font-weight: 600;
-        color: var(--text-primary, #12161f);
-    }
-    .skill-row-name i {
-        color: var(--accent, #1e40af);
+        gap: 0.38rem;
+        padding: 0.32rem 0.62rem;
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
         font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text-primary);
     }
-    .skill-row-details {
-        margin-top: 0.25rem;
-        font-size: 0.85rem;
-        color: var(--text-secondary, #434d5e);
-        line-height: 1.55;
-        padding-left: 1.25rem;
+    .about-skill-chip i {
+        color: var(--accent);
+        font-size: 0.78rem;
     }
 
     /* Experience Ledger */
     .exp-ledger {
-        display: flex;
-        flex-direction: column;
-        border-top: 1px solid var(--border, #dce1e9);
+        border-top: 1px solid var(--border-strong);
     }
     .exp-ledger-row {
         display: grid;
-        grid-template-columns: 240px 1fr;
-        gap: 1.75rem;
+        grid-template-columns: 240px minmax(0, 1fr);
+        gap: 2rem;
         padding: 1.85rem 0;
-        border-bottom: 1px solid var(--border, #dce1e9);
+        border-bottom: 1px solid var(--border);
         align-items: start;
     }
-    @media (max-width: 768px) {
-        .exp-ledger-row {
-            grid-template-columns: 1fr;
-            gap: 0.85rem;
-        }
-    }
     .exp-ledger-date {
-        font-size: 0.84rem;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
         font-weight: 600;
-        color: var(--accent, #1e40af);
+        color: var(--accent);
         margin-bottom: 0.35rem;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
     }
     .exp-ledger-company {
-        font-size: 1.05rem;
+        font-family: var(--font-display);
+        font-size: 1.08rem;
         font-weight: 700;
-        color: var(--text-primary, #12161f);
-        line-height: 1.35;
+        color: var(--text-primary);
     }
     .exp-ledger-role {
-        font-size: 1.06rem;
+        font-family: var(--font-display);
+        font-size: 1.15rem;
         font-weight: 700;
-        color: var(--text-primary, #12161f);
+        color: var(--text-primary);
         margin-bottom: 0.65rem;
     }
     .exp-ledger-bullets {
         margin: 0 0 1rem 1.15rem;
-        padding: 0;
-        color: var(--text-secondary, #434d5e);
-        font-size: 0.93rem;
-        line-height: 1.65;
+        color: var(--text-secondary);
+        font-size: 0.94rem;
+        line-height: 1.68;
     }
     .exp-ledger-bullets li {
-        margin-bottom: 0.3rem;
-    }
-    .exp-ledger-p {
-        color: var(--text-secondary, #434d5e);
-        font-size: 0.93rem;
-        line-height: 1.65;
-        margin-bottom: 1rem;
-        max-width: 66ch;
+        margin-bottom: 0.38rem;
     }
     .exp-ledger-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.4rem;
+        gap: 0.38rem;
     }
-    .exp-ledger-tag {
-        font-size: 0.77rem;
-        font-weight: 500;
-        color: var(--text-secondary, #434d5e);
-        background: var(--bg-card, #ffffff);
-        border: 1px solid var(--border, #dce1e9);
-        padding: 0.2rem 0.6rem;
-        border-radius: 5px;
+
+    @media (max-width: 960px) {
+        .about-hero-grid { grid-template-columns: 1fr; }
+        .about-monogram-plate { max-width: 240px; }
+        .story-grid { grid-template-columns: 1fr; }
+        .achievements-grid { grid-template-columns: 1fr; }
+        .education-metrics { grid-template-columns: 1fr; }
+        .about-skills-grid { grid-template-columns: 1fr; }
+        .exp-ledger-row { grid-template-columns: 1fr; gap: 0.85rem; }
     }
 </style>
 @endsection
 
 @section('content')
-<!-- Hero & Summary -->
-<section class="about-header">
-    <div class="container">
-        <div class="about-intro hero-animate">
-            <div class="about-monogram" aria-hidden="true">
-                <span class="initials">HT</span>
-                <span class="monogram-tag">dev</span>
-            </div>
-            <div class="about-text">
-                <h1>{{ __("Hi, I'm") }} {{ __('Hồ Thành Thiện') }}</h1>
-                <div class="about-role">{{ __('Full-stack Developer') }}</div>
-                <p class="about-bio">{{ __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.') }}</p>
+@php $isVi = app()->getLocale() === 'vi'; @endphp
 
-                <div class="about-quick-meta">
-                    <a href="tel:0375227764" class="about-meta-chip">
-                        <i class="fas fa-phone-alt"></i> 0375227764
-                    </a>
-                    <a href="mailto:hothanhthien119@gmail.com" class="about-meta-chip">
-                        <i class="fas fa-envelope"></i> hothanhthien119@gmail.com
-                    </a>
-                    <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="about-meta-chip">
-                        <i class="fas fa-globe"></i> hothanhthien.io.vn
-                    </a>
-                    <span class="about-meta-chip">
-                        <i class="fas fa-location-dot"></i> HCM
-                    </span>
+<!-- Editorial Hero -->
+<section class="about-hero">
+    <div class="container">
+        <div class="about-hero-grid hero-animate">
+            <aside class="about-monogram-plate" aria-hidden="true">
+                <div class="about-monogram-initials">HT</div>
+                <div class="about-monogram-tag">FULL-STACK // AI</div>
+                <div class="about-monogram-meta">
+                    B.Sc. Information Technology<br>UTH · 2023–2026
+                </div>
+            </aside>
+
+            <div class="about-hero-text">
+                <div class="editorial-kicker">{{ __('About Me') }}</div>
+                <h1>{{ __("Hi, I'm") }} {{ __('Hồ Thành Thiện') }}</h1>
+                <div class="about-role-line">Full-Stack Web Developer · Laravel · Java Spring Boot · ReactJS</div>
+                <p class="about-lead-bio">
+                    {{ __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.') }}
+                </p>
+
+                <div class="about-meta-strip">
+                    <a href="tel:0375227764" class="about-meta-chip"><i class="fas fa-phone-alt"></i> 0375227764</a>
+                    <a href="mailto:hothanhthien119@gmail.com" class="about-meta-chip"><i class="fas fa-envelope"></i> hothanhthien119@gmail.com</a>
+                    <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="about-meta-chip"><i class="fas fa-globe"></i> hothanhthien.io.vn</a>
+                    <span class="about-meta-chip"><i class="fas fa-location-dot"></i> HCM</span>
                 </div>
 
-                <div class="about-actions">
-                    <a href="{{ route('projects.index') }}" class="btn btn-primary">
-                        <i class="fas fa-folder-open"></i> {{ __('See My Work') }}
+                <div class="about-cta-row">
+                    <a href="{{ route('projects.index') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-folder-open" aria-hidden="true"></i> {{ __('See My Work') }}
                     </a>
-                    <a href="{{ route('certificates') }}" class="btn btn-outline">
-                        <i class="fas fa-file-pdf"></i> {{ __('Brochure & Giấy khen') }}
+                    <a href="{{ route('certificates') }}" class="btn btn-outline btn-sm">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> {{ __('Credentials') }}
                     </a>
-                    <a href="{{ route('contact') }}" class="btn btn-outline">
-                        <i class="fas fa-envelope"></i> {{ __('Get In Touch') }}
+                    <a href="{{ route('contact') }}" class="btn btn-outline btn-sm">
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i> {{ __('Get In Touch') }}
                     </a>
-                    <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="btn btn-outline">
-                        <i class="fab fa-github"></i> GitHub
+                    <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+                        <i class="fab fa-github" aria-hidden="true"></i> GitHub
                     </a>
-                    <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="btn btn-outline">
-                        <i class="fab fa-linkedin"></i> LinkedIn
+                    <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+                        <i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn
                     </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Personal Story & Principles -->
+<section class="section">
+    <div class="container">
+        <div class="editorial-head" data-reveal>
+            <div class="editorial-head-left">
+                <div class="editorial-kicker">01 // {{ __('Personal Story & Philosophy') }}</div>
+                <h2>{{ __('Design & Engineering Principles') }}</h2>
+            </div>
+        </div>
+
+        <div class="story-grid" data-reveal>
+            <div class="story-narrative">
+                <p>
+                    {{ __("I'm a passionate developer with a love for building clean, performant, and user-friendly web applications. I bridge the gap between design and functionality to create digital experiences that matter.") }}
+                </p>
+                <p>
+                    {{ __("When I'm not coding, you'll find me exploring new technologies, contributing to open source, or brewing the perfect cup of coffee ☕") }}
+                </p>
+            </div>
+
+            <div class="story-pillars">
+                <div class="pillar-row">
+                    <span class="pillar-num">01</span>
+                    <div>
+                        <h3 class="pillar-title">{{ __('Engineering Craft') }}</h3>
+                        <p class="pillar-desc">{{ $isVi ? 'Ưu tiên thiết kế CSDL chuẩn hóa, API rõ ràng và mã nguồn dễ bảo trì lâu dài.' : 'Prioritizing normalized schema design, predictable APIs, and maintainable architecture.' }}</p>
+                    </div>
+                </div>
+                <div class="pillar-row">
+                    <span class="pillar-num">02</span>
+                    <div>
+                        <h3 class="pillar-title">{{ __('Fullstack & AI Systems') }}</h3>
+                        <p class="pillar-desc">{{ $isVi ? 'Kết hợp frontend trực quan với backend vững chắc (Laravel, Spring Boot) và ứng dụng RAG / LLM thực tiễn.' : 'Bridging expressive interfaces with resilient backends and practical RAG / LLM pipelines.' }}</p>
+                    </div>
+                </div>
+                <div class="pillar-row">
+                    <span class="pillar-num">03</span>
+                    <div>
+                        <h3 class="pillar-title">{{ __('Academic Discipline') }}</h3>
+                        <p class="pillar-desc">{{ $isVi ? 'Duy trì kỷ luật học thuật cao (GPA 4.0/4.0 học kỳ gần nhất, tốt nghiệp Xuất sắc ĐH GTVT TP.HCM).' : 'Sustaining high rigor (4.0 semester GPA & Excellent graduation standing at UTH).' }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -526,148 +502,97 @@
 </section>
 
 <!-- Key Achievements -->
-<section class="about-section">
+<section class="section section--alt">
     <div class="container">
-        <div class="about-section-head" data-reveal>
-            <h2>{!! __('heading_achievements') !!}</h2>
-            <p>{{ __('Academic recognition and competition awards') }}</p>
+        <div class="editorial-head" data-reveal>
+            <div class="editorial-head-left">
+                <div class="editorial-kicker">02 // MILESTONES</div>
+                <h2>{!! __('heading_achievements') !!}</h2>
+                <p>{{ __('Academic recognition and competition awards') }}</p>
+            </div>
         </div>
 
         <div class="achievements-grid" data-stagger>
-            <!-- 1. GPA 4.0 -->
-            <div class="achievement-card">
-                <div class="achievement-top">
-                    <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                    </div>
-                    <span class="achievement-year">2026</span>
+            <article class="ach-card">
+                <div class="ach-card-top">
+                    <span class="ach-metric">4.0</span>
+                    <span class="ach-year">2026</span>
                 </div>
-                <div class="achievement-subtitle">
-                    {{ app()->getLocale() == 'vi' ? 'Học kỳ gần nhất / GPA 4.0/4.0' : 'Latest Semester / GPA 4.0/4.0' }}
-                </div>
-                <h3 class="achievement-title">{{ __('GPA in Most Recent Semester — 4.0/4.0') }}</h3>
-                <p class="achievement-desc">
-                    {{ app()->getLocale() == 'vi' ? 'Đạt kết quả học tập xuất sắc với điểm GPA 4.0/4.0 trong học kỳ gần nhất, thể hiện tính kỷ luật cao và tư duy logic chuyên sâu.' : 'Achieved a perfect 4.0/4.0 GPA in the most recent semester, demonstrating high dedication, discipline, and strong software engineering competence.' }}
+                <h3 class="ach-title">{{ __('GPA in Most Recent Semester — 4.0/4.0') }}</h3>
+                <p class="ach-desc">
+                    {{ $isVi ? 'Đạt kết quả học tập xuất sắc với điểm GPA 4.0/4.0 trong học kỳ gần nhất, thể hiện tính kỷ luật cao và tư duy logic chuyên sâu.' : 'Achieved a perfect 4.0/4.0 GPA in the most recent semester, demonstrating high dedication, discipline, and strong software engineering competence.' }}
                 </p>
-                <div class="achievement-tags">
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Kỷ luật cao' : 'High Discipline' }}</span>
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Tư duy logic' : 'Logical Thinking' }}</span>
+                <div class="ach-tags">
+                    <span class="tag">{{ $isVi ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
+                    <span class="tag">{{ $isVi ? 'Kỷ luật cao' : 'High Discipline' }}</span>
                 </div>
-            </div>
+            </article>
 
-            <!-- 2. Excellent Graduation -->
-            <div class="achievement-card">
-                <div class="achievement-top">
-                    <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                        </svg>
-                    </div>
-                    <span class="achievement-year">2026</span>
+            <article class="ach-card">
+                <div class="ach-card-top">
+                    <span class="ach-metric">3.6</span>
+                    <span class="ach-year">2026</span>
                 </div>
-                <div class="achievement-subtitle">
-                    {{ app()->getLocale() == 'vi' ? 'Tốt nghiệp Xuất sắc / UTH' : 'Summa Cum Laude / UTH' }}
-                </div>
-                <h3 class="achievement-title">{{ __('Bachelor’s Degree – Excellent Graduation Classification') }}</h3>
-                <p class="achievement-desc">
-                    {{ app()->getLocale() == 'vi' ? 'Bằng Cử nhân Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc.' : "Bachelor's Degree in Information Technology from University of Transport Ho Chi Minh City with Excellent Graduation Classification." }}
+                <h3 class="ach-title">{{ __('Bachelor’s Degree – Excellent Graduation Classification') }}</h3>
+                <p class="ach-desc">
+                    {{ $isVi ? 'Bằng Cử nhân Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc.' : "Bachelor's Degree in Information Technology from University of Transport Ho Chi Minh City with Excellent Graduation Classification." }}
                 </p>
-                <div class="achievement-tags">
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Loại Xuất sắc' : 'Summa Cum Laude' }}</span>
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'ĐH GTVT TP.HCM' : 'UTH University' }}</span>
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Cử nhân CNTT' : 'IT Engineer' }}</span>
+                <div class="ach-tags">
+                    <span class="tag">{{ $isVi ? 'Loại Xuất sắc' : 'Excellent' }}</span>
+                    <span class="tag">{{ $isVi ? 'ĐH GTVT TP.HCM' : 'UTH' }}</span>
                 </div>
-            </div>
+            </article>
 
-            <!-- 3. Logo Design Award -->
-            <div class="achievement-card">
-                <div class="achievement-top">
-                    <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="13.5" cy="6.5" r=".8" fill="currentColor"></circle>
-                            <circle cx="17.5" cy="10.5" r=".8" fill="currentColor"></circle>
-                            <circle cx="8.5" cy="7.5" r=".8" fill="currentColor"></circle>
-                            <circle cx="6.5" cy="12.5" r=".8" fill="currentColor"></circle>
-                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>
-                        </svg>
-                    </div>
-                    <span class="achievement-year">2025</span>
+            <article class="ach-card">
+                <div class="ach-card-top">
+                    <span class="ach-metric">2nd</span>
+                    <span class="ach-year">2025</span>
                 </div>
-                <div class="achievement-subtitle">
-                    {{ app()->getLocale() == 'vi' ? 'Giải Nhì / Thiết kế Cấp Viện' : 'Second Prize / Logo Design' }}
-                </div>
-                <h3 class="achievement-title">{{ __('Second prize in the institute/faculty logo design competition') }}</h3>
-                <p class="achievement-desc">
+                <h3 class="ach-title">{{ __('Second prize in the institute/faculty logo design competition') }}</h3>
+                <p class="ach-desc">
                     {{ __('Designed a competition-winning logo concept, demonstrating strong creativity, visual communication, and design thinking.') }}
                 </p>
-                <div class="achievement-tags">
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Giải Nhì cấp Viện' : '2nd Prize Winner' }}</span>
-                    <span class="achievement-tag">Design Thinking</span>
-                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Truyền thông thị giác' : 'Visual Aesthetics' }}</span>
+                <div class="ach-tags">
+                    <span class="tag">Design Thinking</span>
+                    <span class="tag">{{ $isVi ? 'Truyền thông thị giác' : 'Visual Identity' }}</span>
                 </div>
-            </div>
+            </article>
         </div>
     </div>
 </section>
 
 <!-- Education -->
-<section class="about-section about-section--tinted">
+<section class="section">
     <div class="container">
-        <div class="about-section-head" data-reveal>
-            <h2>{!! __('heading_education') !!}</h2>
-            <p>{{ __('Formal academic background & verified credentials') }}</p>
+        <div class="editorial-head" data-reveal>
+            <div class="editorial-head-left">
+                <div class="editorial-kicker">03 // ACADEMIC RECORD</div>
+                <h2>{!! __('heading_education') !!}</h2>
+                <p>{{ __('Formal academic background & verified credentials') }}</p>
+            </div>
         </div>
 
-        <div class="education-card" data-reveal>
-            <div class="education-header">
+        <div class="education-plate" data-reveal>
+            <div class="education-head">
                 <div>
-                    <h3 class="education-school">
-                        <i class="fas fa-university"></i>
-                        {{ __('University of Transport Ho Chi Minh City') }}
-                    </h3>
-                    <div class="education-degree">
-                        <i class="fas fa-user-graduate"></i>
-                        {{ __("Bachelor's Degree Information Technology") }}
-                    </div>
+                    <h3 class="education-school">{{ __('University of Transport Ho Chi Minh City') }}</h3>
+                    <div class="education-degree">{{ __("Bachelor's Degree Information Technology") }}</div>
                 </div>
-                <span class="education-period">
-                    <i class="far fa-calendar-alt"></i> 2023 - 2026
-                </span>
+                <span class="education-period">2023 – 2026</span>
             </div>
 
             <div class="education-metrics">
-                <div class="education-metric-item">
-                    <div class="education-metric-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div>
-                        <div class="education-metric-label">{{ __('Cumulative GPA') }}</div>
-                        <div class="education-metric-val">3.6 / 4.0</div>
-                    </div>
+                <div class="edu-metric-box">
+                    <div class="edu-metric-label">{{ __('Cumulative GPA') }}</div>
+                    <div class="edu-metric-val">3.6 / 4.0</div>
                 </div>
-
-                <div class="education-metric-item">
-                    <div class="education-metric-icon">
-                        <i class="fas fa-medal"></i>
-                    </div>
-                    <div>
-                        <div class="education-metric-label">{{ __('Classification') }}</div>
-                        <div class="education-metric-val">{{ __('Excellent') }}</div>
-                    </div>
+                <div class="edu-metric-box">
+                    <div class="edu-metric-label">{{ __('Classification') }}</div>
+                    <div class="edu-metric-val">{{ __('Excellent') }}</div>
                 </div>
-
-                <div class="education-metric-item" style="grid-column: 1 / -1">
-                    <div class="education-metric-icon">
-                        <i class="fab fa-google"></i>
-                    </div>
-                    <div>
-                        <div class="education-metric-label">{{ __('Community & Clubs') }}</div>
-                        <div class="education-metric-val">{{ __('Member Google Developer Chapter University of Transport Ho Chi Minh City') }}</div>
-                    </div>
+                <div class="edu-metric-box">
+                    <div class="edu-metric-label">{{ __('Community & Clubs') }}</div>
+                    <div class="edu-metric-val">{{ __('Member Google Developer Chapter University of Transport Ho Chi Minh City') }}</div>
                 </div>
             </div>
         </div>
@@ -676,34 +601,77 @@
 
 <!-- Technical Skills -->
 @if($skills->count())
-<section class="about-section">
+@php
+    $aboutBuckets = [
+        'languages' => ['label' => __('Programming Languages'), 'icon' => 'fas fa-code', 'items' => []],
+        'frontend' => ['label' => __('Frontend Development'), 'icon' => 'fas fa-layer-group', 'items' => []],
+        'backend' => ['label' => __('Backend Development'), 'icon' => 'fas fa-server', 'items' => []],
+        'databases' => ['label' => __('Databases'), 'icon' => 'fas fa-database', 'items' => []],
+        'architecture' => ['label' => __('API & Architecture'), 'icon' => 'fas fa-sitemap', 'items' => []],
+        'devops' => ['label' => __('DevOps & Cloud'), 'icon' => 'fas fa-cloud', 'items' => []],
+        'ai' => ['label' => __('AI & Integration'), 'icon' => 'fas fa-microchip', 'items' => []],
+        'tools' => ['label' => __('Development Tools'), 'icon' => 'fas fa-screwdriver-wrench', 'items' => []],
+    ];
+    foreach ($skills as $rawCat => $catItems) {
+        foreach ($catItems as $sk) {
+            $nameLow = strtolower($sk->name);
+            $catLow = strtolower($rawCat);
+            if ($catLow === 'languages') { $aboutBuckets['languages']['items'][] = $sk; }
+            elseif ($catLow === 'frontend' || str_contains($nameLow, 'next') || str_contains($nameLow, 'responsive') || str_contains($nameLow, 'tailwind') || str_contains($nameLow, 'blade')) { $aboutBuckets['frontend']['items'][] = $sk; }
+            elseif ($catLow === 'backend') { $aboutBuckets['backend']['items'][] = $sk; }
+            elseif ($catLow === 'database') { $aboutBuckets['databases']['items'][] = $sk; }
+            elseif (str_contains($nameLow, 'rag') || str_contains($nameLow, 'llm') || str_contains($nameLow, 'vector') || str_contains($nameLow, 'ai ') || $nameLow === 'ai') { $aboutBuckets['ai']['items'][] = $sk; }
+            elseif (str_contains($nameLow, 'docker') || str_contains($nameLow, 'aws') || str_contains($nameLow, 'nginx') || str_contains($nameLow, 'cpanel') || str_contains($nameLow, 'ci/cd') || $nameLow === 'firebase') { $aboutBuckets['devops']['items'][] = $sk; }
+            elseif (in_array($catLow, ['api development', 'software engineering', 'authentication']) || str_contains($nameLow, 'websocket') || str_contains($nameLow, 'socket.io') || str_contains($nameLow, 'payment') || str_contains($nameLow, 'auth')) { $aboutBuckets['architecture']['items'][] = $sk; }
+            else { $aboutBuckets['tools']['items'][] = $sk; }
+        }
+    }
+    $aboutBuckets = array_filter($aboutBuckets, fn($b) => count($b['items']) > 0);
+@endphp
+<section class="section section--alt">
     <div class="container">
-        <div class="about-section-head" data-reveal>
-            <h2>{!! __('heading_my_skills') !!}</h2>
-            <p>{{ __('Technologies and tools I work with every day') }}</p>
+        <div class="editorial-head" data-reveal>
+            <div class="editorial-head-left">
+                <div class="editorial-kicker">04 // CAPABILITIES</div>
+                <h2>{!! __('heading_my_skills') !!}</h2>
+                <p>{{ __('Technologies and tools I work with every day') }}</p>
+            </div>
         </div>
 
-        <div class="skills-categories-grid" data-stagger>
-            @foreach($skills as $category => $categorySkills)
-            <div class="skill-category-panel">
-                <div class="skill-category-head">
-                    <i class="fas fa-layer-group"></i>
-                    <span>{{ $category }}</span>
-                </div>
-                <div class="skill-rows">
-                    @foreach($categorySkills as $skill)
-                    <div class="skill-row">
-                        <div class="skill-row-name">
-                            <i class="{{ $skill->icon ?: 'fas fa-check' }}"></i>
-                            <span>{{ $skill->name }}</span>
+        <div class="about-skills-grid" data-stagger>
+            @foreach($aboutBuckets as $bucket)
+                @php $detailed = array_filter($bucket['items'], fn($i) => !empty(trim((string) $i->details))); @endphp
+                <div class="about-skill-panel">
+                    <div class="about-skill-head">
+                        <div class="about-skill-title">
+                            <i class="{{ $bucket['icon'] }}" aria-hidden="true"></i>
+                            <span>{{ $bucket['label'] }}</span>
                         </div>
-                        @if($skill->details)
-                        <div class="skill-row-details">{{ $skill->details }}</div>
-                        @endif
+                        <span class="mono-label">{{ count($bucket['items']) }}</span>
                     </div>
-                    @endforeach
+
+                    <div class="about-skill-rows">
+                        @foreach($bucket['items'] as $skill)
+                            <span class="about-skill-chip" title="{{ $skill->details ?: $skill->name }}">
+                                <i class="{{ $skill->icon ?: 'fas fa-check' }}" aria-hidden="true"></i>
+                                <span>{{ $skill->name }}</span>
+                            </span>
+                        @endforeach
+                    </div>
+
+                    @if(count($detailed))
+                    <details style="margin-top:0.75rem; border-top:1px dashed var(--border); padding-top:0.65rem;">
+                        <summary style="cursor:pointer; font-family:var(--font-mono); font-size:0.76rem; color:var(--text-muted); font-weight:600;">
+                            {{ __('Technical notes') }} ({{ count($detailed) }})
+                        </summary>
+                        <div style="margin-top:0.55rem; display:flex; flex-direction:column; gap:0.4rem; font-size:0.84rem; color:var(--text-secondary); line-height:1.55;">
+                            @foreach($detailed as $ds)
+                                <div><strong style="color:var(--text-primary);">{{ $ds->name }}:</strong> {{ $ds->details }}</div>
+                            @endforeach
+                        </div>
+                    </details>
+                    @endif
                 </div>
-            </div>
             @endforeach
         </div>
     </div>
@@ -712,49 +680,45 @@
 
 <!-- Work Experience -->
 @if($experiences->count())
-<section class="about-section about-section--tinted">
+<section class="section">
     <div class="container">
-        <div class="about-section-head" data-reveal>
-            <h2>{!! __('heading_experience') !!}</h2>
-            <p>{{ __('My professional journey so far') }}</p>
+        <div class="editorial-head" data-reveal>
+            <div class="editorial-head-left">
+                <div class="editorial-kicker">05 // WORK HISTORY</div>
+                <h2>{!! __('heading_experience') !!}</h2>
+                <p>{{ __('My professional journey so far') }}</p>
+            </div>
         </div>
 
         <div class="exp-ledger" data-stagger>
             @foreach($experiences as $exp)
-            <div class="exp-ledger-row">
-                <div>
-                    <div class="exp-ledger-date">
-                        <i class="far fa-calendar-alt"></i>
-                        <span>{{ $exp->formatted_date }}</span>
+                <div class="exp-ledger-row">
+                    <div>
+                        <div class="exp-ledger-date">{{ $exp->formatted_date }}</div>
+                        <div class="exp-ledger-company">{{ $exp->localized_company }}</div>
                     </div>
-                    <div class="exp-ledger-company">{{ $exp->localized_company }}</div>
-                </div>
-                <div>
-                    <h3 class="exp-ledger-role">{{ $exp->localized_position }}</h3>
-                    @php
-                        $sentences = array_filter(array_map('trim', explode('.', $exp->localized_description)));
-                    @endphp
-                    @if(count($sentences) > 1)
-                        <ul class="exp-ledger-bullets">
-                            @foreach($sentences as $s)
-                                @if(!empty($s))
-                                <li>{{ $s }}.</li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="exp-ledger-p">{{ $exp->localized_description }}</p>
-                    @endif
+                    <div>
+                        <h3 class="exp-ledger-role">{{ $exp->localized_position }}</h3>
+                        @php $sentences = array_values(array_filter(array_map('trim', explode('.', (string) $exp->localized_description)))); @endphp
+                        @if(count($sentences) > 1)
+                            <ul class="exp-ledger-bullets">
+                                @foreach($sentences as $s)
+                                    <li>{{ $s }}.</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p style="color:var(--text-secondary); font-size:0.94rem; line-height:1.68; margin-bottom:1rem;">{{ $exp->localized_description }}</p>
+                        @endif
 
-                    @if(count($exp->tech_tags))
-                    <div class="exp-ledger-tags">
-                        @foreach($exp->tech_tags as $tag)
-                        <span class="exp-ledger-tag">{{ $tag }}</span>
-                        @endforeach
+                        @if(count($exp->tech_tags))
+                        <div class="exp-ledger-tags">
+                            @foreach($exp->tech_tags as $tag)
+                                <span class="tag">{{ $tag }}</span>
+                            @endforeach
+                        </div>
+                        @endif
                     </div>
-                    @endif
                 </div>
-            </div>
             @endforeach
         </div>
     </div>
