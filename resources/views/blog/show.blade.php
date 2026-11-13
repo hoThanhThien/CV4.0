@@ -237,6 +237,12 @@
 @endsection
 
 @section('content')
+@php
+    $cleanTitle = trim(rtrim(strip_tags((string) $post->title), " \t\n\r\0\x0B|:"));
+    $thumbUrl = $post->thumbnail_url;
+    $isSvgThumbnail = $thumbUrl && str_ends_with(strtolower(parse_url($thumbUrl, PHP_URL_PATH) ?? ''), '.svg');
+@endphp
+
 <div class="post-hero">
     <div class="container">
         <div class="breadcrumb">
@@ -244,7 +250,7 @@
             <span>/</span>
             <a href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
             <span>/</span>
-            <span>{{ Str::limit($post->title, 48) }}</span>
+            <span>{{ Str::limit($cleanTitle, 48) }}</span>
         </div>
     </div>
 </div>
@@ -254,7 +260,7 @@
         <div class="post-layout hero-animate">
             <!-- Main -->
             <article>
-                <h1 class="post-title">{{ $post->title }}</h1>
+                <h1 class="post-title">{{ $cleanTitle }}</h1>
                 <div class="post-meta">
                     @if($post->published_at)
                         <span><i class="fas fa-calendar-alt"></i> {{ $post->published_at->format('F d, Y') }}</span>
@@ -262,9 +268,9 @@
                     <span><i class="fas fa-clock"></i> {{ max(1, ceil(str_word_count(strip_tags($post->content)) / 200)) }} {{ __('min read') }}</span>
                 </div>
 
-                @if($post->thumbnail_url)
+                @if($thumbUrl)
                 <div class="post-image">
-                    <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
+                    <img src="{{ $thumbUrl }}" alt="{{ $cleanTitle }}" loading="lazy" decoding="async">
                 </div>
                 @endif
 

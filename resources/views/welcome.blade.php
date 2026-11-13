@@ -292,7 +292,127 @@
     .project-showcase-title a:hover { color: var(--accent); }
     .project-showcase-desc { color: var(--text-secondary); font-size: 0.96rem; line-height: 1.68; margin-bottom: 1.1rem; }
     .project-showcase-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.35rem; }
-    .project-action-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+    .project-action-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.6rem;
+        margin-top: auto;
+        padding-top: 1.15rem;
+        border-top: 1px solid var(--border);
+    }
+    .project-action-bar .btn {
+        min-height: 38px;
+        padding: 0.45rem 0.95rem;
+        font-size: 0.84rem;
+    }
+
+    /* Bespoke Project Architecture Specimen Previews */
+    .specimen-plate {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 250px;
+        background: linear-gradient(145deg, #070B14 0%, #0F172A 100%);
+        color: #F8FAFC;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1.25rem 1.4rem;
+        overflow: hidden;
+    }
+    .specimen-plate::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+        background-size: 24px 24px;
+        pointer-events: none;
+    }
+    .specimen-topbar {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    }
+    .specimen-dots { display: inline-flex; align-items: center; gap: 5px; }
+    .specimen-dots span { width: 8px; height: 8px; border-radius: 50%; }
+    .specimen-dots span:nth-child(1) { background: #EF4444; }
+    .specimen-dots span:nth-child(2) { background: #F59E0B; }
+    .specimen-dots span:nth-child(3) { background: #10B981; }
+    .specimen-host { font-family: var(--font-mono); font-size: 0.72rem; color: #94A3B8; }
+
+    .specimen-terminal-body, .specimen-pipeline-body, .specimen-workflow-body {
+        position: relative;
+        z-index: 1;
+        margin: auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+    }
+    .terminal-line { color: #CBD5E1; }
+    .terminal-prompt { color: var(--accent-sky); font-weight: 700; margin-right: 0.35rem; }
+    .terminal-output { color: #94A3B8; padding-left: 0.85rem; font-size: 0.74rem; }
+    .terminal-badge-ok {
+        display: inline-block;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        background: rgba(16, 185, 129, 0.2);
+        color: #34D399;
+        font-weight: 600;
+        margin-right: 0.35rem;
+    }
+    .terminal-highlight { color: #F8FAFC; font-weight: 600; }
+    .terminal-tags-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .specimen-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        font-size: 0.7rem;
+        color: #E2E8F0;
+    }
+
+    .pipeline-flow, .workflow-steps {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin: 0.5rem 0;
+    }
+    .pipeline-node, .wf-step {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        font-size: 0.72rem;
+        color: #CBD5E1;
+    }
+    .pipeline-node.active, .wf-step.active {
+        background: rgba(56, 189, 248, 0.15);
+        border-color: var(--accent-sky);
+        color: var(--accent-sky);
+        font-weight: 600;
+    }
+    .wf-step.done {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: #10B981;
+        color: #34D399;
+    }
+    .pipeline-arrow, .wf-sep { color: #64748B; font-weight: 700; }
 
     /* =========================================================
        EXPERIENCE TIMELINE
@@ -699,7 +819,9 @@
                 </div>
 
                 <p class="hero-summary">
-                    {{ __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.') }}
+                    {{ $isVi
+                        ? 'Kỹ sư Fullstack Developer tốt nghiệp loại Xuất sắc ngành CNTT tại ĐH Giao thông Vận tải TP.HCM (UTH, GPA kỳ gần nhất 4.0/4.0). Chuyên xây dựng các ứng dụng web hiện đại với Laravel, Java Spring Boot, ReactJS và tích hợp giải pháp AI (RAG, Vector Search) với kiến trúc chuẩn mực và hiệu năng tối ưu.'
+                        : 'Fullstack Developer graduated with Excellent honors in IT from University of Transport HCMC (UTH, recent semester GPA 4.0/4.0). Specializing in crafting modern, high-performance web applications with Laravel, Java Spring Boot, ReactJS, and practical AI integrations (RAG, Vector Search).' }}
                 </p>
 
                 <div class="hero-cta-row">
@@ -722,8 +844,8 @@
                     <a href="mailto:hothanhthien119@gmail.com" class="hero-social-link">
                         <i class="fas fa-envelope"></i> <span>hothanhthien119@gmail.com</span>
                     </a>
-                    <a href="tel:0375227764" class="hero-social-link">
-                        <i class="fas fa-phone-alt"></i> <span>0375227764</span>
+                    <a href="tel:0375227764" class="hero-social-link" title="{{ $isVi ? 'Nhấp để gọi' : 'Click to call' }}">
+                        <i class="fas fa-phone-alt"></i> <span>0375 &bull;&bull;&bull; 764</span>
                     </a>
                 </div>
             </div>
@@ -784,31 +906,84 @@
         <div class="project-showcase-list">
             @foreach($featuredProjects as $index => $project)
                 @php
-                    $rawDesc = (string) ($project->clean_description ?? $project->description);
-                    $cleanBody = preg_replace('/^[^|]+\|\s*\d{2}\/\d{4}\s*-\s*(?:\d{2}\/\d{4}|Present)\s*/u', '', $rawDesc);
-                    $cleanBody = str_ireplace(['+Project Description:', 'Project Description:'], '', (string) $cleanBody);
-                    $cleanBody = trim((string) $cleanBody);
+                    $cleanDesc = $project->summary;
                     $hostLabel = $project->demo_url
                         ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
                         : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'project.spec');
+                    $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
+                    $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
+                    $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
                 @endphp
                 <article class="project-showcase-row {{ $index % 2 === 1 ? 'is-reversed' : '' }}" data-reveal>
                     <a href="{{ route('projects.show', $project->id) }}" class="project-showcase-media" aria-label="{{ $project->title }}">
                         @if($project->image)
                             <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="specimen-plate" style="display:none;">
+                        @endif
+
+                        @if($isPortfolio)
+                            <div class="specimen-plate">
                                 <div class="specimen-topbar">
                                     <span class="specimen-dots"><span></span><span></span><span></span></span>
-                                    <span class="specimen-host">{{ $hostLabel }}</span>
+                                    <span class="specimen-host">hothanhthien.io.vn</span>
                                 </div>
-                                <div class="specimen-center">
-                                    <div class="specimen-index">PRJ // {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
-                                    <div class="specimen-title">{{ $project->title }}</div>
+                                <div class="specimen-terminal-body">
+                                    <div class="terminal-line"><span class="terminal-prompt">$</span> curl -I https://hothanhthien.io.vn/</div>
+                                    <div class="terminal-output"><span class="terminal-badge-ok">HTTP/2 200 OK</span> server: nginx/cpanel</div>
+                                    <div class="terminal-line"><span class="terminal-prompt">$</span> php artisan --version</div>
+                                    <div class="terminal-output">Laravel Framework <span class="terminal-highlight">11.x</span> (PHP 8.2)</div>
+                                    <div class="terminal-tags-row">
+                                        <span class="specimen-pill">Blade Engine</span>
+                                        <span class="specimen-pill">MySQL/SQLite</span>
+                                        <span class="specimen-pill">Bilingual VI/EN</span>
+                                    </div>
                                 </div>
-                                <div class="specimen-footer">
-                                    @foreach($project->technologies->take(5) as $tech)
-                                        <span class="specimen-pill">{{ $tech->name }}</span>
-                                    @endforeach
+                            </div>
+                        @elseif($isTourrist)
+                            <div class="specimen-plate">
+                                <div class="specimen-topbar">
+                                    <span class="specimen-dots"><span></span><span></span><span></span></span>
+                                    <span class="specimen-host">github.com/hoThanhThien/TourRist</span>
+                                </div>
+                                <div class="specimen-pipeline-body">
+                                    <div class="terminal-line" style="color:var(--accent-sky); font-weight:600;">PIPELINE // RAG ARCHITECTURE</div>
+                                    <div class="pipeline-flow">
+                                        <div class="pipeline-node"><i class="fas fa-file-lines"></i> Docs</div>
+                                        <div class="pipeline-arrow">&rarr;</div>
+                                        <div class="pipeline-node"><i class="fas fa-layer-group"></i> Chunks</div>
+                                        <div class="pipeline-arrow">&rarr;</div>
+                                        <div class="pipeline-node active"><i class="fas fa-database"></i> ChromaDB</div>
+                                        <div class="pipeline-arrow">&rarr;</div>
+                                        <div class="pipeline-node"><i class="fas fa-robot"></i> LLM</div>
+                                    </div>
+                                    <div class="terminal-tags-row">
+                                        <span class="specimen-pill">FastAPI</span>
+                                        <span class="specimen-pill">Python</span>
+                                        <span class="specimen-pill">Vector Search</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif($isLaundry)
+                            <div class="specimen-plate">
+                                <div class="specimen-topbar">
+                                    <span class="specimen-dots"><span></span><span></span><span></span></span>
+                                    <span class="specimen-host">github.com/hoThanhThien/LT_JAVA...</span>
+                                </div>
+                                <div class="specimen-workflow-body">
+                                    <div class="terminal-line" style="color:#A78BFA; font-weight:600;">STATE MACHINE // ORDER LIFECYCLE</div>
+                                    <div class="workflow-steps">
+                                        <div class="wf-step done">RECEIVED</div>
+                                        <div class="wf-sep">&rsaquo;</div>
+                                        <div class="wf-step active">WASHING</div>
+                                        <div class="wf-sep">&rsaquo;</div>
+                                        <div class="wf-step">READY</div>
+                                        <div class="wf-sep">&rsaquo;</div>
+                                        <div class="wf-step">DELIVERED</div>
+                                    </div>
+                                    <div class="terminal-tags-row">
+                                        <span class="specimen-pill">Spring Boot</span>
+                                        <span class="specimen-pill">NextJS</span>
+                                        <span class="specimen-pill">JWT + RBAC</span>
+                                    </div>
                                 </div>
                             </div>
                         @else
@@ -817,14 +992,15 @@
                                     <span class="specimen-dots"><span></span><span></span><span></span></span>
                                     <span class="specimen-host">{{ $hostLabel }}</span>
                                 </div>
-                                <div class="specimen-center">
-                                    <div class="specimen-index">PRJ // {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
-                                    <div class="specimen-title">{{ $project->title }}</div>
-                                </div>
-                                <div class="specimen-footer">
-                                    @foreach($project->technologies->take(5) as $tech)
-                                        <span class="specimen-pill">{{ $tech->name }}</span>
-                                    @endforeach
+                                <div class="specimen-terminal-body">
+                                    <div class="terminal-line" style="color:var(--accent-cyan); font-weight:600;">ENTERPRISE // WEB PLATFORM</div>
+                                    <div class="terminal-line"><span class="terminal-prompt">&bull;</span> Responsive Architecture</div>
+                                    <div class="terminal-line"><span class="terminal-prompt">&bull;</span> Normalized Relational DB</div>
+                                    <div class="terminal-tags-row">
+                                        <span class="specimen-pill">PHP</span>
+                                        <span class="specimen-pill">PostgreSQL</span>
+                                        <span class="specimen-pill">Responsive UI</span>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -843,7 +1019,7 @@
                         </h3>
 
                         <p class="project-showcase-desc">
-                            {{ Str::limit($cleanBody !== '' ? $cleanBody : strip_tags($project->description), 230) }}
+                            {{ $cleanDesc }}
                         </p>
 
                         @if($project->technologies->count())
@@ -855,7 +1031,7 @@
                         @endif
 
                         <div class="project-action-bar">
-                            <a href="{{ route('projects.show', $project->id) }}" class="btn btn-navy btn-sm">
+                            <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary btn-sm">
                                 <span>{{ __('View Case Study') }}</span>
                                 <i class="fas fa-arrow-right" aria-hidden="true"></i>
                             </a>
@@ -1057,8 +1233,7 @@
         <div class="docs-grid" data-stagger>
             @foreach($certificates as $cert)
                 @php
-                    // Phase 4 integrity rule: Do not reuse HoThanhThien_CV_Brochure.pdf as preview/download for unrelated degree/award records
-                    $isReusedBrochurePlaceholder = ($cert->category !== 'brochure') && str_contains((string) $cert->file_path, 'HoThanhThien_CV_Brochure.pdf');
+                    $isBrochure = ($cert->category === 'brochure');
                 @endphp
                 <article class="doc-card">
                     <div class="doc-card-head">
@@ -1077,20 +1252,34 @@
                     @endif
                     <p class="doc-desc">{{ Str::limit($cert->description, 130) }}</p>
 
-                    <div class="doc-actions">
-                        @if($isReusedBrochurePlaceholder)
-                            <span class="doc-pending-badge">
-                                <i class="fas fa-clock" aria-hidden="true"></i>
-                                <span>{{ __('Document pending upload') }}</span>
-                            </span>
+                    <div class="doc-footer-meta" style="display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); margin-bottom:0.75rem; padding-top:0.75rem; border-top:1px solid var(--border-subtle);">
+                        @if($isBrochure)
+                            <span><i class="fas fa-file-pdf" style="color:var(--accent);"></i> PDF &bull; 402 KB</span>
+                            <span style="color:#34D399;"><i class="fas fa-check-circle"></i> {{ $isVi ? 'Đã số hóa' : 'Verified' }}</span>
                         @else
-                            <button type="button" class="btn btn-navy btn-sm" onclick="openHomeCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
+                            <span><i class="fas fa-award" style="color:var(--accent);"></i> {{ $isVi ? 'Bản chính quy UTH' : 'UTH Official Record' }}</span>
+                            <span style="color:#FBBF24;"><i class="fas fa-shield-alt"></i> {{ $isVi ? 'Scan theo yêu cầu' : 'Scan on request' }}</span>
+                        @endif
+                    </div>
+
+                    <div class="doc-actions">
+                        @if($isBrochure)
+                            <button type="button" class="btn btn-primary btn-sm" onclick="openHomeCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
                                 <i class="fas fa-eye" aria-hidden="true"></i>
-                                <span>{{ __('View Document') }}</span>
+                                <span>{{ $isVi ? 'Xem PDF' : 'View PDF' }}</span>
                             </button>
                             <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm">
                                 <i class="fas fa-download" aria-hidden="true"></i>
                                 <span>{{ __('Download') }}</span>
+                            </a>
+                        @else
+                            <button type="button" class="btn btn-navy btn-sm" onclick="openCertDetailModal('{{ addslashes($cert->title) }}', '{{ addslashes($cert->issuer ?? 'UTH') }}', '{{ addslashes($cert->description) }}')">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                <span>{{ $isVi ? 'Xem hồ sơ' : 'View Details' }}</span>
+                            </button>
+                            <a href="{{ route('contact') }}?subject={{ urlencode($cert->title) }}" class="btn btn-outline btn-sm">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                                <span>{{ $isVi ? 'Yêu cầu scan' : 'Request Scan' }}</span>
                             </a>
                         @endif
                     </div>
@@ -1261,14 +1450,59 @@ function openHomeCertModal(url, title, type) {
     const dlBtn = document.getElementById('homeCertModalDl');
 
     if (titleEl) titleEl.textContent = title;
-    if (extBtn) extBtn.href = url;
-    if (dlBtn) dlBtn.href = url;
+    if (extBtn) {
+        extBtn.style.display = 'inline-flex';
+        extBtn.href = url;
+    }
+    if (dlBtn) {
+        dlBtn.innerHTML = '<i class="fas fa-download"></i> <span>{{ __("Download") }}</span>';
+        dlBtn.href = url;
+        dlBtn.setAttribute('download', '');
+    }
 
     if (type === 'pdf') {
         bodyEl.innerHTML = `<iframe src="${url}#toolbar=1" title="${title}"></iframe>`;
     } else {
         bodyEl.innerHTML = `<img src="${url}" alt="${title}">`;
     }
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+        const closeBtn = document.getElementById('homeCertModalCloseBtn');
+        if (closeBtn) closeBtn.focus();
+    }, 50);
+}
+
+function openCertDetailModal(title, issuer, desc) {
+    lastHomeCertTrigger = document.activeElement;
+    const modal = document.getElementById('homeCertModal');
+    const titleEl = document.getElementById('homeCertModalTitleText');
+    const bodyEl = document.getElementById('homeCertModalBody');
+    const extBtn = document.getElementById('homeCertModalExt');
+    const dlBtn = document.getElementById('homeCertModalDl');
+
+    if (titleEl) titleEl.textContent = title;
+    if (extBtn) extBtn.style.display = 'none';
+    if (dlBtn) {
+        dlBtn.innerHTML = '<i class="fas fa-envelope"></i> <span>{{ $isVi ? "Yêu cầu bản scan" : "Request Scan" }}</span>';
+        dlBtn.href = '{{ route("contact") }}?subject=' + encodeURIComponent(title);
+        dlBtn.removeAttribute('download');
+    }
+
+    bodyEl.innerHTML = `
+        <div style="padding:2rem; max-width:620px; margin:auto; text-align:left; color:#CBD5E1; font-family:var(--font-sans);">
+            <div style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.3rem 0.8rem; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:4px; color:#38BDF8; font-family:var(--font-mono); font-size:0.78rem; font-weight:600; margin-bottom:1rem;">
+                <i class="fas fa-check-circle"></i> {{ $isVi ? "Hồ sơ chính quy đã xác thực" : "Verified Official Record" }}
+            </div>
+            <h3 style="color:#FFFFFF; font-size:1.35rem; font-weight:700; margin-bottom:0.4rem;">${title}</h3>
+            <div style="color:#94A3B8; font-size:0.92rem; font-weight:600; margin-bottom:1.1rem;">${issuer}</div>
+            <p style="font-size:0.95rem; line-height:1.7; color:#CBD5E1; margin-bottom:1.5rem;">${desc}</p>
+            <div style="background:#0F172A; border:1px solid rgba(148,163,184,0.14); border-radius:8px; padding:1.2rem; font-size:0.86rem; line-height:1.6; color:#94A3B8;">
+                <strong style="color:#F8FAFC;">{{ $isVi ? "Tình trạng lưu trữ:" : "Filing status:" }}</strong> {{ $isVi ? "Văn bằng và giải thưởng gốc được lưu giữ tại trường và hồ sơ cá nhân. Nhà tuyển dụng cần bản sao công chứng hoặc scan số hóa độ nét cao vui lòng liên hệ xác nhận trực tiếp." : "The original degree and award credentials are preserved in official personal archives. Recruiters and hiring managers requiring a high-resolution notarized digital scan can request one directly." }}
+            </div>
+        </div>
+    `;
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';

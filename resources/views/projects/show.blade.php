@@ -217,7 +217,22 @@
                 </div>
 
                 <h1 class="project-title">{{ $project->title }}</h1>
-                <div class="project-desc">{!! nl2br(e($project->description)) !!}</div>
+                <div class="project-desc">
+                    <p style="font-size:1.06rem; line-height:1.75; color:var(--text-primary); margin-bottom:1.5rem;">
+                        {{ $project->summary }}
+                    </p>
+
+                    @if(count($project->highlights) > 1)
+                        <h3 style="font-size:1.15rem; font-weight:700; color:var(--text-primary); margin:1.75rem 0 0.85rem;">
+                            {{ (app()->getLocale() === 'vi') ? 'Điểm nhấn kỹ thuật & Triển khai' : 'Key Engineering Highlights' }}
+                        </h3>
+                        <ul style="margin-left:1.25rem; display:flex; flex-direction:column; gap:0.65rem; color:var(--text-secondary); line-height:1.68;">
+                            @foreach(array_slice($project->highlights, 1) as $item)
+                                <li>{{ $item }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
             </div>
 
             <!-- Sidebar -->

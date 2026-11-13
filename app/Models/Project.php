@@ -33,13 +33,6 @@ class Project extends Model
     public function getCleanDescriptionAttribute(): string
     {
         $desc = (string) $this->description;
-        if (preg_match('/\+Project Description:?\s*(.*?)(?=\+Tech:|\+Deployed:|\+Deploy:|https?:\/\/|$)/is', $desc, $matches)) {
-            $cleaned = trim($matches[1]);
-            if (!empty($cleaned)) {
-                return preg_replace('/^\+\s*/', '', $cleaned);
-            }
-        }
-
         $lines = preg_split('/\r\n|\r|\n/', $desc);
         $cleanLines = [];
         $foundBody = false;
@@ -54,27 +47,59 @@ class Project extends Model
                 if (str_contains($trimmed, '|') || preg_match('/^(Developer|Fullstack|Backend|Frontend|Back End|Front End|Mobile|Engineer)/i', $trimmed)) {
                     continue;
                 }
-                if (preg_match('/^\+Project Description:?\s*(.*)$/i', $trimmed, $m)) {
+                if (preg_match('/^\+?\s*Project Description:?\s*(.*)$/i', $trimmed, $m)) {
                     $foundBody = true;
                     if (!empty($m[1])) {
-                        $cleanLines[] = trim($m[1]);
+                        $cleanLines[] = trim(ltrim($m[1], '+ '));
                     }
                     continue;
                 }
                 $foundBody = true;
             }
 
-            if (preg_match('/^(\+Tech:|\+Deployed:|\+Deploy:|https?:\/\/)/i', $trimmed)) {
+            if (preg_match('/^(\+?\s*Tech:|\+?\s*Deployed:|\+?\s*Deploy:|https?:\/\/)/i', $trimmed)) {
                 break;
             }
 
-            $cleanLines[] = ltrim($trimmed, '+ ');
+            $cleaned = trim(ltrim($trimmed, '+ '));
+            if ($cleaned !== '') {
+                $cleanLines[] = $cleaned;
+            }
         }
 
         if (!empty($cleanLines)) {
             return implode("\n", $cleanLines);
         }
 
-        return trim($desc);
+        return trim(ltrim($desc, '+ '));
+    }
+
+    /**
+     * First concise summary sentence for cards and previews.
+     */
+    public function getSummaryAttribute(): string
+    {
+        $clean = $this->clean_description;
+        $lines = preg_split('/\r\n|\r|\n/', $clean);
+        return trim($lines[0] ?? '');
+    }
+
+    /**
+     * Array of clean achievement / engineering bullet points.
+     *
+     * @return array<int, string>
+     */
+    public function getHighlightsAttribute(): array
+    {
+        $clean = $this->clean_description;
+        $lines = preg_split('/\r\n|\r|\n/', $clean);
+        $items = [];
+        foreach ($lines as $line) {
+            $t = trim($line);
+            if ($t !== '') {
+                $items[] = $t;
+            }
+        }
+        return $items;
     }
 }

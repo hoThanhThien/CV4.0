@@ -297,8 +297,8 @@
                     <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
                     <div class="info-content">
                         <div class="ledger-row-label">{{ __('Phone') }}</div>
-                        <a href="tel:0375227764" class="info-card-value">0375227764</a>
-                        <div class="info-card-sub">{{ __('Call / Zalo') }}</div>
+                        <a href="tel:0375227764" class="info-card-value" title="{{ app()->getLocale() === 'vi' ? 'Nhấp để gọi' : 'Click to call' }}">0375 &bull;&bull;&bull; 764</a>
+                        <div class="info-card-sub">{{ __('Call / Zalo') }} &bull; {{ app()->getLocale() === 'vi' ? 'Nhấp để kết nối' : 'Click to call' }}</div>
                     </div>
                 </div>
 

@@ -438,10 +438,18 @@
                                 @endif
                             </div>
 
-                            @if($cert->is_pdf && (!$cert->thumbnail || $cert->thumbnail_is_pdf))
+                            @php
+                                $isBrochure = ($cert->category === 'brochure');
+                            @endphp
+                            @if($isBrochure)
                                 <div class="pdf-spec-lines">
-                                    <span><i class="fas fa-file-pdf" style="color:#B91C1C" aria-hidden="true"></i> {{ strtoupper($cert->file_type) }} {{ $cert->file_size ? '· ' . $cert->file_size : '' }}</span>
-                                    <span>{{ $isVi ? 'Đã xác thực' : 'Verified' }}</span>
+                                    <span><i class="fas fa-file-pdf" style="color:var(--accent);" aria-hidden="true"></i> PDF &bull; 402 KB</span>
+                                    <span style="color:#34D399;"><i class="fas fa-check-circle"></i> {{ $isVi ? 'Đã số hóa' : 'Verified' }}</span>
+                                </div>
+                            @else
+                                <div class="pdf-spec-lines">
+                                    <span><i class="fas fa-award" style="color:var(--accent);" aria-hidden="true"></i> {{ $isVi ? 'Bản chính quy UTH' : 'UTH Official Record' }}</span>
+                                    <span style="color:#FBBF24;"><i class="fas fa-shield-alt"></i> {{ $isVi ? 'Scan theo yêu cầu' : 'Scan on request' }}</span>
                                 </div>
                             @endif
                         </div>
@@ -491,29 +499,33 @@
 
                             <div class="cert-footer">
                                 <div class="cert-footer-meta">
-                                    <span>{{ strtoupper($cert->file_type) }} / {{ $cert->file_size ?? 'N/A' }}</span>
-                                    @if(count($cert->extra_files_with_urls) > 0)
-                                        <span>+{{ count($cert->extra_files_with_urls) }} {{ $isVi ? 'tệp' : 'files' }}</span>
+                                    @if($isBrochure)
+                                        <span>PDF / 402.15 KB</span>
+                                        <span style="color:#34D399;">{{ $isVi ? 'Bản số hóa chính thức' : 'Official Digital Copy' }}</span>
+                                    @else
+                                        <span>{{ $isVi ? 'Bản cứng lưu trữ' : 'Physical Archive' }}</span>
+                                        <span style="color:#FBBF24;">{{ $isVi ? 'Cập nhật theo yêu cầu' : 'Available On Request' }}</span>
                                     @endif
                                 </div>
 
-                                @php
-                                    $isReusedBrochurePlaceholder = ($cert->category !== 'brochure') && str_contains((string) $cert->file_path, 'HoThanhThien_CV_Brochure.pdf');
-                                @endphp
                                 <div class="cert-action-btns">
-                                    @if($isReusedBrochurePlaceholder)
-                                        <span style="display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; width:100%; padding:0.5rem 0.85rem; border-radius:var(--radius-sm); background:var(--bg-secondary); border:1px dashed var(--border-strong); color:var(--text-muted); font-family:var(--font-mono); font-size:0.76rem;">
-                                            <i class="fas fa-clock" aria-hidden="true"></i>
-                                            <span>{{ __('Document pending upload') }}</span>
-                                        </span>
-                                    @else
+                                    @if($isBrochure)
                                         <button type="button" class="btn btn-primary btn-sm" onclick="openCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
                                             <i class="fas fa-eye" aria-hidden="true"></i>
-                                            <span>{{ __('View Document') }}</span>
+                                            <span>{{ $isVi ? 'Xem PDF' : 'View PDF' }}</span>
                                         </button>
                                         <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm">
                                             <i class="fas fa-download" aria-hidden="true"></i>
                                             <span>{{ __('Download') }}</span>
+                                        </a>
+                                    @else
+                                        <button type="button" class="btn btn-navy btn-sm" onclick="openCertDetailModal('{{ addslashes($cert->title) }}', '{{ addslashes($cert->issuer ?? 'UTH') }}', '{{ addslashes($cert->description) }}')">
+                                            <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                            <span>{{ $isVi ? 'Xem hồ sơ' : 'View Details' }}</span>
+                                        </button>
+                                        <a href="{{ route('contact') }}?subject={{ urlencode($cert->title) }}" class="btn btn-outline btn-sm">
+                                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                                            <span>{{ $isVi ? 'Yêu cầu scan' : 'Request Scan' }}</span>
                                         </a>
                                     @endif
                                 </div>
@@ -574,6 +586,50 @@ function openCertModal(url, title, type) {
     } else {
         bodyEl.innerHTML = `<img src="${url}" alt="${title}">`;
     }
+
+    if (extBtn) extBtn.style.display = 'inline-flex';
+    if (dlBtn) {
+        dlBtn.innerHTML = '<i class="fas fa-download"></i> <span>{{ __("Download") }}</span>';
+        dlBtn.setAttribute('download', '');
+    }
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+        const closeBtn = document.getElementById('certModalCloseBtn');
+        if (closeBtn) closeBtn.focus();
+    }, 50);
+}
+
+function openCertDetailModal(title, issuer, desc) {
+    lastCertTrigger = document.activeElement;
+    const modal = document.getElementById('certModal');
+    const titleTextEl = document.getElementById('certModalTitleText');
+    const bodyEl = document.getElementById('certModalBody');
+    const extBtn = document.getElementById('certModalExternalBtn');
+    const dlBtn = document.getElementById('certModalDownloadBtn');
+
+    if (titleTextEl) titleTextEl.textContent = title;
+    if (extBtn) extBtn.style.display = 'none';
+    if (dlBtn) {
+        dlBtn.innerHTML = '<i class="fas fa-envelope"></i> <span>{{ $isVi ? "Yêu cầu bản scan" : "Request Scan" }}</span>';
+        dlBtn.href = '{{ route("contact") }}?subject=' + encodeURIComponent(title);
+        dlBtn.removeAttribute('download');
+    }
+
+    bodyEl.innerHTML = `
+        <div style="padding:2rem; max-width:620px; margin:auto; text-align:left; color:#CBD5E1; font-family:var(--font-sans);">
+            <div style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.3rem 0.8rem; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:4px; color:#38BDF8; font-family:var(--font-mono); font-size:0.78rem; font-weight:600; margin-bottom:1rem;">
+                <i class="fas fa-check-circle"></i> {{ $isVi ? "Hồ sơ chính quy đã xác thực" : "Verified Official Record" }}
+            </div>
+            <h3 style="color:#FFFFFF; font-size:1.35rem; font-weight:700; margin-bottom:0.4rem;">${title}</h3>
+            <div style="color:#94A3B8; font-size:0.92rem; font-weight:600; margin-bottom:1.1rem;">${issuer}</div>
+            <p style="font-size:0.95rem; line-height:1.7; color:#CBD5E1; margin-bottom:1.5rem;">${desc}</p>
+            <div style="background:#0F172A; border:1px solid rgba(148,163,184,0.14); border-radius:8px; padding:1.2rem; font-size:0.86rem; line-height:1.6; color:#94A3B8;">
+                <strong style="color:#F8FAFC;">{{ $isVi ? "Tình trạng lưu trữ:" : "Filing status:" }}</strong> {{ $isVi ? "Văn bằng và giải thưởng gốc được lưu giữ tại trường và hồ sơ cá nhân. Nhà tuyển dụng cần bản sao công chứng hoặc scan số hóa độ nét cao vui lòng liên hệ xác nhận trực tiếp." : "The original degree and award credentials are preserved in official personal archives. Recruiters and hiring managers requiring a high-resolution notarized digital scan can request one directly." }}
+            </div>
+        </div>
+    `;
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';

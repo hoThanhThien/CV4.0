@@ -203,5 +203,9 @@
     "AI / RAG / LLM": "AI / RAG / LLM",
     "DevOps & Deployment": "DevOps & Deployment",
     "Tools & Platforms": "Tools & Platforms",
-    "Document pending upload": "Document scan pending"
+    "Document pending upload": "Document scan pending",
+    "View PDF": "View PDF",
+    "View Details": "View Details",
+    "Request Scan": "Request Scan",
+    "Key Engineering Highlights": "Key Engineering Highlights"
 }

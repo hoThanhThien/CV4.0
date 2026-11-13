@@ -203,5 +203,9 @@
     "AI / RAG / LLM": "AI / RAG / LLM",
     "DevOps & Deployment": "DevOps & Triển khai",
     "Tools & Platforms": "Công cụ & Nền tảng",
-    "Document pending upload": "Đang cập nhật bản scan"
+    "Document pending upload": "Đang cập nhật bản scan",
+    "View PDF": "Xem PDF",
+    "View Details": "Xem chi tiết",
+    "Request Scan": "Yêu cầu bản scan",
+    "Key Engineering Highlights": "Điểm nhấn kỹ thuật & Triển khai"
 }

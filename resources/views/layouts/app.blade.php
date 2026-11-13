@@ -160,8 +160,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
-    <!-- Typography: Plus Jakarta Sans (Modern SaaS/Tech Display), IBM Plex Sans (UI/Body), IBM Plex Mono (Specs) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+    <!-- Typography: Inter (Modern SaaS UI & High-Legibility Body), JetBrains Mono (Specs, Code, Metrics) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
 
     <!-- Font Awesome 6.5 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -172,50 +172,57 @@
 
     <style>
         :root {
-            /* Dark Navy & Refined Blue/Cyan Portfolio System */
+            /* Linear/Vercel-Grade Engineering Dark System */
+            --bg-base: #0B1120;
+            --bg-primary: #0B1120;
+            --bg-secondary: #0D1526;
+            --bg-card: #0F172A;
+            --bg-elevated: #162238;
+            --surface-ink: #070B14;
             --navy-deep: #070B14;
             --navy-surface: #0D1526;
             --navy-elevated: #131E36;
-            --navy-border: rgba(148, 163, 184, 0.16);
+            --navy-border: rgba(148, 163, 184, 0.14);
 
-            /* High-Contrast Reading & Section Surfaces */
-            --bg-primary: #F8FAFC;
-            --bg-secondary: #EFF4FA;
-            --bg-card: #FFFFFF;
-            --surface-ink: #0B1120;
-            --border: #E2E8F0;
-            --border-strong: #CBD5E1;
+            /* High-Contrast Structural Borders */
+            --border: rgba(148, 163, 184, 0.12);
+            --border-subtle: rgba(148, 163, 184, 0.08);
+            --border-strong: rgba(148, 163, 184, 0.22);
+            --border-glow: rgba(56, 189, 248, 0.35);
 
-            /* Typography Ink */
-            --text-primary: #0F172A;
-            --text-secondary: #475569;
+            /* Typography Ink (WCAG AA & AAA compliant on #0B1120) */
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
             --text-muted: #64748B;
 
-            /* Refined Blue & Cyan Accents */
-            --accent: #2563EB;
-            --accent-hover: #1D4ED8;
+            /* Refined Engineering Accents */
+            --accent: #38BDF8;
+            --accent-hover: #0EA5E9;
             --accent-cyan: #06B6D4;
             --accent-sky: #38BDF8;
-            --accent-soft: rgba(37, 99, 235, 0.08);
-            --green: #0F766E;
-            --danger: #DC2626;
+            --accent-indigo: #6366F1;
+            --accent-soft: rgba(56, 189, 248, 0.10);
+            --accent-glow: rgba(56, 189, 248, 0.22);
+            --green: #10B981;
+            --green-soft: rgba(16, 185, 129, 0.12);
+            --danger: #EF4444;
 
             /* Font Families */
-            --font-display: 'Plus Jakarta Sans', 'IBM Plex Sans', -apple-system, sans-serif;
-            --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'IBM Plex Mono', monospace;
+            --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
 
             /* Motion & Elevation */
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
             --duration-fast: 150ms;
-            --duration-base: 260ms;
-            --duration-slow: 400ms;
-            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-            --shadow-md: 0 12px 28px -10px rgba(15, 23, 42, 0.10);
-            --shadow-lg: 0 24px 48px -16px rgba(7, 11, 20, 0.24);
+            --duration-base: 240ms;
+            --duration-slow: 380ms;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 28px -8px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
             --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -379,22 +386,23 @@
         }
 
         /* =========================================================
-           DARK NAVY STICKY NAVBAR (No wrapping at <= 1024px)
+           ENGINEERING TERMINAL STICKY NAVBAR
         ========================================================= */
         .navbar {
             position: sticky;
             top: 0;
             z-index: 1000;
             height: 68px;
-            background: rgba(7, 11, 20, 0.90);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--navy-border);
-            transition: background var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out);
+            background: rgba(11, 17, 32, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            transition: background var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), border-color var(--duration-fast) ease;
         }
         .navbar.scrolled {
-            background: rgba(7, 11, 20, 0.97);
-            box-shadow: 0 8px 28px rgba(7, 11, 20, 0.24);
+            background: rgba(11, 17, 32, 0.98);
+            border-bottom-color: var(--border-strong);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
         }
         .navbar-inner {
             height: 100%;
@@ -405,6 +413,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 1.25rem;
+            flex-wrap: nowrap;
         }
 
         .nav-logo {
@@ -413,64 +422,67 @@
             gap: 0.55rem;
             text-decoration: none;
             color: #F8FAFC;
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 1.06rem;
-            letter-spacing: -0.02em;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .nav-logo-mark {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border-radius: var(--radius-sm);
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-cyan) 100%);
-            color: #FFFFFF;
             font-family: var(--font-mono);
-            font-size: 0.74rem;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.14rem;
+            letter-spacing: -0.02em;
+            white-space: nowrap !important;
+            flex-shrink: 0;
+            transition: opacity var(--duration-fast) ease;
+        }
+        .nav-logo:hover { opacity: 0.9; }
+        .nav-brand-code {
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            text-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
         }
 
         .nav-links {
             display: flex;
             align-items: center;
             list-style: none;
-            gap: 0.2rem;
+            gap: 0.25rem;
+            flex-wrap: nowrap;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links > li {
+            white-space: nowrap !important;
+            flex-shrink: 0;
         }
         .nav-links > li > a.nav-item-link {
             position: relative;
             display: inline-flex;
             align-items: center;
-            padding: 0.45rem 0.78rem;
-            color: #CBD5E1;
+            padding: 0.45rem 0.8rem;
+            color: #94A3B8;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 500;
-            white-space: nowrap;
+            white-space: nowrap !important;
             border-radius: var(--radius-sm);
-            transition: color var(--duration-fast) ease;
+            transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
         }
         .nav-links > li > a.nav-item-link::after {
             content: '';
             position: absolute;
-            left: 0.78rem;
-            right: 0.78rem;
-            bottom: 0.16rem;
+            left: 0.8rem;
+            right: 0.8rem;
+            bottom: 0.12rem;
             height: 2px;
-            background: var(--accent-sky);
+            background: var(--accent);
             transform: scaleX(0);
             transform-origin: left center;
-            transition: transform 220ms var(--ease-out);
+            transition: transform 200ms var(--ease-out);
         }
-        .nav-links > li > a.nav-item-link:hover,
+        .nav-links > li > a.nav-item-link:hover {
+            color: #F8FAFC;
+        }
         .nav-links > li > a.nav-item-link.active {
-            color: #FFFFFF;
+            color: var(--accent);
             font-weight: 600;
         }
-        .nav-links > li > a.nav-item-link:hover::after,
         .nav-links > li > a.nav-item-link.active::after {
             transform: scaleX(1);
         }
@@ -479,46 +491,49 @@
             display: flex;
             align-items: center;
             gap: 0.65rem;
-            margin-left: 0.55rem;
+            margin-left: 0.65rem;
             flex-shrink: 0;
+            white-space: nowrap !important;
         }
 
         .nav-cta {
             height: 36px !important;
             min-height: 36px !important;
-            padding: 0 0.95rem !important;
-            font-size: 0.85rem !important;
-            white-space: nowrap;
+            padding: 0 1rem !important;
+            font-size: 0.84rem !important;
+            white-space: nowrap !important;
+            border-radius: var(--radius-sm);
         }
 
         .lang-switcher {
             display: inline-flex;
             align-items: center;
-            padding: 3px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(148, 163, 184, 0.22);
+            padding: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             gap: 2px;
             flex-shrink: 0;
+            white-space: nowrap !important;
         }
         .lang-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
-            padding: 0.24rem 0.52rem;
+            gap: 0.32rem;
+            padding: 0.22rem 0.5rem;
             border-radius: 4px;
             text-decoration: none;
             font-family: var(--font-mono);
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             font-weight: 600;
             color: #94A3B8;
-            white-space: nowrap;
+            white-space: nowrap !important;
             transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
         }
         .lang-btn:hover { color: #FFFFFF; }
         .lang-btn.active {
             background: var(--accent);
-            color: #FFFFFF;
+            color: #070B14;
         }
         .flag-icon { border-radius: 1.5px; flex-shrink: 0; display: block; }
 
@@ -528,67 +543,71 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(148, 163, 184, 0.24);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             color: #F8FAFC;
             font-size: 1rem;
             cursor: pointer;
+            transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+        }
+        .hamburger:hover {
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .nav-backdrop {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(7, 11, 20, 0.65);
-            backdrop-filter: blur(4px);
+            background: rgba(7, 11, 20, 0.75);
+            backdrop-filter: blur(6px);
             z-index: 990;
             opacity: 0;
             transition: opacity var(--duration-base) ease;
         }
         .nav-backdrop.open { display: block; opacity: 1; }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1040px) {
             .hamburger { display: inline-flex; }
             .nav-links {
                 position: fixed;
                 top: 0;
                 right: 0;
                 bottom: 0;
-                width: min(330px, 86vw);
-                background: var(--navy-surface);
-                border-left: 1px solid var(--navy-border);
+                width: min(340px, 86vw);
+                background: #0D1526;
+                border-left: 1px solid var(--border-strong);
                 flex-direction: column;
                 align-items: stretch;
                 padding: 5.25rem 1.5rem 2rem;
-                gap: 0.4rem;
+                gap: 0.5rem;
                 transform: translateX(100%);
-                transition: transform 280ms var(--ease-out);
+                transition: transform 260ms var(--ease-out);
                 z-index: 995;
                 overflow-y: auto;
-                box-shadow: -12px 0 40px rgba(7, 11, 20, 0.45);
+                box-shadow: -16px 0 40px rgba(0, 0, 0, 0.7);
             }
             .nav-links.open { transform: translateX(0); }
             .nav-links > li > a.nav-item-link {
                 width: 100%;
-                padding: 0.78rem 0.9rem;
-                font-size: 1rem;
-                border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-                border-radius: 0;
+                padding: 0.85rem 1rem;
+                font-size: 0.96rem;
+                border-bottom: 1px solid var(--border-subtle);
+                border-radius: var(--radius-sm);
             }
             .nav-links > li > a.nav-item-link::after { display: none; }
             .nav-links > li > a.nav-item-link.active {
-                color: var(--accent-sky);
+                color: var(--accent);
                 background: rgba(56, 189, 248, 0.1);
-                border-radius: var(--radius-sm);
                 border-bottom-color: transparent;
             }
             .nav-actions-cluster {
                 flex-direction: column;
                 align-items: stretch;
                 margin-left: 0;
-                margin-top: 1rem;
-                gap: 0.75rem;
+                margin-top: 1.25rem;
+                gap: 0.85rem;
             }
             .nav-cta { height: 44px !important; justify-content: center; width: 100%; font-size: 0.94rem !important; }
             .lang-switcher { justify-content: center; padding: 4px; }
@@ -596,58 +615,98 @@
         }
 
         /* =========================================================
-           BUTTONS, TAGS, CARDS, PAGINATION
+           BUTTONS, TAGS, CARDS, PAGINATION (Minimalist Dark SaaS)
         ========================================================= */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            padding: 0.62rem 1.2rem;
+            padding: 0.62rem 1.25rem;
             min-height: 42px;
             border-radius: var(--radius-sm);
             font-family: var(--font-sans);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
             text-decoration: none;
             cursor: pointer;
             border: 1px solid transparent;
-            white-space: nowrap;
+            white-space: nowrap !important;
             transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
         }
         .btn:active { transform: translateY(1px); }
-        .btn-sm { padding: 0.44rem 0.9rem; min-height: 36px; font-size: 0.84rem; }
+        .btn-sm { padding: 0.44rem 0.9rem; min-height: 36px; font-size: 0.82rem; }
 
         .btn-primary {
             background: var(--accent);
-            color: #FFFFFF;
+            color: #070B14;
             border-color: var(--accent);
+            font-weight: 700;
         }
         .btn-primary:hover {
             background: var(--accent-hover);
             border-color: var(--accent-hover);
+            color: #070B14;
             transform: translateY(-1px);
-            box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.45);
+            box-shadow: 0 8px 24px -4px rgba(56, 189, 248, 0.45);
         }
         .btn-navy {
-            background: var(--navy-surface);
-            color: #FFFFFF;
-            border-color: var(--navy-surface);
+            background: var(--bg-elevated);
+            color: #F8FAFC;
+            border-color: var(--border-strong);
         }
         .btn-navy:hover {
-            background: var(--accent);
+            background: rgba(56, 189, 248, 0.12);
             border-color: var(--accent);
+            color: var(--accent);
             transform: translateY(-1px);
         }
         .btn-outline {
-            background: var(--bg-card);
+            background: rgba(255, 255, 255, 0.03);
             color: var(--text-primary);
-            border-color: var(--border-strong);
+            border-color: var(--border);
         }
         .btn-outline:hover {
             border-color: var(--accent);
             color: var(--accent);
+            background: rgba(56, 189, 248, 0.08);
             transform: translateY(-1px);
+        }
+        .btn-outline-dark {
+            background: rgba(255, 255, 255, 0.04);
+            color: #F8FAFC;
+            border-color: var(--border-strong);
+        }
+        .btn-outline-dark:hover {
+            border-color: var(--accent-sky);
+            color: var(--accent-sky);
+            background: rgba(56, 189, 248, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.22rem 0.58rem;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out);
+        }
+        .card:hover {
+            border-color: var(--border-strong);
         }
         .btn-outline-dark {
             background: rgba(255, 255, 255, 0.04);
@@ -915,9 +974,8 @@
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="navbar-inner">
-            <a href="{{ route('home') }}" class="nav-logo">
-                <span class="nav-logo-mark" aria-hidden="true">HT</span>
-                <span>{{ __('Hồ Thành Thiện') }}</span>
+            <a href="{{ route('home') }}" class="nav-logo" aria-label="Hồ Thành Thiện Portfolio">
+                <span class="nav-brand-code">&lt;{{ $isVi ? 'Thiện' : 'Thien' }} /&gt;</span>
             </a>
 
             <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
@@ -970,8 +1028,7 @@
         <div class="footer-inner">
             <div>
                 <div class="footer-logo">
-                    <span class="nav-logo-mark" aria-hidden="true">HT</span>
-                    <span>{{ __('Hồ Thành Thiện') }}</span>
+                    <span class="nav-brand-code">&lt;{{ $isVi ? 'Thiện' : 'Thien' }} /&gt;</span>
                 </div>
                 <p class="footer-copy">
                     &copy; {{ date('Y') }} {{ __('Hồ Thành Thiện') }}. {{ __('Built with Laravel & ♥') }}
@@ -994,7 +1051,7 @@
                 <div class="footer-col-title">{{ __('Contact') }}</div>
                 <div class="footer-contact-list">
                     <a href="mailto:hothanhthien119@gmail.com"><i class="fas fa-envelope"></i> hothanhthien119@gmail.com</a>
-                    <a href="tel:0375227764"><i class="fas fa-phone-alt"></i> 0375227764</a>
+                    <a href="tel:0375227764" title="{{ $isVi ? 'Nhấp để gọi' : 'Click to call' }}"><i class="fas fa-phone-alt"></i> 0375 &bull;&bull;&bull; 764</a>
                 </div>
                 <div class="footer-socials">
                     <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
