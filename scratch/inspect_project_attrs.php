@@ -6,3 +6,4 @@ $kernel->bootstrap();
 
 $project = App\Models\Project::first();
 print_r(array_keys($project->getAttributes()));
+

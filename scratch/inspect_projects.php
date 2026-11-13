@@ -17,3 +17,4 @@ foreach (App\Models\Project::with('technologies')->get() as $p) {
     echo "Technologies: " . $p->technologies->pluck('name')->implode(', ') . "\n";
     echo "--------------------------------------------------------\n";
 }
+
