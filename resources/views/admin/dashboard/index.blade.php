@@ -30,7 +30,7 @@
         <div class="stat-label">Skills</div>
         <div class="stat-value">{{ $stats['skills'] }}</div>
     </div>
-    <div class="stat-card {{ $stats['unread_messages'] > 0 ? 'stat-purple' : '' }}">
+        <div class="stat-card {{ $stats['unread_messages'] > 0 ? 'stat-pink' : '' }}">
         <div class="stat-icon"><i class="fas fa-envelope"></i></div>
         <div class="stat-label">Inbox Messages</div>
         <div class="stat-value">
@@ -161,7 +161,7 @@
             </thead>
             <tbody>
                 @forelse($recentMessages as $msg)
-                <tr style="{{ !$msg->is_read ? 'background: rgba(99,102,241,0.03); font-weight:600' : '' }}">
+                                    <tr style="{{ !$msg->is_read ? 'background: rgba(30,64,175,0.04); font-weight:600' : '' }}">
                     <td>
                         <div>{{ $msg->name }}</div>
                         <div style="font-size:0.8rem; color:var(--text-muted); font-weight:400">{{ $msg->email }}</div>

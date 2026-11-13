@@ -28,7 +28,7 @@
                     <input type="text" id="title" name="title" class="form-control" value="{{ old('title', $post->title) }}" required>
                     @error('title')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
                 </div>
-                <div style="margin-bottom:1.25rem; padding:0.75rem 1rem; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border)">
+                <div style="margin-bottom:1.25rem; padding:0.75rem 1rem; border-radius:10px; background:var(--bg); border:1px solid var(--border)">
                     <div style="font-size:0.78rem; color:var(--text-muted)">Slug: <code style="color:var(--accent-light)">/{{ $post->slug }}</code></div>
                 </div>
                 <div class="form-group">
@@ -58,7 +58,7 @@
                     @if($post->thumbnail_url)
                         <img src="{{ $post->thumbnail_url }}" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px; border:1px solid var(--border); margin-bottom:0.65rem">
                     @else
-                        <div style="background:rgba(255,255,255,0.04); border-radius:10px; height:100px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); margin-bottom:0.65rem; border:1px solid var(--border); font-size:0.88rem">
+                        <div style="background:var(--bg); border-radius:10px; height:100px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); margin-bottom:0.65rem; border:1px solid var(--border); font-size:0.88rem">
                             No thumbnail
                         </div>
                     @endif

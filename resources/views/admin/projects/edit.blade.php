@@ -55,7 +55,7 @@
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" style="width:100%; border-radius:10px; border:1px solid var(--border); margin-bottom:0.75rem">
                     @else
-                        <div style="background:rgba(255,255,255,0.04); border-radius:10px; height:120px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); margin-bottom:0.75rem; border:1px solid var(--border)">
+                        <div style="background:var(--bg); border-radius:10px; height:120px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); margin-bottom:0.75rem; border:1px solid var(--border)">
                             No image
                         </div>
                     @endif

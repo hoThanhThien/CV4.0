@@ -41,7 +41,7 @@
                         @endif
                     </td>
                     <td>
-                        <span class="badge" style="background:rgba(99,102,241,0.1); color:var(--accent); text-transform:uppercase; font-size:0.7rem">
+                        <span class="badge badge-purple" style="text-transform:uppercase; font-size:0.7rem">
                             {{ $provider->provider_type }}
                         </span>
                     </td>

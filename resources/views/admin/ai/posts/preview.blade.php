@@ -14,7 +14,7 @@
             @if($post->status === 'published')
                 <span class="badge badge-success"><i class="fas fa-check-circle"></i> Đã xuất bản</span>
             @elseif($post->status === 'scheduled')
-                <span class="badge badge-info" style="background:rgba(6,182,212,0.15); color:#0891b2">
+                <span class="badge badge-info">
                     <i class="fas fa-clock"></i> Lên lịch: {{ $post->published_at ? $post->published_at->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y H:i') : '' }}
                 </span>
             @elseif($post->status === 'pending_review')
@@ -72,7 +72,7 @@
             </a>
 
             <!-- Nút Tạo Thumbnail & Ảnh OG bằng AI -->
-            <button type="button" class="btn btn-secondary btn-sm" onclick="openAiImageModal()" style="color:#0891b2; border-color:rgba(6,182,212,0.35); background:rgba(6,182,212,0.08); font-weight:700">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="openAiImageModal()" style="color:var(--accent); border-color:#bfdbfe; background:#eff6ff; font-weight:700">
                 <i class="fas fa-image"></i> {{ $post->image ? 'Tạo lại Thumbnail & OG (AI)' : 'Tạo Thumbnail & OG bằng AI' }}
             </button>
 
@@ -85,7 +85,7 @@
 </div>
 
 <!-- Article Preview Box (Styling exact match with public blog) -->
-<div style="max-width:960px; margin:0 auto; background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:3rem 2.5rem; box-shadow:0 10px 15px -3px rgba(0,0,0,0.05)">
+<div class="admin-article-preview" style="max-width:960px; margin:0 auto; background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:3rem 2.5rem; box-shadow:0 10px 15px -3px rgba(0,0,0,0.05)">
     <!-- Metadata header -->
     <div style="display:flex; align-items:center; gap:0.5rem; color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem">
         <span><i class="fas fa-folder" style="color:var(--accent)"></i> {{ $post->category ?? 'Technology' }}</span>
@@ -117,12 +117,12 @@
                 <span><i class="fas fa-check-circle" style="color:var(--success)"></i> <strong>Thumbnail bài viết (16:9)</strong> — Đang sử dụng trên danh sách & đầu bài Blog</span>
                 <div style="display:flex; gap:0.5rem">
                     <a href="{{ $post->thumbnail_url }}" target="_blank" rel="noopener" style="color:var(--accent); font-weight:600; text-decoration:none"><i class="fas fa-external-link-alt"></i> Mở ảnh gốc</a>
-                    <button type="button" onclick="openAiImageModal()" style="background:none; border:none; color:#0891b2; font-weight:700; cursor:pointer; padding:0"><i class="fas fa-magic"></i> Tạo lại bằng AI</button>
+                    <button type="button" onclick="openAiImageModal()" style="background:none; border:none; color:var(--accent); font-weight:700; cursor:pointer; padding:0"><i class="fas fa-magic"></i> Tạo lại bằng AI</button>
                 </div>
             </div>
         </div>
     @else
-        <div style="margin-bottom:2rem; padding:1.35rem; background:linear-gradient(135deg, rgba(99,102,241,0.06), rgba(6,182,212,0.06)); border:1px dashed var(--accent); border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem">
+        <div style="margin-bottom:2rem; padding:1.35rem; background:linear-gradient(135deg, #f8fafc, #eff6ff); border:1px dashed var(--accent); border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem">
             <div>
                 <div style="font-weight:800; color:var(--text); font-size:0.95rem"><i class="fas fa-image" style="color:var(--accent)"></i> Bài viết chưa có Thumbnail & Ảnh OG riêng</div>
                 <div style="font-size:0.83rem; color:var(--text-muted); margin-top:0.2rem">Bấm nút bên cạnh để AI tự động thiết kế bộ Thumbnail (16:9) và Ảnh OpenGraph (1200×630) theo đúng chủ đề bài viết.</div>
@@ -135,7 +135,7 @@
 
     <!-- Cover image prompt if available -->
     @if($post->cover_image_prompt)
-        <div style="margin-bottom:2rem; padding:1rem; background:rgba(99,102,241,0.05); border:1px dashed var(--accent); border-radius:10px; font-size:0.85rem">
+        <div style="margin-bottom:2rem; padding:1rem; background:rgba(30,64,175,0.04); border:1px dashed var(--accent); border-radius:10px; font-size:0.85rem">
             <strong><i class="fas fa-paint-brush" style="color:var(--accent)"></i> Prompt ý tưởng hình ảnh AI (Image Prompt):</strong>
             <p style="margin-top:0.35rem; margin-bottom:0; color:var(--text-muted); font-family:monospace">{{ $post->cover_image_prompt }}</p>
         </div>
@@ -202,7 +202,7 @@
 
             <!-- Simulated Facebook / LinkedIn Link Share Card -->
             <div style="border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg-card); box-shadow:0 4px 12px rgba(0,0,0,0.06)">
-                <div style="aspect-ratio: 1200 / 630; width:100%; overflow:hidden; background:#0f172a">
+                <div style="aspect-ratio: 1200 / 630; width:100%; overflow:hidden; background:var(--bg)">
                     <img src="{{ $post->og_image_url }}" alt="OG Preview" style="width:100%; height:100%; object-fit:cover; display:block">
                 </div>
                 <div style="padding:0.85rem 1rem; border-top:1px solid var(--border)">

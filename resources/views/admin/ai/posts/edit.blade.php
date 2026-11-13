@@ -46,7 +46,7 @@
         </div>
 
         <!-- Thumbnail & OpenGraph Visual Assets -->
-        <div style="margin-bottom:1.5rem; padding:1.25rem; background:linear-gradient(135deg, rgba(99,102,241,0.05), rgba(6,182,212,0.05)); border:1px solid rgba(99,102,241,0.22); border-radius:10px">
+        <div style="margin-bottom:1.5rem; padding:1.25rem; background:linear-gradient(135deg, #f8fafc, #eff6ff); border:1px solid #bfdbfe; border-radius:10px">
             <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem">
                 <h4 style="font-size:0.95rem; font-weight:800; margin:0; color:var(--accent)">
                     <i class="fas fa-images"></i> Thumbnail bài viết (16:9) & Ảnh OpenGraph (1200×630)

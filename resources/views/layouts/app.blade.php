@@ -166,6 +166,10 @@
     <!-- Font Awesome 6.5 Full Icon Set -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
+    <script>
+        document.documentElement.classList.add('has-reveal');
+    </script>
+
     <style>
         :root {
             /* Core Restrained Mineral Paper & Cobalt Graphite Palette */
@@ -185,6 +189,17 @@
             --green: #15803d;
             --danger: #b91c1c;
             --gradient: #12161f;
+
+            /* Design System Motion & Elevation Tokens */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-fast: 160ms;
+            --duration-base: 260ms;
+            --duration-slow: 380ms;
+            --shadow-sm: 0 2px 6px rgba(18, 22, 31, 0.04);
+            --shadow-md: 0 10px 24px -8px rgba(18, 22, 31, 0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 10px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -202,6 +217,24 @@
             font-size: 16px;
             line-height: 1.65;
             overflow-x: hidden;
+        }
+
+        .skip-link {
+            position: fixed;
+            top: -100px;
+            left: 1rem;
+            z-index: 2000;
+            background: var(--text-primary);
+            color: #ffffff;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: top var(--duration-fast) var(--ease-out);
+        }
+        .skip-link:focus {
+            top: 0.75rem;
         }
 
         :focus-visible {
@@ -287,9 +320,24 @@
             white-space: nowrap;
         }
 
+        .nav-links a:not(.btn):not(.lang-btn)::after {
+            content: '';
+            position: absolute;
+            left: 0.8rem;
+            right: 0.8rem;
+            bottom: 0.18rem;
+            height: 1.5px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform var(--duration-base) var(--ease-out);
+        }
         .nav-links a:not(.btn):not(.lang-btn):hover {
             color: var(--text-primary);
             background: var(--bg-secondary);
+        }
+        .nav-links a:not(.btn):not(.lang-btn):hover::after {
+            transform: scaleX(0.45);
         }
         .nav-links a:not(.btn):not(.lang-btn).active {
             color: var(--accent);
@@ -297,13 +345,7 @@
             background: transparent;
         }
         .nav-links a:not(.btn):not(.lang-btn).active::after {
-            content: '';
-            position: absolute;
-            left: 0.8rem;
-            right: 0.8rem;
-            bottom: 0.15rem;
-            height: 1.5px;
-            background: var(--accent);
+            transform: scaleX(1);
         }
 
         .nav-cta {
@@ -388,16 +430,16 @@
         .hamburger:hover { background: var(--bg-secondary); border-color: var(--border-strong); }
 
         .nav-backdrop {
-            display: none;
             position: fixed; inset: 0;
             background: rgba(18, 22, 31, 0.45);
             backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             z-index: 998;
             opacity: 0;
-            transition: opacity 0.2s ease;
+            visibility: hidden;
+            transition: opacity var(--duration-base) var(--ease-out), visibility var(--duration-base);
             pointer-events: none;
         }
-        .nav-backdrop.open { display: block; opacity: 1; pointer-events: auto; }
+        .nav-backdrop.open { opacity: 1; visibility: visible; pointer-events: auto; }
 
         /* Page content offset for fixed navbar */
         .page-content { padding-top: 64px; min-height: calc(100vh - 200px); }
@@ -510,22 +552,39 @@
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: var(--radius-lg);
             padding: 1.5rem;
-            transition: border-color 0.18s ease, box-shadow 0.18s ease;
+            transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
         }
         .card:hover {
             border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
         }
 
         .btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-            padding: 0 1.15rem; border-radius: 8px; min-height: 40px; height: 40px;
+            padding: 0 1.15rem; border-radius: var(--radius-md); min-height: 40px; height: 40px;
             font-size: 0.9rem; font-weight: 600; text-decoration: none;
             border: 1px solid transparent; cursor: pointer;
-            transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+            transition: background-color var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) ease;
             touch-action: manipulation;
             white-space: nowrap;
+        }
+        .btn:active:not(:disabled) {
+            transform: scale(0.985);
+        }
+        .btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+        .btn i {
+            transition: transform var(--duration-fast) var(--ease-out);
+        }
+        .btn:hover:not(:disabled) .fa-arrow-right {
+            transform: translateX(2px);
+        }
+        .btn:hover:not(:disabled) .fa-arrow-left {
+            transform: translateX(-2px);
         }
 
         .btn-primary {
@@ -533,10 +592,11 @@
             color: #ffffff;
             border-color: var(--text-primary);
         }
-        .btn-primary:hover {
-            background: #232a3b;
-            border-color: #232a3b;
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent);
+            border-color: var(--accent);
             color: #ffffff;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.18);
         }
 
         .btn-accent {
@@ -594,17 +654,35 @@
             background: var(--text-primary); border-color: var(--text-primary); color: #ffffff;
         }
 
-        /* Single orchestrated entrance option */
+        /* Purposeful Scroll Reveal & Stagger System (fail-safe: only hides when JS active & off-screen) */
         @keyframes quietEnter {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .hero-animate {
-            animation: quietEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+            animation: quietEnter var(--duration-slow) var(--ease-out) both;
+        }
+        html.has-reveal [data-reveal] {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out);
+            transition-delay: calc(var(--stagger-i, 0) * 55ms);
+        }
+        html.has-reveal [data-reveal].is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         @media (prefers-reduced-motion: reduce) {
             .hero-animate { animation: none !important; }
             html { scroll-behavior: auto; }
+            html.has-reveal [data-reveal] {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            *, *::before, *::after {
+                transition-duration: 0.01ms !important;
+            }
         }
 
         /* Mobile & Tablet Navigation <= 1024px */
@@ -684,6 +762,8 @@
     @yield('styles')
 </head>
 <body>
+    <a href="#main-content" class="skip-link">{{ app()->getLocale() === 'vi' ? 'Chuyển tới nội dung chính' : 'Skip to main content' }}</a>
+
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <a href="{{ route('home') }}" class="nav-logo">{{ __('Hồ Thành Thiện') }}</a>
@@ -721,7 +801,7 @@
     <div class="nav-backdrop" id="nav-backdrop"></div>
 
     <!-- Page Content -->
-    <main class="page-content">
+    <main class="page-content" id="main-content" tabindex="-1">
         @yield('content')
     </main>
 
@@ -797,6 +877,51 @@
             if (window.innerWidth > 1024 && navLinks.classList.contains('open')) toggleMenu(false);
         });
         backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Purposeful Scroll Reveal & Stagger Initialization (fail-safe)
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-stagger]').forEach(container => {
+                Array.from(container.children).forEach((child, idx) => {
+                    child.setAttribute('data-reveal', '');
+                    child.style.setProperty('--stagger-i', Math.min(idx, 5));
+                });
+            });
+
+            const revealEls = document.querySelectorAll('[data-reveal]');
+            if (!revealEls.length) return;
+
+            if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                revealEls.forEach(el => el.classList.add('is-visible'));
+                return;
+            }
+
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.06, rootMargin: '0px 0px -24px 0px' });
+
+            revealEls.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.94) {
+                    el.classList.add('is-visible');
+                } else {
+                    io.observe(el);
+                }
+            });
+
+            // Hard fail-safe: guarantee scrolled elements never remain invisible
+            setTimeout(() => {
+                revealEls.forEach(el => {
+                    if (el.getBoundingClientRect().top < window.innerHeight + 120) {
+                        el.classList.add('is-visible');
+                    }
+                });
+            }, 900);
+        });
     </script>
 
     @yield('scripts')

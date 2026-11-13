@@ -28,7 +28,7 @@
         </thead>
         <tbody>
             @forelse($messages as $msg)
-            <tr style="{{ !$msg->is_read ? 'background: rgba(99,102,241,0.03); font-weight:600' : '' }}">
+            <tr style="{{ !$msg->is_read ? 'background: rgba(30,64,175,0.04); font-weight:600' : '' }}">
                 <td style="text-align:center">
                     @if(!$msg->is_read)
                         <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent)" title="Unread"></span>

@@ -25,12 +25,16 @@
             --text: #12161f;
             --text-muted: #687385;
             --accent: #1e40af;
+            --primary: #1e40af;
             --accent-light: #1d4ed8;
             --gradient: linear-gradient(135deg, #12161f, #1e40af);
             --sidebar-width: 256px;
             --danger: #dc2626;
             --success: #15803d;
             --warning: #b45309;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --shadow-sm: 0 2px 8px rgba(18, 22, 31, 0.05);
+            --shadow-md: 0 10px 28px rgba(18, 22, 31, 0.09);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -96,7 +100,7 @@
         .sidebar-footer form button:hover { background: #fef2f2; color: var(--danger); }
 
         /* Main content */
-        .main { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+        .main { margin-left: var(--sidebar-width); flex: 1; min-width: 0; max-width: 100%; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
 
         /* Top bar */
         .topbar {
@@ -122,11 +126,14 @@
         /* Content area */
         .content { padding: 1.75rem 1.5rem; flex: 1; }
 
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
         /* Page header */
         .page-header {
             display: flex; align-items: center; justify-content: space-between;
             margin-bottom: 1.65rem; flex-wrap: wrap; gap: 1rem;
         }
+        .page-header > div { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
         .page-header h1 { font-size: 1.45rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 
         /* Cards/Stats */
@@ -134,13 +141,16 @@
         .stat-card {
             background: var(--bg-card); border: 1px solid var(--border);
             border-radius: 9px; padding: 1.2rem;
+            transition: transform 0.2s var(--ease-out), border-color 0.2s ease, box-shadow 0.2s ease;
         }
+        .stat-card:hover { transform: translateY(-1px); border-color: #cbd5e1; box-shadow: var(--shadow-sm); }
         .stat-card .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.45rem; font-weight: 500; }
         .stat-card .stat-value { font-size: 1.85rem; font-weight: 700; color: var(--text); }
         .stat-card .stat-icon {
             width: 34px; height: 34px; border-radius: 7px;
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 0.65rem; font-size: 0.95rem;
+            background: #eef1f5; color: var(--accent);
             border: 1px solid var(--border);
         }
         .stat-purple .stat-icon { background: #eef1f5; color: var(--accent); }
@@ -149,7 +159,7 @@
         .stat-pink .stat-icon { background: #fef2f2; color: #b91c1c; }
 
         /* Table */
-        .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+        .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 9px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; max-width: 100%; }
         table { width: 100%; border-collapse: collapse; }
         thead th {
             padding: 0.85rem 1.15rem; text-align: left;
@@ -157,7 +167,7 @@
             color: var(--text-muted);
             background: #f7f8fa; border-bottom: 1px solid var(--border);
         }
-        tbody td { padding: 0.9rem 1.15rem; border-bottom: 1px solid #eef1f5; font-size: 0.88rem; vertical-align: middle; color: var(--text); }
+        tbody td { padding: 0.9rem 1.15rem; border-bottom: 1px solid #eef1f5; font-size: 0.88rem; vertical-align: middle; color: var(--text); transition: background-color 0.14s ease; }
         tbody tr:last-child td { border-bottom: none; }
         tbody tr:hover td { background: #f9fafb; }
 
@@ -171,7 +181,8 @@
         .badge-info { background: #e0f2fe; color: #075985; }
 
         /* Buttons */
-        .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.52rem 1rem; border-radius: 7px; font-family: inherit; font-size: 0.84rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: all 0.16s ease; white-space: nowrap; }
+        .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.52rem 1rem; border-radius: 7px; font-family: inherit; font-size: 0.84rem; font-weight: 600; text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.14s ease, box-shadow 0.16s ease; white-space: nowrap; }
+        .btn:active { transform: translateY(1px); }
         .btn-primary { background: var(--text); border-color: var(--text); color: #ffffff; }
         .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
         .btn-secondary { background: var(--bg-card); border-color: var(--border); color: var(--text); }
@@ -206,33 +217,63 @@
             display: none; background: var(--bg-card); border: 1px solid var(--border);
             color: var(--text); width: 38px; height: 38px; border-radius: 8px;
             align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;
-            margin-right: 0.75rem;
+            margin-right: 0.75rem; transition: border-color 0.16s ease, background-color 0.16s ease;
         }
+        .admin-hamburger:hover { border-color: var(--text); background: #f7f8fa; }
 
         .admin-backdrop {
-            display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4);
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4);
             backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            z-index: 99; opacity: 0; transition: opacity 0.3s ease;
+            z-index: 99; opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.25s var(--ease-out), visibility 0.25s ease;
         }
-        .admin-backdrop.open { display: block; opacity: 1; }
+        .admin-backdrop.open { opacity: 1; visibility: visible; pointer-events: auto; }
 
         /* Responsive */
+        @media (max-width: 960px) {
+            div[style*="grid-template-columns: 1fr 1fr"],
+            div[style*="grid-template-columns:1fr 1fr"],
+            div[style*="grid-template-columns: 2fr 1fr"],
+            div[style*="grid-template-columns:2fr 1fr"],
+            div[style*="grid-template-columns: 1fr 320px"],
+            div[style*="grid-template-columns:1fr 320px"],
+            div[style*="grid-template-columns: 1fr 340px"],
+            div[style*="grid-template-columns:1fr 340px"],
+            div[style*="grid-template-columns: 1fr 350px"],
+            div[style*="grid-template-columns:1fr 350px"],
+            div[style*="grid-template-columns: 1fr 380px"],
+            div[style*="grid-template-columns:1fr 380px"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
         @media (max-width: 900px) {
             .admin-hamburger { display: flex; }
-            .sidebar { transform: translateX(-100%); box-shadow: 0 0 30px rgba(0,0,0,0.15); }
+            .sidebar { transform: translateX(-100%); box-shadow: var(--shadow-md); }
             .sidebar.open { transform: none; }
             .main { margin-left: 0; }
             .topbar { padding: 0.85rem 1rem; }
             .content { padding: 1.25rem 1rem; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
             table { min-width: 600px; }
+        }
+
+        @media (max-width: 640px) {
+            .page-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .admin-article-preview { padding: 1.45rem 1.1rem !important; border-radius: 12px !important; }
         }
 
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
-            .page-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
             .form-card { padding: 1.25rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
         /* ===== CUSTOM POP-UP MODAL & TOAST SYSTEM ===== */
@@ -541,7 +582,7 @@
     <div class="main">
         <header class="topbar">
             <div style="display: flex; align-items: center;">
-                <button class="admin-hamburger" id="admin-hamburger" aria-label="Toggle sidebar">
+                <button type="button" class="admin-hamburger" id="admin-hamburger" aria-label="Toggle sidebar" aria-expanded="false" aria-controls="sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="topbar-title">
@@ -628,14 +669,22 @@
                 const isOpen = typeof state === 'boolean' ? state : !adminSidebar.classList.contains('open');
                 adminSidebar.classList.toggle('open', isOpen);
                 if (adminBackdrop) adminBackdrop.classList.toggle('open', isOpen);
+                adminHamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                document.body.style.overflow = (isOpen && window.innerWidth <= 900) ? 'hidden' : '';
             }
 
             adminHamburger.addEventListener('click', () => toggleAdminSidebar());
             if (adminBackdrop) adminBackdrop.addEventListener('click', () => toggleAdminSidebar(false));
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && adminSidebar.classList.contains('open')) {
+                    toggleAdminSidebar(false);
+                    adminHamburger.focus();
+                }
+            });
 
             adminSidebar.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) toggleAdminSidebar(false);
+                    if (window.innerWidth <= 900) toggleAdminSidebar(false);
                 });
             });
         }

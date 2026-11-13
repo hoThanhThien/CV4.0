@@ -208,7 +208,7 @@
             }
 
             suggestionsBox.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted); width:100%">Model khả dụng trên API (' + data.models.length + '):</span> ' +
-                data.models.slice(0, 12).map(m => `<button type="button" onclick="selectModel('${m.id}')" title="${m.display_name || m.id}" class="badge" style="cursor:pointer; background:rgba(99,102,241,0.1); color:var(--accent); border:1px solid rgba(99,102,241,0.2); padding:0.3rem 0.6rem; border-radius:6px; font-family:monospace">${m.id}</button>`).join(' ');
+                data.models.slice(0, 12).map(m => `<button type="button" onclick="selectModel('${m.id}')" title="${m.display_name || m.id}" class="badge" style="cursor:pointer; background:#eff6ff; color:var(--accent); border:1px solid #bfdbfe; padding:0.3rem 0.6rem; border-radius:6px; font-family:monospace">${m.id}</button>`).join(' ');
         } catch (err) {
             suggestionsBox.innerHTML = '<span style="font-size:0.82rem; color:var(--danger)">Lỗi kết nối khi truy vấn danh sách Model.</span>';
         } finally {

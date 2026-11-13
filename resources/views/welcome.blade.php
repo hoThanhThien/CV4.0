@@ -120,6 +120,7 @@
     .spec-value a {
         color: var(--accent);
         text-decoration: none;
+        overflow-wrap: anywhere;
     }
     .spec-value a:hover {
         text-decoration: underline;
@@ -138,10 +139,12 @@
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        transition: border-color 0.18s ease;
+        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
     }
     .achievement-card:hover {
         border-color: var(--border-strong);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
     .achievement-top {
         display: flex;
@@ -356,13 +359,14 @@
         border: 1px solid var(--border);
         border-radius: 10px;
         overflow: hidden;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
         display: flex;
         flex-direction: column;
     }
     .project-card:hover {
         border-color: var(--border-strong);
-        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.08);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
     .project-image {
         height: 190px;
@@ -376,6 +380,10 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: transform var(--duration-base) var(--ease-out);
+    }
+    .project-card:hover .project-image img {
+        transform: scale(1.025);
     }
     .project-body {
         padding: 1.25rem;
@@ -445,11 +453,12 @@
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
     }
     .home-cert-card:hover {
         border-color: var(--border-strong);
-        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.07);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
     .home-cert-top {
         display: flex;
@@ -605,14 +614,23 @@
         position: fixed;
         inset: 0;
         z-index: 9999;
-        display: none;
+        display: flex;
         align-items: center;
         justify-content: center;
         padding: 1.25rem;
-        background: rgba(18, 22, 31, 0.72);
+        background: rgba(18, 22, 31, 0.68);
         backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity var(--duration-base) var(--ease-out), visibility var(--duration-base);
     }
-    .home-cert-modal.active { display: flex; }
+    .home-cert-modal.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
     .home-cert-modal-box {
         background: var(--bg-card);
         border: 1px solid var(--border);
@@ -624,6 +642,11 @@
         flex-direction: column;
         overflow: hidden;
         box-shadow: 0 24px 48px -12px rgba(18, 22, 31, 0.35);
+        transform: scale(0.97) translateY(8px);
+        transition: transform var(--duration-base) var(--ease-out);
+    }
+    .home-cert-modal.active .home-cert-modal-box {
+        transform: scale(1) translateY(0);
     }
     .home-cert-modal-header {
         padding: 0.9rem 1.25rem;
@@ -631,7 +654,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
+        gap: 0.75rem;
         background: var(--bg-card);
     }
     .home-cert-modal-title {
@@ -641,9 +664,16 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        min-width: 0;
+        flex: 1;
         display: flex;
         align-items: center;
         gap: 0.55rem;
+    }
+    .home-cert-modal-title span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     .home-cert-modal-body {
         flex: 1;
@@ -680,11 +710,12 @@
         color: inherit;
         display: flex;
         flex-direction: column;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
     }
     .blog-card:hover {
         border-color: var(--border-strong);
-        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.08);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
     .blog-image {
         aspect-ratio: 16 / 9;
@@ -697,6 +728,10 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: transform var(--duration-base) var(--ease-out);
+    }
+    .blog-card:hover .blog-image img {
+        transform: scale(1.025);
     }
     .blog-body {
         padding: 1.25rem;
@@ -793,9 +828,23 @@
         .home-cert-card:last-child:nth-child(odd) {
             max-width: 100%;
         }
+        .home-cert-title {
+            min-height: auto;
+        }
         .spec-row {
             grid-template-columns: 1fr;
             gap: 0.25rem;
+        }
+        .home-cert-modal {
+            padding: 0.5rem;
+        }
+        .home-cert-modal-box {
+            width: 100%;
+            height: 92vh;
+        }
+        #homeCertModalExt span,
+        #homeCertModalDl span {
+            display: none;
         }
     }
     @media (max-width: 480px) {
@@ -881,14 +930,14 @@
 <!-- ===== KEY ACHIEVEMENTS ===== -->
 <section class="section">
     <div class="container">
-        <div class="section-header-row">
+        <div class="section-header-row" data-reveal>
             <div>
                 <h2 class="section-title">{!! __('heading_achievements') !!}</h2>
                 <p class="section-subtitle">{{ __('Academic recognition and competition awards') }}</p>
             </div>
         </div>
 
-        <div class="achievements-grid">
+        <div class="achievements-grid" data-stagger>
             <!-- 1. GPA 4.0 -->
             <div class="achievement-card">
                 <div class="achievement-top">
@@ -967,14 +1016,14 @@
 @if($skills->count())
 <section class="section skills-section">
     <div class="container">
-        <div class="section-header-row">
+        <div class="section-header-row" data-reveal>
             <div>
                 <h2 class="section-title">{!! __('heading_my_skills') !!}</h2>
                 <p class="section-subtitle">{{ __('Technologies and tools I work with every day') }}</p>
             </div>
         </div>
 
-        <div class="skills-categories-grid">
+        <div class="skills-categories-grid" data-stagger>
             @foreach($skills as $category => $categorySkills)
             <div class="skill-category-block">
                 <h3 class="skill-category-title">
@@ -1004,14 +1053,14 @@
 @if($experiences->count())
 <section class="section">
     <div class="container">
-        <div class="section-header-row">
+        <div class="section-header-row" data-reveal>
             <div>
                 <h2 class="section-title">{!! __('heading_experience') !!}</h2>
                 <p class="section-subtitle">{{ __('My professional journey so far') }}</p>
             </div>
         </div>
 
-        <div class="experience-ledger">
+        <div class="experience-ledger" data-stagger>
             @foreach($experiences as $exp)
             <div class="exp-row">
                 <div class="exp-meta-col">
@@ -1054,7 +1103,7 @@
 @if($featuredProjects->count())
 <section class="section projects-section">
     <div class="container">
-        <div class="section-header-row">
+        <div class="section-header-row" data-reveal>
             <div>
                 <h2 class="section-title">{!! __('heading_featured_projects') !!}</h2>
                 <p class="section-subtitle">{{ __('Some of my recent and favourite work') }}</p>
@@ -1064,7 +1113,7 @@
             </a>
         </div>
 
-        <div class="projects-grid">
+        <div class="projects-grid" data-stagger>
             @foreach($featuredProjects as $project)
             <div class="project-card">
                 <div class="project-image">
@@ -1110,7 +1159,7 @@
 @if(isset($certificates) && $certificates->count())
 <section class="section">
     <div class="container">
-        <div class="section-header-row">
+        <div class="section-header-row" data-reveal>
             <div>
                 <h2 class="section-title">{!! __('heading_credentials') !!}</h2>
                 <p class="section-subtitle">{{ __('credentials_subtitle') }}</p>
@@ -1120,7 +1169,7 @@
             </a>
         </div>
 
-        <div class="home-cert-grid">
+        <div class="home-cert-grid" data-stagger>
             @foreach($certificates->take(3) as $cert)
             <div class="home-cert-card">
                 <div class="home-cert-top">
@@ -1210,7 +1259,7 @@
 </section>
 
 <!-- Home Quick Document Viewer Modal -->
-<div class="home-cert-modal" id="homeCertModal" onclick="if(event.target===this) closeHomeCertModal()">
+<div class="home-cert-modal" id="homeCertModal" role="dialog" aria-modal="true" aria-labelledby="homeCertModalTitle" onclick="if(event.target===this) closeHomeCertModal()">
     <div class="home-cert-modal-box">
         <div class="home-cert-modal-header">
             <div class="home-cert-modal-title">
@@ -1218,15 +1267,15 @@
                 <span id="homeCertModalTitle">{{ app()->getLocale() == 'vi' ? 'Tài liệu' : 'Document' }}</span>
             </div>
             <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0">
-                <a id="homeCertModalExt" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+                <a id="homeCertModalExt" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm" title="{{ app()->getLocale() == 'vi' ? 'Mở tab mới' : 'Open tab' }}">
                     <i class="fas fa-external-link-alt"></i>
                     <span>{{ app()->getLocale() == 'vi' ? 'Mở tab mới' : 'Open tab' }}</span>
                 </a>
-                <a id="homeCertModalDl" href="#" download class="btn btn-primary btn-sm">
+                <a id="homeCertModalDl" href="#" download class="btn btn-primary btn-sm" title="{{ __('Download') }}">
                     <i class="fas fa-download"></i>
                     <span>{{ __('Download') }}</span>
                 </a>
-                <button type="button" onclick="closeHomeCertModal()" aria-label="Close"
+                <button type="button" id="homeCertModalCloseBtn" onclick="closeHomeCertModal()" aria-label="Close"
                     style="width:36px; height:36px; border-radius:7px; border:1px solid var(--border); background:var(--bg-primary); color:var(--text-secondary); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:1.1rem">
                     &times;
                 </button>
@@ -1237,7 +1286,10 @@
 </div>
 
 <script>
+    let lastFocusedCertTrigger = null;
+
     function openHomeCertModal(url, title, type) {
+        lastFocusedCertTrigger = document.activeElement;
         const modal = document.getElementById('homeCertModal');
         const body = document.getElementById('homeCertModalBody');
         document.getElementById('homeCertModalTitle').textContent = title;
@@ -1248,15 +1300,24 @@
             : `<img src="${url}" alt="${title}">`;
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            const closeBtn = document.getElementById('homeCertModalCloseBtn');
+            if (closeBtn) closeBtn.focus();
+        }, 50);
     }
 
     function closeHomeCertModal() {
         const modal = document.getElementById('homeCertModal');
         const body = document.getElementById('homeCertModalBody');
-        if (!modal) return;
+        if (!modal || !modal.classList.contains('active')) return;
         modal.classList.remove('active');
-        if (body) body.innerHTML = '';
+        setTimeout(() => {
+            if (body && !modal.classList.contains('active')) body.innerHTML = '';
+        }, 260);
         document.body.style.overflow = '';
+        if (lastFocusedCertTrigger && typeof lastFocusedCertTrigger.focus === 'function') {
+            lastFocusedCertTrigger.focus();
+        }
     }
 
     document.addEventListener('keydown', function(e) {
@@ -1269,7 +1330,7 @@
 @if($recentPosts->count())
 <section class="section blog-section">
     <div class="container">
-        <div class="section-header-row">
+        <div class="section-header-row" data-reveal>
             <div>
                 <h2 class="section-title">{!! __('heading_recent_articles') !!}</h2>
                 <p class="section-subtitle">{{ __('Thoughts, learnings and insights from my journey') }}</p>
@@ -1279,7 +1340,7 @@
             </a>
         </div>
 
-        <div class="blog-grid">
+        <div class="blog-grid" data-stagger>
             @foreach($recentPosts as $post)
             <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
                 <div class="blog-image">
@@ -1306,7 +1367,7 @@
 <!-- ===== CTA ===== -->
 <section class="cta-section">
     <div class="container">
-        <div class="cta-box">
+        <div class="cta-box" data-reveal>
             <div>
                 <h2>{!! __('cta_heading') !!}</h2>
                 <p>{{ __("I'm always open to interesting projects and opportunities.") }}</p>

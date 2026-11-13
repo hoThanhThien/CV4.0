@@ -40,11 +40,12 @@
         flex-direction: column;
         text-decoration: none;
         color: inherit;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
     }
     .blog-card:hover {
         border-color: var(--border-strong);
-        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.08);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
 
     .blog-image {
@@ -61,6 +62,10 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: transform var(--duration-base) var(--ease-out);
+    }
+    .blog-card:hover .blog-image img {
+        transform: scale(1.025);
     }
     .blog-image-placeholder { font-size: 2.25rem; color: var(--text-muted); }
 
@@ -121,7 +126,7 @@
 
 @section('content')
 <section class="page-header-band">
-    <div class="container">
+    <div class="container hero-animate">
         <h1>{!! __('heading_my_blog') !!}</h1>
         <p>{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
     </div>
@@ -130,7 +135,7 @@
 <section class="section" style="padding-top: 2.5rem">
     <div class="container">
         @if($posts->count())
-        <div class="blog-grid">
+        <div class="blog-grid" data-stagger>
             @foreach($posts as $post)
             <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
                 <div class="blog-image">
@@ -158,23 +163,23 @@
         </div>
 
         @if($posts->hasPages())
-        <div class="pagination-wrap">
+        <nav class="pagination-wrap" aria-label="Pagination">
             @if($posts->onFirstPage())
-                <span class="page-link" style="opacity:0.45">« {{ __('Prev') }}</span>
+                <span class="page-link" aria-disabled="true" style="opacity:0.45; pointer-events:none;">« {{ __('Prev') }}</span>
             @else
-                <a href="{{ $posts->previousPageUrl() }}" class="page-link">« {{ __('Prev') }}</a>
+                <a href="{{ $posts->previousPageUrl() }}" class="page-link" rel="prev">« {{ __('Prev') }}</a>
             @endif
 
             @foreach($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
-                <a href="{{ $url }}" class="page-link {{ $posts->currentPage() == $page ? 'active' : '' }}">{{ $page }}</a>
+                <a href="{{ $url }}" class="page-link {{ $posts->currentPage() == $page ? 'active' : '' }}" {{ $posts->currentPage() == $page ? 'aria-current="page"' : '' }}>{{ $page }}</a>
             @endforeach
 
             @if($posts->hasMorePages())
-                <a href="{{ $posts->nextPageUrl() }}" class="page-link">{{ __('Next') }} »</a>
+                <a href="{{ $posts->nextPageUrl() }}" class="page-link" rel="next">{{ __('Next') }} »</a>
             @else
-                <span class="page-link" style="opacity:0.45">{{ __('Next') }} »</span>
+                <span class="page-link" aria-disabled="true" style="opacity:0.45; pointer-events:none;">{{ __('Next') }} »</span>
             @endif
-        </div>
+        </nav>
         @endif
 
         @else

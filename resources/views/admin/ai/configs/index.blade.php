@@ -37,7 +37,7 @@
                         <div style="font-weight:700">{{ $cfg->name }}</div>
                         <div style="font-size:0.75rem; color:var(--text-muted)">Danh mục: {{ $cfg->category }}</div>
                         @if($cfg->auto_generate_image ?? true)
-                            <span class="badge" style="margin-top:0.25rem; background:rgba(6,182,212,0.12); color:#0891b2; font-size:0.68rem">
+                            <span class="badge badge-info" style="margin-top:0.25rem; font-size:0.68rem">
                                 <i class="fas fa-image"></i> Auto Thumbnail & OG
                             </span>
                         @endif
@@ -70,7 +70,7 @@
                         <small style="color:var(--text-muted)">{{ $cfg->writing_tone }}</small>
                     </td>
                     <td>
-                        <span class="badge" style="background:rgba(99,102,241,0.1); color:var(--accent); text-transform:capitalize">
+                        <span class="badge badge-purple" style="text-transform:capitalize">
                             {{ $cfg->article_length }}
                         </span>
                     </td>

@@ -56,7 +56,7 @@
                             <i class="fas fa-file-pdf"></i>
                         </div>
                     @else
-                        <div style="width:48px; height:48px; border-radius:8px; background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.25); display:flex; align-items:center; justify-content:center; color:#06b6d4; font-size:1.4rem">
+                        <div style="width:48px; height:48px; border-radius:8px; background:#eff6ff; border:1px solid #bfdbfe; display:flex; align-items:center; justify-content:center; color:#1e40af; font-size:1.4rem">
                             <i class="fas fa-file-image"></i>
                         </div>
                     @endif
@@ -83,7 +83,7 @@
                             <i class="fas fa-file-pdf"></i> PDF
                         </span>
                     @else
-                        <span class="badge" style="background:rgba(6,182,212,0.1); color:#06b6d4; border:1px solid rgba(6,182,212,0.2)">
+                        <span class="badge" style="background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe">
                             <i class="fas fa-image"></i> IMAGE
                         </span>
                     @endif

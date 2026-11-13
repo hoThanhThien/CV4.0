@@ -163,11 +163,12 @@
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        transition: border-color var(--duration-fast, 160ms) ease, box-shadow var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), transform var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
     }
     .achievement-card:hover {
-        border-color: #b8c2d1;
-        box-shadow: 0 6px 20px rgba(18, 22, 31, 0.05);
+        border-color: var(--border-strong, #b8c2d1);
+        box-shadow: var(--shadow-md, 0 10px 24px -8px rgba(18, 22, 31, 0.1));
+        transform: translateY(-2px);
     }
     .achievement-top {
         display: flex;
@@ -292,8 +293,15 @@
         gap: 1.15rem 2rem;
     }
     @media (max-width: 640px) {
+        .education-card {
+            padding: 1.35rem;
+        }
         .education-metrics {
             grid-template-columns: 1fr;
+        }
+        .about-meta-chip {
+            max-width: 100%;
+            overflow-wrap: anywhere;
         }
     }
     .education-metric-item {
@@ -470,7 +478,7 @@
 <!-- Hero & Summary -->
 <section class="about-header">
     <div class="container">
-        <div class="about-intro">
+        <div class="about-intro hero-animate">
             <div class="about-monogram" aria-hidden="true">
                 <span class="initials">HT</span>
                 <span class="monogram-tag">dev</span>
@@ -520,12 +528,12 @@
 <!-- Key Achievements -->
 <section class="about-section">
     <div class="container">
-        <div class="about-section-head">
+        <div class="about-section-head" data-reveal>
             <h2>{!! __('heading_achievements') !!}</h2>
             <p>{{ __('Academic recognition and competition awards') }}</p>
         </div>
 
-        <div class="achievements-grid">
+        <div class="achievements-grid" data-stagger>
             <!-- 1. GPA 4.0 -->
             <div class="achievement-card">
                 <div class="achievement-top">
@@ -609,12 +617,12 @@
 <!-- Education -->
 <section class="about-section about-section--tinted">
     <div class="container">
-        <div class="about-section-head">
+        <div class="about-section-head" data-reveal>
             <h2>{!! __('heading_education') !!}</h2>
             <p>{{ __('Formal academic background & verified credentials') }}</p>
         </div>
 
-        <div class="education-card">
+        <div class="education-card" data-reveal>
             <div class="education-header">
                 <div>
                     <h3 class="education-school">
@@ -670,12 +678,12 @@
 @if($skills->count())
 <section class="about-section">
     <div class="container">
-        <div class="about-section-head">
+        <div class="about-section-head" data-reveal>
             <h2>{!! __('heading_my_skills') !!}</h2>
             <p>{{ __('Technologies and tools I work with every day') }}</p>
         </div>
 
-        <div class="skills-categories-grid">
+        <div class="skills-categories-grid" data-stagger>
             @foreach($skills as $category => $categorySkills)
             <div class="skill-category-panel">
                 <div class="skill-category-head">
@@ -706,12 +714,12 @@
 @if($experiences->count())
 <section class="about-section about-section--tinted">
     <div class="container">
-        <div class="about-section-head">
+        <div class="about-section-head" data-reveal>
             <h2>{!! __('heading_experience') !!}</h2>
             <p>{{ __('My professional journey so far') }}</p>
         </div>
 
-        <div class="exp-ledger">
+        <div class="exp-ledger" data-stagger>
             @foreach($experiences as $exp)
             <div class="exp-ledger-row">
                 <div>

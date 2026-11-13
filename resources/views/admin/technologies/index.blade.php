@@ -74,8 +74,8 @@
             <div class="form-group">
                 <label class="form-label" for="color">Tag Accent Color</label>
                 <div style="display:flex; gap:0.5rem; align-items:center">
-                    <input type="color" id="color_picker" value="#6366f1" style="width:42px; height:42px; border:1px solid var(--border); border-radius:8px; cursor:pointer; padding:2px" oninput="document.getElementById('color').value = this.value">
-                    <input type="text" id="color" name="color" class="form-control" value="#6366f1" placeholder="#6366f1" oninput="document.getElementById('color_picker').value = this.value">
+                    <input type="color" id="color_picker" value="#1e40af" style="width:42px; height:42px; border:1px solid var(--border); border-radius:8px; cursor:pointer; padding:2px" oninput="document.getElementById('color').value = this.value">
+                    <input type="text" id="color" name="color" class="form-control" value="#1e40af" placeholder="#1e40af" oninput="document.getElementById('color_picker').value = this.value">
                 </div>
                 @error('color')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
             </div>

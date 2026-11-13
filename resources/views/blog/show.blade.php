@@ -195,6 +195,12 @@
         min-width: 0;
         width: 100%;
     }
+    @media (min-width: 961px) {
+        .post-sidebar {
+            position: sticky;
+            top: 88px;
+        }
+    }
     .post-sidebar .card {
         margin-bottom: 1rem;
         padding: 1.25rem;
@@ -234,7 +240,7 @@
 
 <section class="section" style="padding-top:2.25rem">
     <div class="container">
-        <div class="post-layout">
+        <div class="post-layout hero-animate">
             <!-- Main -->
             <article>
                 <h1 class="post-title">{{ $post->title }}</h1>

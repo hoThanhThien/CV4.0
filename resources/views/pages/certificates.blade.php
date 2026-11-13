@@ -103,12 +103,18 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+        transition: border-color var(--duration-fast, 160ms) ease, box-shadow var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), transform var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
     }
     .cert-card:hover {
-        border-color: #b8c2d1;
-        box-shadow: 0 8px 24px rgba(18, 22, 31, 0.06);
+        border-color: var(--border-strong, #b8c2d1);
+        box-shadow: var(--shadow-md, 0 10px 24px -8px rgba(18, 22, 31, 0.1));
         transform: translateY(-2px);
+    }
+    .cert-preview-img {
+        transition: transform var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+    }
+    .cert-card:hover .cert-preview-img {
+        transform: scale(1.02);
     }
 
     /* Document Preview Frame */
@@ -458,18 +464,25 @@
 
     /* Lightbox Modal */
     .cert-modal {
-        display: none;
+        display: flex;
         position: fixed;
         inset: 0;
         z-index: 9999;
-        background: rgba(18, 22, 31, 0.72);
-        backdrop-filter: blur(4px);
+        background: rgba(18, 22, 31, 0.68);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         align-items: center;
         justify-content: center;
         padding: 1.5rem;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), visibility var(--duration-base, 260ms);
     }
     .cert-modal.active {
-        display: flex;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
     }
     .cert-modal-box {
         width: 100%;
@@ -482,6 +495,11 @@
         display: flex;
         flex-direction: column;
         box-shadow: 0 24px 60px rgba(18, 22, 31, 0.25);
+        transform: scale(0.97) translateY(8px);
+        transition: transform var(--duration-base, 260ms) var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+    }
+    .cert-modal.active .cert-modal-box {
+        transform: scale(1) translateY(0);
     }
     .cert-modal-header {
         display: flex;
@@ -602,7 +620,7 @@
 @section('content')
 <!-- Header Section -->
 <section class="cert-header">
-    <div class="container">
+    <div class="container hero-animate">
         <h1>{!! __('heading_credentials') !!}</h1>
         <p>{{ __('credentials_subtitle') }}</p>
 
@@ -650,7 +668,7 @@
                 </a>
             </div>
         @else
-            <div class="cert-grid">
+            <div class="cert-grid" data-stagger>
                 @foreach($certificates as $cert)
                     <article class="cert-card">
                         <!-- Preview Frame -->
@@ -797,7 +815,7 @@
 </section>
 
 <!-- Document Viewer Modal -->
-<div class="cert-modal" id="certModal" onclick="closeCertModal(event)">
+<div class="cert-modal" id="certModal" role="dialog" aria-modal="true" aria-labelledby="certModalTitleText" onclick="closeCertModal(event)">
     <div class="cert-modal-box" onclick="event.stopPropagation()">
         <div class="cert-modal-header">
             <div class="cert-modal-title" id="certModalTitle">
@@ -813,7 +831,7 @@
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     <span>{{ __('Download') }}</span>
                 </a>
-                <button type="button" class="btn-modal-close" onclick="closeCertModalDirect()" title="{{ app()->getLocale() == 'vi' ? 'Đóng' : 'Close' }}">
+                <button type="button" id="certModalCloseBtn" class="btn-modal-close" onclick="closeCertModalDirect()" title="{{ app()->getLocale() == 'vi' ? 'Đóng' : 'Close' }}" aria-label="{{ app()->getLocale() == 'vi' ? 'Đóng' : 'Close' }}">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
@@ -825,7 +843,10 @@
 </div>
 
 <script>
+let lastCertTrigger = null;
+
 function openCertModal(url, title, type) {
+    lastCertTrigger = document.activeElement;
     const modal = document.getElementById('certModal');
     const titleTextEl = document.getElementById('certModalTitleText');
     const bodyEl = document.getElementById('certModalBody');
@@ -846,14 +867,24 @@ function openCertModal(url, title, type) {
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+        const closeBtn = document.getElementById('certModalCloseBtn');
+        if (closeBtn) closeBtn.focus();
+    }, 50);
 }
 
 function closeCertModalDirect() {
     const modal = document.getElementById('certModal');
     const bodyEl = document.getElementById('certModalBody');
+    if (!modal || !modal.classList.contains('active')) return;
     modal.classList.remove('active');
-    bodyEl.innerHTML = '';
+    setTimeout(() => {
+        if (bodyEl && !modal.classList.contains('active')) bodyEl.innerHTML = '';
+    }, 260);
     document.body.style.overflow = '';
+    if (lastCertTrigger && typeof lastCertTrigger.focus === 'function') {
+        lastCertTrigger.focus();
+    }
 }
 
 function closeCertModal(e) {

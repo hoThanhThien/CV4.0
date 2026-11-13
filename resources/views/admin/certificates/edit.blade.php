@@ -86,9 +86,9 @@
                         <label class="form-label" style="margin-bottom:0.5rem">Danh sách file đính kèm hiện có:</label>
                         <div style="display:flex; flex-direction:column; gap:0.6rem">
                             @foreach($certificate->extra_files as $idx => $extra)
-                                <div style="display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0.9rem; border-radius:8px; background:rgba(255,255,255,0.03); border:1px solid var(--border); gap:0.75rem">
+                                <div style="display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0.9rem; border-radius:8px; background:var(--bg); border:1px solid var(--border); gap:0.75rem">
                                     <div style="display:flex; align-items:center; gap:0.65rem; min-width:0; flex:1">
-                                        <i class="fas {{ ($extra['type'] ?? '') == 'pdf' ? 'fa-file-pdf' : 'fa-file-image' }}" style="font-size:1.3rem; color:{{ ($extra['type'] ?? '') == 'pdf' ? '#ef4444' : '#06b6d4' }}"></i>
+                                        <i class="fas {{ ($extra['type'] ?? '') == 'pdf' ? 'fa-file-pdf' : 'fa-file-image' }}" style="font-size:1.3rem; color:{{ ($extra['type'] ?? '') == 'pdf' ? '#dc2626' : '#1e40af' }}"></i>
                                         <div style="min-width:0; flex:1">
                                             <div style="font-size:0.88rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">
                                                 {{ $extra['name'] ?? basename($extra['path']) }}
@@ -137,8 +137,8 @@
                 </h3>
 
                 <!-- Current file preview -->
-                <div style="padding:0.75rem; border-radius:8px; background:rgba(99,102,241,0.06); border:1px solid var(--border); margin-bottom:1rem; display:flex; align-items:center; gap:0.75rem">
-                    <div style="font-size:1.8rem; color:{{ $certificate->is_pdf ? '#ef4444' : '#06b6d4' }}">
+                <div style="padding:0.75rem; border-radius:8px; background:var(--bg); border:1px solid var(--border); margin-bottom:1rem; display:flex; align-items:center; gap:0.75rem">
+                    <div style="font-size:1.8rem; color:{{ $certificate->is_pdf ? '#dc2626' : '#1e40af' }}">
                         <i class="fas {{ $certificate->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}"></i>
                     </div>
                     <div style="flex:1; min-width:0">
@@ -163,7 +163,7 @@
                     @error('file')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
 
                     <!-- Preview box when new file selected -->
-                    <div id="file-info-preview" style="display:none; margin-top:0.85rem; padding:0.75rem; border-radius:8px; background:rgba(99,102,241,0.12); border:1px dashed var(--primary); align-items:center; gap:0.75rem">
+                    <div id="file-info-preview" style="display:none; margin-top:0.85rem; padding:0.75rem; border-radius:8px; background:#eff6ff; border:1px dashed var(--accent); align-items:center; gap:0.75rem">
                         <div id="file-icon" style="font-size:1.8rem; color:var(--primary)"></div>
                         <div style="flex:1; min-width:0">
                             <div style="font-size:0.75rem; color:var(--primary); font-weight:600">File mới được chọn:</div>
@@ -230,7 +230,7 @@
                     <span style="font-size:0.78rem; color:var(--text-muted)">Số nhỏ hơn sẽ đứng trước (0 là ưu tiên cao nhất).</span>
                 </div>
 
-                <div style="margin-top:1rem; padding:0.75rem; border-radius:8px; background:var(--bg-subtle, rgba(255,255,255,0.03)); border:1px solid var(--border)">
+                <div style="margin-top:1rem; padding:0.75rem; border-radius:8px; background:var(--bg); border:1px solid var(--border)">
                     <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-weight:500; font-size:0.9rem">
                         <input type="checkbox" name="featured" value="1" {{ old('featured', $certificate->featured) ? 'checked' : '' }} style="width:18px; height:18px; accent-color:var(--primary)">
                         <span><i class="fas fa-star" style="color:#eab308"></i> Ghim nổi bật trang chủ</span>
@@ -265,10 +265,10 @@ function handleFileSelect(input) {
 
         if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
             icon.className = 'fas fa-file-pdf';
-            icon.style.color = '#ef4444';
+            icon.style.color = '#dc2626';
         } else {
             icon.className = 'fas fa-file-image';
-            icon.style.color = '#06b6d4';
+            icon.style.color = '#1e40af';
         }
     } else {
         preview.style.display = 'none';
@@ -311,9 +311,9 @@ function handleExtraFilesSelect(input) {
             const f = input.files[i];
             const isPdf = f.name.toLowerCase().endsWith('.pdf') || f.type === 'application/pdf';
             const item = document.createElement('div');
-            item.style.cssText = 'padding:0.5rem 0.75rem; border-radius:6px; background:rgba(99,102,241,0.08); border:1px dashed var(--primary); display:flex; align-items:center; gap:0.6rem; font-size:0.84rem';
+            item.style.cssText = 'padding:0.5rem 0.75rem; border-radius:6px; background:#eff6ff; border:1px dashed var(--accent); display:flex; align-items:center; gap:0.6rem; font-size:0.84rem';
             item.innerHTML = `
-                <i class="fas ${isPdf ? 'fa-file-pdf' : 'fa-file-image'}" style="color:${isPdf ? '#ef4444' : '#06b6d4'}; font-size:1.1rem"></i>
+                <i class="fas ${isPdf ? 'fa-file-pdf' : 'fa-file-image'}" style="color:${isPdf ? '#dc2626' : '#1e40af'}; font-size:1.1rem"></i>
                 <div style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600">${f.name}</div>
                 <div style="font-size:0.75rem; color:var(--text-muted)">${(f.size / 1024).toFixed(1)} KB</div>
             `;

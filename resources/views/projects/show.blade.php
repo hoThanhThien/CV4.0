@@ -105,6 +105,12 @@
         min-width: 0;
         width: 100%;
     }
+    @media (min-width: 961px) {
+        .project-sidebar {
+            position: sticky;
+            top: 88px;
+        }
+    }
     .project-sidebar .card {
         margin-bottom: 1.15rem;
         padding: 1.25rem;
@@ -159,7 +165,7 @@
 
 <section class="section" style="padding-top:2.25rem">
     <div class="container">
-        <div class="project-detail">
+        <div class="project-detail hero-animate">
             <!-- Main Content -->
             <div>
                 <div class="project-image-full">

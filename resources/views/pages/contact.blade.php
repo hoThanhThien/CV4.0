@@ -153,11 +153,19 @@
         font-weight: 600;
         color: var(--text-primary, #12161f);
         text-decoration: none;
-        word-break: break-word;
+        overflow-wrap: anywhere;
     }
     a.info-card-value:hover {
         color: var(--accent, #1e40af);
         text-decoration: underline;
+    }
+    @media (max-width: 480px) {
+        .contact-ledger-status,
+        .contact-ledger-item,
+        .contact-socials-row {
+            padding-left: 1.1rem;
+            padding-right: 1.1rem;
+        }
     }
     .info-card-sub {
         margin-top: 0.2rem;
@@ -310,7 +318,7 @@
 
 @section('content')
 <div class="contact-header">
-    <div class="container">
+    <div class="container hero-animate">
         <h1>{!! __('heading_contact') !!}</h1>
         <p>{{ __('I\'m always open to interesting projects and opportunities.') }}</p>
 
@@ -508,6 +516,14 @@
 @endsection
 
 @section('scripts')
+<script>
+    function setContactSubmitLoading() {
+        const btn = document.getElementById('btnSubmit');
+        if (!btn) return;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i><span>{{ app()->getLocale() === "vi" ? "Đang gửi..." : "Sending..." }}</span>';
+    }
+</script>
 @if(config('services.recaptcha.site_key'))
 <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
 <script>
@@ -517,6 +533,7 @@
 
         if (contactForm) {
             contactForm.addEventListener('submit', function(e) {
+                setContactSubmitLoading();
                 if (!tokenInput.value) {
                     e.preventDefault();
                     grecaptcha.ready(function() {
@@ -538,8 +555,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const tokenInput = document.getElementById('gRecaptchaResponse');
+        const contactForm = document.getElementById('contactForm');
         if (tokenInput) {
             tokenInput.value = 'invisible_v3_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+        }
+        if (contactForm) {
+            contactForm.addEventListener('submit', function() {
+                setContactSubmitLoading();
+            });
         }
     });
 </script>

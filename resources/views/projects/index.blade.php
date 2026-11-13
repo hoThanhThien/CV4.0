@@ -50,11 +50,12 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
     }
     .project-card:hover {
         border-color: var(--border-strong);
-        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.08);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
 
     .project-image {
@@ -72,6 +73,10 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: transform var(--duration-base) var(--ease-out);
+    }
+    .project-card:hover .project-image img {
+        transform: scale(1.025);
     }
 
     .project-featured-badge {
@@ -168,7 +173,7 @@
 
 @section('content')
 <section class="page-header-band">
-    <div class="container">
+    <div class="container hero-animate">
         <h1>{!! __('heading_my_projects') !!}</h1>
         <p>{{ __("Things I've built and worked on") }}</p>
     </div>
@@ -177,7 +182,7 @@
 <section class="section" style="padding-top:2.5rem">
     <div class="container">
         @if($projects->count())
-        <div class="projects-grid">
+        <div class="projects-grid" data-stagger>
             @foreach($projects as $project)
             <div class="project-card">
                 <div class="project-image">
@@ -220,11 +225,11 @@
         </div>
 
         @if($projects->hasPages())
-        <div class="pagination-wrap">
+        <nav class="pagination-wrap" aria-label="Pagination">
             @foreach($projects->links()->elements[0] as $page => $url)
-                <a href="{{ $url }}" class="page-link {{ $projects->currentPage() == $page ? 'active' : '' }}">{{ $page }}</a>
+                <a href="{{ $url }}" class="page-link {{ $projects->currentPage() == $page ? 'active' : '' }}" {{ $projects->currentPage() == $page ? 'aria-current="page"' : '' }}>{{ $page }}</a>
             @endforeach
-        </div>
+        </nav>
         @endif
 
         @else

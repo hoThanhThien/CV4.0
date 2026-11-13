@@ -66,7 +66,7 @@
                             <div>
                                 <div style="font-weight:700; max-width:300px">{{ Str::limit($post->title, 58) }}</div>
                                 <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap; margin-top:0.15rem">
-                                    <code style="font-size:0.73rem; color:var(--accent-light); background:rgba(99,102,241,0.1); padding:0.1rem 0.4rem; border-radius:4px">/{{ Str::limit($post->slug, 34) }}</code>
+                                    <code style="font-size:0.73rem; color:var(--accent); background:#eff6ff; padding:0.12rem 0.42rem; border-radius:4px">/{{ Str::limit($post->slug, 34) }}</code>
                                     @if($post->og_image)
                                         <span class="badge" style="background:rgba(16,185,129,0.12); color:var(--success); font-size:0.65rem" title="Đã có ảnh OpenGraph 1200×630">OG 1200×630</span>
                                     @endif
@@ -88,7 +88,7 @@
                         @if($post->status === 'published')
                             <span class="badge badge-success"><i class="fas fa-check-circle"></i> Đã xuất bản</span>
                         @elseif($post->status === 'scheduled')
-                            <span class="badge badge-info" style="background:rgba(6,182,212,0.15); color:#0891b2"><i class="fas fa-clock"></i> Đã lên lịch</span>
+                            <span class="badge badge-info"><i class="fas fa-clock"></i> Đã lên lịch</span>
                         @elseif($post->status === 'pending_review')
                             <span class="badge badge-warning"><i class="fas fa-user-clock"></i> Chờ duyệt</span>
                         @else
@@ -100,7 +100,7 @@
                     </td>
                     <td style="font-size:0.82rem">
                         @if($post->status === 'scheduled')
-                            <div style="font-weight:700; color:#0891b2">
+                            <div style="font-weight:700; color:var(--accent)">
                                 <i class="fas fa-calendar-alt"></i> {{ $post->published_at ? $post->published_at->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y H:i') : '—' }}
                             </div>
                         @elseif($post->status === 'published')
@@ -126,7 +126,7 @@
                                 data-loading-title="AI đang thiết kế Thumbnail & Ảnh OG..."
                                 data-loading-desc="Hệ thống đang tạo bộ ảnh đại diện 16:9 và ảnh chia sẻ mạng xã hội OpenGraph 1200×630...">
                                 @csrf
-                                <button type="submit" class="btn btn-secondary btn-sm" style="color:#0891b2" title="Tạo / Tạo lại Thumbnail & Ảnh OG bằng AI">
+                                <button type="submit" class="btn btn-secondary btn-sm" style="color:var(--accent)" title="Tạo / Tạo lại Thumbnail & Ảnh OG bằng AI">
                                     <i class="fas fa-image"></i>
                                 </button>
                             </form>

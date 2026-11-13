@@ -37,7 +37,7 @@
                             <span class="badge badge-purple">{{ $skill->name }}</span>
                         @endforeach
                         @if($project->skills->count() > 3)
-                            <span class="badge" style="background:rgba(255,255,255,0.05); color:var(--text-muted)">+{{ $project->skills->count() - 3 }}</span>
+                            <span class="badge badge-secondary">+{{ $project->skills->count() - 3 }}</span>
                         @endif
                     </div>
                 </td>

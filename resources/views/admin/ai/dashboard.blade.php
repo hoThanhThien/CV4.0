@@ -45,7 +45,7 @@
         <div class="stat-value">{{ $scheduledAiPosts }}</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon" style="background:rgba(99,102,241,0.15); color:var(--accent)"><i class="fas fa-bolt"></i></div>
+        <div class="stat-icon" style="background:#eff6ff; color:var(--accent)"><i class="fas fa-bolt"></i></div>
         <div class="stat-label">Automation đang bật</div>
         <div class="stat-value">{{ $activeAutomations }}</div>
     </div>
@@ -79,7 +79,7 @@
                         Cấu hình: <strong>{{ $nextScheduledRun->contentConfig->name ?? '—' }}</strong> |
                         Chế độ: <strong>{{ strtoupper(str_replace('_', ' ', $nextScheduledRun->publishing_mode)) }}</strong>
                     </div>
-                    <div style="margin-top:0.75rem; padding:0.65rem 0.85rem; background:rgba(99,102,241,0.06); border-radius:8px; font-size:0.85rem">
+                    <div style="margin-top:0.75rem; padding:0.65rem 0.85rem; background:rgba(30,64,175,0.04); border-radius:8px; font-size:0.85rem">
                         <i class="fas fa-calendar-check" style="color:var(--accent)"></i> Thời điểm chạy:
                         <strong style="color:var(--text)">
                             {{ $nextScheduledRun->next_run_at ? $nextScheduledRun->next_run_at->timezone('Asia/Ho_Chi_Minh')->format('H:i - d/m/Y') : '—' }}
@@ -165,7 +165,7 @@
                             </div>
                         </td>
                         <td>
-                            <span class="badge" style="background:rgba(99,102,241,0.1); color:var(--accent)">
+                            <span class="badge badge-purple">
                                 {{ $post->category ?? 'Tech' }}
                             </span>
                         </td>
@@ -173,7 +173,7 @@
                             @if($post->status === 'published')
                                 <span class="badge badge-success"><i class="fas fa-check-circle"></i> Đã xuất bản</span>
                             @elseif($post->status === 'scheduled')
-                                <span class="badge badge-info" style="background:rgba(6,182,212,0.15); color:#0891b2">
+                                <span class="badge badge-info">
                                     <i class="fas fa-clock"></i> Lên lịch: {{ $post->published_at ? $post->published_at->timezone('Asia/Ho_Chi_Minh')->format('d/m H:i') : '' }}
                                 </span>
                             @elseif($post->status === 'pending_review')
