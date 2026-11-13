@@ -372,7 +372,7 @@
 
 <section class="page-header-band">
     <div class="container hero-animate">
-        <div class="editorial-kicker">VERIFIED ARCHIVE // CREDENTIALS</div>
+        <div class="section-kicker" style="color:var(--accent-sky);">VERIFIED ARCHIVE // CREDENTIALS</div>
         <h1>{!! __('heading_credentials') !!}</h1>
         <p>{{ __('credentials_subtitle') }}</p>
 
@@ -497,15 +497,25 @@
                                     @endif
                                 </div>
 
+                                @php
+                                    $isReusedBrochurePlaceholder = ($cert->category !== 'brochure') && str_contains((string) $cert->file_path, 'HoThanhThien_CV_Brochure.pdf');
+                                @endphp
                                 <div class="cert-action-btns">
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="openCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
-                                        <i class="fas fa-eye" aria-hidden="true"></i>
-                                        <span>{{ __('View Document') }}</span>
-                                    </button>
-                                    <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm">
-                                        <i class="fas fa-download" aria-hidden="true"></i>
-                                        <span>{{ __('Download') }}</span>
-                                    </a>
+                                    @if($isReusedBrochurePlaceholder)
+                                        <span style="display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; width:100%; padding:0.5rem 0.85rem; border-radius:var(--radius-sm); background:var(--bg-secondary); border:1px dashed var(--border-strong); color:var(--text-muted); font-family:var(--font-mono); font-size:0.76rem;">
+                                            <i class="fas fa-clock" aria-hidden="true"></i>
+                                            <span>{{ __('Document pending upload') }}</span>
+                                        </span>
+                                    @else
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="openCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
+                                            <i class="fas fa-eye" aria-hidden="true"></i>
+                                            <span>{{ __('View Document') }}</span>
+                                        </button>
+                                        <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm">
+                                            <i class="fas fa-download" aria-hidden="true"></i>
+                                            <span>{{ __('Download') }}</span>
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

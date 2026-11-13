@@ -8,8 +8,9 @@
 <style>
     .about-hero {
         padding: clamp(2.75rem, 5vw, 4.25rem) 0 clamp(2.5rem, 4.5vw, 3.5rem);
-        background: var(--bg-primary);
-        border-bottom: 1px solid var(--border-strong);
+        background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-surface) 100%);
+        color: #F8FAFC;
+        border-bottom: 1px solid var(--navy-border);
     }
 
     .about-hero-grid {
@@ -64,18 +65,19 @@
         font-weight: 800;
         line-height: 1.08;
         letter-spacing: -0.035em;
+        color: #FFFFFF;
         margin-bottom: 0.5rem;
     }
     .about-role-line {
         font-family: var(--font-mono);
         font-size: 0.88rem;
         font-weight: 600;
-        color: var(--accent);
+        color: var(--accent-sky);
         margin-bottom: 1.15rem;
     }
     .about-lead-bio {
         font-size: 1.04rem;
-        color: var(--text-secondary);
+        color: #CBD5E1;
         line-height: 1.72;
         max-width: 64ch;
         margin-bottom: 1.4rem;
@@ -418,7 +420,7 @@
             </aside>
 
             <div class="about-hero-text">
-                <div class="editorial-kicker">{{ __('About Me') }}</div>
+                <div class="section-kicker" style="color:var(--accent-sky);">{{ __('About Me') }}</div>
                 <h1>{{ __("Hi, I'm") }} {{ __('Hồ Thành Thiện') }}</h1>
                 <div class="about-role-line">Full-Stack Web Developer · Laravel · Java Spring Boot · ReactJS</div>
                 <p class="about-lead-bio">
@@ -457,9 +459,9 @@
 <!-- Personal Story & Principles -->
 <section class="section">
     <div class="container">
-        <div class="editorial-head" data-reveal>
-            <div class="editorial-head-left">
-                <div class="editorial-kicker">01 // {{ __('Personal Story & Philosophy') }}</div>
+        <div class="section-head" data-reveal>
+            <div class="section-head-left">
+                <div class="section-kicker">01 // {{ __('Personal Story & Philosophy') }}</div>
                 <h2>{{ __('Design & Engineering Principles') }}</h2>
             </div>
         </div>
@@ -504,9 +506,9 @@
 <!-- Key Achievements -->
 <section class="section section--alt">
     <div class="container">
-        <div class="editorial-head" data-reveal>
-            <div class="editorial-head-left">
-                <div class="editorial-kicker">02 // MILESTONES</div>
+        <div class="section-head" data-reveal>
+            <div class="section-head-left">
+                <div class="section-kicker">02 // MILESTONES</div>
                 <h2>{!! __('heading_achievements') !!}</h2>
                 <p>{{ __('Academic recognition and competition awards') }}</p>
             </div>
@@ -564,9 +566,9 @@
 <!-- Education -->
 <section class="section">
     <div class="container">
-        <div class="editorial-head" data-reveal>
-            <div class="editorial-head-left">
-                <div class="editorial-kicker">03 // ACADEMIC RECORD</div>
+        <div class="section-head" data-reveal>
+            <div class="section-head-left">
+                <div class="section-kicker">03 // ACADEMIC RECORD</div>
                 <h2>{!! __('heading_education') !!}</h2>
                 <p>{{ __('Formal academic background & verified credentials') }}</p>
             </div>
@@ -606,23 +608,30 @@
         'languages' => ['label' => __('Programming Languages'), 'icon' => 'fas fa-code', 'items' => []],
         'frontend' => ['label' => __('Frontend Development'), 'icon' => 'fas fa-layer-group', 'items' => []],
         'backend' => ['label' => __('Backend Development'), 'icon' => 'fas fa-server', 'items' => []],
-        'databases' => ['label' => __('Databases'), 'icon' => 'fas fa-database', 'items' => []],
-        'architecture' => ['label' => __('API & Architecture'), 'icon' => 'fas fa-sitemap', 'items' => []],
-        'devops' => ['label' => __('DevOps & Cloud'), 'icon' => 'fas fa-cloud', 'items' => []],
-        'ai' => ['label' => __('AI & Integration'), 'icon' => 'fas fa-microchip', 'items' => []],
-        'tools' => ['label' => __('Development Tools'), 'icon' => 'fas fa-screwdriver-wrench', 'items' => []],
+        'database' => ['label' => __('Database Management'), 'icon' => 'fas fa-database', 'items' => []],
+        'api' => ['label' => __('API Development'), 'icon' => 'fas fa-network-wired', 'items' => []],
+        'ai' => ['label' => __('AI / RAG / LLM'), 'icon' => 'fas fa-microchip', 'items' => []],
+        'devops' => ['label' => __('DevOps & Deployment'), 'icon' => 'fas fa-cloud', 'items' => []],
+        'tools' => ['label' => __('Tools & Platforms'), 'icon' => 'fas fa-screwdriver-wrench', 'items' => []],
+    ];
+    $seenSkills = [];
+    $omitSubtopics = [
+        'agile / scrum', 'clean code & documentation', 'mvc & solid principles',
+        'design patterns', 'session management', 'password hashing', 'php (backend)',
     ];
     foreach ($skills as $rawCat => $catItems) {
         foreach ($catItems as $sk) {
-            $nameLow = strtolower($sk->name);
+            $nameLow = strtolower(trim($sk->name));
+            if (in_array($nameLow, $omitSubtopics, true) || isset($seenSkills[$nameLow])) { continue; }
+            $seenSkills[$nameLow] = true;
             $catLow = strtolower($rawCat);
             if ($catLow === 'languages') { $aboutBuckets['languages']['items'][] = $sk; }
-            elseif ($catLow === 'frontend' || str_contains($nameLow, 'next') || str_contains($nameLow, 'responsive') || str_contains($nameLow, 'tailwind') || str_contains($nameLow, 'blade')) { $aboutBuckets['frontend']['items'][] = $sk; }
+            elseif ($catLow === 'frontend' || str_contains($nameLow, 'next') || str_contains($nameLow, 'responsive') || str_contains($nameLow, 'blade')) { $aboutBuckets['frontend']['items'][] = $sk; }
             elseif ($catLow === 'backend') { $aboutBuckets['backend']['items'][] = $sk; }
-            elseif ($catLow === 'database') { $aboutBuckets['databases']['items'][] = $sk; }
-            elseif (str_contains($nameLow, 'rag') || str_contains($nameLow, 'llm') || str_contains($nameLow, 'vector') || str_contains($nameLow, 'ai ') || $nameLow === 'ai') { $aboutBuckets['ai']['items'][] = $sk; }
-            elseif (str_contains($nameLow, 'docker') || str_contains($nameLow, 'aws') || str_contains($nameLow, 'nginx') || str_contains($nameLow, 'cpanel') || str_contains($nameLow, 'ci/cd') || $nameLow === 'firebase') { $aboutBuckets['devops']['items'][] = $sk; }
-            elseif (in_array($catLow, ['api development', 'software engineering', 'authentication']) || str_contains($nameLow, 'websocket') || str_contains($nameLow, 'socket.io') || str_contains($nameLow, 'payment') || str_contains($nameLow, 'auth')) { $aboutBuckets['architecture']['items'][] = $sk; }
+            elseif ($catLow === 'database') { $aboutBuckets['database']['items'][] = $sk; }
+            elseif (str_contains($nameLow, 'rag') || str_contains($nameLow, 'llm') || str_contains($nameLow, 'vector')) { $aboutBuckets['ai']['items'][] = $sk; }
+            elseif (str_contains($nameLow, 'docker') || str_contains($nameLow, 'aws') || str_contains($nameLow, 'nginx') || str_contains($nameLow, 'cpanel') || str_contains($nameLow, 'ci/cd')) { $aboutBuckets['devops']['items'][] = $sk; }
+            elseif ($catLow === 'api development' || str_contains($nameLow, 'jwt') || str_contains($nameLow, 'rbac') || str_contains($nameLow, 'otp') || str_contains($nameLow, 'websocket') || str_contains($nameLow, 'payment')) { $aboutBuckets['api']['items'][] = $sk; }
             else { $aboutBuckets['tools']['items'][] = $sk; }
         }
     }
@@ -630,9 +639,9 @@
 @endphp
 <section class="section section--alt">
     <div class="container">
-        <div class="editorial-head" data-reveal>
-            <div class="editorial-head-left">
-                <div class="editorial-kicker">04 // CAPABILITIES</div>
+        <div class="section-head" data-reveal>
+            <div class="section-head-left">
+                <div class="section-kicker">04 // CAPABILITIES</div>
                 <h2>{!! __('heading_my_skills') !!}</h2>
                 <p>{{ __('Technologies and tools I work with every day') }}</p>
             </div>
@@ -640,7 +649,6 @@
 
         <div class="about-skills-grid" data-stagger>
             @foreach($aboutBuckets as $bucket)
-                @php $detailed = array_filter($bucket['items'], fn($i) => !empty(trim((string) $i->details))); @endphp
                 <div class="about-skill-panel">
                     <div class="about-skill-head">
                         <div class="about-skill-title">
@@ -652,25 +660,12 @@
 
                     <div class="about-skill-rows">
                         @foreach($bucket['items'] as $skill)
-                            <span class="about-skill-chip" title="{{ $skill->details ?: $skill->name }}">
+                            <span class="about-skill-chip">
                                 <i class="{{ $skill->icon ?: 'fas fa-check' }}" aria-hidden="true"></i>
                                 <span>{{ $skill->name }}</span>
                             </span>
                         @endforeach
                     </div>
-
-                    @if(count($detailed))
-                    <details style="margin-top:0.75rem; border-top:1px dashed var(--border); padding-top:0.65rem;">
-                        <summary style="cursor:pointer; font-family:var(--font-mono); font-size:0.76rem; color:var(--text-muted); font-weight:600;">
-                            {{ __('Technical notes') }} ({{ count($detailed) }})
-                        </summary>
-                        <div style="margin-top:0.55rem; display:flex; flex-direction:column; gap:0.4rem; font-size:0.84rem; color:var(--text-secondary); line-height:1.55;">
-                            @foreach($detailed as $ds)
-                                <div><strong style="color:var(--text-primary);">{{ $ds->name }}:</strong> {{ $ds->details }}</div>
-                            @endforeach
-                        </div>
-                    </details>
-                    @endif
                 </div>
             @endforeach
         </div>
@@ -682,9 +677,9 @@
 @if($experiences->count())
 <section class="section">
     <div class="container">
-        <div class="editorial-head" data-reveal>
-            <div class="editorial-head-left">
-                <div class="editorial-kicker">05 // WORK HISTORY</div>
+        <div class="section-head" data-reveal>
+            <div class="section-head-left">
+                <div class="section-kicker">05 // WORK HISTORY</div>
                 <h2>{!! __('heading_experience') !!}</h2>
                 <p>{{ __('My professional journey so far') }}</p>
             </div>

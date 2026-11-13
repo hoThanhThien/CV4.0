@@ -185,7 +185,7 @@
     <div class="container hero-animate">
         <div class="page-header-inner">
             <div>
-                <div class="editorial-kicker">ARCHIVE // SOFTWARE &amp; SYSTEMS</div>
+                <div class="section-kicker" style="color:var(--accent-sky);">ARCHIVE // SOFTWARE &amp; SYSTEMS</div>
                 <h1>{!! __('heading_my_projects') !!}</h1>
                 <p>{{ __("Things I've built and worked on") }}</p>
             </div>

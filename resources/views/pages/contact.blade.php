@@ -269,7 +269,7 @@
 @section('content')
 <section class="page-header-band">
     <div class="container hero-animate">
-        <div class="editorial-kicker">DIRECT CHANNELS // AVAILABILITY</div>
+        <div class="section-kicker" style="color:var(--accent-sky);">DIRECT CHANNELS // AVAILABILITY</div>
         <h1>{!! __('heading_contact') !!}</h1>
         <p>{{ __('Feel free to reach out for collaborations, project inquiries, or just to say hello!') }}</p>
     </div>

@@ -171,7 +171,7 @@
     <div class="container hero-animate">
         <div class="page-header-inner">
             <div>
-                <div class="editorial-kicker">PUBLICATIONS // {{ __('Engineering Journal') }}</div>
+                <div class="section-kicker" style="color:var(--accent-sky);">PUBLICATIONS // {{ __('Engineering Journal') }}</div>
                 <h1>{!! __('heading_my_blog') !!}</h1>
                 <p>{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
             </div>
