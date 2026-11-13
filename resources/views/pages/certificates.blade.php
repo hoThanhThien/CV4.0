@@ -6,253 +6,363 @@
 
 @section('styles')
 <style>
-    .cert-hero {
-        padding: 5rem 0 2.5rem;
-        position: relative;
-        overflow: hidden;
-        background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(124,58,237,0.18) 0%, transparent 70%);
-        text-align: center;
+    .cert-header {
+        padding: 3.5rem 0 2.25rem;
+        background: var(--bg-secondary, #eef1f5);
+        border-bottom: 1px solid var(--border, #dce1e9);
     }
-    .cert-hero h1 {
-        font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 900;
-        letter-spacing: -0.02em;
-        margin-bottom: 0.75rem;
+    .cert-header h1 {
+        font-size: clamp(1.9rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--text-primary, #12161f);
+        margin-bottom: 0.65rem;
+        line-height: 1.15;
     }
-    .cert-hero p {
-        color: var(--text-secondary);
-        font-size: 1.05rem;
-        max-width: 680px;
-        margin: 0 auto 1.75rem;
-        line-height: 1.7;
+    .cert-header p {
+        color: var(--text-secondary, #434d5e);
+        font-size: 1.02rem;
+        max-width: 65ch;
+        line-height: 1.65;
+        margin-bottom: 1.75rem;
     }
 
-    /* Filter pills */
+    /* Filter Tabs */
     .cert-filter-bar {
         display: flex;
-        justify-content: center;
         flex-wrap: wrap;
-        gap: 0.6rem;
-        margin-bottom: 3rem;
+        gap: 0.55rem;
+        align-items: center;
     }
     .cert-filter-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.55rem 1.15rem;
-        border-radius: 50px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        color: var(--text-secondary);
+        gap: 0.45rem;
+        padding: 0.5rem 0.95rem;
+        border-radius: 7px;
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        color: var(--text-secondary, #434d5e);
         text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.25s ease;
+        font-size: 0.86rem;
+        font-weight: 500;
+        transition: border-color 0.16s ease, color 0.16s ease, background 0.16s ease;
     }
     .cert-filter-btn:hover {
-        border-color: var(--accent);
-        color: var(--accent-light);
-        transform: translateY(-2px);
+        border-color: var(--text-primary, #12161f);
+        color: var(--text-primary, #12161f);
     }
     .cert-filter-btn.active {
-        background: var(--gradient);
+        background: var(--text-primary, #12161f);
+        border-color: var(--text-primary, #12161f);
         color: #ffffff;
-        border-color: transparent;
-        box-shadow: 0 4px 15px var(--accent-glow);
     }
     .cert-filter-btn .count-badge {
-        font-size: 0.75rem;
-        padding: 0.15rem 0.45rem;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.2);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.35rem;
+        height: 1.25rem;
+        padding: 0 0.35rem;
+        border-radius: 4px;
+        background: var(--bg-secondary, #eef1f5);
+        color: var(--text-muted, #687385);
+        font-size: 0.74rem;
+        font-weight: 600;
     }
-    .cert-filter-btn:not(.active) .count-badge {
-        background: rgba(0, 0, 0, 0.08);
-        color: var(--text-secondary);
+    .cert-filter-btn.active .count-badge {
+        background: rgba(255, 255, 255, 0.18);
+        color: #ffffff;
     }
 
-    /* Certificates Grid */
+    /* Grid */
+    .cert-section {
+        padding: 2.75rem 0 5rem;
+    }
     .cert-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
-        gap: 2rem;
-        margin-bottom: 4rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
     }
+    @media (max-width: 1024px) {
+        .cert-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+    @media (max-width: 640px) {
+        .cert-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Card */
     .cert-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 20px;
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 10px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-        box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
     }
     .cert-card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(124, 58, 237, 0.4);
-        box-shadow: 0 16px 36px -8px var(--accent-glow);
+        border-color: #b8c2d1;
+        box-shadow: 0 8px 24px rgba(18, 22, 31, 0.06);
+        transform: translateY(-2px);
     }
 
-    /* Preview Header in Card */
+    /* Document Preview Frame */
     .cert-preview-wrap {
         position: relative;
-        height: 220px;
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.95) 100%);
+        aspect-ratio: 16 / 10;
+        background: #f1f3f7;
+        border-bottom: 1px solid var(--border, #dce1e9);
         overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 1rem;
     }
     .cert-preview-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.4s ease;
+        display: block;
+        border-radius: 5px;
     }
-    .cert-card:hover .cert-preview-img {
-        transform: scale(1.05);
+    .cert-preview-wrap:has(.cert-preview-img) {
+        padding: 0;
     }
 
-    /* PDF Mockup Plate */
+    /* Crisp Architectural Paper PDF Mockup */
     .pdf-mockup-plate {
-        width: 82%;
-        height: 80%;
+        width: 100%;
+        height: 100%;
         background: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        padding: 1.25rem;
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 6px;
+        padding: 0.9rem 1rem;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        position: relative;
-        transition: transform 0.3s ease;
-    }
-    .cert-card:hover .pdf-mockup-plate {
-        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 2px 8px rgba(18, 22, 31, 0.04);
     }
     .pdf-header-bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 2px solid #f1f5f9;
-        padding-bottom: 0.5rem;
+        gap: 0.5rem;
+        padding-bottom: 0.55rem;
+        border-bottom: 1px solid #eceff4;
     }
     .pdf-badge-tag {
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-        background: #fee2e2;
-        color: #ef4444;
-        font-weight: 700;
-        font-size: 0.72rem;
-        padding: 0.2rem 0.5rem;
+        padding: 0.15rem 0.5rem;
         border-radius: 4px;
-        letter-spacing: 0.04em;
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+    .pdf-file-note {
+        font-size: 0.74rem;
+        color: var(--text-muted, #687385);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 55%;
     }
     .pdf-lines-mock {
         display: flex;
         flex-direction: column;
         gap: 0.45rem;
-        margin: 0.8rem 0;
+        margin: 0.5rem 0;
     }
     .pdf-line {
         height: 6px;
-        background: #e2e8f0;
         border-radius: 3px;
+        background: #e5e9f0;
     }
     .pdf-footer-tag {
-        font-size: 0.75rem;
-        color: #64748b;
-        font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        color: var(--text-muted, #687385);
+        padding-top: 0.45rem;
+        border-top: 1px solid #f1f3f7;
     }
-
-    /* Category Pill on top-right */
-    .cert-cat-pill {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
+    .pdf-verified-inline {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        padding: 0.35rem 0.75rem;
-        border-radius: 50px;
-        font-size: 0.78rem;
-        font-weight: 700;
-        background: rgba(15, 23, 42, 0.75);
-        backdrop-filter: blur(8px);
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        z-index: 2;
+        gap: 0.3rem;
+        color: #15803d;
+        font-weight: 600;
     }
-    .cert-featured-ribbon {
+
+    /* Overlay Pills inside Preview */
+    .cert-cat-pill {
         position: absolute;
-        top: 1rem;
-        left: 1rem;
-        background: linear-gradient(135deg, #f59e0b, #d97706);
-        color: #ffffff;
-        font-size: 0.72rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
         padding: 0.25rem 0.65rem;
-        border-radius: 50px;
-        box-shadow: 0 2px 8px rgba(217, 119, 6, 0.4);
-        display: flex;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid var(--border, #dce1e9);
+        color: var(--text-primary, #12161f);
+        font-size: 0.74rem;
+        font-weight: 600;
+    }
+    .cert-cat-pill i {
+        color: var(--accent, #1e40af);
+    }
+    .cert-featured-pill {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        z-index: 2;
+        display: inline-flex;
         align-items: center;
         gap: 0.3rem;
-        z-index: 2;
+        padding: 0.25rem 0.6rem;
+        border-radius: 5px;
+        background: var(--text-primary, #12161f);
+        color: #ffffff;
+        font-size: 0.72rem;
+        font-weight: 600;
     }
 
     /* Card Body */
     .cert-body {
-        padding: 1.5rem;
+        padding: 1.25rem 1.35rem 1.35rem;
         display: flex;
         flex-direction: column;
         flex: 1;
     }
     .cert-meta-row {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
-        gap: 0.75rem;
-        font-size: 0.82rem;
-        color: var(--text-muted);
+        gap: 0.45rem 0.9rem;
+        font-size: 0.8rem;
+        color: var(--text-muted, #687385);
         margin-bottom: 0.6rem;
     }
-    .cert-meta-row i { color: var(--accent-light); }
+    .cert-meta-row span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
     .cert-title {
-        font-size: 1.18rem;
-        font-weight: 800;
+        font-size: 1.06rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
         line-height: 1.4;
-        margin-bottom: 0.65rem;
-        color: var(--text-primary);
+        margin-bottom: 0.5rem;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
     .cert-desc {
-        color: var(--text-secondary);
-        font-size: 0.92rem;
+        font-size: 0.88rem;
+        color: var(--text-secondary, #434d5e);
         line-height: 1.6;
-        margin-bottom: 1.25rem;
-        flex: 1;
+        margin-bottom: 1rem;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
 
-    /* Card Footer Actions */
+    /* Extra Attachments */
+    .cert-extras {
+        margin-bottom: 1rem;
+        padding-top: 0.8rem;
+        border-top: 1px dashed var(--border, #dce1e9);
+    }
+    .cert-extras-title {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--text-muted, #687385);
+        margin-bottom: 0.45rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+    .cert-extras-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+    .cert-extra-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        background: var(--bg-primary, #f7f8fa);
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        border: 1px solid var(--border, #dce1e9);
+    }
+    .cert-extra-name {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-width: 0;
+        flex: 1;
+        color: var(--text-secondary, #434d5e);
+    }
+    .cert-extra-name span.truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .cert-extra-size {
+        font-size: 0.74rem;
+        color: var(--text-muted, #687385);
+        flex-shrink: 0;
+    }
+    .cert-extra-actions {
+        display: flex;
+        gap: 0.3rem;
+        flex-shrink: 0;
+    }
+    .cert-mini-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 5px;
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        color: var(--text-secondary, #434d5e);
+        font-size: 0.74rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .cert-mini-btn:hover {
+        border-color: var(--text-primary, #12161f);
+        color: var(--text-primary, #12161f);
+    }
+
+    /* Card Footer */
     .cert-footer {
-        padding-top: 1.1rem;
         margin-top: auto;
-        border-top: 1px solid var(--border);
+        padding-top: 0.9rem;
+        border-top: 1px solid #eef1f5;
         display: flex;
         flex-direction: column;
         gap: 0.8rem;
@@ -262,249 +372,236 @@
         align-items: center;
         justify-content: space-between;
         gap: 0.5rem;
+        font-size: 0.78rem;
+        color: var(--text-muted, #687385);
     }
     .cert-file-badge {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-        font-weight: 600;
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        white-space: nowrap;
-        flex-shrink: 0;
+        font-weight: 500;
+    }
+    .cert-attach-count {
+        color: var(--accent, #1e40af);
+        font-weight: 600;
     }
     .cert-action-btns {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
-        width: 100%;
+        gap: 0.6rem;
     }
     .btn-cert-view {
-        height: 42px;
-        padding: 0 1rem;
-        border-radius: 12px;
-        background: var(--gradient);
-        color: #ffffff;
-        font-size: 0.88rem;
-        font-weight: 700;
-        text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        border: none;
+        gap: 0.4rem;
+        padding: 0.55rem 0.85rem;
+        border-radius: 7px;
+        background: var(--text-primary, #12161f);
+        border: 1px solid var(--text-primary, #12161f);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 0.83rem;
+        font-weight: 600;
         cursor: pointer;
-        box-shadow: 0 4px 14px var(--accent-glow);
-        white-space: nowrap;
+        transition: background 0.16s ease, border-color 0.16s ease;
     }
     .btn-cert-view:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 22px var(--accent-glow);
-        color: #ffffff;
-        filter: brightness(1.08);
+        background: var(--accent, #1e40af);
+        border-color: var(--accent, #1e40af);
     }
     .btn-cert-dl {
-        height: 42px;
-        padding: 0 1rem;
-        border-radius: 12px;
-        background: rgba(99, 102, 241, 0.08);
-        border: 1.5px solid rgba(99, 102, 241, 0.35);
-        color: var(--accent-light);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
-        font-size: 0.88rem;
-        font-weight: 700;
+        gap: 0.4rem;
+        padding: 0.55rem 0.85rem;
+        border-radius: 7px;
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        color: var(--text-primary, #12161f);
+        font-size: 0.83rem;
+        font-weight: 600;
         text-decoration: none;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        cursor: pointer;
-        white-space: nowrap;
+        transition: border-color 0.16s ease, background 0.16s ease;
     }
     .btn-cert-dl:hover {
-        border-color: transparent;
-        color: #ffffff;
-        background: var(--gradient);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 22px var(--accent-glow);
-    }
-    .btn-cert-view svg,
-    .btn-cert-dl svg {
-        flex-shrink: 0;
+        border-color: var(--text-primary, #12161f);
+        background: var(--bg-primary, #f7f8fa);
     }
 
-    /* Modal Viewer */
+    /* Empty State */
+    .cert-empty {
+        text-align: center;
+        padding: 4.5rem 1.5rem;
+        background: var(--bg-card, #ffffff);
+        border-radius: 10px;
+        border: 1px solid var(--border, #dce1e9);
+    }
+    .cert-empty i.empty-icon {
+        font-size: 2.5rem;
+        color: var(--text-muted, #687385);
+        margin-bottom: 0.85rem;
+        display: block;
+    }
+    .cert-empty h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
+        margin-bottom: 0.45rem;
+    }
+    .cert-empty p {
+        color: var(--text-secondary, #434d5e);
+        margin-bottom: 1.35rem;
+        font-size: 0.94rem;
+    }
+
+    /* Lightbox Modal */
     .cert-modal {
+        display: none;
         position: fixed;
         inset: 0;
         z-index: 9999;
-        display: none;
+        background: rgba(18, 22, 31, 0.72);
+        backdrop-filter: blur(4px);
         align-items: center;
         justify-content: center;
-        padding: 1.25rem;
-        background: rgba(15, 23, 42, 0.85);
-        backdrop-filter: blur(12px);
-        animation: fadeIn 0.2s ease;
+        padding: 1.5rem;
     }
-    .cert-modal.active { display: flex; }
+    .cert-modal.active {
+        display: flex;
+    }
     .cert-modal-box {
-        background: var(--bg-card);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 20px;
-        width: 95vw;
-        max-width: 1180px;
-        height: 90vh;
-        max-height: 90vh;
+        width: 100%;
+        max-width: 980px;
+        height: 88vh;
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 12px;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 24px 60px rgba(18, 22, 31, 0.25);
     }
     .cert-modal-header {
-        padding: 0.9rem 1.5rem;
-        border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        background: var(--bg-primary);
-        flex-shrink: 0;
+        padding: 0.9rem 1.25rem;
+        background: var(--bg-card, #ffffff);
+        border-bottom: 1px solid var(--border, #dce1e9);
     }
     .cert-modal-title {
-        font-size: 1.15rem;
-        font-weight: 800;
-        color: var(--text-primary);
-        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 0.96rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
+        min-width: 0;
+    }
+    .cert-modal-title span {
         overflow: hidden;
         text-overflow: ellipsis;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
+        white-space: nowrap;
     }
     .cert-modal-title i {
-        color: var(--accent-light);
+        color: var(--accent, #1e40af);
     }
-    .cert-modal-body {
-        flex: 1;
-        height: calc(90vh - 65px);
-        position: relative;
-        overflow: hidden;
-        background: #0b0f19;
+    .cert-modal-actions {
         display: flex;
         align-items: center;
-        justify-content: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
     }
-    .cert-modal-body iframe,
-    .cert-modal-body img {
-        width: 100%;
-        height: 100%;
-        border: none;
-        display: block;
-        object-fit: contain;
-    }
+    .btn-modal-ext,
     .btn-modal-dl {
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
-        padding: 0.5rem 1.15rem;
-        border-radius: 50px;
-        background: var(--gradient);
-        color: #ffffff !important;
-        font-size: 0.85rem;
-        font-weight: 700;
-        text-decoration: none;
-        border: none;
-        box-shadow: 0 4px 14px var(--accent-glow);
-        transition: all 0.25s ease;
-        cursor: pointer;
-    }
-    .btn-modal-dl:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px var(--accent-glow);
-        filter: brightness(1.1);
-        color: #ffffff !important;
-    }
-    .btn-modal-ext {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        padding: 0.5rem 1rem;
-        border-radius: 50px;
-        background: rgba(99, 102, 241, 0.1);
-        border: 1px solid rgba(99, 102, 241, 0.3);
-        color: var(--accent-light) !important;
-        font-size: 0.85rem;
+        gap: 0.35rem;
+        padding: 0.42rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.82rem;
         font-weight: 600;
         text-decoration: none;
-        transition: all 0.25s ease;
-        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .btn-modal-ext {
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        color: var(--text-secondary, #434d5e);
     }
     .btn-modal-ext:hover {
-        background: rgba(99, 102, 241, 0.2);
-        border-color: var(--accent);
-        color: #ffffff !important;
-        transform: translateY(-2px);
+        border-color: var(--text-primary, #12161f);
+        color: var(--text-primary, #12161f);
+    }
+    .btn-modal-dl {
+        background: var(--text-primary, #12161f);
+        border: 1px solid var(--text-primary, #12161f);
+        color: #ffffff;
+    }
+    .btn-modal-dl:hover {
+        background: var(--accent, #1e40af);
+        border-color: var(--accent, #1e40af);
     }
     .btn-modal-close {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid var(--border);
-        color: var(--text-secondary);
-        font-size: 1rem;
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        background: var(--bg-secondary, #eef1f5);
+        border: 1px solid var(--border, #dce1e9);
+        color: var(--text-primary, #12161f);
         cursor: pointer;
-        transition: all 0.25s ease;
+        transition: background 0.15s ease;
     }
     .btn-modal-close:hover {
-        background: rgba(239, 68, 68, 0.15);
-        border-color: rgba(239, 68, 68, 0.3);
-        color: #ef4444;
-        transform: rotate(90deg);
+        background: #dce1e9;
     }
-
-    /* Responsive adjustments */
-    @media (max-width: 860px) {
-        .cert-hero { padding: 3.5rem 0 2rem; }
-        .cert-grid {
-            grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-            gap: 1.5rem;
+    .cert-modal-body {
+        flex: 1;
+        background: #eef1f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+        padding: 0.75rem;
+    }
+    .cert-modal-body iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 6px;
+        background: #ffffff;
+    }
+    .cert-modal-body img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+        box-shadow: 0 4px 18px rgba(18, 22, 31, 0.12);
+    }
+    @media (max-width: 640px) {
+        .cert-modal {
+            padding: 0.5rem;
         }
         .cert-modal-box {
-            width: 96vw;
             height: 92vh;
-            max-height: 92vh;
-            border-radius: 16px;
         }
-        .cert-modal-header {
-            padding: 0.75rem 1rem;
+        .btn-modal-ext span,
+        .btn-modal-dl span {
+            display: none;
         }
-    }
-
-    @media (max-width: 640px) {
-        .cert-hero { padding: 2.75rem 0 1.5rem; }
-        .cert-filter-bar { gap: 0.45rem; margin-bottom: 2rem; }
-        .cert-filter-btn { padding: 0.45rem 0.85rem; font-size: 0.84rem; }
-        .cert-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-        .cert-card { border-radius: 16px; }
-        .cert-body { padding: 1.25rem; }
-    }
-
-    @media (max-width: 480px) {
-        .cert-action-btns { grid-template-columns: 1fr; gap: 0.5rem; }
-        .btn-modal-dl span, .btn-modal-ext span { display: none; }
-        .btn-modal-dl, .btn-modal-ext { padding: 0.5rem 0.75rem; }
     }
 </style>
 @endsection
 
 @section('content')
-<!-- Hero Section -->
-<section class="cert-hero">
+<!-- Header Section -->
+<section class="cert-header">
     <div class="container">
         <h1>{!! __('heading_credentials') !!}</h1>
         <p>{{ __('credentials_subtitle') }}</p>
@@ -512,23 +609,28 @@
         <!-- Category Filters -->
         <div class="cert-filter-bar">
             <a href="{{ route('certificates') }}" class="cert-filter-btn {{ !request('category') ? 'active' : '' }}">
-                <i class="fas fa-th-large"></i> {{ __('All Documents') }}
+                <i class="fas fa-th-large"></i>
+                <span>{{ __('All Documents') }}</span>
                 <span class="count-badge">{{ \App\Models\Certificate::count() }}</span>
             </a>
             <a href="{{ route('certificates', ['category' => 'brochure']) }}" class="cert-filter-btn {{ request('category') == 'brochure' ? 'active' : '' }}">
-                <i class="fas fa-book-open"></i> {{ __('Portfolio Brochure') }}
+                <i class="fas fa-book-open"></i>
+                <span>{{ __('Portfolio Brochure') }}</span>
                 <span class="count-badge">{{ \App\Models\Certificate::where('category', 'brochure')->count() }}</span>
             </a>
             <a href="{{ route('certificates', ['category' => 'degree']) }}" class="cert-filter-btn {{ request('category') == 'degree' ? 'active' : '' }}">
-                <i class="fas fa-graduation-cap"></i> {{ __('Official Degree') }}
+                <i class="fas fa-graduation-cap"></i>
+                <span>{{ __('Official Degree') }}</span>
                 <span class="count-badge">{{ \App\Models\Certificate::where('category', 'degree')->count() }}</span>
             </a>
             <a href="{{ route('certificates', ['category' => 'award']) }}" class="cert-filter-btn {{ request('category') == 'award' ? 'active' : '' }}">
-                <i class="fas fa-trophy"></i> {{ __('Award & Honor') }}
+                <i class="fas fa-trophy"></i>
+                <span>{{ __('Award & Honor') }}</span>
                 <span class="count-badge">{{ \App\Models\Certificate::where('category', 'award')->count() }}</span>
             </a>
             <a href="{{ route('certificates', ['category' => 'certificate']) }}" class="cert-filter-btn {{ request('category') == 'certificate' ? 'active' : '' }}">
-                <i class="fas fa-certificate"></i> {{ __('Certificate') }}
+                <i class="fas fa-certificate"></i>
+                <span>{{ __('Certificate') }}</span>
                 <span class="count-badge">{{ \App\Models\Certificate::where('category', 'certificate')->count() }}</span>
             </a>
         </div>
@@ -536,53 +638,51 @@
 </section>
 
 <!-- Content Grid Section -->
-<section style="padding: 1rem 0 5rem">
+<section class="cert-section">
     <div class="container">
         @if($certificates->isEmpty())
-            <div style="text-align:center; padding:5rem 1rem; background:var(--bg-card); border-radius:20px; border:1px solid var(--border)">
-                <i class="fas fa-folder-open" style="font-size:3.5rem; color:var(--text-muted); margin-bottom:1rem; display:block"></i>
-                <h3 style="font-size:1.3rem; font-weight:700; margin-bottom:0.5rem">{{ __('No documents found') }}</h3>
-                <p style="color:var(--text-muted); margin-bottom:1.5rem">Hiện tại chưa có tài liệu nào trong danh mục này.</p>
+            <div class="cert-empty">
+                <i class="fas fa-folder-open empty-icon"></i>
+                <h3>{{ __('No documents found') }}</h3>
+                <p>{{ app()->getLocale() == 'vi' ? 'Hiện tại chưa có tài liệu nào trong danh mục này.' : 'No documents are currently available in this category.' }}</p>
                 <a href="{{ route('certificates') }}" class="btn btn-primary">
-                    <i class="fas fa-arrow-left"></i> Xem tất cả tài liệu
+                    <i class="fas fa-arrow-left"></i> {{ __('All Documents') }}
                 </a>
             </div>
         @else
             <div class="cert-grid">
                 @foreach($certificates as $cert)
                     <article class="cert-card">
-                        <!-- Top visual / preview -->
+                        <!-- Preview Frame -->
                         <div class="cert-preview-wrap">
-                            @if($cert->featured)
-                                <div class="cert-featured-ribbon">
-                                    <i class="fas fa-star"></i> Featured
-                                </div>
-                            @endif
-
                             <div class="cert-cat-pill">
                                 <i class="{{ $cert->category_icon }}"></i>
                                 <span>{{ $cert->category_label }}</span>
                             </div>
 
+                            @if($cert->featured)
+                                <div class="cert-featured-pill">
+                                    <i class="fas fa-star"></i>
+                                    <span>{{ __('Featured') }}</span>
+                                </div>
+                            @endif
+
                             @if($cert->thumbnail)
                                 @if($cert->thumbnail_is_pdf)
-                                    <!-- PDF Thumbnail Mockup -->
                                     <div class="pdf-mockup-plate">
                                         <div class="pdf-header-bar">
                                             <div class="pdf-badge-tag">
-                                                <i class="fas fa-file-pdf"></i> PREVIEW PDF
+                                                <i class="fas fa-file-pdf"></i> PDF Preview
                                             </div>
-                                            <div style="font-size:0.72rem; color:#64748b; font-weight:700">
-                                                {{ basename($cert->thumbnail) }}
-                                            </div>
+                                            <div class="pdf-file-note">{{ basename($cert->thumbnail) }}</div>
                                         </div>
                                         <div class="pdf-lines-mock">
                                             <div class="pdf-line" style="width:90%"></div>
-                                            <div class="pdf-line" style="width:75%"></div>
-                                            <div class="pdf-line" style="width:85%"></div>
+                                            <div class="pdf-line" style="width:74%"></div>
+                                            <div class="pdf-line" style="width:82%"></div>
                                         </div>
                                         <div class="pdf-footer-tag">
-                                            <span><i class="fas fa-check-circle" style="color:#10b981"></i> Verified</span>
+                                            <span class="pdf-verified-inline"><i class="fas fa-check-circle"></i> Verified</span>
                                             <span>{{ $cert->issuer ?? 'Official' }}</span>
                                         </div>
                                     </div>
@@ -590,24 +690,21 @@
                                     <img src="{{ $cert->thumbnail_url }}" alt="{{ $cert->title }}" class="cert-preview-img" loading="lazy">
                                 @endif
                             @elseif($cert->is_pdf)
-                                <!-- Elegant PDF Plate Mockup -->
                                 <div class="pdf-mockup-plate">
                                     <div class="pdf-header-bar">
                                         <div class="pdf-badge-tag">
                                             <i class="fas fa-file-pdf"></i> PDF
                                         </div>
-                                        <div style="font-size:0.75rem; color:#64748b; font-weight:700">
-                                            {{ $cert->file_size ?? 'DOCUMENT' }}
-                                        </div>
+                                        <div class="pdf-file-note">{{ $cert->file_size ?? 'Document' }}</div>
                                     </div>
                                     <div class="pdf-lines-mock">
                                         <div class="pdf-line" style="width:90%"></div>
-                                        <div class="pdf-line" style="width:75%"></div>
-                                        <div class="pdf-line" style="width:85%"></div>
-                                        <div class="pdf-line" style="width:50%"></div>
+                                        <div class="pdf-line" style="width:74%"></div>
+                                        <div class="pdf-line" style="width:84%"></div>
+                                        <div class="pdf-line" style="width:52%"></div>
                                     </div>
                                     <div class="pdf-footer-tag">
-                                        <span><i class="fas fa-check-circle" style="color:#10b981"></i> Verified</span>
+                                        <span class="pdf-verified-inline"><i class="fas fa-check-circle"></i> Verified</span>
                                         <span>{{ $cert->issuer ?? 'Official' }}</span>
                                     </div>
                                 </div>
@@ -623,33 +720,33 @@
                                     <span><i class="fas fa-building"></i> {{ $cert->issuer }}</span>
                                 @endif
                                 @if($cert->issue_date)
-                                    <span>&bull;</span>
                                     <span><i class="fas fa-calendar-alt"></i> {{ $cert->issue_date }}</span>
                                 @endif
                             </div>
 
                             <h2 class="cert-title" title="{{ $cert->title }}">{{ $cert->title }}</h2>
 
-                            <p class="cert-desc">{{ $cert->description ?: 'Tài liệu xác thực chính thức và hồ sơ năng lực cá nhân.' }}</p>
+                            <p class="cert-desc">{{ $cert->description ?: (app()->getLocale() == 'vi' ? 'Tài liệu xác thực chính thức và hồ sơ năng lực cá nhân.' : 'Verified credential and portfolio documentation.') }}</p>
 
                             @if(count($cert->extra_files_with_urls) > 0)
-                                <div style="margin-bottom:1rem; padding-top:0.75rem; border-top:1px dashed var(--border)">
-                                    <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-bottom:0.4rem; display:flex; align-items:center; gap:0.35rem">
-                                        <i class="fas fa-paperclip" style="color:var(--accent-light)"></i> File đính kèm thêm ({{ count($cert->extra_files_with_urls) }}):
+                                <div class="cert-extras">
+                                    <div class="cert-extras-title">
+                                        <i class="fas fa-paperclip"></i>
+                                        <span>{{ app()->getLocale() == 'vi' ? 'Tệp đính kèm' : 'Attachments' }} ({{ count($cert->extra_files_with_urls) }})</span>
                                     </div>
-                                    <div style="display:flex; flex-direction:column; gap:0.35rem">
+                                    <div class="cert-extras-list">
                                         @foreach($cert->extra_files_with_urls as $extra)
-                                            <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; font-size:0.8rem; background:rgba(255,255,255,0.03); padding:0.35rem 0.6rem; border-radius:6px; border:1px solid var(--border)">
-                                                <div style="display:flex; align-items:center; gap:0.4rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1">
-                                                    <i class="fas {{ $extra['is_pdf'] ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $extra['is_pdf'] ? '#ef4444' : '#06b6d4' }}"></i>
-                                                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap" title="{{ $extra['name'] }}">{{ $extra['name'] }}</span>
-                                                    <span style="font-size:0.72rem; color:var(--text-muted); flex-shrink:0">({{ $extra['size'] }})</span>
+                                            <div class="cert-extra-item">
+                                                <div class="cert-extra-name">
+                                                    <i class="fas {{ $extra['is_pdf'] ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $extra['is_pdf'] ? '#b91c1c' : '#1e40af' }}"></i>
+                                                    <span class="truncate" title="{{ $extra['name'] }}">{{ $extra['name'] }}</span>
+                                                    <span class="cert-extra-size">({{ $extra['size'] }})</span>
                                                 </div>
-                                                <div style="display:flex; gap:0.3rem; flex-shrink:0">
-                                                    <button type="button" class="btn btn-secondary" style="padding:0.15rem 0.45rem; font-size:0.72rem" onclick="openCertModal('{{ $extra['url'] }}', '{{ addslashes($extra['name']) }}', '{{ $extra['type'] }}')" title="Xem">
+                                                <div class="cert-extra-actions">
+                                                    <button type="button" class="cert-mini-btn" onclick="openCertModal('{{ $extra['url'] }}', '{{ addslashes($extra['name']) }}', '{{ $extra['type'] }}')" title="{{ __('View Document') }}">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <a href="{{ $extra['url'] }}" download class="btn btn-secondary" style="padding:0.15rem 0.45rem; font-size:0.72rem" title="Tải xuống">
+                                                    <a href="{{ $extra['url'] }}" download class="cert-mini-btn" title="{{ __('Download') }}">
                                                         <i class="fas fa-download"></i>
                                                     </a>
                                                 </div>
@@ -663,26 +760,26 @@
                             <div class="cert-footer">
                                 <div class="cert-footer-meta">
                                     <div class="cert-file-badge">
-                                        <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $cert->is_pdf ? '#ef4444' : '#06b6d4' }}"></i>
-                                        <span>{{ strtoupper($cert->file_type) }} &bull; {{ $cert->file_size ?? 'N/A' }}</span>
+                                        <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $cert->is_pdf ? '#b91c1c' : '#1e40af' }}"></i>
+                                        <span>{{ strtoupper($cert->file_type) }} / {{ $cert->file_size ?? 'N/A' }}</span>
                                     </div>
                                     @if(count($cert->extra_files_with_urls) > 0)
-                                        <span style="font-size:0.75rem; color:var(--accent-light); font-weight:700">
-                                            <i class="fas fa-paperclip"></i> +{{ count($cert->extra_files_with_urls) }} đính kèm
+                                        <span class="cert-attach-count">
+                                            <i class="fas fa-paperclip"></i> +{{ count($cert->extra_files_with_urls) }}
                                         </span>
                                     @endif
                                 </div>
 
                                 <div class="cert-action-btns">
                                     <button type="button" class="btn-cert-view" onclick="openCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
-                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
                                         <span>{{ __('View Document') }}</span>
                                     </button>
                                     <a href="{{ $cert->file_url }}" download class="btn-cert-dl" title="{{ __('Download') }}">
-                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                             <polyline points="7 10 12 15 17 10"></polyline>
                                             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -705,18 +802,18 @@
         <div class="cert-modal-header">
             <div class="cert-modal-title" id="certModalTitle">
                 <i class="fas fa-file-pdf"></i>
-                <span id="certModalTitleText">Tài liệu</span>
+                <span id="certModalTitleText">{{ app()->getLocale() == 'vi' ? 'Tài liệu' : 'Document' }}</span>
             </div>
-            <div style="display:flex; align-items:center; gap:0.6rem">
-                <a id="certModalExternalBtn" href="#" target="_blank" class="btn-modal-ext" title="Mở trong tab trình duyệt mới">
+            <div class="cert-modal-actions">
+                <a id="certModalExternalBtn" href="#" target="_blank" class="btn-modal-ext" title="{{ app()->getLocale() == 'vi' ? 'Mở trong tab mới' : 'Open in new tab' }}">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                    <span>Mở tab mới</span>
+                    <span>{{ app()->getLocale() == 'vi' ? 'Mở tab mới' : 'New Tab' }}</span>
                 </a>
-                <a id="certModalDownloadBtn" href="#" download class="btn-modal-dl" title="Tải tài liệu PDF về máy">
+                <a id="certModalDownloadBtn" href="#" download class="btn-modal-dl" title="{{ __('Download') }}">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    <span>Tải về</span>
+                    <span>{{ __('Download') }}</span>
                 </a>
-                <button type="button" class="btn-modal-close" onclick="closeCertModalDirect()" title="Đóng cửa sổ">
+                <button type="button" class="btn-modal-close" onclick="closeCertModalDirect()" title="{{ app()->getLocale() == 'vi' ? 'Đóng' : 'Close' }}">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
@@ -737,8 +834,6 @@ function openCertModal(url, title, type) {
 
     if (titleTextEl) {
         titleTextEl.textContent = title;
-    } else if (titleEl) {
-        titleEl.textContent = title;
     }
     extBtn.href = url;
     dlBtn.href = url;

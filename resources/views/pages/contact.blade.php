@@ -6,300 +6,315 @@
 
 @section('styles')
 <style>
-    .contact-hero {
-        padding: 4.5rem 0 2rem; text-align: center;
-        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
+    .contact-header {
+        padding: 3.5rem 0 2.5rem;
+        background: var(--bg-secondary, #eef1f5);
+        border-bottom: 1px solid var(--border, #dce1e9);
     }
-    .contact-hero h1 {
-        font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900;
-        margin-bottom: 0.75rem; letter-spacing: -0.02em;
+    .contact-header h1 {
+        font-size: clamp(1.9rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--text-primary, #12161f);
+        line-height: 1.15;
+        margin-bottom: 0.6rem;
     }
-    .contact-hero p {
-        color: var(--text-secondary); font-size: 1.05rem; max-width: 600px; margin: 0 auto;
+    .contact-header p {
+        color: var(--text-secondary, #434d5e);
+        font-size: 1.02rem;
+        max-width: 60ch;
+        line-height: 1.65;
+        margin-bottom: 1.5rem;
     }
-
-    .contact-layout {
-        display: grid; grid-template-columns: 1fr 1.35fr; gap: 2.5rem;
-        align-items: start; padding-bottom: 4rem;
-    }
-
-    /* Left Info Cards */
-    .info-group {
-        display: flex; flex-direction: column; gap: 1.25rem;
-    }
-    .info-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 16px; padding: 1.5rem;
-        box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.04);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .info-card:hover {
-        border-color: rgba(99, 102, 241, 0.4);
-        transform: translateY(-3px);
-        box-shadow: 0 12px 25px -5px rgba(99, 102, 241, 0.12);
-    }
-    .info-card-header {
-        display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;
-    }
-    .info-icon {
-        width: 42px; height: 42px; border-radius: 12px;
-        background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2);
-        color: var(--accent); display: flex; align-items: center; justify-content: center;
-        font-size: 1.15rem; flex-shrink: 0;
-    }
-    .info-card-title {
-        font-size: 0.9rem; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.05em; color: var(--text-secondary);
-    }
-    .info-card-value {
-        font-size: 1.05rem; font-weight: 600; color: var(--text-primary);
-        word-break: break-word; text-decoration: none; display: block;
-    }
-    .info-card-value:hover {
-        color: var(--accent);
-    }
-    .info-card-sub {
-        font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;
-    }
-
-    .status-badge {
-        display: inline-flex; align-items: center; gap: 0.5rem;
-        padding: 0.35rem 0.85rem; border-radius: 50px;
-        background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3);
-        color: #059669; font-size: 0.85rem; font-weight: 600;
-    }
-    .status-badge .dot {
-        width: 8px; height: 8px; border-radius: 50%; background: #10b981;
-        box-shadow: 0 0 8px #10b981; animation: pulse 2s infinite;
-    }
-
-    /* Right Form Card */
-    .form-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 20px; padding: 2.25rem 2rem;
-        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06);
-    }
-    .form-card-title {
-        font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;
-        display: flex; align-items: center; gap: 0.6rem;
-    }
-    .form-card-title i { color: var(--accent); }
-    .form-card-subtitle {
-        color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.75rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.25rem;
-    }
-    .form-label {
-        display: block; font-size: 0.88rem; font-weight: 600;
-        margin-bottom: 0.45rem; color: var(--text-primary);
-    }
-    .form-label .required { color: #ef4444; }
-    .form-control {
-        width: 100%; padding: 0.85rem 1rem; border-radius: 12px;
-        border: 1px solid var(--border); background: var(--bg-primary);
-        color: var(--text-primary); font-size: 0.95rem; font-family: inherit;
-        transition: all 0.25s ease;
-    }
-    .form-control:focus {
-        outline: none; border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-        background: #ffffff;
-    }
-    .form-control.is-invalid {
-        border-color: #ef4444;
-        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
-    }
-    .invalid-feedback {
-        color: #ef4444; font-size: 0.82rem; margin-top: 0.35rem; display: block; font-weight: 500;
-    }
-
-    /* Google reCAPTCHA v3 Floating Badge & Footer Notice */
-    .recaptcha-v3-text {
-        font-size: 0.78rem;
-        color: var(--text-muted);
-        text-align: center;
-        margin-top: 1rem;
-        line-height: 1.5;
-    }
-    .recaptcha-v3-text a {
-        color: var(--text-secondary);
-        text-decoration: underline;
-        text-underline-offset: 2px;
-    }
-    .recaptcha-v3-text a:hover {
-        color: var(--accent);
-    }
-
-    /* Hide Google reCAPTCHA v3 floating badge completely (Officially permitted since disclaimer text is included below form) */
-    .grecaptcha-badge {
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
-
-    /* Submit Button */
-    .btn-submit {
-        width: 100%; padding: 0.95rem 1.5rem; border-radius: 12px;
-        background: var(--gradient); color: #ffffff; border: none;
-        font-size: 1.05rem; font-weight: 700; cursor: pointer;
-        display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-        box-shadow: 0 4px 15px var(--accent-glow);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        margin-top: 0.5rem;
-    }
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
-    }
-    .btn-submit:active {
-        transform: scale(0.98);
-    }
-
-    /* Alert Success */
-    .alert-custom-success {
-        padding: 1.15rem 1.25rem; border-radius: 14px;
-        background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);
-        color: #065f46; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem;
-        animation: fadeInDown 0.5s ease;
-    }
-    .alert-custom-success i {
-        color: #10b981; font-size: 1.3rem; margin-top: 0.1rem;
-    }
-
-    /* Quick Contact Chips under Hero */
     .contact-quick-chips {
         display: flex;
-        align-items: center;
-        justify-content: center;
         flex-wrap: wrap;
-        gap: 0.65rem;
-        margin-top: 1.25rem;
+        gap: 0.55rem;
     }
     .contact-chip {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.45rem 1rem;
-        border-radius: 50px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        color: var(--text-primary);
-        font-size: 0.88rem;
-        font-weight: 600;
+        gap: 0.45rem;
+        padding: 0.42rem 0.85rem;
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 6px;
+        font-size: 0.84rem;
+        font-weight: 500;
+        color: var(--text-secondary, #434d5e);
         text-decoration: none;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        transition: border-color 0.15s ease, color 0.15s ease;
     }
     .contact-chip:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.18);
+        border-color: var(--text-primary, #12161f);
+        color: var(--text-primary, #12161f);
     }
     .contact-chip i {
-        color: var(--accent);
-        font-size: 0.95rem;
+        color: var(--accent, #1e40af);
     }
 
-    @media (max-width: 960px) {
-        .contact-hero { padding: 3.5rem 0 1.5rem; }
+    /* Main Split Layout */
+    .contact-section {
+        padding: 3rem 0 5rem;
+    }
+    .contact-layout {
+        display: grid;
+        grid-template-columns: 1fr 1.35fr;
+        gap: 2.25rem;
+        align-items: start;
+    }
+    @media (max-width: 900px) {
         .contact-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 1.75rem;
-            padding-bottom: 5rem;
-        }
-        .form-card {
-            order: 1;
-            padding: 1.75rem 1.5rem;
-        }
-        .info-group {
-            order: 2;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        .info-card.info-card-full {
-            grid-column: 1 / -1;
-        }
-        .reveal-left, .reveal-right {
-            transform: translateY(20px) !important;
+            grid-template-columns: 1fr;
         }
     }
 
-    @media (max-width: 580px) {
-        .contact-hero h1 { font-size: 1.85rem; }
-        .contact-quick-chips { gap: 0.5rem; }
-        .contact-chip { font-size: 0.82rem; padding: 0.38rem 0.75rem; }
-        .info-group {
-            grid-template-columns: 1fr;
-            gap: 0.85rem;
-        }
-        .info-card {
-            padding: 1.15rem 1.15rem;
-            border-radius: 14px;
-        }
-        .info-icon {
-            width: 38px;
-            height: 38px;
-            font-size: 1rem;
-            border-radius: 10px;
-        }
-        .info-card-title {
-            font-size: 0.82rem;
-        }
-        .info-card-value {
-            font-size: 0.98rem;
-        }
+    /* Left Contact Ledger */
+    .contact-ledger {
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .contact-ledger-status {
+        padding: 1.4rem 1.5rem;
+        background: var(--bg-primary, #f7f8fa);
+        border-bottom: 1px solid var(--border, #dce1e9);
+    }
+    .contact-status-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.65rem;
+    }
+    .ledger-row-label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-muted, #687385);
+    }
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        background: #dcfce7;
+        color: #166534;
+        font-size: 0.78rem;
+        font-weight: 600;
+    }
+    .status-badge .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #16a34a;
+    }
+    .contact-status-note {
+        font-size: 0.9rem;
+        color: var(--text-secondary, #434d5e);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .contact-ledger-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.9rem;
+        padding: 1.15rem 1.5rem;
+        border-bottom: 1px solid #eef1f5;
+    }
+    .contact-ledger-item:last-child {
+        border-bottom: none;
+    }
+    .info-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 7px;
+        background: var(--bg-secondary, #eef1f5);
+        border: 1px solid var(--border, #dce1e9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent, #1e40af);
+        font-size: 0.9rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+    .info-content {
+        min-width: 0;
+        flex: 1;
+    }
+    .info-card-value {
+        display: block;
+        margin-top: 0.15rem;
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: var(--text-primary, #12161f);
+        text-decoration: none;
+        word-break: break-word;
+    }
+    a.info-card-value:hover {
+        color: var(--accent, #1e40af);
+        text-decoration: underline;
+    }
+    .info-card-sub {
+        margin-top: 0.2rem;
+        font-size: 0.82rem;
+        color: var(--text-muted, #687385);
+    }
+
+    .contact-socials-row {
+        padding: 1.25rem 1.5rem;
+        background: var(--bg-primary, #f7f8fa);
+        border-top: 1px solid var(--border, #dce1e9);
+    }
+    .contact-socials-btns {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-top: 0.65rem;
+    }
+
+    /* Right Form Card */
+    .form-card {
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 10px;
+        padding: 2rem;
+    }
+    @media (max-width: 640px) {
         .form-card {
-            padding: 1.35rem 1.15rem;
-            border-radius: 16px;
+            padding: 1.35rem;
         }
-        .form-card-title {
-            font-size: 1.25rem;
-        }
-        .form-card-subtitle {
-            font-size: 0.88rem;
-            margin-bottom: 1.25rem;
-        }
-        .form-control {
-            font-size: 16px !important; /* Prevents iOS Safari auto-zoom */
-            padding: 0.78rem 0.9rem;
-            border-radius: 10px;
-        }
-        .form-label {
-            font-size: 0.85rem;
-            margin-bottom: 0.35rem;
-        }
-        .btn-submit {
-            min-height: 48px;
-            font-size: 1rem;
-            border-radius: 10px;
-            margin-top: 0.75rem;
-            margin-bottom: 0.5rem;
-        }
-        .recaptcha-v3-text {
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            padding-bottom: 0.25rem;
-        }
+    }
+    .form-card-title {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
+        margin-bottom: 0.35rem;
+    }
+    .form-card-title i {
+        color: var(--accent, #1e40af);
+        font-size: 1.05rem;
+    }
+    .form-card-subtitle {
+        font-size: 0.92rem;
+        color: var(--text-secondary, #434d5e);
+        margin-bottom: 1.5rem;
+        line-height: 1.55;
+    }
+
+    .alert-custom-success {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem 1.15rem;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+    .alert-custom-success i {
+        font-size: 1.15rem;
+        margin-top: 2px;
+        color: #16a34a;
+    }
+
+    .form-group {
+        margin-bottom: 1.15rem;
+    }
+    .form-label {
+        display: block;
+        font-size: 0.86rem;
+        font-weight: 600;
+        color: var(--text-primary, #12161f);
+        margin-bottom: 0.42rem;
+    }
+    .form-label .required {
+        color: #b91c1c;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.68rem 0.9rem;
+        background: var(--bg-primary, #f7f8fa);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 7px;
+        color: var(--text-primary, #12161f);
+        font-family: inherit;
+        font-size: 0.94rem;
+        transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+        box-sizing: border-box;
+    }
+    .form-control::placeholder {
+        color: var(--text-muted, #687385);
+    }
+    .form-control:focus {
+        outline: none;
+        background: #ffffff;
+        border-color: var(--accent, #1e40af);
+        box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.12);
+    }
+    .form-control.is-invalid {
+        border-color: #dc2626;
+        background: #fef2f2;
+    }
+    .invalid-feedback {
+        display: block;
+        margin-top: 0.35rem;
+        font-size: 0.82rem;
+        color: #b91c1c;
+        font-weight: 500;
+    }
+
+    .btn-submit {
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        padding: 0.8rem 1.25rem;
+        background: var(--text-primary, #12161f);
+        border: 1px solid var(--text-primary, #12161f);
+        border-radius: 7px;
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.16s ease, border-color 0.16s ease;
+    }
+    .btn-submit:hover {
+        background: var(--accent, #1e40af);
+        border-color: var(--accent, #1e40af);
+    }
+
+    .recaptcha-v3-text {
+        margin-top: 0.9rem;
+        font-size: 0.78rem;
+        color: var(--text-muted, #687385);
+        text-align: center;
+        line-height: 1.5;
+    }
+    .recaptcha-v3-text a {
+        color: var(--accent, #1e40af);
+        text-decoration: underline;
     }
 </style>
 @endsection
 
 @section('content')
-<div class="contact-hero">
+<div class="contact-header">
     <div class="container">
-        <span class="hero-badge reveal-fade">
-            <span class="dot"></span>
-            {{ __('Contact') }}
-        </span>
-        <h1 class="reveal">{!! __('heading_contact') !!}</h1>
-        <p class="reveal delay-1">{{ __('I\'m always open to interesting projects and opportunities.') }}</p>
+        <h1>{!! __('heading_contact') !!}</h1>
+        <p>{{ __('I\'m always open to interesting projects and opportunities.') }}</p>
 
-        <div class="contact-quick-chips reveal delay-2">
+        <div class="contact-quick-chips">
             <a href="tel:0375227764" class="contact-chip">
                 <i class="fas fa-phone-alt"></i> 0375227764
             </a>
@@ -319,78 +334,69 @@
     </div>
 </div>
 
-<section class="section" style="padding-top: 1.5rem">
+<section class="contact-section">
     <div class="container">
         <div class="contact-layout">
 
-            <!-- Left: Info Cards -->
-            <div class="info-group reveal-left">
-                <!-- Status -->
-                <div class="info-card info-card-full">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem">
-                        <span class="info-card-title">{{ __('Availability') }}</span>
+            <!-- Left: Contact Details Ledger -->
+            <div class="contact-ledger">
+                <div class="contact-ledger-status">
+                    <div class="contact-status-top">
+                        <span class="ledger-row-label">{{ __('Availability') }}</span>
                         <span class="status-badge">
                             <span class="dot"></span>
                             {{ __('Available for opportunities') }}
                         </span>
                     </div>
-                    <p style="color:var(--text-secondary); font-size:0.92rem; line-height:1.6">
+                    <p class="contact-status-note">
                         {{ __('I\'m currently open to freelance projects, remote roles, and engineering collaborations.') }}
                     </p>
                 </div>
 
                 <!-- Phone -->
-                <div class="info-card">
-                    <div class="info-card-header">
-                        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
-                        <div>
-                            <div class="info-card-title">{{ __('Phone') }}</div>
-                            <a href="tel:0375227764" class="info-card-value">0375227764</a>
-                        </div>
+                <div class="contact-ledger-item">
+                    <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div class="info-content">
+                        <div class="ledger-row-label">{{ __('Phone') }}</div>
+                        <a href="tel:0375227764" class="info-card-value">0375227764</a>
+                        <div class="info-card-sub">{{ __('Call / Zalo') }}</div>
                     </div>
-                    <div class="info-card-sub">{{ __('Call / Zalo') }}</div>
                 </div>
 
                 <!-- Email -->
-                <div class="info-card">
-                    <div class="info-card-header">
-                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                        <div>
-                            <div class="info-card-title">Email</div>
-                            <a href="mailto:hothanhthien119@gmail.com" class="info-card-value">hothanhthien119@gmail.com</a>
-                        </div>
+                <div class="contact-ledger-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="ledger-row-label">Email</div>
+                        <a href="mailto:hothanhthien119@gmail.com" class="info-card-value">hothanhthien119@gmail.com</a>
+                        <div class="info-card-sub">{{ __('Response time: Usually within 24 hours') }}</div>
                     </div>
-                    <div class="info-card-sub">{{ __('Response time: Usually within 24 hours') }}</div>
                 </div>
 
                 <!-- Website -->
-                <div class="info-card">
-                    <div class="info-card-header">
-                        <div class="info-icon"><i class="fas fa-globe"></i></div>
-                        <div>
-                            <div class="info-card-title">{{ __('Website') }}</div>
-                            <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="info-card-value">hothanhthien.io.vn</a>
-                        </div>
+                <div class="contact-ledger-item">
+                    <div class="info-icon"><i class="fas fa-globe"></i></div>
+                    <div class="info-content">
+                        <div class="ledger-row-label">{{ __('Website') }}</div>
+                        <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="info-card-value">hothanhthien.io.vn</a>
+                        <div class="info-card-sub">https://hothanhthien.io.vn/</div>
                     </div>
-                    <div class="info-card-sub">https://hothanhthien.io.vn/</div>
                 </div>
 
                 <!-- Location -->
-                <div class="info-card">
-                    <div class="info-card-header">
-                        <div class="info-icon"><i class="fas fa-location-dot"></i></div>
-                        <div>
-                            <div class="info-card-title">{{ __('Location') }}</div>
-                            <span class="info-card-value">{{ __('Hồ Chí Minh, Việt Nam') }}</span>
-                        </div>
+                <div class="contact-ledger-item">
+                    <div class="info-icon"><i class="fas fa-location-dot"></i></div>
+                    <div class="info-content">
+                        <div class="ledger-row-label">{{ __('Location') }}</div>
+                        <span class="info-card-value">{{ __('Hồ Chí Minh, Việt Nam') }}</span>
+                        <div class="info-card-sub">HCM / UTC+7</div>
                     </div>
-                    <div class="info-card-sub">HCM • UTC+7</div>
                 </div>
 
                 <!-- Socials -->
-                <div class="info-card info-card-full">
-                    <div class="info-card-title" style="margin-bottom:0.75rem">{{ __('Follow & Connect') }}</div>
-                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap">
+                <div class="contact-socials-row">
+                    <div class="ledger-row-label">{{ __('Follow & Connect') }}</div>
+                    <div class="contact-socials-btns">
                         <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="flex:1; min-width:120px; justify-content:center">
                             <i class="fab fa-github"></i> GitHub
                         </a>
@@ -402,7 +408,7 @@
             </div>
 
             <!-- Right: Contact Form -->
-            <div class="form-card reveal-right">
+            <div class="form-card">
                 <h2 class="form-card-title">
                     <i class="fas fa-paper-plane"></i>
                     {{ __('Send Me a Message') }}
@@ -415,8 +421,8 @@
                 <div class="alert-custom-success">
                     <i class="fas fa-circle-check"></i>
                     <div>
-                        <strong style="font-size:1rem">{{ __('Sent successfully!') }}</strong>
-                        <div style="margin-top:0.25rem; font-size:0.92rem">{{ session('success') }}</div>
+                        <strong style="font-size:0.96rem">{{ __('Sent successfully!') }}</strong>
+                        <div style="margin-top:0.2rem; font-size:0.9rem">{{ session('success') }}</div>
                     </div>
                 </div>
                 @endif
@@ -533,7 +539,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         const tokenInput = document.getElementById('gRecaptchaResponse');
         if (tokenInput) {
-            // Invisible automated client token
             tokenInput.value = 'invisible_v3_' + Date.now() + '_' + Math.random().toString(36).substring(2);
         }
     });
@@ -541,15 +546,12 @@
 @endif
 
 <script>
-    // Mobile-friendly focus interaction:
-    // Only auto-focus on desktop screens to prevent mobile viewport jump/keyboard trigger
     window.addEventListener('DOMContentLoaded', () => {
         const nameInput = document.getElementById('name');
         if (window.innerWidth > 768 && nameInput && !nameInput.value) {
             nameInput.focus();
         }
 
-        // Auto-hide floating back-to-top button when focusing inputs in the form
         const backToTopBtn = document.getElementById('backToTop');
         const contactForm = document.getElementById('contactForm');
         if (contactForm && backToTopBtn) {

@@ -6,685 +6,501 @@
 
 @section('styles')
 <style>
-    .about-hero {
-        padding: 5rem 0 3rem;
-        position: relative; overflow: hidden;
-        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.18) 0%, transparent 70%);
+    .about-header {
+        padding: 3.75rem 0 3rem;
+        background: var(--bg-secondary, #eef1f5);
+        border-bottom: 1px solid var(--border, #dce1e9);
     }
-
-    .about-intro { display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center; margin-bottom: 2rem; }
-
-    .about-avatar {
-        width: 190px; height: 190px; border-radius: 28px;
-        background: var(--gradient);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 4.8rem; font-weight: 900; color: white;
-        box-shadow: 0 10px 40px var(--accent-glow); flex-shrink: 0;
-        animation: floatAvatar 6s ease-in-out infinite alternate;
-        position: relative;
-    }
-    .about-avatar::after {
-        content: ''; position: absolute; inset: -4px; border-radius: 32px;
-        border: 2px solid rgba(99, 102, 241, 0.3); pointer-events: none;
-        animation: pulseRing 3s ease-in-out infinite;
-    }
-    @keyframes floatAvatar {
-        0% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-8px) rotate(1deg); }
-        100% { transform: translateY(0) rotate(0deg); }
-    }
-    @keyframes pulseRing {
-        0%, 100% { transform: scale(1); opacity: 0.6; }
-        50% { transform: scale(1.05); opacity: 0.2; }
-    }
-
-    .about-text h1 { font-size: clamp(1.8rem, 4.5vw, 2.9rem); font-weight: 900; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-    .about-text .role { color: var(--accent-light); font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-    .about-text p { color: var(--text-secondary); line-height: 1.8; font-size: 1.02rem; margin-bottom: 1.25rem; }
-    
-    .about-quick-meta {
-        display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem;
-    }
-    .about-meta-pill {
-        display: inline-flex; align-items: center; gap: 0.5rem;
-        padding: 0.4rem 0.85rem; border-radius: 50px;
-        background: var(--bg-card); border: 1px solid var(--border);
-        font-size: 0.86rem; font-weight: 600; color: var(--text-primary);
-        text-decoration: none; transition: all 0.25s ease;
-    }
-    .about-meta-pill:hover {
-        border-color: var(--accent); color: var(--accent);
-        transform: translateY(-2px);
-    }
-    .about-meta-pill i { color: var(--accent-light); font-size: 0.9rem; }
-
-    .about-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-top: 1rem; }
-
-    /* ===== KEY ACHIEVEMENTS (PRESTIGE EDITION) ===== */
-    .achievements-grid {
+    .about-intro {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
+        grid-template-columns: auto 1fr;
+        gap: 2.5rem;
+        align-items: start;
     }
-    .achievement-card {
-        background: #ffffff;
-        border: 1px solid rgba(226, 232, 240, 0.85);
-        border-radius: 22px;
-        padding: 1.85rem 1.65rem 1.65rem;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    .about-monogram {
+        width: 112px;
+        height: 112px;
+        border-radius: 12px;
+        background: var(--text-primary, #12161f);
+        color: #ffffff;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: 1px solid var(--text-primary, #12161f);
+        box-shadow: 0 8px 24px rgba(18, 22, 31, 0.08);
     }
-    .achievement-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 4px;
-        background: var(--card-gradient, var(--gradient));
-        transition: height 0.3s ease;
+    .about-monogram .initials {
+        font-size: 2.35rem;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1;
     }
-    .achievement-card::after {
-        content: '';
-        position: absolute;
-        top: -60px; right: -60px;
-        width: 140px; height: 140px;
-        background: var(--card-glow, rgba(99, 102, 241, 0.12));
-        border-radius: 50%;
-        filter: blur(40px);
-        opacity: 0.5;
-        transition: all 0.4s ease;
-        pointer-events: none;
+    .about-monogram .monogram-tag {
+        margin-top: 0.35rem;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.7rem;
+        color: #9aa5b8;
+    }
+
+    .about-text h1 {
+        font-size: clamp(1.9rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--text-primary, #12161f);
+        line-height: 1.15;
+        margin-bottom: 0.45rem;
+    }
+    .about-role {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--accent, #1e40af);
+        margin-bottom: 1rem;
+    }
+    .about-bio {
+        font-size: 1rem;
+        color: var(--text-secondary, #434d5e);
+        line-height: 1.7;
+        max-width: 65ch;
+        margin-bottom: 1.35rem;
+    }
+
+    .about-quick-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-bottom: 1.6rem;
+    }
+    .about-meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.4rem 0.8rem;
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 6px;
+        font-size: 0.84rem;
+        color: var(--text-secondary, #434d5e);
+        text-decoration: none;
+        transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    a.about-meta-chip:hover {
+        border-color: var(--text-primary, #12161f);
+        color: var(--text-primary, #12161f);
+    }
+    .about-meta-chip i {
+        color: var(--accent, #1e40af);
+        font-size: 0.82rem;
+    }
+
+    .about-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        .about-intro {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .about-monogram {
+            width: 84px;
+            height: 84px;
+        }
+        .about-monogram .initials {
+            font-size: 1.85rem;
+        }
+    }
+
+    /* Section Headers */
+    .about-section {
+        padding: 4rem 0;
+    }
+    .about-section--tinted {
+        background: var(--bg-secondary, #eef1f5);
+        border-top: 1px solid var(--border, #dce1e9);
+        border-bottom: 1px solid var(--border, #dce1e9);
+    }
+    .about-section-head {
+        margin-bottom: 2rem;
+    }
+    .about-section-head h2 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text-primary, #12161f);
+        margin-bottom: 0.35rem;
+    }
+    .about-section-head p {
+        font-size: 0.96rem;
+        color: var(--text-secondary, #434d5e);
+        max-width: 60ch;
+    }
+
+    /* Achievements Grid (Unified Calm Monochrome) */
+    .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.35rem;
+    }
+    @media (max-width: 1024px) {
+        .achievements-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+    @media (max-width: 640px) {
+        .achievements-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .achievement-card {
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 10px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
     .achievement-card:hover {
-        transform: translateY(-8px);
-        border-color: var(--card-border-hover, rgba(99, 102, 241, 0.4));
-        box-shadow: 0 20px 40px -12px var(--card-glow, rgba(99, 102, 241, 0.2)), 0 2px 6px rgba(0,0,0,0.03);
+        border-color: #b8c2d1;
+        box-shadow: 0 6px 20px rgba(18, 22, 31, 0.05);
     }
-    .achievement-card:hover::before {
-        height: 6px;
-    }
-    .achievement-card:hover::after {
-        opacity: 0.85;
-        transform: scale(1.25);
-    }
-
-    /* Card Themes */
-    .achievement-card.theme-blue {
-        --card-gradient: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-        --card-glow: rgba(79, 70, 229, 0.2);
-        --card-border-hover: rgba(79, 70, 229, 0.4);
-        --card-icon-gradient: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
-        --card-icon-shadow: rgba(37, 99, 235, 0.35);
-        --chip-bg: rgba(79, 70, 229, 0.08);
-        --chip-color: #4338ca;
-        --chip-border: rgba(79, 70, 229, 0.2);
-    }
-    .achievement-card.theme-emerald {
-        --card-gradient: linear-gradient(135deg, #059669 0%, #06b6d4 100%);
-        --card-glow: rgba(5, 150, 105, 0.2);
-        --card-border-hover: rgba(5, 150, 105, 0.4);
-        --card-icon-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        --card-icon-shadow: rgba(16, 185, 129, 0.35);
-        --chip-bg: rgba(5, 150, 105, 0.08);
-        --chip-color: #047857;
-        --chip-border: rgba(5, 150, 105, 0.2);
-    }
-    .achievement-card.theme-rose {
-        --card-gradient: linear-gradient(135deg, #db2777 0%, #f59e0b 100%);
-        --card-glow: rgba(219, 39, 119, 0.2);
-        --card-border-hover: rgba(219, 39, 119, 0.4);
-        --card-icon-gradient: linear-gradient(135deg, #db2777 0%, #f43f5e 100%);
-        --card-icon-shadow: rgba(244, 63, 94, 0.35);
-        --chip-bg: rgba(219, 39, 119, 0.08);
-        --chip-color: #be185d;
-        --chip-border: rgba(219, 39, 119, 0.2);
-    }
-
     .achievement-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 1.15rem;
+        margin-bottom: 1rem;
     }
     .achievement-icon-wrap {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        background: var(--card-icon-gradient);
-        box-shadow: 0 10px 22px -6px var(--card-icon-shadow);
-        color: #ffffff;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: var(--bg-secondary, #eef1f5);
+        border: 1px solid var(--border, #dce1e9);
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        flex-shrink: 0;
-    }
-    .achievement-card:hover .achievement-icon-wrap {
-        transform: scale(1.08) rotate(-4deg);
+        color: var(--accent, #1e40af);
     }
     .achievement-icon-wrap svg {
-        width: 26px;
-        height: 26px;
-        stroke: currentColor;
+        width: 20px;
+        height: 20px;
     }
-    .achievement-year-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
+    .achievement-year {
         font-size: 0.8rem;
-        font-weight: 800;
-        letter-spacing: 0.03em;
-        padding: 0.32rem 0.8rem;
-        border-radius: 50px;
-        background: rgba(15, 23, 42, 0.04);
-        color: var(--text-primary);
-        border: 1px solid rgba(15, 23, 42, 0.08);
+        font-weight: 600;
+        color: var(--text-muted, #687385);
+        background: var(--bg-primary, #f7f8fa);
+        border: 1px solid var(--border, #dce1e9);
+        padding: 0.2rem 0.6rem;
+        border-radius: 5px;
     }
-    .achievement-year-badge .year-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-        box-shadow: 0 0 8px currentColor;
+    .achievement-subtitle {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--accent, #1e40af);
+        margin-bottom: 0.45rem;
     }
-
-    .achievement-highlight-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.35rem 0.75rem;
-        border-radius: 8px;
-        background: var(--chip-bg);
-        color: var(--chip-color);
-        border: 1px solid var(--chip-border);
-        font-size: 0.78rem;
-        font-weight: 700;
-        margin-bottom: 0.85rem;
-        width: fit-content;
-    }
-    .achievement-highlight-chip i {
-        font-size: 0.72rem;
-    }
-
     .achievement-title {
-        font-size: 1.15rem;
-        font-weight: 800;
-        color: var(--text-primary);
+        font-size: 1.06rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
         line-height: 1.4;
-        margin-bottom: 0.65rem;
-        letter-spacing: -0.015em;
-        transition: color 0.25s ease;
-    }
-    .achievement-card:hover .achievement-title {
-        color: var(--accent);
+        margin-bottom: 0.6rem;
     }
     .achievement-desc {
-        color: var(--text-secondary);
-        font-size: 0.92rem;
-        line-height: 1.65;
+        font-size: 0.9rem;
+        color: var(--text-secondary, #434d5e);
+        line-height: 1.6;
+        margin-bottom: 1.15rem;
         flex: 1;
-        margin-bottom: 1.25rem;
     }
-
     .achievement-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.45rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(226, 232, 240, 0.7);
-        margin-top: auto;
+        gap: 0.4rem;
+        padding-top: 0.9rem;
+        border-top: 1px solid #eef1f5;
     }
     .achievement-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 0.22rem 0.55rem;
-        border-radius: 6px;
-        background: var(--bg-secondary);
-        color: var(--text-muted);
-        border: 1px solid rgba(226, 232, 240, 0.6);
-        transition: all 0.2s ease;
-    }
-    .achievement-tag i {
-        color: var(--chip-color);
-        font-size: 0.65rem;
-    }
-    .achievement-card:hover .achievement-tag {
-        background: #ffffff;
-        color: var(--text-secondary);
-        border-color: var(--chip-border);
+        font-size: 0.76rem;
+        font-weight: 500;
+        color: var(--text-secondary, #434d5e);
+        background: var(--bg-primary, #f7f8fa);
+        border: 1px solid var(--border, #dce1e9);
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
     }
 
-    /* ===== EDUCATION CARD ===== */
+    /* Education Ledger Card */
     .education-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 2.25rem;
-        box-shadow: 0 8px 30px -8px rgba(0,0,0,0.06);
-        position: relative;
-        overflow: hidden;
-        transition: all 0.35s ease;
-    }
-    .education-card:hover {
-        border-color: rgba(99, 102, 241, 0.35);
-        box-shadow: 0 16px 40px -10px rgba(99, 102, 241, 0.14);
-    }
-    .education-card::before {
-        content: '';
-        position: absolute;
-        top: 0; bottom: 0; left: 0; width: 4px;
-        background: var(--gradient);
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 10px;
+        padding: 2rem;
     }
     .education-header {
         display: flex;
-        justify-content: space-between;
         align-items: flex-start;
-        flex-wrap: wrap;
+        justify-content: space-between;
         gap: 1rem;
-        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+        padding-bottom: 1.35rem;
+        margin-bottom: 1.35rem;
+        border-bottom: 1px solid var(--border, #dce1e9);
     }
     .education-school {
-        font-size: clamp(1.2rem, 3.5vw, 1.6rem);
-        font-weight: 800;
-        color: var(--text-primary);
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
+        margin-bottom: 0.35rem;
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.55rem;
     }
     .education-school i {
-        color: var(--accent);
-    }
-    .education-timeline-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.35rem 0.9rem;
-        border-radius: 50px;
-        background: rgba(99, 102, 241, 0.12);
-        border: 1px solid rgba(99, 102, 241, 0.25);
-        color: var(--accent);
-        font-size: 0.85rem;
-        font-weight: 700;
+        color: var(--accent, #1e40af);
     }
     .education-degree {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: var(--accent-light);
-        margin-bottom: 1.25rem;
+        font-size: 0.96rem;
+        font-weight: 500;
+        color: var(--text-secondary, #434d5e);
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
-    .education-highlights {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        margin-top: 1.25rem;
+    .education-period {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.75rem;
+        background: var(--bg-primary, #f7f8fa);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 6px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: var(--text-primary, #12161f);
+        white-space: nowrap;
     }
-    .education-highlight-item {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1rem;
+    .education-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.15rem 2rem;
+    }
+    @media (max-width: 640px) {
+        .education-metrics {
+            grid-template-columns: 1fr;
+        }
+    }
+    .education-metric-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .education-metric-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 7px;
+        background: var(--bg-secondary, #eef1f5);
+        border: 1px solid var(--border, #dce1e9);
         display: flex;
         align-items: center;
-        gap: 0.85rem;
-    }
-    .education-highlight-item i {
-        font-size: 1.3rem;
-        color: var(--accent);
+        justify-content: center;
+        color: var(--accent, #1e40af);
         flex-shrink: 0;
+        margin-top: 2px;
     }
-    .education-highlight-text .label {
-        font-size: 0.78rem;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        font-weight: 700;
+    .education-metric-label {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text-muted, #687385);
+        margin-bottom: 0.15rem;
     }
-    .education-highlight-text .val {
+    .education-metric-val {
         font-size: 1rem;
-        font-weight: 800;
-        color: var(--text-primary);
+        font-weight: 600;
+        color: var(--text-primary, #12161f);
     }
 
-    /* ===== SKILLS CATEGORIES ===== */
-    .skills-section { background: var(--bg-secondary); }
+    /* Skills Index Grid */
     .skills-categories-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.35rem;
     }
-    .skill-category-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        transition: all 0.3s ease;
-    }
-    .skill-category-card:hover {
-        border-color: rgba(99, 102, 241, 0.35);
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.05);
-    }
-    .skill-category-title {
-        font-size: 1.05rem;
-        font-weight: 800;
-        color: var(--accent-light);
-        margin-bottom: 1.25rem;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--border);
-    }
-    .skill-items-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    .skill-item {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-    }
-    .skill-item-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 0.92rem;
-        font-weight: 700;
-        color: var(--text-primary);
-    }
-    .skill-item-header span i {
-        margin-right: 0.45rem;
-        color: var(--accent);
-    }
-    .skill-item-details {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        line-height: 1.5;
-        background: var(--bg-secondary);
-        padding: 0.35rem 0.65rem;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-    }
-
-    /* ===== EXPERIENCE TIMELINE ===== */
-    .timeline {
-        position: relative;
-        padding-left: 3.75rem;
-    }
-    .timeline::before {
-        content: '';
-        position: absolute;
-        left: 20.5px;
-        top: 24px;
-        bottom: 24px;
-        width: 3px;
-        background: linear-gradient(180deg, var(--accent) 0%, #8b5cf6 45%, #06b6d4 85%, rgba(6, 182, 212, 0) 100%);
-        border-radius: 99px;
-        box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
-    }
-
-    .timeline-item {
-        position: relative;
-        margin-bottom: 2.25rem;
-    }
-    .timeline-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .timeline-marker {
-        position: absolute;
-        left: -3.75rem;
-        top: 1.25rem;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 5;
-    }
-    .timeline-marker-inner {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)), var(--bg-card);
-        border: 2px solid var(--accent);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent);
-        font-size: 0.95rem;
-        box-shadow: 0 0 16px rgba(99, 102, 241, 0.25), inset 0 0 10px rgba(99, 102, 241, 0.12);
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-        z-index: 2;
-    }
-    .timeline-marker-pulse {
-        position: absolute;
-        inset: -5px;
-        border-radius: 50%;
-        border: 2px solid var(--accent);
-        opacity: 0.8;
-        animation: timelinePulse 2.4s cubic-bezier(0.24, 0, 0.38, 1) infinite;
-        pointer-events: none;
-        z-index: 1;
-    }
-    @keyframes timelinePulse {
-        0% { transform: scale(0.92); opacity: 0.85; }
-        70% { transform: scale(1.55); opacity: 0; }
-        100% { transform: scale(1.55); opacity: 0; }
-    }
-    .timeline-item:hover .timeline-marker-inner {
-        background: linear-gradient(135deg, var(--accent), #06b6d4);
-        border-color: #06b6d4;
-        color: #ffffff;
-        transform: scale(1.15) rotate(10deg);
-        box-shadow: 0 0 24px rgba(99, 102, 241, 0.65), 0 0 12px rgba(6, 182, 212, 0.45);
-    }
-
-    .timeline-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.04);
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-    }
-    .timeline-card::before {
-        content: '';
-        position: absolute;
-        left: -8px;
-        top: 1.75rem;
-        width: 14px;
-        height: 14px;
-        background: var(--bg-card);
-        border-left: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-        transform: rotate(45deg);
-        transition: border-color 0.35s ease, background 0.35s ease;
-        z-index: 1;
-    }
-    .timeline-item:hover .timeline-card {
-        border-color: rgba(99, 102, 241, 0.4);
-        transform: translateY(-3px) translateX(6px);
-        box-shadow: 0 16px 36px -6px rgba(99, 102, 241, 0.14);
-    }
-    .timeline-item:hover .timeline-card::before {
-        border-color: rgba(99, 102, 241, 0.4);
-    }
-
-    .timeline-header {
-        display: flex; align-items: flex-start; justify-content: space-between;
-        flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.65rem;
-    }
-    .timeline-date-badge {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        padding: 0.3rem 0.75rem; border-radius: 50px;
-        background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25);
-        color: var(--accent); font-size: 0.78rem; font-weight: 700;
-    }
-    .timeline-company {
-        font-size: 1.15rem; font-weight: 800; color: var(--text-primary);
-        display: flex; align-items: center; gap: 0.5rem;
-    }
-    .timeline-company i {
-        color: var(--accent); font-size: 0.95rem;
-    }
-    .timeline-position-badge {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        font-size: 0.9rem; font-weight: 600; color: var(--accent-light);
-        margin-bottom: 0.85rem;
-    }
-    .timeline-desc {
-        color: var(--text-secondary); font-size: 0.92rem; line-height: 1.65;
-        margin-bottom: 1rem;
-    }
-    .timeline-bullets {
-        list-style: none;
-        padding-left: 0;
-        margin: 0.5rem 0 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.45rem;
-    }
-    .timeline-bullets li {
-        position: relative;
-        padding-left: 1.25rem;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-        line-height: 1.6;
-    }
-    .timeline-bullets li::before {
-        content: '•';
-        position: absolute;
-        left: 0.25rem;
-        top: 0;
-        color: var(--accent);
-        font-weight: 900;
-        font-size: 1.15rem;
-    }
-    .timeline-tags {
-        display: flex; flex-wrap: wrap; gap: 0.45rem;
-    }
-    .timeline-tag {
-        font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.65rem;
-        background: var(--bg-secondary); border: 1px solid var(--border);
-        border-radius: 6px; color: var(--text-secondary);
-        transition: all 0.2s ease;
-    }
-    .timeline-card:hover .timeline-tag {
-        border-color: rgba(99, 102, 241, 0.25);
-        color: var(--accent);
-    }
-
-    @media (max-width: 991px) {
-        .about-intro { gap: 2rem; }
-        .about-avatar { width: 160px; height: 160px; font-size: 4rem; }
-    }
-
-    @media (max-width: 1024px) {
-        .achievements-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-        }
-        .achievement-card:last-child:nth-child(odd) {
-            grid-column: 1 / -1;
-            max-width: 580px;
-            margin: 0 auto;
-            width: 100%;
-        }
-    }
-
     @media (max-width: 768px) {
-        .about-hero { padding: 3.5rem 0 2rem; }
-        .about-intro { grid-template-columns: 1fr; gap: 1.75rem; text-align: center; }
-        .about-avatar { margin: 0 auto; width: 130px; height: 130px; font-size: 3.2rem; border-radius: 22px; }
-        .about-actions { justify-content: center; }
-        .about-quick-meta { justify-content: center; }
-        .timeline { padding-left: 2.75rem; }
-        .timeline::before { left: 14px; }
-        .timeline-marker { left: -2.75rem; width: 32px; height: 32px; }
-        .timeline-marker-inner { width: 32px; height: 32px; font-size: 0.75rem; }
-        .timeline-card::before { left: -6px; width: 10px; height: 10px; top: 1.6rem; }
-    }
-
-    @media (max-width: 600px) {
-        .achievements-grid {
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-        .achievement-card:last-child:nth-child(odd) {
-            max-width: 100%;
-        }
         .skills-categories-grid {
             grid-template-columns: 1fr;
         }
-        .education-highlights {
-            grid-template-columns: 1fr;
-        }
+    }
+    .skill-category-panel {
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        border-radius: 10px;
+        padding: 1.5rem;
+    }
+    .skill-category-head {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 1.02rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
+        padding-bottom: 0.85rem;
+        margin-bottom: 0.9rem;
+        border-bottom: 1px solid var(--border, #dce1e9);
+    }
+    .skill-category-head i {
+        color: var(--accent, #1e40af);
+        font-size: 0.92rem;
+    }
+    .skill-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .skill-row {
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #f1f3f7;
+    }
+    .skill-row:last-child {
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    .skill-row-name {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.93rem;
+        font-weight: 600;
+        color: var(--text-primary, #12161f);
+    }
+    .skill-row-name i {
+        color: var(--accent, #1e40af);
+        font-size: 0.82rem;
+    }
+    .skill-row-details {
+        margin-top: 0.25rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary, #434d5e);
+        line-height: 1.55;
+        padding-left: 1.25rem;
     }
 
-    @media (max-width: 480px) {
-        .about-hero { padding: 2.75rem 0 1.5rem; }
-        .about-actions { flex-direction: column; width: 100%; gap: 0.75rem; }
-        .about-actions .btn { width: 100%; justify-content: center; }
-        .about-quick-meta { flex-direction: column; align-items: stretch; gap: 0.5rem; }
-        .about-meta-pill { justify-content: center; width: 100%; }
-        .education-card { padding: 1.25rem 1rem; }
-        .education-school { font-size: 1.15rem; }
-        .timeline { padding-left: 2.25rem; }
-        .timeline::before { left: 11px; }
-        .timeline-marker { left: -2.25rem; width: 26px; height: 26px; }
-        .timeline-marker-inner { width: 26px; height: 26px; font-size: 0.7rem; }
-        .timeline-card { padding: 1.15rem; }
+    /* Experience Ledger */
+    .exp-ledger {
+        display: flex;
+        flex-direction: column;
+        border-top: 1px solid var(--border, #dce1e9);
+    }
+    .exp-ledger-row {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 1.75rem;
+        padding: 1.85rem 0;
+        border-bottom: 1px solid var(--border, #dce1e9);
+        align-items: start;
+    }
+    @media (max-width: 768px) {
+        .exp-ledger-row {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+        }
+    }
+    .exp-ledger-date {
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: var(--accent, #1e40af);
+        margin-bottom: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .exp-ledger-company {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
+        line-height: 1.35;
+    }
+    .exp-ledger-role {
+        font-size: 1.06rem;
+        font-weight: 700;
+        color: var(--text-primary, #12161f);
+        margin-bottom: 0.65rem;
+    }
+    .exp-ledger-bullets {
+        margin: 0 0 1rem 1.15rem;
+        padding: 0;
+        color: var(--text-secondary, #434d5e);
+        font-size: 0.93rem;
+        line-height: 1.65;
+    }
+    .exp-ledger-bullets li {
+        margin-bottom: 0.3rem;
+    }
+    .exp-ledger-p {
+        color: var(--text-secondary, #434d5e);
+        font-size: 0.93rem;
+        line-height: 1.65;
+        margin-bottom: 1rem;
+        max-width: 66ch;
+    }
+    .exp-ledger-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+    .exp-ledger-tag {
+        font-size: 0.77rem;
+        font-weight: 500;
+        color: var(--text-secondary, #434d5e);
+        background: var(--bg-card, #ffffff);
+        border: 1px solid var(--border, #dce1e9);
+        padding: 0.2rem 0.6rem;
+        border-radius: 5px;
     }
 </style>
 @endsection
 
 @section('content')
-<!-- ===== HERO & SUMMARY ===== -->
-<section class="about-hero">
+<!-- Hero & Summary -->
+<section class="about-header">
     <div class="container">
         <div class="about-intro">
-            <div class="about-avatar reveal-fade">T</div>
-            <div class="about-text reveal delay-1">
-                <h1>{{ __("Hi, I'm") }} <span class="gradient-text">{{ __('Hồ Thành Thiện') }}</span></h1>
-                <div class="role">⚡ {{ __('Full-stack Developer') }}</div>
-                <p>{{ __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.') }}</p>
-                
+            <div class="about-monogram" aria-hidden="true">
+                <span class="initials">HT</span>
+                <span class="monogram-tag">dev</span>
+            </div>
+            <div class="about-text">
+                <h1>{{ __("Hi, I'm") }} {{ __('Hồ Thành Thiện') }}</h1>
+                <div class="about-role">{{ __('Full-stack Developer') }}</div>
+                <p class="about-bio">{{ __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.') }}</p>
+
                 <div class="about-quick-meta">
-                    <a href="tel:0375227764" class="about-meta-pill">
+                    <a href="tel:0375227764" class="about-meta-chip">
                         <i class="fas fa-phone-alt"></i> 0375227764
                     </a>
-                    <a href="mailto:hothanhthien119@gmail.com" class="about-meta-pill">
+                    <a href="mailto:hothanhthien119@gmail.com" class="about-meta-chip">
                         <i class="fas fa-envelope"></i> hothanhthien119@gmail.com
                     </a>
-                    <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="about-meta-pill">
+                    <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="about-meta-chip">
                         <i class="fas fa-globe"></i> hothanhthien.io.vn
                     </a>
-                    <span class="about-meta-pill">
+                    <span class="about-meta-chip">
                         <i class="fas fa-location-dot"></i> HCM
                     </span>
                 </div>
 
                 <div class="about-actions">
                     <a href="{{ route('projects.index') }}" class="btn btn-primary">
-                        <i class="fas fa-rocket"></i> {{ __('See My Work') }}
+                        <i class="fas fa-folder-open"></i> {{ __('See My Work') }}
                     </a>
-                    <a href="{{ route('certificates') }}" class="btn btn-outline" style="border-color: rgba(124,58,237,0.45); background: rgba(124,58,237,0.06)">
-                        <i class="fas fa-file-pdf" style="color:#ef4444"></i> {{ __('Brochure & Giấy khen') }}
+                    <a href="{{ route('certificates') }}" class="btn btn-outline">
+                        <i class="fas fa-file-pdf"></i> {{ __('Brochure & Giấy khen') }}
                     </a>
                     <a href="{{ route('contact') }}" class="btn btn-outline">
                         <i class="fas fa-envelope"></i> {{ __('Get In Touch') }}
@@ -701,73 +517,69 @@
     </div>
 </section>
 
-<!-- ===== KEY ACHIEVEMENTS ===== -->
-<section class="section" style="padding-top: 3.5rem">
+<!-- Key Achievements -->
+<section class="about-section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_achievements') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('Academic recognition and competition awards') }}</p>
+        <div class="about-section-head">
+            <h2>{!! __('heading_achievements') !!}</h2>
+            <p>{{ __('Academic recognition and competition awards') }}</p>
+        </div>
 
-        <div class="achievements-grid reveal delay-2">
+        <div class="achievements-grid">
             <!-- 1. GPA 4.0 -->
-            <div class="achievement-card theme-blue">
+            <div class="achievement-card">
                 <div class="achievement-top">
                     <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                         </svg>
                     </div>
-                    <div class="achievement-top-meta">
-                        <span class="achievement-year-badge"><span class="year-dot"></span>2026</span>
-                    </div>
+                    <span class="achievement-year">2026</span>
                 </div>
-                <div class="achievement-highlight-chip">
-                    <i class="fas fa-star"></i>
-                    <span>{{ app()->getLocale() == 'vi' ? 'Học kỳ gần nhất • GPA 4.0/4.0' : 'Latest Semester • GPA 4.0/4.0' }}</span>
+                <div class="achievement-subtitle">
+                    {{ app()->getLocale() == 'vi' ? 'Học kỳ gần nhất / GPA 4.0/4.0' : 'Latest Semester / GPA 4.0/4.0' }}
                 </div>
                 <h3 class="achievement-title">{{ __('GPA in Most Recent Semester — 4.0/4.0') }}</h3>
                 <p class="achievement-desc">
                     {{ app()->getLocale() == 'vi' ? 'Đạt kết quả học tập xuất sắc với điểm GPA 4.0/4.0 trong học kỳ gần nhất, thể hiện tính kỷ luật cao và tư duy logic chuyên sâu.' : 'Achieved a perfect 4.0/4.0 GPA in the most recent semester, demonstrating high dedication, discipline, and strong software engineering competence.' }}
                 </p>
                 <div class="achievement-tags">
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Kỷ luật cao' : 'High Discipline' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Tư duy logic' : 'Logical Thinking' }}</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Kỷ luật cao' : 'High Discipline' }}</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Tư duy logic' : 'Logical Thinking' }}</span>
                 </div>
             </div>
 
             <!-- 2. Excellent Graduation -->
-            <div class="achievement-card theme-emerald">
+            <div class="achievement-card">
                 <div class="achievement-top">
                     <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                             <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                         </svg>
                     </div>
-                    <div class="achievement-top-meta">
-                        <span class="achievement-year-badge"><span class="year-dot"></span>2026</span>
-                    </div>
+                    <span class="achievement-year">2026</span>
                 </div>
-                <div class="achievement-highlight-chip">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>{{ app()->getLocale() == 'vi' ? 'Tốt nghiệp Xuất sắc • UTH' : 'Summa Cum Laude • UTH' }}</span>
+                <div class="achievement-subtitle">
+                    {{ app()->getLocale() == 'vi' ? 'Tốt nghiệp Xuất sắc / UTH' : 'Summa Cum Laude / UTH' }}
                 </div>
                 <h3 class="achievement-title">{{ __('Bachelor’s Degree – Excellent Graduation Classification') }}</h3>
                 <p class="achievement-desc">
                     {{ app()->getLocale() == 'vi' ? 'Bằng Cử nhân Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc.' : "Bachelor's Degree in Information Technology from University of Transport Ho Chi Minh City with Excellent Graduation Classification." }}
                 </p>
                 <div class="achievement-tags">
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Loại Xuất sắc' : 'Summa Cum Laude' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'ĐH GTVT TP.HCM' : 'UTH University' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Cử nhân CNTT' : 'IT Engineer' }}</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Loại Xuất sắc' : 'Summa Cum Laude' }}</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'ĐH GTVT TP.HCM' : 'UTH University' }}</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Cử nhân CNTT' : 'IT Engineer' }}</span>
                 </div>
             </div>
 
             <!-- 3. Logo Design Award -->
-            <div class="achievement-card theme-rose">
+            <div class="achievement-card">
                 <div class="achievement-top">
                     <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="13.5" cy="6.5" r=".8" fill="currentColor"></circle>
                             <circle cx="17.5" cy="10.5" r=".8" fill="currentColor"></circle>
                             <circle cx="8.5" cy="7.5" r=".8" fill="currentColor"></circle>
@@ -775,75 +587,78 @@
                             <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>
                         </svg>
                     </div>
-                    <div class="achievement-top-meta">
-                        <span class="achievement-year-badge"><span class="year-dot"></span>2025</span>
-                    </div>
+                    <span class="achievement-year">2025</span>
                 </div>
-                <div class="achievement-highlight-chip">
-                    <i class="fas fa-trophy"></i>
-                    <span>{{ app()->getLocale() == 'vi' ? 'Giải Nhì • Thiết kế Cấp Viện' : 'Second Prize • Logo Design' }}</span>
+                <div class="achievement-subtitle">
+                    {{ app()->getLocale() == 'vi' ? 'Giải Nhì / Thiết kế Cấp Viện' : 'Second Prize / Logo Design' }}
                 </div>
                 <h3 class="achievement-title">{{ __('Second prize in the institute/faculty logo design competition') }}</h3>
                 <p class="achievement-desc">
                     {{ __('Designed a competition-winning logo concept, demonstrating strong creativity, visual communication, and design thinking.') }}
                 </p>
                 <div class="achievement-tags">
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Giải Nhì cấp Viện' : '2nd Prize Winner' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Design Thinking' : 'Design Thinking' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Truyền thông thị giác' : 'Visual Aesthetics' }}</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Giải Nhì cấp Viện' : '2nd Prize Winner' }}</span>
+                    <span class="achievement-tag">Design Thinking</span>
+                    <span class="achievement-tag">{{ app()->getLocale() == 'vi' ? 'Truyền thông thị giác' : 'Visual Aesthetics' }}</span>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ===== EDUCATION ===== -->
-<section class="section" style="background: var(--bg-secondary); padding-top: 3.5rem">
+<!-- Education -->
+<section class="about-section about-section--tinted">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_education') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('Formal academic background & verified credentials') }}</p>
+        <div class="about-section-head">
+            <h2>{!! __('heading_education') !!}</h2>
+            <p>{{ __('Formal academic background & verified credentials') }}</p>
+        </div>
 
-        <div style="max-width: 860px; margin: 0 auto" class="reveal delay-2">
-            <div class="education-card">
-                <div class="education-header">
-                    <div>
-                        <h3 class="education-school">
-                            <i class="fas fa-university"></i>
-                            {{ __('University of Transport Ho Chi Minh City') }}
-                        </h3>
-                        <div class="education-degree">
-                            <i class="fas fa-user-graduate"></i>
-                            {{ __("Bachelor's Degree Information Technology") }}
-                        </div>
+        <div class="education-card">
+            <div class="education-header">
+                <div>
+                    <h3 class="education-school">
+                        <i class="fas fa-university"></i>
+                        {{ __('University of Transport Ho Chi Minh City') }}
+                    </h3>
+                    <div class="education-degree">
+                        <i class="fas fa-user-graduate"></i>
+                        {{ __("Bachelor's Degree Information Technology") }}
                     </div>
-                    <span class="education-timeline-badge">
-                        <i class="far fa-calendar-alt"></i> 2023 - 2026
-                    </span>
                 </div>
+                <span class="education-period">
+                    <i class="far fa-calendar-alt"></i> 2023 - 2026
+                </span>
+            </div>
 
-                <div class="education-highlights">
-                    <div class="education-highlight-item">
+            <div class="education-metrics">
+                <div class="education-metric-item">
+                    <div class="education-metric-icon">
                         <i class="fas fa-chart-line"></i>
-                        <div class="education-highlight-text">
-                            <div class="label">{{ __('Cumulative GPA') }}</div>
-                            <div class="val">3.6 / 4.0</div>
-                        </div>
                     </div>
+                    <div>
+                        <div class="education-metric-label">{{ __('Cumulative GPA') }}</div>
+                        <div class="education-metric-val">3.6 / 4.0</div>
+                    </div>
+                </div>
 
-                    <div class="education-highlight-item">
+                <div class="education-metric-item">
+                    <div class="education-metric-icon">
                         <i class="fas fa-medal"></i>
-                        <div class="education-highlight-text">
-                            <div class="label">{{ __('Classification') }}</div>
-                            <div class="val">{{ __('Excellent') }}</div>
-                        </div>
                     </div>
+                    <div>
+                        <div class="education-metric-label">{{ __('Classification') }}</div>
+                        <div class="education-metric-val">{{ __('Excellent') }}</div>
+                    </div>
+                </div>
 
-                    <div class="education-highlight-item" style="grid-column: 1 / -1">
+                <div class="education-metric-item" style="grid-column: 1 / -1">
+                    <div class="education-metric-icon">
                         <i class="fab fa-google"></i>
-                        <div class="education-highlight-text">
-                            <div class="label">{{ __('Community & Clubs') }}</div>
-                            <div class="val">{{ __('Member Google Developer Chapter University of Transport Ho Chi Minh City') }}</div>
-                        </div>
+                    </div>
+                    <div>
+                        <div class="education-metric-label">{{ __('Community & Clubs') }}</div>
+                        <div class="education-metric-val">{{ __('Member Google Developer Chapter University of Transport Ho Chi Minh City') }}</div>
                     </div>
                 </div>
             </div>
@@ -851,32 +666,31 @@
     </div>
 </section>
 
-<!-- ===== TECHNICAL SKILLS ===== -->
+<!-- Technical Skills -->
 @if($skills->count())
-<section class="section">
+<section class="about-section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_my_skills') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('Technologies and tools I work with every day') }}</p>
+        <div class="about-section-head">
+            <h2>{!! __('heading_my_skills') !!}</h2>
+            <p>{{ __('Technologies and tools I work with every day') }}</p>
+        </div>
 
-        <div class="skills-categories-grid reveal delay-2">
+        <div class="skills-categories-grid">
             @foreach($skills as $category => $categorySkills)
-            <div class="skill-category-card">
-                <div class="skill-category-title">
-                    <i class="fas fa-layer-group"></i> {{ $category }}
+            <div class="skill-category-panel">
+                <div class="skill-category-head">
+                    <i class="fas fa-layer-group"></i>
+                    <span>{{ $category }}</span>
                 </div>
-                <div class="skill-items-list">
+                <div class="skill-rows">
                     @foreach($categorySkills as $skill)
-                    <div class="skill-item">
-                        <div class="skill-item-header">
-                            <span>
-                                <i class="{{ $skill->icon ?: 'fas fa-check-circle' }}"></i>
-                                {{ $skill->name }}
-                            </span>
+                    <div class="skill-row">
+                        <div class="skill-row-name">
+                            <i class="{{ $skill->icon ?: 'fas fa-check' }}"></i>
+                            <span>{{ $skill->name }}</span>
                         </div>
                         @if($skill->details)
-                        <div class="skill-item-details">
-                            {{ $skill->details }}
-                        </div>
+                        <div class="skill-row-details">{{ $skill->details }}</div>
                         @endif
                     </div>
                     @endforeach
@@ -888,70 +702,52 @@
 </section>
 @endif
 
-<!-- ===== WORK EXPERIENCE ===== -->
+<!-- Work Experience -->
 @if($experiences->count())
-<section class="section" style="background: var(--bg-secondary)">
+<section class="about-section about-section--tinted">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_experience') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('My professional journey so far') }}</p>
-        <div style="max-width:760px; margin:0 auto">
-            <div class="timeline">
-                @foreach($experiences as $exp)
-                <div class="timeline-item reveal delay-{{ ($loop->index % 3) + 1 }}">
-                    <div class="timeline-marker">
-                        <div class="timeline-marker-inner">
-                            @if($loop->first)
-                                <i class="fas fa-briefcase"></i>
-                            @else
-                                <i class="fas fa-laptop-code"></i>
-                            @endif
-                        </div>
-                        @if($loop->first)
-                            <span class="timeline-marker-pulse"></span>
-                        @endif
+        <div class="about-section-head">
+            <h2>{!! __('heading_experience') !!}</h2>
+            <p>{{ __('My professional journey so far') }}</p>
+        </div>
+
+        <div class="exp-ledger">
+            @foreach($experiences as $exp)
+            <div class="exp-ledger-row">
+                <div>
+                    <div class="exp-ledger-date">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>{{ $exp->formatted_date }}</span>
                     </div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <h3 class="timeline-company">
-                                <i class="fas fa-building"></i>
-                                {{ $exp->localized_company }}
-                            </h3>
-                            <span class="timeline-date-badge">
-                                <i class="far fa-calendar-alt"></i>
-                                {{ $exp->formatted_date }}
-                            </span>
-                        </div>
-                        <div class="timeline-position-badge">
-                            <i class="fas fa-code-branch"></i>
-                            {{ $exp->localized_position }}
-                        </div>
-                        <div class="timeline-desc">
-                            @php
-                                $sentences = array_filter(array_map('trim', explode('.', $exp->localized_description)));
-                            @endphp
-                            @if(count($sentences) > 1)
-                                <ul class="timeline-bullets">
-                                    @foreach($sentences as $s)
-                                        @if(!empty($s))
-                                        <li>{{ $s }}.</li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                            @else
-                                <p>{{ $exp->localized_description }}</p>
-                            @endif
-                        </div>
-                        @if(count($exp->tech_tags))
-                        <div class="timeline-tags">
-                            @foreach($exp->tech_tags as $tag)
-                            <span class="timeline-tag">{{ $tag }}</span>
-                            @endforeach
-                        </div>
-                        @endif
-                    </div>
+                    <div class="exp-ledger-company">{{ $exp->localized_company }}</div>
                 </div>
-                @endforeach
+                <div>
+                    <h3 class="exp-ledger-role">{{ $exp->localized_position }}</h3>
+                    @php
+                        $sentences = array_filter(array_map('trim', explode('.', $exp->localized_description)));
+                    @endphp
+                    @if(count($sentences) > 1)
+                        <ul class="exp-ledger-bullets">
+                            @foreach($sentences as $s)
+                                @if(!empty($s))
+                                <li>{{ $s }}.</li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="exp-ledger-p">{{ $exp->localized_description }}</p>
+                    @endif
+
+                    @if(count($exp->tech_tags))
+                    <div class="exp-ledger-tags">
+                        @foreach($exp->tech_tags as $tag)
+                        <span class="exp-ledger-tag">{{ $tag }}</span>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
             </div>
+            @endforeach
         </div>
     </div>
 </section>

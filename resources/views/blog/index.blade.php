@@ -6,75 +6,133 @@
 
 @section('styles')
 <style>
-    .page-hero {
-        padding: 5rem 0 3rem; text-align: center;
-        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
+    .page-header-band {
+        padding: 3.5rem 0 2.25rem;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border);
     }
-    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
-    .page-hero p { color: var(--text-secondary); font-size: 1.1rem; }
+    .page-header-band h1 {
+        font-size: clamp(1.9rem, 4vw, 2.75rem);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--text-primary);
+        margin-bottom: 0.6rem;
+    }
+    .page-header-band p {
+        color: var(--text-secondary);
+        font-size: 1.02rem;
+        max-width: 62ch;
+        line-height: 1.65;
+    }
 
-    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
+        gap: 1.5rem;
+    }
 
     .blog-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
-        text-decoration: none; color: inherit; transition: all 0.3s ease;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
-    .blog-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+    .blog-card:hover {
+        border-color: var(--border-strong);
+        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.08);
+    }
 
     .blog-image {
-        height: 200px; overflow: hidden;
-        background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
-        display: flex; align-items: center; justify-content: center;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    .blog-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .blog-card:hover .blog-image img { transform: scale(1.05); }
-    .blog-image-placeholder { font-size: 3rem; opacity: 0.3; }
+    .blog-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .blog-image-placeholder { font-size: 2.25rem; color: var(--text-muted); }
 
     .blog-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
-    .blog-meta { display: flex; align-items: center; gap: 1rem; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
-    .blog-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.4; }
-    .blog-excerpt { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; }
+    .blog-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        margin-bottom: 0.6rem;
+        flex-wrap: wrap;
+    }
+    .blog-title {
+        font-size: 1.08rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+    .blog-excerpt {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        flex: 1;
+    }
     .blog-read-more {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        color: var(--accent-light); font-size: 0.85rem; font-weight: 600;
-        margin-top: 1rem; text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--accent);
+        font-size: 0.86rem;
+        font-weight: 600;
+        margin-top: 1rem;
     }
 
-    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-secondary); }
-    .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.3; }
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-secondary);
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+    }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted); }
 
+    @media (max-width: 1024px) {
+        .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+    }
     @media (max-width: 768px) {
-        .page-hero { padding: 3.5rem 0 2rem; }
-        .page-hero h1 { font-size: clamp(1.8rem, 6vw, 2.5rem); }
-        .page-hero p { font-size: 1rem; }
+        .page-header-band { padding: 2.5rem 0 1.75rem; }
     }
     @media (max-width: 640px) {
-        .blog-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 480px) {
-        .page-hero { padding: 2.75rem 0 1.5rem; }
-        .blog-image { height: 160px; }
-        .blog-body { padding: 1.1rem; }
-        .blog-meta { gap: 0.75rem; flex-wrap: wrap; }
+        .blog-grid { grid-template-columns: 1fr; gap: 1.15rem; }
     }
 </style>
 @endsection
 
 @section('content')
-<section class="page-hero">
+<section class="page-header-band">
     <div class="container">
-        <h1 class="reveal">{!! __('heading_my_blog') !!}</h1>
-        <p class="reveal delay-1">{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
+        <h1>{!! __('heading_my_blog') !!}</h1>
+        <p>{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
     </div>
 </section>
 
-<section class="section" style="padding-top: 2rem">
+<section class="section" style="padding-top: 2.5rem">
     <div class="container">
         @if($posts->count())
         <div class="blog-grid">
             @foreach($posts as $post)
-            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card reveal delay-{{ ($loop->index % 3) + 1 }}">
+            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
                 <div class="blog-image">
                     @if($post->thumbnail_url)
                         <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
@@ -85,24 +143,24 @@
                 <div class="blog-body">
                     <div class="blog-meta">
                         @if($post->published_at)
-                        <span><i class="fas fa-calendar-alt"></i> {{ $post->published_at->format('M d, Y') }}</span>
+                        <span>{{ $post->published_at->format('M d, Y') }}</span>
                         @endif
-                        <span><i class="fas fa-clock"></i> {{ ceil(str_word_count(strip_tags($post->content)) / 200) }} {{ __('min read') }}</span>
+                        <span>{{ ceil(str_word_count(strip_tags($post->content)) / 200) }} {{ __('min read') }}</span>
                     </div>
                     <div class="blog-title">{{ $post->title }}</div>
                     @if($post->excerpt)
                     <p class="blog-excerpt">{{ Str::limit($post->excerpt, 130) }}</p>
                     @endif
-                    <span class="blog-read-more">{{ __('Read more') }} <i class="fas fa-arrow-right"></i></span>
+                    <span class="blog-read-more">{{ __('Read more') }}</span>
                 </div>
             </a>
             @endforeach
         </div>
 
         @if($posts->hasPages())
-        <div class="pagination-wrap reveal delay-2">
+        <div class="pagination-wrap">
             @if($posts->onFirstPage())
-                <span class="page-link" style="opacity:0.4">« {{ __('Prev') }}</span>
+                <span class="page-link" style="opacity:0.45">« {{ __('Prev') }}</span>
             @else
                 <a href="{{ $posts->previousPageUrl() }}" class="page-link">« {{ __('Prev') }}</a>
             @endif
@@ -114,13 +172,13 @@
             @if($posts->hasMorePages())
                 <a href="{{ $posts->nextPageUrl() }}" class="page-link">{{ __('Next') }} »</a>
             @else
-                <span class="page-link" style="opacity:0.4">{{ __('Next') }} »</span>
+                <span class="page-link" style="opacity:0.45">{{ __('Next') }} »</span>
             @endif
         </div>
         @endif
 
         @else
-        <div class="empty-state reveal">
+        <div class="empty-state">
             <i class="fas fa-pen-nib"></i>
             <h3>{{ __('No articles yet') }}</h3>
             <p>{{ __('Stay tuned for upcoming posts!') }}</p>

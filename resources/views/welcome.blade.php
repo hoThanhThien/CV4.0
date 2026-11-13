@@ -6,581 +6,403 @@
 
 @section('styles')
 <style>
-    /* ===== HERO ===== */
+    /* ===== HERO: ASYMMETRIC EDITORIAL ENGINEERING BRIEF ===== */
     .hero {
-        min-height: calc(100svh - 70px);
-        min-height: 88vh;
-        display: flex; align-items: center;
-        position: relative; overflow: hidden;
-        padding: 4.5rem 0 3.5rem;
+        padding: 4.5rem 0 4rem;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border);
     }
-
-    .hero-bg {
-        position: absolute; inset: 0; z-index: 0;
-        background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(124,58,237,0.25) 0%, transparent 60%),
-                    radial-gradient(ellipse 60% 60% at 80% 50%, rgba(6,182,212,0.1) 0%, transparent 60%);
+    .hero-grid-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+        gap: 3.5rem;
+        align-items: start;
     }
-
-    /* Ambient Floating Glow Blobs */
-    .hero-glow-blob {
-        position: absolute; border-radius: 50%; filter: blur(75px);
-        pointer-events: none; z-index: 0; opacity: 0.4;
+    .hero-availability {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        font-size: 0.84rem;
+        font-weight: 500;
+        text-decoration: none;
+        margin-bottom: 1.35rem;
+        transition: border-color 0.16s ease, color 0.16s ease;
     }
-    .blob-1 {
-        width: 380px; height: 380px; top: 5%; left: 0%;
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, transparent 70%);
-        animation: floatBlob1 14s ease-in-out infinite alternate;
+    .hero-availability:hover {
+        border-color: var(--text-primary);
+        color: var(--text-primary);
     }
-    .blob-2 {
-        width: 420px; height: 420px; bottom: 5%; right: 0%;
-        background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, transparent 70%);
-        animation: floatBlob2 16s ease-in-out infinite alternate;
+    .hero-availability .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+        flex-shrink: 0;
     }
-    @keyframes floatBlob1 {
-        0% { transform: translate(0, 0) scale(1); }
-        100% { transform: translate(50px, 30px) scale(1.12); }
+    .hero-content h1 {
+        font-size: clamp(2rem, 3.8vw, 2.95rem);
+        font-weight: 700;
+        line-height: 1.18;
+        letter-spacing: -0.03em;
+        color: var(--text-primary);
+        margin-bottom: 1.25rem;
+        max-width: 22ch;
     }
-    @keyframes floatBlob2 {
-        0% { transform: translate(0, 0) scale(1); }
-        100% { transform: translate(-45px, -35px) scale(1.15); }
+    .hero-content p {
+        font-size: 1.05rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        max-width: 60ch;
+        margin-bottom: 1.85rem;
     }
-
-    .hero-grid {
-        position: absolute; inset: 0; z-index: -1;
-        background-size: 40px 40px;
-        background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-        mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-    }
-
-    .hero-content { position: relative; z-index: 1; max-width: 820px; width: 100%; }
-
-    .hero-line {
-        display: block;
-    }
-
-    @media (min-width: 992px) {
-        .hero-content {
-            max-width: 980px;
-        }
-        .hero-line-1,
-        .hero-line-2 {
-            white-space: nowrap;
-        }
-    }
-
-    .hero-badge {
-        display: inline-flex; align-items: center; gap: 0.5rem;
-        padding: 0.35rem 0.9rem; border-radius: 50px;
-        background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
-        color: var(--accent-light); font-size: 0.85rem; font-weight: 600;
-        margin-bottom: 1.25rem; animation: fadeInDown 0.6s ease;
-        text-decoration: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
-    }
-    .hero-badge:hover {
-        background: rgba(124,58,237,0.25);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(99, 102, 241, 0.2);
-    }
-    .hero-badge .dot {
-        width: 8px; height: 8px; border-radius: 50%; background: var(--green);
-        box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
-
-    .hero h1 {
-        font-size: clamp(2.1rem, 4.4vw, 3.4rem); font-weight: 900;
-        line-height: 1.2; margin-bottom: 1.25rem; letter-spacing: -0.02em;
-        word-break: normal; overflow-wrap: break-word;
-    }
-
-    .hero p {
-        font-size: clamp(1rem, 2.5vw, 1.15rem); color: var(--text-secondary);
-        margin-bottom: 1.75rem; max-width: 680px; line-height: 1.7;
-    }
-
     .hero-actions {
-        display: flex; gap: 1rem; flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
     }
 
-    .hero-scroll {
-        position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-        display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-        color: var(--text-secondary); font-size: 0.8rem; animation: fadeInUp 1s ease 0.8s both;
+    /* Engineering Profile Spec Sheet */
+    .spec-sheet {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
     }
-    .hero-scroll .scroll-line {
-        width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent);
-        animation: scrollDown 1.5s ease-in-out infinite;
+    .spec-sheet-header {
+        padding: 0.9rem 1.25rem;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+    .spec-sheet-title {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    .spec-sheet-meta {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+    }
+    .spec-row {
+        padding: 0.95rem 1.25rem;
+        border-bottom: 1px solid var(--border);
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 1rem;
+        align-items: baseline;
+    }
+    .spec-row:last-child {
+        border-bottom: none;
+    }
+    .spec-label {
+        font-size: 0.84rem;
+        font-weight: 500;
+        color: var(--text-muted);
+    }
+    .spec-value {
+        font-size: 0.92rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        line-height: 1.5;
+    }
+    .spec-value strong {
+        font-weight: 600;
+    }
+    .spec-value a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+    .spec-value a:hover {
+        text-decoration: underline;
     }
 
-    @keyframes scrollDown { 0% { opacity: 0; transform: translateY(-10px); } 100% { opacity: 1; transform: translateY(10px); } }
-    @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: none; } }
-    @keyframes fadeInUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: none; } }
-
-    /* ===== KEY ACHIEVEMENTS (PRESTIGE EDITION) ===== */
+    /* ===== ACHIEVEMENTS ===== */
     .achievements-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-        gap: 1.75rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
     }
     .achievement-card {
-        background: #ffffff;
-        border: 1px solid rgba(226, 232, 240, 0.85);
-        border-radius: 22px;
-        padding: 1.85rem 1.65rem 1.65rem;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
-    }
-    .achievement-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 4px;
-        background: var(--card-gradient, var(--gradient));
-        transition: height 0.3s ease;
-    }
-    .achievement-card::after {
-        content: '';
-        position: absolute;
-        top: -60px; right: -60px;
-        width: 140px; height: 140px;
-        background: var(--card-glow, rgba(99, 102, 241, 0.12));
-        border-radius: 50%;
-        filter: blur(40px);
-        opacity: 0.5;
-        transition: all 0.4s ease;
-        pointer-events: none;
+        transition: border-color 0.18s ease;
     }
     .achievement-card:hover {
-        transform: translateY(-8px);
-        border-color: var(--card-border-hover, rgba(99, 102, 241, 0.4));
-        box-shadow: 0 20px 40px -12px var(--card-glow, rgba(99, 102, 241, 0.2)), 0 2px 6px rgba(0,0,0,0.03);
+        border-color: var(--border-strong);
     }
-    .achievement-card:hover::before {
-        height: 6px;
-    }
-    .achievement-card:hover::after {
-        opacity: 0.85;
-        transform: scale(1.25);
-    }
-
-    /* Card Themes */
-    .achievement-card.theme-blue {
-        --card-gradient: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-        --card-glow: rgba(79, 70, 229, 0.2);
-        --card-border-hover: rgba(79, 70, 229, 0.4);
-        --card-icon-gradient: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
-        --card-icon-shadow: rgba(37, 99, 235, 0.35);
-        --chip-bg: rgba(79, 70, 229, 0.08);
-        --chip-color: #4338ca;
-        --chip-border: rgba(79, 70, 229, 0.2);
-    }
-    .achievement-card.theme-emerald {
-        --card-gradient: linear-gradient(135deg, #059669 0%, #06b6d4 100%);
-        --card-glow: rgba(5, 150, 105, 0.2);
-        --card-border-hover: rgba(5, 150, 105, 0.4);
-        --card-icon-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        --card-icon-shadow: rgba(16, 185, 129, 0.35);
-        --chip-bg: rgba(5, 150, 105, 0.08);
-        --chip-color: #047857;
-        --chip-border: rgba(5, 150, 105, 0.2);
-    }
-    .achievement-card.theme-rose {
-        --card-gradient: linear-gradient(135deg, #db2777 0%, #f59e0b 100%);
-        --card-glow: rgba(219, 39, 119, 0.2);
-        --card-border-hover: rgba(219, 39, 119, 0.4);
-        --card-icon-gradient: linear-gradient(135deg, #db2777 0%, #f43f5e 100%);
-        --card-icon-shadow: rgba(244, 63, 94, 0.35);
-        --chip-bg: rgba(219, 39, 119, 0.08);
-        --chip-color: #be185d;
-        --chip-border: rgba(219, 39, 119, 0.2);
-    }
-
     .achievement-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 1.15rem;
+        gap: 0.75rem;
+        margin-bottom: 1.1rem;
     }
-    .achievement-icon-wrap {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        background: var(--card-icon-gradient);
-        box-shadow: 0 10px 22px -6px var(--card-icon-shadow);
-        color: #ffffff;
+    .achievement-icon-box {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         flex-shrink: 0;
     }
-    .achievement-card:hover .achievement-icon-wrap {
-        transform: scale(1.08) rotate(-4deg);
+    .achievement-icon-box svg {
+        width: 18px;
+        height: 18px;
     }
-    .achievement-icon-wrap svg {
-        width: 26px;
-        height: 26px;
-        stroke: currentColor;
+    .achievement-year {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        padding: 0.2rem 0.6rem;
+        border-radius: 5px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
     }
-    .achievement-year-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-size: 0.8rem;
-        font-weight: 800;
-        letter-spacing: 0.03em;
-        padding: 0.32rem 0.8rem;
-        border-radius: 50px;
-        background: rgba(15, 23, 42, 0.04);
-        color: var(--text-primary);
-        border: 1px solid rgba(15, 23, 42, 0.08);
-    }
-    .achievement-year-badge .year-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-        box-shadow: 0 0 8px currentColor;
-    }
-
-    .achievement-highlight-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.35rem 0.75rem;
-        border-radius: 8px;
-        background: var(--chip-bg);
-        color: var(--chip-color);
-        border: 1px solid var(--chip-border);
-        font-size: 0.78rem;
-        font-weight: 700;
-        margin-bottom: 0.85rem;
-        width: fit-content;
-    }
-    .achievement-highlight-chip i {
-        font-size: 0.72rem;
-    }
-
-    .achievement-title {
-        font-size: 1.15rem;
-        font-weight: 800;
-        color: var(--text-primary);
-        line-height: 1.4;
-        margin-bottom: 0.65rem;
-        letter-spacing: -0.015em;
-        transition: color 0.25s ease;
-    }
-    .achievement-card:hover .achievement-title {
+    .achievement-kicker {
+        font-size: 0.84rem;
+        font-weight: 600;
         color: var(--accent);
+        margin-bottom: 0.4rem;
+    }
+    .achievement-title {
+        font-size: 1.06rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.38;
+        margin-bottom: 0.6rem;
     }
     .achievement-desc {
         color: var(--text-secondary);
-        font-size: 0.92rem;
-        line-height: 1.65;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1.15rem;
         flex: 1;
-        margin-bottom: 1.25rem;
     }
-
     .achievement-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.45rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(226, 232, 240, 0.7);
+        gap: 0.4rem;
+        padding-top: 0.9rem;
+        border-top: 1px solid var(--border);
         margin-top: auto;
     }
-    .achievement-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 0.22rem 0.55rem;
-        border-radius: 6px;
-        background: var(--bg-secondary);
-        color: var(--text-muted);
-        border: 1px solid rgba(226, 232, 240, 0.6);
-        transition: all 0.2s ease;
-    }
-    .achievement-tag i {
-        color: var(--chip-color);
-        font-size: 0.65rem;
-    }
-    .achievement-card:hover .achievement-tag {
-        background: #ffffff;
-        color: var(--text-secondary);
-        border-color: var(--chip-border);
-    }
 
-    /* ===== SKILLS ===== */
-    .skills-section { background: var(--bg-secondary); }
+    /* ===== SKILLS INDEX ===== */
+    .skills-section {
+        background: var(--bg-card);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+    }
     .skills-categories-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 2.25rem 2.5rem;
     }
-    .skill-category-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 1.5rem;
+    .skill-category-block {
         display: flex;
         flex-direction: column;
-        transition: all 0.3s ease;
-    }
-    .skill-category-card:hover {
-        border-color: rgba(99, 102, 241, 0.35);
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.05);
     }
     .skill-category-title {
-        font-size: 1.05rem;
-        font-weight: 800;
-        color: var(--accent-light);
-        margin-bottom: 1.25rem;
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        padding-bottom: 0.75rem;
+        margin-bottom: 0.9rem;
+        border-bottom: 1.5px solid var(--text-primary);
         display: flex;
         align-items: center;
-        gap: 0.6rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--border);
+        gap: 0.55rem;
+    }
+    .skill-category-title i {
+        color: var(--accent);
+        font-size: 0.9rem;
     }
     .skill-items-list {
         display: flex;
         flex-direction: column;
-        gap: 0.9rem;
+        gap: 0.85rem;
     }
     .skill-item {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border);
     }
-    .skill-item-header {
+    .skill-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .skill-item-name {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--text-primary);
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        font-size: 0.92rem;
-        font-weight: 700;
-        color: var(--text-primary);
+        gap: 0.45rem;
     }
-    .skill-item-header span i {
-        margin-right: 0.45rem;
-        color: var(--accent);
+    .skill-item-name i {
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        width: 16px;
+        text-align: center;
     }
     .skill-item-details {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: var(--text-secondary);
-        line-height: 1.45;
-        background: var(--bg-secondary);
-        padding: 0.3rem 0.6rem;
-        border-radius: 8px;
-        border: 1px solid var(--border);
+        line-height: 1.55;
+        margin-top: 0.2rem;
+        padding-left: 1.45rem;
     }
 
-    /* ===== EXPERIENCE TIMELINE ===== */
-    .timeline {
-        position: relative;
-        padding-left: 3.75rem;
-    }
-    .timeline::before {
-        content: '';
-        position: absolute;
-        left: 20.5px;
-        top: 24px;
-        bottom: 24px;
-        width: 3px;
-        background: linear-gradient(180deg, var(--accent) 0%, #8b5cf6 45%, #06b6d4 85%, rgba(6, 182, 212, 0) 100%);
-        border-radius: 99px;
-        box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
-    }
-    .timeline-item {
-        position: relative;
-        margin-bottom: 2.25rem;
-    }
-    .timeline-item:last-child {
-        margin-bottom: 0;
-    }
-    .timeline-marker {
-        position: absolute;
-        left: -3.75rem;
-        top: 1.25rem;
-        width: 44px;
-        height: 44px;
+    /* ===== EXPERIENCE LEDGER ===== */
+    .experience-ledger {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 5;
+        flex-direction: column;
+        border-top: 1px solid var(--border);
     }
-    .timeline-marker-inner {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)), var(--bg-card);
-        border: 2px solid var(--accent);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent);
-        font-size: 0.95rem;
-        box-shadow: 0 0 16px rgba(99, 102, 241, 0.25), inset 0 0 10px rgba(99, 102, 241, 0.12);
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-        z-index: 2;
-    }
-    .timeline-marker-pulse {
-        position: absolute;
-        inset: -5px;
-        border-radius: 50%;
-        border: 2px solid var(--accent);
-        opacity: 0.8;
-        animation: timelinePulse 2.4s cubic-bezier(0.24, 0, 0.38, 1) infinite;
-        pointer-events: none;
-        z-index: 1;
-    }
-    .timeline-item:hover .timeline-marker-inner {
-        background: linear-gradient(135deg, var(--accent), #06b6d4);
-        border-color: #06b6d4;
-        color: #ffffff;
-        transform: scale(1.15) rotate(10deg);
-        box-shadow: 0 0 24px rgba(99, 102, 241, 0.65), 0 0 12px rgba(6, 182, 212, 0.45);
-    }
-    .timeline-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.04);
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-    }
-    .timeline-card::before {
-        content: '';
-        position: absolute;
-        left: -8px;
-        top: 1.75rem;
-        width: 14px;
-        height: 14px;
-        background: var(--bg-card);
-        border-left: 1px solid var(--border);
+    .exp-row {
+        display: grid;
+        grid-template-columns: 240px minmax(0, 1fr);
+        gap: 2rem;
+        padding: 2rem 0;
         border-bottom: 1px solid var(--border);
-        transform: rotate(45deg);
-        transition: border-color 0.35s ease, background 0.35s ease;
-        z-index: 1;
+        align-items: start;
     }
-    .timeline-item:hover .timeline-card {
-        border-color: rgba(99, 102, 241, 0.4);
-        transform: translateY(-3px) translateX(6px);
-        box-shadow: 0 16px 36px -6px rgba(99, 102, 241, 0.14);
+    .exp-meta-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
     }
-    .timeline-item:hover .timeline-card::before {
-        border-color: rgba(99, 102, 241, 0.4);
+    .exp-date {
+        font-size: 0.86rem;
+        font-weight: 600;
+        color: var(--text-muted);
     }
-    .timeline-header {
-        display: flex; align-items: flex-start; justify-content: space-between;
-        flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.65rem;
+    .exp-position {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--accent);
+        line-height: 1.4;
     }
-    .timeline-date-badge {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        padding: 0.3rem 0.75rem; border-radius: 50px;
-        background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25);
-        color: var(--accent); font-size: 0.78rem; font-weight: 700;
+    .exp-body-col {
+        min-width: 0;
     }
-    .timeline-company {
-        font-size: 1.15rem; font-weight: 800; color: var(--text-primary);
-        display: flex; align-items: center; gap: 0.5rem;
+    .exp-company {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
     }
-    .timeline-company i { color: var(--accent); font-size: 0.95rem; }
-    .timeline-position-badge {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        font-size: 0.9rem; font-weight: 600; color: var(--accent-light);
-        margin-bottom: 0.85rem;
-    }
-    .timeline-desc {
-        color: var(--text-secondary); font-size: 0.92rem; line-height: 1.65;
-        margin-bottom: 1rem;
-    }
-    .timeline-bullets {
+    .exp-bullets {
         list-style: none;
         padding-left: 0;
-        margin: 0.5rem 0 1rem;
+        margin: 0 0 1rem;
         display: flex;
         flex-direction: column;
         gap: 0.45rem;
+        max-width: 68ch;
     }
-    .timeline-bullets li {
+    .exp-bullets li {
         position: relative;
-        padding-left: 1.25rem;
+        padding-left: 1.1rem;
         color: var(--text-secondary);
-        font-size: 0.9rem;
-        line-height: 1.6;
+        font-size: 0.93rem;
+        line-height: 1.62;
     }
-    .timeline-bullets li::before {
-        content: '•';
+    .exp-bullets li::before {
+        content: '';
         position: absolute;
-        left: 0.25rem;
-        top: 0;
-        color: var(--accent);
-        font-weight: 900;
-        font-size: 1.15rem;
+        left: 0.1rem;
+        top: 0.62rem;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--text-muted);
     }
-    .timeline-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-    .timeline-tag {
-        font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.65rem;
-        background: var(--bg-secondary); border: 1px solid var(--border);
-        border-radius: 6px; color: var(--text-secondary);
-        transition: all 0.2s ease;
-    }
-    .timeline-card:hover .timeline-tag {
-        border-color: rgba(99, 102, 241, 0.25); color: var(--accent);
+    .exp-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
     }
 
     /* ===== PROJECTS ===== */
+    .projects-section {
+        background: var(--bg-card);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+    }
     .projects-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
         gap: 1.5rem;
     }
-    @media (max-width: 1024px) {
-        .projects-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-        }
-    }
-    @media (max-width: 640px) {
-        .projects-grid {
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-    }
     .project-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 16px; overflow: hidden;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
-        display: flex; flex-direction: column;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        display: flex;
+        flex-direction: column;
     }
     .project-card:hover {
-        border-color: rgba(99,102,241,0.4);
-        transform: translateY(-8px);
-        box-shadow: 0 25px 50px rgba(99,102,241,0.12), 0 4px 15px rgba(0,0,0,0.04);
+        border-color: var(--border-strong);
+        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.08);
     }
     .project-image {
-        height: 200px; overflow: hidden; position: relative;
-        background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
-        display: flex; align-items: center; justify-content: center;
+        height: 190px;
+        overflow: hidden;
+        position: relative;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
     }
-    .project-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    .project-card:hover .project-image img { transform: scale(1.08); }
-    .project-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
-    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
-    .project-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .project-desc { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
+    .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .project-body {
+        padding: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-bottom: 0.75rem;
+    }
+    .project-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.45rem;
+        line-height: 1.35;
+    }
+    .project-desc {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        flex: 1;
+        margin-bottom: 1.25rem;
+    }
     .project-links {
         display: flex;
         gap: 0.5rem;
@@ -589,18 +411,16 @@
         width: 100%;
     }
     .project-links .btn {
-        height: 38px;
-        min-height: 38px;
+        height: 36px;
+        min-height: 36px;
         padding: 0 0.75rem;
-        font-size: 0.83rem;
-        font-weight: 700;
-        border-radius: 10px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        border-radius: 7px;
         gap: 0.4rem;
         white-space: nowrap;
-        text-decoration: none;
         flex: 1 1 calc(50% - 0.25rem);
         justify-content: center;
-        transition: all 0.25s ease;
     }
     .project-links.has-3-links .btn:first-child,
     .project-links:has(.btn:nth-child(3)) .btn:first-child {
@@ -612,256 +432,102 @@
         flex: 1 1 calc(50% - 0.25rem);
     }
 
-    /* ===== BLOG ===== */
-    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; }
-    .blog-card {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit;
-        display: flex; flex-direction: column;
-        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .blog-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.06); }
-    .blog-image { height: 180px; overflow: hidden; background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.15)); }
-    .blog-image img { width: 100%; height: 100%; object-fit: cover; }
-    .blog-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
-    .blog-date { color: var(--accent-light); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
-    .blog-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .blog-excerpt { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; }
-
-    /* ===== CTA ===== */
-    .cta-section {
-        padding: 5rem 0; text-align: center;
-        background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,0.2) 0%, transparent 70%);
-        border-top: 1px solid var(--border);
-    }
-    .cta-section h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; margin-bottom: 1rem; }
-    .cta-section p { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin: 0 auto 2rem; }
-
-    @media (max-width: 768px) {
-        .hero { padding: 3.5rem 0 2rem; }
-        .timeline { padding-left: 3rem; }
-        .timeline::before { left: 16px; }
-        .timeline-marker { left: -3rem; width: 34px; height: 34px; }
-        .timeline-marker-inner { width: 34px; height: 34px; font-size: 0.8rem; }
-        .timeline-card::before { left: -6px; width: 10px; height: 10px; top: 1.6rem; }
-    }
-
-    @media (max-width: 480px) {
-        .hero-actions { flex-direction: column; width: 100%; gap: 0.75rem; }
-        .hero-actions .btn { width: 100%; justify-content: center; }
-        .project-image { height: 180px; }
-        .project-body { padding: 1.1rem; }
-        .project-links .btn { min-width: 0; }
-        .project-links.has-3-links .btn:first-child,
-        .project-links:has(.btn:nth-child(3)) .btn:first-child { flex: 1 1 100%; width: 100%; }
-        .project-links.has-3-links .btn:not(:first-child),
-        .project-links:has(.btn:nth-child(3)) .btn:not(:first-child) { flex: 1 1 calc(50% - 0.25rem); }
-        .cta-section .btn { width: 100%; justify-content: center; }
-    }
-
-    /* ===== HOME CREDENTIALS SHOWCASE (REDESIGNED) ===== */
+    /* ===== CREDENTIALS SHOWCASE (UNIFIED QUIET DESIGN) ===== */
     .home-cert-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.75rem;
-    }
-    @media (max-width: 1024px) {
-        .home-cert-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-        .home-cert-card:last-child:nth-child(odd) {
-            grid-column: 1 / -1;
-            max-width: 580px;
-            margin: 0 auto;
-            width: 100%;
-        }
-    }
-    @media (max-width: 640px) {
-        .home-cert-grid {
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-        .home-cert-card:last-child:nth-child(odd) {
-            max-width: 100%;
-        }
+        gap: 1.5rem;
     }
     .home-cert-card {
-        --cert-accent: #6366f1;
-        --cert-accent-2: #06b6d4;
-        --cert-soft: rgba(99, 102, 241, 0.1);
-        --cert-border-hover: rgba(99, 102, 241, 0.4);
-        --cert-glow: rgba(99, 102, 241, 0.16);
         background: var(--bg-card);
         border: 1px solid var(--border);
-        border-radius: 22px;
-        padding: 1.75rem;
+        border-radius: 10px;
+        padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 8px 26px -10px rgba(15, 23, 42, 0.06);
-    }
-    .home-cert-card.theme-indigo {
-        --cert-accent: #4f46e5;
-        --cert-accent-2: #7c3aed;
-        --cert-soft: rgba(99, 102, 241, 0.11);
-        --cert-border-hover: rgba(99, 102, 241, 0.42);
-        --cert-glow: rgba(99, 102, 241, 0.18);
-    }
-    .home-cert-card.theme-emerald {
-        --cert-accent: #059669;
-        --cert-accent-2: #10b981;
-        --cert-soft: rgba(16, 185, 129, 0.11);
-        --cert-border-hover: rgba(16, 185, 129, 0.42);
-        --cert-glow: rgba(16, 185, 129, 0.18);
-    }
-    .home-cert-card.theme-amber {
-        --cert-accent: #d97706;
-        --cert-accent-2: #ec4899;
-        --cert-soft: rgba(245, 158, 11, 0.12);
-        --cert-border-hover: rgba(245, 158, 11, 0.45);
-        --cert-glow: rgba(245, 158, 11, 0.18);
-    }
-    .home-cert-card.theme-cyan {
-        --cert-accent: #0284c7;
-        --cert-accent-2: #06b6d4;
-        --cert-soft: rgba(6, 182, 212, 0.12);
-        --cert-border-hover: rgba(6, 182, 212, 0.42);
-        --cert-glow: rgba(6, 182, 212, 0.18);
-    }
-    .home-cert-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--cert-accent), var(--cert-accent-2));
-    }
-    .home-cert-card::after {
-        content: '';
-        position: absolute;
-        top: -60px;
-        right: -60px;
-        width: 170px;
-        height: 170px;
-        border-radius: 50%;
-        background: radial-gradient(circle, var(--cert-soft) 0%, transparent 70%);
-        pointer-events: none;
-        transition: transform 0.4s ease;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
     .home-cert-card:hover {
-        transform: translateY(-7px);
-        border-color: var(--cert-border-hover);
-        box-shadow: 0 22px 44px -12px var(--cert-glow), 0 6px 18px -6px rgba(15, 23, 42, 0.06);
-    }
-    .home-cert-card:hover::after {
-        transform: scale(1.2);
+        border-color: var(--border-strong);
+        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.07);
     }
     .home-cert-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 0.75rem;
-        margin-bottom: 1.15rem;
-        position: relative;
-        z-index: 1;
+        margin-bottom: 1.1rem;
     }
     .home-cert-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 15px;
-        background: var(--cert-soft);
-        color: var(--cert-accent);
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        border: 1px solid rgba(15, 23, 42, 0.06);
-        transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
     }
     .home-cert-icon svg {
-        width: 24px;
-        height: 24px;
-    }
-    .home-cert-card:hover .home-cert-icon {
-        background: linear-gradient(135deg, var(--cert-accent), var(--cert-accent-2));
-        color: #ffffff;
-        transform: scale(1.06) rotate(-3deg);
-        border-color: transparent;
-        box-shadow: 0 10px 20px -6px var(--cert-glow);
+        width: 19px;
+        height: 19px;
     }
     .home-cert-badges {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
         justify-content: flex-end;
-        gap: 0.45rem;
+        gap: 0.4rem;
     }
     .home-cert-cat {
-        font-size: 0.75rem;
-        font-weight: 700;
-        padding: 0.32rem 0.75rem;
-        border-radius: 50px;
-        background: var(--cert-soft);
-        color: var(--cert-accent);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        white-space: nowrap;
-    }
-    .home-cert-year {
-        font-size: 0.74rem;
-        font-weight: 700;
-        padding: 0.3rem 0.65rem;
-        border-radius: 50px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.22rem 0.6rem;
+        border-radius: 5px;
         background: var(--bg-secondary);
-        border: 1px solid var(--border);
         color: var(--text-secondary);
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
         white-space: nowrap;
     }
-    .home-cert-year-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--cert-accent);
+    .home-cert-year {
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.22rem 0.55rem;
+        border-radius: 5px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        white-space: nowrap;
     }
     .home-cert-title {
-        font-size: 1.14rem;
-        font-weight: 800;
-        line-height: 1.42;
-        min-height: 3.22rem;
-        margin-bottom: 0.65rem;
+        font-size: 1.08rem;
+        font-weight: 700;
+        line-height: 1.4;
+        min-height: 3.05rem;
+        margin-bottom: 0.55rem;
         color: var(--text-primary);
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        position: relative;
-        z-index: 1;
     }
     .home-cert-issuer {
-        font-size: 0.83rem;
-        font-weight: 600;
+        font-size: 0.85rem;
+        font-weight: 500;
         color: var(--text-muted);
         display: flex;
         align-items: center;
         gap: 0.45rem;
-        margin-bottom: 0.85rem;
-        padding: 0.4rem 0.7rem;
-        background: var(--bg-secondary);
-        border-radius: 10px;
-        border: 1px solid rgba(226, 232, 240, 0.7);
+        margin-bottom: 0.8rem;
     }
     .home-cert-issuer svg {
-        width: 15px;
-        height: 15px;
-        color: var(--cert-accent);
+        width: 14px;
+        height: 14px;
+        color: var(--text-muted);
         flex-shrink: 0;
     }
     .home-cert-issuer span {
@@ -872,8 +538,8 @@
     .home-cert-desc {
         color: var(--text-secondary);
         font-size: 0.9rem;
-        line-height: 1.65;
-        margin-bottom: 1.35rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
         flex: 1;
         display: -webkit-box;
         -webkit-line-clamp: 3;
@@ -881,105 +547,60 @@
         overflow: hidden;
     }
     .home-cert-footer {
-        padding-top: 1rem;
+        padding-top: 0.95rem;
         margin-top: auto;
-        border-top: 1px dashed var(--border);
+        border-top: 1px solid var(--border);
         display: flex;
         flex-direction: column;
-        gap: 0.85rem;
+        gap: 0.75rem;
     }
     .home-cert-footer-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 0.5rem;
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
-        font-weight: 700;
+        font-weight: 500;
     }
     .home-cert-file-chip {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        padding: 0.28rem 0.65rem;
-        border-radius: 8px;
-        background: rgba(239, 68, 68, 0.08);
-        color: #dc2626;
-        font-size: 0.76rem;
-        font-weight: 700;
-        letter-spacing: 0.02em;
+        gap: 0.35rem;
+        color: var(--text-secondary);
+        font-weight: 600;
         white-space: nowrap;
         flex-shrink: 0;
-    }
-    .home-cert-file-chip.is-img {
-        background: rgba(6, 182, 212, 0.1);
-        color: #0284c7;
     }
     .home-cert-verified {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
-        color: #059669;
-        font-size: 0.76rem;
-        font-weight: 700;
+        gap: 0.3rem;
+        color: var(--green);
+        font-size: 0.8rem;
+        font-weight: 600;
         white-space: nowrap;
         flex-shrink: 0;
     }
     .home-cert-btns {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.65rem;
+        gap: 0.55rem;
         width: 100%;
     }
     .home-cert-btns .btn {
         width: 100%;
-        min-height: 42px;
-        height: 42px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        font-weight: 700;
+        min-height: 38px;
+        height: 38px;
+        font-size: 0.84rem;
+        font-weight: 600;
         padding: 0 0.75rem;
-        border-radius: 12px;
-        gap: 0.45rem;
-        cursor: pointer;
+        border-radius: 7px;
+        gap: 0.4rem;
         white-space: nowrap;
-        text-decoration: none;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .btn-home-cert-view {
-        background: linear-gradient(135deg, var(--cert-accent), var(--cert-accent-2));
-        color: #ffffff !important;
-        border: none;
-        box-shadow: 0 4px 14px -3px var(--cert-glow);
-    }
-    .btn-home-cert-view:hover {
-        filter: brightness(1.08);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px -3px var(--cert-glow);
-        color: #ffffff !important;
-    }
-    .btn-home-cert-dl {
-        background: rgba(99, 102, 241, 0.06);
-        color: var(--text-primary) !important;
-        border: 1.5px solid var(--border);
-    }
-    .btn-home-cert-dl:hover {
-        border-color: var(--cert-accent);
-        color: var(--cert-accent) !important;
-        background: var(--cert-soft);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px -4px var(--cert-glow);
-    }
-    @media (max-width: 440px) {
-        .home-cert-btns {
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
-        }
     }
 
-    /* Home Quick Preview Lightbox Modal */
+    /* Quick Preview Modal */
     .home-cert-modal {
         position: fixed;
         inset: 0;
@@ -988,34 +609,34 @@
         align-items: center;
         justify-content: center;
         padding: 1.25rem;
-        background: rgba(15, 23, 42, 0.82);
-        backdrop-filter: blur(10px);
+        background: rgba(18, 22, 31, 0.72);
+        backdrop-filter: blur(6px);
     }
     .home-cert-modal.active { display: flex; }
     .home-cert-modal-box {
         background: var(--bg-card);
         border: 1px solid var(--border);
-        border-radius: 20px;
+        border-radius: 12px;
         width: 95vw;
         max-width: 1120px;
         height: 88vh;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.55);
+        box-shadow: 0 24px 48px -12px rgba(18, 22, 31, 0.35);
     }
     .home-cert-modal-header {
-        padding: 0.95rem 1.35rem;
+        padding: 0.9rem 1.25rem;
         border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        background: var(--bg-primary);
+        background: var(--bg-card);
     }
     .home-cert-modal-title {
-        font-size: 1.05rem;
-        font-weight: 800;
+        font-size: 1rem;
+        font-weight: 700;
         color: var(--text-primary);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1026,7 +647,7 @@
     }
     .home-cert-modal-body {
         flex: 1;
-        background: #0f172a;
+        background: var(--bg-secondary);
         overflow: hidden;
         display: flex;
         align-items: center;
@@ -1039,6 +660,155 @@
         border: none;
         object-fit: contain;
     }
+
+    /* ===== BLOG ===== */
+    .blog-section {
+        background: var(--bg-card);
+        border-top: 1px solid var(--border);
+    }
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        gap: 1.5rem;
+    }
+    .blog-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .blog-card:hover {
+        border-color: var(--border-strong);
+        box-shadow: 0 8px 20px -8px rgba(18, 22, 31, 0.08);
+    }
+    .blog-image {
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+    }
+    .blog-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .blog-body {
+        padding: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .blog-date {
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    .blog-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+    }
+    .blog-excerpt {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* ===== CTA BAND ===== */
+    .cta-section {
+        padding: 4rem 0;
+        background: var(--bg-primary);
+        border-top: 1px solid var(--border);
+    }
+    .cta-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        flex-wrap: wrap;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 2.25rem 2.5rem;
+    }
+    .cta-box h2 {
+        font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
+        margin-bottom: 0.4rem;
+    }
+    .cta-box p {
+        color: var(--text-secondary);
+        font-size: 0.98rem;
+        max-width: 58ch;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+        .hero-grid-layout {
+            grid-template-columns: 1fr;
+            gap: 2.25rem;
+        }
+        .achievements-grid,
+        .projects-grid,
+        .home-cert-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+        .achievement-card:last-child:nth-child(odd),
+        .home-cert-card:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            max-width: 560px;
+            width: 100%;
+        }
+    }
+    @media (max-width: 768px) {
+        .hero { padding: 3rem 0 2.75rem; }
+        .exp-row {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            padding: 1.5rem 0;
+        }
+        .cta-box { padding: 1.75rem 1.5rem; }
+    }
+    @media (max-width: 640px) {
+        .achievements-grid,
+        .projects-grid,
+        .home-cert-grid,
+        .blog-grid {
+            grid-template-columns: 1fr;
+            gap: 1.15rem;
+        }
+        .achievement-card:last-child:nth-child(odd),
+        .home-cert-card:last-child:nth-child(odd) {
+            max-width: 100%;
+        }
+        .spec-row {
+            grid-template-columns: 1fr;
+            gap: 0.25rem;
+        }
+    }
+    @media (max-width: 480px) {
+        .hero-actions { flex-direction: column; align-items: stretch; }
+        .hero-actions .btn { width: 100%; justify-content: center; }
+        .cta-box .btn { width: 100%; }
+        .project-links .btn { min-width: 0; }
+        .project-links.has-3-links .btn:first-child,
+        .project-links:has(.btn:nth-child(3)) .btn:first-child { flex: 1 1 100%; width: 100%; }
+        .project-links.has-3-links .btn:not(:first-child),
+        .project-links:has(.btn:nth-child(3)) .btn:not(:first-child) { flex: 1 1 calc(50% - 0.25rem); }
+        .home-cert-btns { grid-template-columns: 1fr; }
+    }
 </style>
 @endsection
 
@@ -1046,137 +816,147 @@
 
 <!-- ===== HERO ===== -->
 <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-glow-blob blob-1"></div>
-    <div class="hero-glow-blob blob-2"></div>
-    <div class="hero-grid"></div>
     <div class="container">
-        <div class="hero-content">
-            <a href="{{ route('contact') }}" class="hero-badge">
-                <span class="dot"></span>
-                {{ __('Available for opportunities') }}
-            </a>
-            
-            <h1>
-                <span class="hero-line hero-line-1">{{ __("Programmers don't just") }} <span class="gradient-text">{{ __('write code,') }}</span></span>
-                <span class="hero-line hero-line-2">{!! __('they create solutions.') !!}</span>
-            </h1>
-            <p>{{ __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.') }}</p>
-            
-            <div class="hero-actions">
-                <a href="{{ route('projects.index') }}" class="btn btn-primary">
-                    <i class="fas fa-rocket"></i> {{ __('View My Work') }}
+        <div class="hero-grid-layout hero-animate">
+            <div class="hero-content">
+                <a href="{{ route('contact') }}" class="hero-availability">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span>{{ __('Available for opportunities') }}</span>
                 </a>
-                <a href="{{ route('certificates') }}" class="btn btn-outline" style="border-color: rgba(124,58,237,0.45); background: rgba(124,58,237,0.06)">
-                    <i class="fas fa-file-pdf" style="color:#ef4444"></i> {{ __('Brochure & Giấy khen') }}
-                </a>
-                <a href="{{ route('contact') }}" class="btn btn-outline">
-                    <i class="fas fa-paper-plane"></i> {{ __('Get In Touch') }}
-                </a>
-                <a href="tel:0375227764" class="btn btn-outline" title="{{ __('Phone') }}">
-                    <i class="fas fa-phone-alt"></i> 0375227764
-                </a>
+
+                <h1>{{ __("Programmers don't just") }} {{ __('write code,') }} {{ __('they create solutions.') }}</h1>
+
+                <p>{{ __('Aspiring Fullstack Developer with hands-on experience in building web applications through academic and personal projects. Skilled in ReactJS, Java Spring Boot, PHP, HTML, CSS, JavaScript, and RESTful APIs, with a solid foundation in database design and software development.') }}</p>
+
+                <div class="hero-actions">
+                    <a href="{{ route('projects.index') }}" class="btn btn-primary">
+                        {{ __('View My Work') }}
+                    </a>
+                    <a href="{{ route('certificates') }}" class="btn btn-outline">
+                        <i class="fas fa-file-pdf"></i> {{ __('Brochure & Giấy khen') }}
+                    </a>
+                    <a href="{{ route('contact') }}" class="btn btn-outline">
+                        {{ __('Get In Touch') }}
+                    </a>
+                    <a href="tel:0375227764" class="btn btn-outline" title="{{ __('Phone') }}">
+                        <i class="fas fa-phone-alt"></i> 0375227764
+                    </a>
+                </div>
             </div>
 
-
+            <!-- Structured Profile Specification Ledger -->
+            <aside class="spec-sheet" aria-label="Profile overview">
+                <div class="spec-sheet-header">
+                    <span class="spec-sheet-title">{{ __('Hồ Thành Thiện') }}</span>
+                    <span class="spec-sheet-meta">{{ __('Fullstack Developer') }}</span>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">{{ __('Education') }}</div>
+                    <div class="spec-value">
+                        <strong>{{ __('University of Transport Ho Chi Minh City') }}</strong><br>
+                        {{ __("Bachelor's Degree Information Technology") }}
+                    </div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">{{ app()->getLocale() == 'vi' ? 'Thành tích' : 'Standing' }}</div>
+                    <div class="spec-value">{{ app()->getLocale() == 'vi' ? 'Tốt nghiệp Xuất sắc, GPA 3.6/4.0 (học kỳ gần nhất 4.0/4.0)' : 'Excellent Classification, Cumulative GPA 3.6/4.0 (Recent 4.0/4.0)' }}</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">{{ app()->getLocale() == 'vi' ? 'Công nghệ chính' : 'Core stack' }}</div>
+                    <div class="spec-value">Laravel, Java Spring Boot, ReactJS, Python (RAG/LLM), Odoo ERP</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">{{ __('Location') }}</div>
+                    <div class="spec-value">{{ __('Hồ Chí Minh, Việt Nam') }}</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label">Email</div>
+                    <div class="spec-value"><a href="mailto:hothanhthien119@gmail.com">hothanhthien119@gmail.com</a></div>
+                </div>
+            </aside>
         </div>
-    </div>
-    <div class="hero-scroll">
-        <span>{{ __('Scroll') }}</span>
-        <div class="scroll-line"></div>
     </div>
 </section>
 
 <!-- ===== KEY ACHIEVEMENTS ===== -->
-<section class="section" style="padding-top: 3.5rem">
+<section class="section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_achievements') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('Academic recognition and competition awards') }}</p>
+        <div class="section-header-row">
+            <div>
+                <h2 class="section-title">{!! __('heading_achievements') !!}</h2>
+                <p class="section-subtitle">{{ __('Academic recognition and competition awards') }}</p>
+            </div>
+        </div>
 
-        <div class="achievements-grid reveal delay-2">
+        <div class="achievements-grid">
             <!-- 1. GPA 4.0 -->
-            <div class="achievement-card theme-blue">
+            <div class="achievement-card">
                 <div class="achievement-top">
-                    <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="achievement-icon-box" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                         </svg>
                     </div>
-                    <div class="achievement-top-meta">
-                        <span class="achievement-year-badge"><span class="year-dot"></span>2026</span>
-                    </div>
+                    <span class="achievement-year">2026</span>
                 </div>
-                <div class="achievement-highlight-chip">
-                    <i class="fas fa-star"></i>
-                    <span>{{ app()->getLocale() == 'vi' ? 'Học kỳ gần nhất • GPA 4.0/4.0' : 'Latest Semester • GPA 4.0/4.0' }}</span>
+                <div class="achievement-kicker">
+                    {{ app()->getLocale() == 'vi' ? 'Học kỳ gần nhất, GPA 4.0/4.0' : 'Latest semester, GPA 4.0/4.0' }}
                 </div>
                 <h3 class="achievement-title">{{ __('GPA in Most Recent Semester — 4.0/4.0') }}</h3>
                 <p class="achievement-desc">
                     {{ app()->getLocale() == 'vi' ? 'Đạt kết quả học tập xuất sắc với điểm GPA 4.0/4.0 trong học kỳ gần nhất, thể hiện tính kỷ luật cao và tư duy logic chuyên sâu.' : 'Achieved a perfect 4.0/4.0 GPA in the most recent semester, demonstrating high dedication, discipline, and strong software engineering competence.' }}
                 </p>
                 <div class="achievement-tags">
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Kỷ luật cao' : 'High Discipline' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Tư duy logic' : 'Logical Thinking' }}</span>
+                    <span class="tag">{{ app()->getLocale() == 'vi' ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
+                    <span class="tag">{{ app()->getLocale() == 'vi' ? 'Tư duy hệ thống' : 'Systems thinking' }}</span>
                 </div>
             </div>
 
             <!-- 2. Excellent Graduation -->
-            <div class="achievement-card theme-emerald">
+            <div class="achievement-card">
                 <div class="achievement-top">
-                    <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="achievement-icon-box" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                             <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                         </svg>
                     </div>
-                    <div class="achievement-top-meta">
-                        <span class="achievement-year-badge"><span class="year-dot"></span>2026</span>
-                    </div>
+                    <span class="achievement-year">2026</span>
                 </div>
-                <div class="achievement-highlight-chip">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>{{ app()->getLocale() == 'vi' ? 'Tốt nghiệp Xuất sắc • UTH' : 'Summa Cum Laude • UTH' }}</span>
+                <div class="achievement-kicker">
+                    {{ app()->getLocale() == 'vi' ? 'Tốt nghiệp Xuất sắc tại UTH' : 'Excellent classification at UTH' }}
                 </div>
                 <h3 class="achievement-title">{{ __('Bachelor’s Degree – Excellent Graduation Classification') }}</h3>
                 <p class="achievement-desc">
                     {{ app()->getLocale() == 'vi' ? 'Bằng Cử nhân Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc.' : "Bachelor's Degree in Information Technology from University of Transport Ho Chi Minh City with Excellent Graduation Classification." }}
                 </p>
                 <div class="achievement-tags">
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Loại Xuất sắc' : 'Summa Cum Laude' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'ĐH GTVT TP.HCM' : 'UTH University' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Cử nhân CNTT' : 'IT Engineer' }}</span>
+                    <span class="tag">{{ app()->getLocale() == 'vi' ? 'Loại Xuất sắc' : 'Excellent grade' }}</span>
+                    <span class="tag">{{ app()->getLocale() == 'vi' ? 'Cử nhân CNTT' : 'IT Graduate' }}</span>
                 </div>
             </div>
 
             <!-- 3. Logo Design Award -->
-            <div class="achievement-card theme-rose">
+            <div class="achievement-card">
                 <div class="achievement-top">
-                    <div class="achievement-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="13.5" cy="6.5" r=".8" fill="currentColor"></circle>
-                            <circle cx="17.5" cy="10.5" r=".8" fill="currentColor"></circle>
-                            <circle cx="8.5" cy="7.5" r=".8" fill="currentColor"></circle>
-                            <circle cx="6.5" cy="12.5" r=".8" fill="currentColor"></circle>
-                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>
+                    <div class="achievement-icon-box" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="6"></circle>
+                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
                         </svg>
                     </div>
-                    <div class="achievement-top-meta">
-                        <span class="achievement-year-badge"><span class="year-dot"></span>2025</span>
-                    </div>
+                    <span class="achievement-year">2025</span>
                 </div>
-                <div class="achievement-highlight-chip">
-                    <i class="fas fa-trophy"></i>
-                    <span>{{ app()->getLocale() == 'vi' ? 'Giải Nhì • Thiết kế Cấp Viện' : 'Second Prize • Logo Design' }}</span>
+                <div class="achievement-kicker">
+                    {{ app()->getLocale() == 'vi' ? 'Giải Nhì thiết kế cấp Viện' : 'Second prize in faculty contest' }}
                 </div>
                 <h3 class="achievement-title">{{ __('Second prize in the institute/faculty logo design competition') }}</h3>
                 <p class="achievement-desc">
                     {{ __('Designed a competition-winning logo concept, demonstrating strong creativity, visual communication, and design thinking.') }}
                 </p>
                 <div class="achievement-tags">
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Giải Nhì cấp Viện' : '2nd Prize Winner' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Design Thinking' : 'Design Thinking' }}</span>
-                    <span class="achievement-tag"><i class="fas fa-check-circle"></i> {{ app()->getLocale() == 'vi' ? 'Truyền thông thị giác' : 'Visual Aesthetics' }}</span>
+                    <span class="tag">{{ app()->getLocale() == 'vi' ? 'Giải Nhì cấp Viện' : '2nd Prize' }}</span>
+                    <span class="tag">{{ app()->getLocale() == 'vi' ? 'Tư duy thị giác' : 'Visual craft' }}</span>
                 </div>
             </div>
         </div>
@@ -1187,28 +967,28 @@
 @if($skills->count())
 <section class="section skills-section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_my_skills') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('Technologies and tools I work with every day') }}</p>
+        <div class="section-header-row">
+            <div>
+                <h2 class="section-title">{!! __('heading_my_skills') !!}</h2>
+                <p class="section-subtitle">{{ __('Technologies and tools I work with every day') }}</p>
+            </div>
+        </div>
 
-        <div class="skills-categories-grid reveal delay-2">
+        <div class="skills-categories-grid">
             @foreach($skills as $category => $categorySkills)
-            <div class="skill-category-card">
-                <div class="skill-category-title">
+            <div class="skill-category-block">
+                <h3 class="skill-category-title">
                     <i class="fas fa-layer-group"></i> {{ $category }}
-                </div>
+                </h3>
                 <div class="skill-items-list">
                     @foreach($categorySkills as $skill)
                     <div class="skill-item">
-                        <div class="skill-item-header">
-                            <span>
-                                <i class="{{ $skill->icon ?: 'fas fa-check-circle' }}"></i>
-                                {{ $skill->name }}
-                            </span>
+                        <div class="skill-item-name">
+                            <i class="{{ $skill->icon ?: 'fas fa-circle-dot' }}"></i>
+                            <span>{{ $skill->name }}</span>
                         </div>
                         @if($skill->details)
-                        <div class="skill-item-details">
-                            {{ $skill->details }}
-                        </div>
+                        <div class="skill-item-details">{{ $skill->details }}</div>
                         @endif
                     </div>
                     @endforeach
@@ -1224,67 +1004,47 @@
 @if($experiences->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_experience') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('My professional journey so far') }}</p>
-
-        <div style="max-width:760px; margin:0 auto">
-            <div class="timeline">
-                @foreach($experiences as $exp)
-                <div class="timeline-item reveal delay-{{ ($loop->index % 3) + 1 }}">
-                    <div class="timeline-marker">
-                        <div class="timeline-marker-inner">
-                            @if($loop->first)
-                                <i class="fas fa-briefcase"></i>
-                            @else
-                                <i class="fas fa-laptop-code"></i>
-                            @endif
-                        </div>
-                        @if($loop->first)
-                            <span class="timeline-marker-pulse"></span>
-                        @endif
-                    </div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <h3 class="timeline-company">
-                                <i class="fas fa-building"></i>
-                                {{ $exp->localized_company }}
-                            </h3>
-                            <span class="timeline-date-badge">
-                                <i class="far fa-calendar-alt"></i>
-                                {{ $exp->formatted_date }}
-                            </span>
-                        </div>
-                        <div class="timeline-position-badge">
-                            <i class="fas fa-code-branch"></i>
-                            {{ $exp->localized_position }}
-                        </div>
-                        <div class="timeline-desc">
-                            @php
-                                $sentences = array_filter(array_map('trim', explode('.', $exp->localized_description)));
-                            @endphp
-                            @if(count($sentences) > 1)
-                                <ul class="timeline-bullets">
-                                    @foreach($sentences as $s)
-                                        @if(!empty($s))
-                                        <li>{{ $s }}.</li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                            @else
-                                <p>{{ $exp->localized_description }}</p>
-                            @endif
-                        </div>
-                        @if(count($exp->tech_tags))
-                        <div class="timeline-tags">
-                            @foreach($exp->tech_tags as $tag)
-                            <span class="timeline-tag">{{ $tag }}</span>
-                            @endforeach
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                @endforeach
+        <div class="section-header-row">
+            <div>
+                <h2 class="section-title">{!! __('heading_experience') !!}</h2>
+                <p class="section-subtitle">{{ __('My professional journey so far') }}</p>
             </div>
+        </div>
+
+        <div class="experience-ledger">
+            @foreach($experiences as $exp)
+            <div class="exp-row">
+                <div class="exp-meta-col">
+                    <div class="exp-date">{{ $exp->formatted_date }}</div>
+                    <div class="exp-position">{{ $exp->localized_position }}</div>
+                </div>
+                <div class="exp-body-col">
+                    <h3 class="exp-company">{{ $exp->localized_company }}</h3>
+                    @php
+                        $sentences = array_filter(array_map('trim', explode('.', $exp->localized_description)));
+                    @endphp
+                    @if(count($sentences) > 1)
+                        <ul class="exp-bullets">
+                            @foreach($sentences as $s)
+                                @if(!empty($s))
+                                <li>{{ $s }}.</li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <p style="color:var(--text-secondary); font-size:0.93rem; line-height:1.65; margin-bottom:1rem; max-width:68ch">{{ $exp->localized_description }}</p>
+                    @endif
+
+                    @if(count($exp->tech_tags))
+                    <div class="exp-tags">
+                        @foreach($exp->tech_tags as $tag)
+                        <span class="tag">{{ $tag }}</span>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -1292,19 +1052,26 @@
 
 <!-- ===== FEATURED PROJECTS ===== -->
 @if($featuredProjects->count())
-<section class="section" style="background: var(--bg-secondary)">
+<section class="section projects-section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_featured_projects') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('Some of my recent and favourite work') }}</p>
+        <div class="section-header-row">
+            <div>
+                <h2 class="section-title">{!! __('heading_featured_projects') !!}</h2>
+                <p class="section-subtitle">{{ __('Some of my recent and favourite work') }}</p>
+            </div>
+            <a href="{{ route('projects.index') }}" class="btn btn-outline btn-sm">
+                {{ __('View All Projects') }}
+            </a>
+        </div>
 
         <div class="projects-grid">
             @foreach($featuredProjects as $project)
-            <div class="project-card reveal delay-{{ ($loop->index % 3) + 1 }}">
+            <div class="project-card">
                 <div class="project-image">
                     @if($project->image)
                         <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
                     @else
-                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} - Thumbnail" loading="lazy" decoding="async">
+                        <img src="{{ asset('images/og-image.webp') }}" alt="{{ $project->title }} Thumbnail" loading="lazy" decoding="async">
                     @endif
                 </div>
                 <div class="project-body">
@@ -1318,7 +1085,7 @@
                     @php $has3Links = !empty($project->github_url) && !empty($project->demo_url); @endphp
                     <div class="project-links {{ $has3Links ? 'has-3-links' : '' }}">
                         <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-eye"></i> {{ __('View') }}
+                            {{ __('View') }}
                         </a>
                         @if($project->github_url)
                         <a href="{{ $project->github_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
@@ -1335,12 +1102,6 @@
             </div>
             @endforeach
         </div>
-
-        <div style="text-align:center; margin-top:2.5rem" class="reveal delay-2">
-            <a href="{{ route('projects.index') }}" class="btn btn-outline">
-                <i class="fas fa-th-large"></i> {{ __('View All Projects') }}
-            </a>
-        </div>
     </div>
 </section>
 @endif
@@ -1349,41 +1110,40 @@
 @if(isset($certificates) && $certificates->count())
 <section class="section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_credentials') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('credentials_subtitle') }}</p>
+        <div class="section-header-row">
+            <div>
+                <h2 class="section-title">{!! __('heading_credentials') !!}</h2>
+                <p class="section-subtitle">{{ __('credentials_subtitle') }}</p>
+            </div>
+            <a href="{{ route('certificates') }}" class="btn btn-outline btn-sm">
+                {{ __('All Documents') }} ({{ \App\Models\Certificate::count() }})
+            </a>
+        </div>
 
         <div class="home-cert-grid">
             @foreach($certificates->take(3) as $cert)
-            @php
-                $certTheme = match($cert->category) {
-                    'brochure' => 'theme-indigo',
-                    'degree' => 'theme-emerald',
-                    'award' => 'theme-amber',
-                    default => 'theme-cyan',
-                };
-            @endphp
-            <div class="home-cert-card {{ $certTheme }} reveal delay-{{ ($loop->index % 3) + 1 }}">
+            <div class="home-cert-card">
                 <div class="home-cert-top">
                     <div class="home-cert-icon" aria-hidden="true">
                         @if($cert->category === 'brochure')
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                                 <line x1="9" y1="7" x2="15" y2="7"></line>
                                 <line x1="9" y1="11" x2="15" y2="11"></line>
                             </svg>
                         @elseif($cert->category === 'degree')
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                                 <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                             </svg>
                         @elseif($cert->category === 'award')
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="8" r="6"></circle>
                                 <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
                             </svg>
                         @else
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                 <polyline points="14 2 14 8 20 8"></polyline>
                                 <line x1="9" y1="15" x2="15" y2="15"></line>
@@ -1392,13 +1152,9 @@
                     </div>
 
                     <div class="home-cert-badges">
-                        <span class="home-cert-cat">
-                            <i class="{{ $cert->category_icon }}"></i> {{ $cert->category_label }}
-                        </span>
+                        <span class="home-cert-cat">{{ $cert->category_label }}</span>
                         @if($cert->issue_date)
-                            <span class="home-cert-year">
-                                <span class="home-cert-year-dot"></span> {{ $cert->issue_date }}
-                            </span>
+                            <span class="home-cert-year">{{ $cert->issue_date }}</span>
                         @endif
                     </div>
                 </div>
@@ -1407,13 +1163,10 @@
 
                 @if($cert->issuer)
                 <div class="home-cert-issuer" title="{{ $cert->issuer }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 21h18"></path>
                         <path d="M5 21V7l8-4v18"></path>
                         <path d="M19 21V11l-6-4"></path>
-                        <path d="M9 9h.01"></path>
-                        <path d="M9 13h.01"></path>
-                        <path d="M9 17h.01"></path>
                     </svg>
                     <span>{{ $cert->issuer }}</span>
                 </div>
@@ -1423,52 +1176,29 @@
 
                 <div class="home-cert-footer">
                     <div class="home-cert-footer-top">
-                        <span class="home-cert-file-chip {{ $cert->is_pdf ? '' : 'is-img' }}">
-                            @if($cert->is_pdf)
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                </svg>
-                            @else
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                    <polyline points="21 15 16 10 5 21"></polyline>
-                                </svg>
-                            @endif
-                            {{ strtoupper($cert->file_type) }}{{ $cert->file_size ? ' • ' . $cert->file_size : '' }}
+                        <span class="home-cert-file-chip">
+                            <i class="fas {{ $cert->is_pdf ? 'fa-file-pdf' : 'fa-file-image' }}"></i>
+                            {{ strtoupper($cert->file_type) }}{{ $cert->file_size ? ' (' . $cert->file_size . ')' : '' }}
                         </span>
 
                         @if(count($cert->extra_files_with_urls) > 0)
-                            <span style="color:var(--accent-light); font-size:0.75rem; font-weight:700">
-                                <i class="fas fa-paperclip"></i> +{{ count($cert->extra_files_with_urls) }} đính kèm
-                            </span>
+                            <span>+{{ count($cert->extra_files_with_urls) }} {{ app()->getLocale() == 'vi' ? 'tệp đính kèm' : 'attachments' }}</span>
                         @else
                             <span class="home-cert-verified">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
+                                <i class="fas fa-check-circle"></i>
                                 {{ app()->getLocale() == 'vi' ? 'Đã xác thực' : 'Verified' }}
                             </span>
                         @endif
                     </div>
 
                     <div class="home-cert-btns">
-                        <button type="button" class="btn btn-home-cert-view btn-sm"
+                        <button type="button" class="btn btn-primary btn-sm"
                             onclick="openHomeCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->is_pdf ? 'pdf' : 'image' }}')">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
+                            <i class="fas fa-eye"></i>
                             <span>{{ __('View') }}</span>
                         </button>
-                        <a href="{{ $cert->file_url }}" download class="btn btn-home-cert-dl btn-sm">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
+                        <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm">
+                            <i class="fas fa-download"></i>
                             <span>{{ __('Download') }}</span>
                         </a>
                     </div>
@@ -1476,37 +1206,28 @@
             </div>
             @endforeach
         </div>
-
-        <div style="text-align:center; margin-top:2.75rem" class="reveal delay-2">
-            <a href="{{ route('certificates') }}" class="btn btn-outline" style="padding: 0.7rem 1.5rem; border-radius: 50px; font-weight: 700; gap: 0.55rem">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <span>{{ __('All Documents') }} ({{ \App\Models\Certificate::count() }})</span>
-            </a>
-        </div>
     </div>
 </section>
 
-<!-- Home Quick Document Viewer Pop-up Modal -->
+<!-- Home Quick Document Viewer Modal -->
 <div class="home-cert-modal" id="homeCertModal" onclick="if(event.target===this) closeHomeCertModal()">
     <div class="home-cert-modal-box">
         <div class="home-cert-modal-header">
             <div class="home-cert-modal-title">
-                <i class="fas fa-file-pdf" style="color:#ef4444"></i>
-                <span id="homeCertModalTitle">Tài liệu</span>
+                <i class="fas fa-file-alt" style="color:var(--text-muted)"></i>
+                <span id="homeCertModalTitle">{{ app()->getLocale() == 'vi' ? 'Tài liệu' : 'Document' }}</span>
             </div>
-            <div style="display:flex; align-items:center; gap:0.55rem; flex-shrink:0">
-                <a id="homeCertModalExt" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="border-radius:50px">
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0">
+                <a id="homeCertModalExt" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
                     <i class="fas fa-external-link-alt"></i>
-                    <span>{{ app()->getLocale() == 'vi' ? 'Mở tab mới' : 'Open Tab' }}</span>
+                    <span>{{ app()->getLocale() == 'vi' ? 'Mở tab mới' : 'Open tab' }}</span>
                 </a>
-                <a id="homeCertModalDl" href="#" download class="btn btn-primary btn-sm" style="border-radius:50px">
+                <a id="homeCertModalDl" href="#" download class="btn btn-primary btn-sm">
                     <i class="fas fa-download"></i>
                     <span>{{ __('Download') }}</span>
                 </a>
-                <button type="button" onclick="closeHomeCertModal()" aria-label="Đóng"
-                    style="width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:1.1rem">
+                <button type="button" onclick="closeHomeCertModal()" aria-label="Close"
+                    style="width:36px; height:36px; border-radius:7px; border:1px solid var(--border); background:var(--bg-primary); color:var(--text-secondary); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:1.1rem">
                     &times;
                 </button>
             </div>
@@ -1546,14 +1267,21 @@
 
 <!-- ===== BLOG ===== -->
 @if($recentPosts->count())
-<section class="section">
+<section class="section blog-section">
     <div class="container">
-        <h2 class="section-title reveal">{!! __('heading_recent_articles') !!}</h2>
-        <p class="section-subtitle reveal delay-1">{{ __('Thoughts, learnings and insights from my journey') }}</p>
+        <div class="section-header-row">
+            <div>
+                <h2 class="section-title">{!! __('heading_recent_articles') !!}</h2>
+                <p class="section-subtitle">{{ __('Thoughts, learnings and insights from my journey') }}</p>
+            </div>
+            <a href="{{ route('blog.index') }}" class="btn btn-outline btn-sm">
+                {{ __('Read All Articles') }}
+            </a>
+        </div>
 
         <div class="blog-grid">
             @foreach($recentPosts as $post)
-            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card reveal delay-{{ ($loop->index % 3) + 1 }}">
+            <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
                 <div class="blog-image">
                     @if($post->thumbnail_url)
                         <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ asset('images/og-image.webp') }}';">
@@ -1561,7 +1289,6 @@
                 </div>
                 <div class="blog-body">
                     <div class="blog-date">
-                        <i class="fas fa-calendar-alt"></i>
                         {{ $post->published_at ? $post->published_at->format('M d, Y') : '' }}
                     </div>
                     <div class="blog-title">{{ $post->title }}</div>
@@ -1572,24 +1299,22 @@
             </a>
             @endforeach
         </div>
-
-        <div style="text-align:center; margin-top:2.5rem" class="reveal delay-2">
-            <a href="{{ route('blog.index') }}" class="btn btn-outline">
-                <i class="fas fa-book-open"></i> {{ __('Read All Articles') }}
-            </a>
-        </div>
     </div>
 </section>
 @endif
 
 <!-- ===== CTA ===== -->
 <section class="cta-section">
-    <div class="container reveal">
-        <h2>{!! __('cta_heading') !!}</h2>
-        <p>{{ __("I'm always open to interesting projects and opportunities.") }}</p>
-        <a href="{{ route('contact') }}" class="btn btn-primary">
-            <i class="fas fa-paper-plane"></i> {{ __('Send Me a Message') }}
-        </a>
+    <div class="container">
+        <div class="cta-box">
+            <div>
+                <h2>{!! __('cta_heading') !!}</h2>
+                <p>{{ __("I'm always open to interesting projects and opportunities.") }}</p>
+            </div>
+            <a href="{{ route('contact') }}" class="btn btn-primary">
+                {{ __('Send Me a Message') }}
+            </a>
+        </div>
     </div>
 </section>
 

@@ -36,52 +36,68 @@
 @section('styles')
 <style>
     .post-hero {
-        padding: 5rem 0 2rem;
-        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
+        padding: 2.5rem 0 1.25rem;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-primary);
     }
-    .breadcrumb { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 2rem; word-break: break-word; }
-    .breadcrumb a { color: var(--accent-light); text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb {
+        color: var(--text-muted);
+        font-size: 0.86rem;
+        word-break: break-word;
+    }
+    .breadcrumb a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .breadcrumb a:hover {
+        color: var(--accent);
+        text-decoration: underline;
+    }
 
     .post-layout {
         display: grid;
         grid-template-columns: minmax(0, 1fr) 300px;
-        gap: 2.5rem;
+        gap: 3rem;
         align-items: start;
         width: 100%;
-        max-width: 100%;
     }
     .post-layout > article {
         min-width: 0;
         max-width: 100%;
-        overflow: hidden;
     }
 
     .post-title {
-        font-size: clamp(1.75rem, 4vw, 2.75rem);
-        font-weight: 900;
-        line-height: 1.25;
-        margin-bottom: 1.25rem;
-        letter-spacing: -0.02em;
+        font-size: clamp(1.75rem, 3.8vw, 2.5rem);
+        font-weight: 700;
+        line-height: 1.22;
+        margin-bottom: 1rem;
+        letter-spacing: -0.025em;
+        color: var(--text-primary);
         word-break: break-word;
-        overflow-wrap: break-word;
+        max-width: 24ch;
     }
-    .post-meta { display: flex; align-items: center; gap: 1.5rem; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 2rem; flex-wrap: wrap; }
-    .post-meta i { color: var(--accent-light); }
+    .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+    .post-meta i { color: var(--text-muted); margin-right: 0.25rem; }
 
     .post-image {
-        border-radius: 16px;
+        border-radius: 10px;
         overflow: hidden;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2.25rem;
         border: 1px solid var(--border);
         width: 100%;
-        max-width: 100%;
         background: var(--bg-secondary);
-        box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.08);
     }
     .post-image img {
         width: 100%;
-        max-width: 100%;
         height: auto;
         display: block;
         object-fit: cover;
@@ -90,61 +106,117 @@
 
     .post-content {
         color: var(--text-secondary);
-        font-size: 1rem;
-        line-height: 1.85;
+        font-size: 1.02rem;
+        line-height: 1.8;
+        max-width: 68ch;
         word-break: break-word;
         overflow-wrap: break-word;
-        min-width: 0;
-        max-width: 100%;
     }
-    .post-content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5rem 0; }
-    .post-content h2, .post-content h3 { color: var(--text-primary); margin: 2rem 0 0.75rem; font-weight: 700; word-break: break-word; }
-    .post-content h2 { font-size: clamp(1.3rem, 3.5vw, 1.5rem); }
-    .post-content h3 { font-size: clamp(1.1rem, 3vw, 1.2rem); }
+    .post-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        margin: 1.5rem 0;
+    }
+    .post-content h2, .post-content h3 {
+        color: var(--text-primary);
+        margin: 2rem 0 0.75rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.3;
+    }
+    .post-content h2 { font-size: clamp(1.3rem, 3vw, 1.55rem); }
+    .post-content h3 { font-size: clamp(1.1rem, 2.5vw, 1.25rem); }
     .post-content p { margin-bottom: 1.25rem; }
-    .post-content a { color: var(--accent-light); word-break: break-all; }
+    .post-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; word-break: break-word; }
     .post-content ul, .post-content ol { margin: 1rem 0 1.25rem 1.5rem; }
-    .post-content li { margin-bottom: 0.4rem; }
+    .post-content li { margin-bottom: 0.45rem; }
     .post-content code {
-        background: rgba(124,58,237,0.15); color: var(--accent-light);
-        padding: 0.2rem 0.5rem; border-radius: 5px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
-        word-break: break-all;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.85em;
+        word-break: break-word;
     }
     .post-content pre {
-        background: #f1f5f9; border: 1px solid var(--border);
-        border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0; overflow-x: auto;
-        max-width: 100%; -webkit-overflow-scrolling: touch;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.15rem 1.25rem;
+        margin: 1.5rem 0;
+        overflow-x: auto;
+        max-width: 100%;
     }
-    .post-content pre code { background: none; padding: 0; color: var(--text-primary); word-break: normal; }
+    .post-content pre code {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--text-primary);
+        word-break: normal;
+        font-size: 0.86rem;
+        line-height: 1.6;
+    }
     .post-content blockquote {
-        border-left: 3px solid var(--accent); padding: 0.5rem 1.25rem; margin: 1.5rem 0;
-        background: rgba(124,58,237,0.05); border-radius: 0 8px 8px 0;
-        color: var(--text-secondary); font-style: italic;
+        border-left: 3px solid var(--accent);
+        padding: 0.6rem 1.25rem;
+        margin: 1.5rem 0;
+        background: var(--bg-card);
+        border-top: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        border-radius: 0 8px 8px 0;
+        color: var(--text-secondary);
     }
     .post-content table {
-        display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
-        border-collapse: collapse; margin: 1.5rem 0;
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+    }
+
+    .faq-section {
+        margin-top: 2.5rem;
+        padding-top: 1.75rem;
+        border-top: 1px solid var(--border);
+    }
+    .faq-item {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem 1.15rem;
     }
 
     .post-sidebar {
         min-width: 0;
         width: 100%;
     }
-    .post-sidebar .card { margin-bottom: 1rem; }
-    .post-sidebar .card h4 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.75rem; }
+    .post-sidebar .card {
+        margin-bottom: 1rem;
+        padding: 1.25rem;
+    }
+    .post-sidebar .card h4 {
+        font-size: 0.86rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+    }
 
     @media (max-width: 960px) {
-        .post-hero { padding: 3rem 0 1.5rem; }
+        .post-hero { padding: 2rem 0 1rem; }
         .post-layout { grid-template-columns: 100%; gap: 2rem; }
-        .post-title { font-size: clamp(1.5rem, 5vw, 2.1rem); }
-        .post-meta { gap: 1rem; margin-bottom: 1.5rem; font-size: 0.82rem; }
-        .post-image { margin-bottom: 1.75rem; border-radius: 12px; }
+        .post-image { margin-bottom: 1.75rem; }
     }
 
     @media (max-width: 480px) {
-        .post-hero { padding: 2.25rem 0 1.25rem; }
-        .post-content pre { padding: 0.85rem; font-size: 0.8rem; }
-        .breadcrumb { margin-bottom: 1.25rem; font-size: 0.8rem; }
+        .post-content pre { padding: 0.85rem; font-size: 0.82rem; }
     }
 </style>
 @endsection
@@ -152,19 +224,19 @@
 @section('content')
 <div class="post-hero">
     <div class="container">
-        <div class="breadcrumb reveal-fade">
+        <div class="breadcrumb">
             <a href="{{ route('home') }}">{{ __('Home') }}</a> /
             <a href="{{ route('blog.index') }}">{{ __('Blog') }}</a> /
-            <span>{{ Str::limit($post->title, 40) }}</span>
+            <span>{{ Str::limit($post->title, 48) }}</span>
         </div>
     </div>
 </div>
 
-<section class="section" style="padding-top:1rem">
+<section class="section" style="padding-top:2.25rem">
     <div class="container">
         <div class="post-layout">
             <!-- Main -->
-            <article class="reveal">
+            <article>
                 <h1 class="post-title">{{ $post->title }}</h1>
                 <div class="post-meta">
                     @if($post->published_at)
@@ -187,12 +259,12 @@
                     @endif
 
                     @if(!empty($post->faq) && is_array($post->faq))
-                        <div style="margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border)">
-                            <h3 style="font-size:1.3rem; margin-bottom:1rem; color:var(--text-primary)"><i class="fas fa-question-circle" style="color:var(--accent-light)"></i> {{ __('FAQ') }}</h3>
+                        <div class="faq-section">
+                            <h3 style="margin-top:0; margin-bottom:1rem; color:var(--text-primary)">{{ __('FAQ') }}</h3>
                             <div style="display:flex; flex-direction:column; gap:0.75rem">
                                 @foreach($post->faq as $faq)
-                                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:1rem">
-                                        <div style="font-weight:700; color:var(--text-primary); margin-bottom:0.35rem">{{ $faq['question'] ?? '' }}</div>
+                                    <div class="faq-item">
+                                        <div style="font-weight:600; color:var(--text-primary); margin-bottom:0.35rem">{{ $faq['question'] ?? '' }}</div>
                                         <div style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6">{{ $faq['answer'] ?? '' }}</div>
                                     </div>
                                 @endforeach
@@ -201,8 +273,8 @@
                     @endif
 
                     @if(!empty($post->sources) && is_array($post->sources))
-                        <div style="margin-top:2rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.9rem">
-                            <h4 style="color:var(--text-secondary); margin-bottom:0.5rem"><i class="fas fa-link"></i> {{ __('Sources & References') }}:</h4>
+                        <div style="margin-top:2rem; padding-top:1.25rem; border-top:1px solid var(--border); font-size:0.92rem">
+                            <h4 style="color:var(--text-primary); font-weight:600; margin-bottom:0.5rem">{{ __('Sources & References') }}</h4>
                             <ul style="margin-left:1.5rem">
                                 @foreach($post->sources as $source)
                                     <li>
@@ -216,7 +288,7 @@
             </article>
 
             <!-- Sidebar -->
-            <aside class="post-sidebar reveal delay-1">
+            <aside class="post-sidebar">
                 @if($post->excerpt)
                 <div class="card">
                     <h4><i class="fas fa-align-left"></i> {{ __('Summary') }}</h4>
@@ -228,12 +300,12 @@
                     <h4><i class="fas fa-info-circle"></i> {{ __('Details') }}</h4>
                     @if($post->published_at)
                     <div style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.5rem;">
-                        <i class="fas fa-calendar" style="color: var(--accent-light); width:16px"></i>
+                        <i class="fas fa-calendar" style="color: var(--text-muted); width:16px"></i>
                         {{ __('Published') }} {{ $post->published_at->format('M d, Y') }}
                     </div>
                     @endif
                     <div style="color: var(--text-secondary); font-size: 0.88rem;">
-                        <i class="fas fa-clock" style="color: var(--accent-light); width:16px"></i>
+                        <i class="fas fa-clock" style="color: var(--text-muted); width:16px"></i>
                         {{ ceil(str_word_count(strip_tags($post->content)) / 200) }} {{ __('min read') }}
                     </div>
                 </div>
