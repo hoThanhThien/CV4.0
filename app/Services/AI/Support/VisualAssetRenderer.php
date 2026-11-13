@@ -231,11 +231,11 @@ class VisualAssetRenderer
         $author = htmlspecialchars($s['author'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
         $siteHost = htmlspecialchars($s['site_host'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
 
-        $lines = $this->wrapUnicodeLines($s['headline'], 26, 4);
+        $lines = $this->wrapUnicodeLines($s['headline'], 24, 3);
         $lineCount = count($lines);
-        $fontSize = $lineCount <= 2 ? 50 : ($lineCount === 3 ? 44 : 38);
-        $lineHeight = (int) round($fontSize * 1.26);
-        $startY = 265 - (int) (($lineCount - 1) * ($lineHeight * 0.28));
+        $fontSize = $lineCount <= 2 ? 40 : 34;
+        $lineHeight = (int) round($fontSize * 1.3);
+        $startY = 260 - (int) (($lineCount - 1) * ($lineHeight * 0.3));
 
         $titleTspans = '';
         foreach ($lines as $idx => $line) {

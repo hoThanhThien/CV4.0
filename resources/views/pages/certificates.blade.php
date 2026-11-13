@@ -8,9 +8,14 @@
 <style>
     .cert-filter-bar {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem;
+        align-items: center;
+        gap: 0.5rem;
         margin-top: 1.5rem;
+        overflow-x: auto;
+        padding-bottom: 0.4rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-strong) transparent;
+        -webkit-overflow-scrolling: touch;
     }
     .cert-filter-btn {
         display: inline-flex;
@@ -24,6 +29,8 @@
         font-size: 0.85rem;
         font-weight: 600;
         text-decoration: none;
+        white-space: nowrap;
+        flex-shrink: 0;
         transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease, background var(--duration-fast) ease;
     }
     .cert-filter-btn i {
@@ -31,16 +38,18 @@
         font-size: 0.8rem;
     }
     .cert-filter-btn:hover {
-        border-color: var(--text-primary);
+        border-color: var(--accent);
         color: var(--text-primary);
     }
     .cert-filter-btn.active {
-        background: var(--surface-ink);
-        border-color: var(--surface-ink);
-        color: #FFFFFF;
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #070B14;
+        font-weight: 700;
+        box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
     }
     .cert-filter-btn.active i {
-        color: #93C5FD;
+        color: #070B14;
     }
     .cert-count-badge {
         font-family: var(--font-mono);
@@ -51,8 +60,9 @@
         color: var(--text-muted);
     }
     .cert-filter-btn.active .cert-count-badge {
-        background: rgba(255, 255, 255, 0.16);
-        color: #FFFFFF;
+        background: rgba(7, 11, 20, 0.2);
+        color: #070B14;
+        font-weight: 700;
     }
 
     .cert-grid {

@@ -160,6 +160,10 @@
     $hostLabel = $project->demo_url
         ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
         : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'architecture.spec');
+    $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
+    $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
+    $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
+    $hasCustomImage = $project->image && !str_contains($project->image, 'placeholder') && !str_contains($project->image, 'stock') && file_exists(public_path('storage/' . $project->image));
 @endphp
 
 <section class="project-hero">
@@ -180,21 +184,72 @@
             <!-- Main Content -->
             <div>
                 <div class="project-image-full">
-                    @if($project->image)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="specimen-plate" style="display:none;">
+                    @if($hasCustomImage)
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
+                    @elseif($isPortfolio)
+                        <div class="specimen-plate">
                             <div class="specimen-topbar">
                                 <span class="specimen-dots"><span></span><span></span><span></span></span>
-                                <span class="specimen-host">{{ $hostLabel }}</span>
+                                <span class="specimen-host">hothanhthien.io.vn</span>
                             </div>
-                            <div class="specimen-center">
-                                <div class="specimen-index">CASE STUDY // #{{ $project->id }}</div>
-                                <div class="specimen-title">{{ $project->title }}</div>
+                            <div class="specimen-terminal-body">
+                                <div class="terminal-line"><span class="terminal-prompt">$</span> curl -I https://hothanhthien.io.vn/</div>
+                                <div class="terminal-output"><span class="terminal-badge-ok">HTTP/2 200 OK</span> server: nginx/cpanel</div>
+                                <div class="terminal-line"><span class="terminal-prompt">$</span> php artisan --version</div>
+                                <div class="terminal-output">Laravel Framework <span class="terminal-highlight">11.x</span> (PHP 8.2)</div>
+                                <div class="terminal-tags-row">
+                                    <span class="specimen-pill">Blade Engine</span>
+                                    <span class="specimen-pill">MySQL/SQLite</span>
+                                    <span class="specimen-pill">Bilingual VI/EN</span>
+                                </div>
                             </div>
-                            <div class="specimen-footer">
-                                @foreach($project->technologies->take(6) as $t)
-                                    <span class="specimen-pill">{{ $t->name }}</span>
-                                @endforeach
+                        </div>
+                    @elseif($isTourrist)
+                        <div class="specimen-plate">
+                            <div class="specimen-topbar">
+                                <span class="specimen-dots"><span></span><span></span><span></span></span>
+                                <span class="specimen-host">github.com/hoThanhThien/TourRist</span>
+                            </div>
+                            <div class="specimen-pipeline-body">
+                                <div class="terminal-line" style="color:var(--accent-sky); font-weight:600;">PIPELINE // RAG ARCHITECTURE</div>
+                                <div class="pipeline-flow">
+                                    <div class="pipeline-node"><i class="fas fa-file-lines"></i> Docs</div>
+                                    <div class="pipeline-arrow">&rarr;</div>
+                                    <div class="pipeline-node"><i class="fas fa-layer-group"></i> Chunks</div>
+                                    <div class="pipeline-arrow">&rarr;</div>
+                                    <div class="pipeline-node active"><i class="fas fa-database"></i> ChromaDB</div>
+                                    <div class="pipeline-arrow">&rarr;</div>
+                                    <div class="pipeline-node"><i class="fas fa-robot"></i> LLM</div>
+                                </div>
+                                <div class="terminal-tags-row">
+                                    <span class="specimen-pill">FastAPI</span>
+                                    <span class="specimen-pill">Python</span>
+                                    <span class="specimen-pill">Vector Search</span>
+                                </div>
+                            </div>
+                        </div>
+                    @elseif($isLaundry)
+                        <div class="specimen-plate">
+                            <div class="specimen-topbar">
+                                <span class="specimen-dots"><span></span><span></span><span></span></span>
+                                <span class="specimen-host">github.com/hoThanhThien/LT_JAVA...</span>
+                            </div>
+                            <div class="specimen-workflow-body">
+                                <div class="terminal-line" style="color:#A78BFA; font-weight:600;">STATE MACHINE // ORDER LIFECYCLE</div>
+                                <div class="workflow-steps">
+                                    <div class="wf-step done">RECEIVED</div>
+                                    <div class="wf-sep">&rsaquo;</div>
+                                    <div class="wf-step active">WASHING</div>
+                                    <div class="wf-sep">&rsaquo;</div>
+                                    <div class="wf-step">READY</div>
+                                    <div class="wf-sep">&rsaquo;</div>
+                                    <div class="wf-step">DELIVERED</div>
+                                </div>
+                                <div class="terminal-tags-row">
+                                    <span class="specimen-pill">Spring Boot</span>
+                                    <span class="specimen-pill">NextJS</span>
+                                    <span class="specimen-pill">JWT + RBAC</span>
+                                </div>
                             </div>
                         </div>
                     @else
@@ -203,14 +258,15 @@
                                 <span class="specimen-dots"><span></span><span></span><span></span></span>
                                 <span class="specimen-host">{{ $hostLabel }}</span>
                             </div>
-                            <div class="specimen-center">
-                                <div class="specimen-index">CASE STUDY // #{{ $project->id }}</div>
-                                <div class="specimen-title">{{ $project->title }}</div>
-                            </div>
-                            <div class="specimen-footer">
-                                @foreach($project->technologies->take(6) as $t)
-                                    <span class="specimen-pill">{{ $t->name }}</span>
-                                @endforeach
+                            <div class="specimen-terminal-body">
+                                <div class="terminal-line" style="color:var(--accent-cyan); font-weight:600;">ENTERPRISE // WEB PLATFORM</div>
+                                <div class="terminal-line"><span class="terminal-prompt">&bull;</span> Responsive Architecture</div>
+                                <div class="terminal-line"><span class="terminal-prompt">&bull;</span> Normalized Relational DB</div>
+                                <div class="terminal-tags-row">
+                                    <span class="specimen-pill">PHP</span>
+                                    <span class="specimen-pill">PostgreSQL</span>
+                                    <span class="specimen-pill">Responsive UI</span>
+                                </div>
                             </div>
                         </div>
                     @endif

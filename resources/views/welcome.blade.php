@@ -913,14 +913,13 @@
                     $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
                     $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
                     $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
+                    $hasCustomImage = $project->image && !str_contains($project->image, 'placeholder') && !str_contains($project->image, 'stock') && file_exists(public_path('storage/' . $project->image));
                 @endphp
                 <article class="project-showcase-row {{ $index % 2 === 1 ? 'is-reversed' : '' }}" data-reveal>
                     <a href="{{ route('projects.show', $project->id) }}" class="project-showcase-media" aria-label="{{ $project->title }}">
-                        @if($project->image)
-                            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        @endif
-
-                        @if($isPortfolio)
+                        @if($hasCustomImage)
+                            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
+                        @elseif($isPortfolio)
                             <div class="specimen-plate">
                                 <div class="specimen-topbar">
                                     <span class="specimen-dots"><span></span><span></span><span></span></span>

@@ -102,14 +102,18 @@
         margin-bottom: 2.25rem;
         border: 1px solid var(--border-strong);
         width: 100%;
+        max-height: 440px;
         background: var(--surface-ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .post-image img {
         width: 100%;
         height: auto;
+        max-height: 440px;
         display: block;
         object-fit: cover;
-        aspect-ratio: 16 / 9;
     }
 
     .post-content {
@@ -238,7 +242,9 @@
 
 @section('content')
 @php
-    $cleanTitle = trim(rtrim(strip_tags((string) $post->title), " \t\n\r\0\x0B|:"));
+    $rawTitle = strip_tags((string) $post->title);
+    $cleanTitle = trim(preg_replace('/\s*\|\s*$/', '', $rawTitle));
+    $cleanTitle = rtrim($cleanTitle, " \t\n\r\0\x0B|:");
     $thumbUrl = $post->thumbnail_url;
     $isSvgThumbnail = $thumbUrl && str_ends_with(strtolower(parse_url($thumbUrl, PHP_URL_PATH) ?? ''), '.svg');
 @endphp

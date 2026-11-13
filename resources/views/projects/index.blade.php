@@ -8,33 +8,49 @@
 <style>
     .projects-filter-bar {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem;
+        align-items: center;
+        gap: 0.5rem;
         margin-bottom: 2rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-strong) transparent;
+        -webkit-overflow-scrolling: touch;
+    }
+    .projects-filter-bar::-webkit-scrollbar {
+        height: 4px;
+    }
+    .projects-filter-bar::-webkit-scrollbar-thumb {
+        background: var(--border-strong);
+        border-radius: 4px;
     }
     .proj-filter-btn {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        padding: 0.42rem 0.85rem;
+        padding: 0.45rem 0.95rem;
         border-radius: var(--radius-sm);
         background: var(--bg-card);
         border: 1px solid var(--border);
         color: var(--text-secondary);
-        font-family: var(--font-sans);
-        font-size: 0.84rem;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
         font-weight: 600;
         cursor: pointer;
-        transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease, background var(--duration-fast) ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: all var(--duration-fast) ease;
     }
     .proj-filter-btn:hover {
-        border-color: var(--text-primary);
+        border-color: var(--accent);
         color: var(--text-primary);
     }
     .proj-filter-btn.active {
-        background: var(--surface-ink);
-        border-color: var(--surface-ink);
-        color: #FFFFFF;
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #070B14;
+        font-weight: 700;
+        box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
     }
 
     .projects-editorial-grid {
@@ -53,7 +69,7 @@
         transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
     }
     .project-card:hover {
-        border-color: var(--text-primary);
+        border-color: var(--accent);
         box-shadow: var(--shadow-md);
         transform: translateY(-2px);
     }
@@ -86,16 +102,123 @@
         top: 0.85rem;
         right: 0.85rem;
         z-index: 3;
-        background: rgba(17, 20, 27, 0.86);
-        backdrop-filter: blur(6px);
+        background: rgba(11, 17, 32, 0.88);
+        backdrop-filter: blur(8px);
         color: #FFFFFF;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 0.22rem 0.6rem;
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        padding: 0.22rem 0.65rem;
         border-radius: var(--radius-sm);
         font-family: var(--font-mono);
         font-size: 0.72rem;
         font-weight: 600;
     }
+
+    /* Specimen terminal styling */
+    .specimen-plate {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 240px;
+        background: linear-gradient(145deg, var(--navy-deep) 0%, var(--navy-elevated) 100%);
+        color: #F8FAFC;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1.35rem 1.5rem 1.5rem;
+        overflow: hidden;
+    }
+    .specimen-plate::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+        background-size: 28px 28px;
+        pointer-events: none;
+    }
+    .specimen-topbar {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    }
+    .specimen-dots { display: inline-flex; align-items: center; gap: 5px; }
+    .specimen-dots span { width: 8px; height: 8px; border-radius: 50%; }
+    .specimen-dots span:nth-child(1) { background: #EF4444; }
+    .specimen-dots span:nth-child(2) { background: #F59E0B; }
+    .specimen-dots span:nth-child(3) { background: #10B981; }
+    .specimen-host { font-family: var(--font-mono); font-size: 0.72rem; color: #94A3B8; }
+
+    .specimen-terminal-body, .specimen-pipeline-body, .specimen-workflow-body {
+        position: relative;
+        z-index: 1;
+        margin: auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+    }
+    .terminal-line { color: #CBD5E1; }
+    .terminal-prompt { color: var(--accent-sky); font-weight: 700; margin-right: 0.35rem; }
+    .terminal-output { color: #94A3B8; padding-left: 0.85rem; font-size: 0.74rem; }
+    .terminal-badge-ok {
+        display: inline-block;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        background: rgba(16, 185, 129, 0.2);
+        color: #34D399;
+        font-weight: 600;
+        margin-right: 0.35rem;
+    }
+    .terminal-highlight { color: #F8FAFC; font-weight: 600; }
+    .terminal-tags-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .specimen-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        font-size: 0.7rem;
+        color: #E2E8F0;
+    }
+
+    .pipeline-flow, .workflow-steps {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin: 0.5rem 0;
+    }
+    .pipeline-node, .wf-step {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        font-size: 0.72rem;
+        color: #CBD5E1;
+    }
+    .pipeline-node.active, .wf-step.active {
+        background: rgba(56, 189, 248, 0.15);
+        border-color: var(--accent-sky);
+        color: var(--accent-sky);
+        font-weight: 600;
+    }
+    .wf-step.done {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: #10B981;
+        color: #34D399;
+    }
+    .pipeline-arrow, .wf-sep { color: #64748B; font-weight: 700; }
 
     .project-body {
         padding: 1.4rem 1.5rem;
@@ -120,6 +243,7 @@
     .project-title a {
         color: inherit;
         text-decoration: none;
+        transition: color var(--duration-fast) ease;
     }
     .project-title a:hover {
         color: var(--accent);
@@ -134,14 +258,28 @@
 
     .project-links {
         display: flex;
-        flex-wrap: wrap;
+        align-items: center;
         gap: 0.55rem;
-        padding-top: 1rem;
+        padding-top: 1.1rem;
+        margin-top: auto;
         border-top: 1px solid var(--border);
     }
-    .project-links .btn {
+    .project-links .btn-primary {
         flex: 1 1 auto;
-        min-width: 110px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        min-height: 38px;
+    }
+    .project-links .btn-outline {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        min-height: 38px;
+        padding: 0.45rem 0.85rem;
     }
 
     .empty-state {
@@ -163,7 +301,17 @@
     }
     @media (max-width: 480px) {
         .project-body { padding: 1.15rem; }
-        .project-links .btn { min-width: 0; }
+        .project-links {
+            flex-wrap: wrap;
+        }
+        .project-links .btn-primary {
+            width: 100%;
+            flex: 1 0 100%;
+        }
+        .project-links .btn-outline {
+            flex: 1 1 calc(50% - 0.28rem);
+            text-align: center;
+        }
     }
 </style>
 @endsection
@@ -171,14 +319,7 @@
 @section('content')
 @php
     $isVi = app()->getLocale() === 'vi';
-    $allTechNames = [];
-    foreach ($projects as $p) {
-        foreach ($p->technologies as $t) {
-            $allTechNames[$t->name] = ($allTechNames[$t->name] ?? 0) + 1;
-        }
-    }
-    arsort($allTechNames);
-    $filterTechs = array_slice(array_keys($allTechNames), 0, 8);
+    $allTechNames = \App\Models\Project::with('technologies')->get()->flatMap->technologies->pluck('name')->countBy()->sortDesc()->take(8)->keys()->all();
 @endphp
 
 <section class="page-header-band">
@@ -197,10 +338,10 @@
 <section class="section" style="padding-top:2.25rem">
     <div class="container">
         @if($projects->count())
-            @if(count($filterTechs))
+            @if(count($allTechNames))
             <div class="projects-filter-bar" role="tablist" aria-label="{{ __('Filter by stack') }}">
                 <button type="button" class="proj-filter-btn active" data-proj-filter="all">{{ __('All Stacks') }}</button>
-                @foreach($filterTechs as $tName)
+                @foreach($allTechNames as $tName)
                     <button type="button" class="proj-filter-btn" data-proj-filter="{{ strtolower($tName) }}">{{ $tName }}</button>
                 @endforeach
             </div>
@@ -209,7 +350,7 @@
             <div class="projects-editorial-grid" data-stagger>
                 @foreach($projects as $idx => $project)
                     @php
-                        $cleanDesc = $project->summary;
+                        $cleanDesc = $project->summary ?: Str::limit($project->clean_description, 150);
                         $hostLabel = $project->demo_url
                             ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
                             : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'architecture.spec');
@@ -217,6 +358,7 @@
                         $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
                         $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
                         $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
+                        $hasCustomImage = $project->image && !str_contains($project->image, 'placeholder') && !str_contains($project->image, 'stock') && file_exists(public_path('storage/' . $project->image));
                     @endphp
                     <article class="project-card" data-proj-techs="{{ $techSlugList }}">
                         <a href="{{ route('projects.show', $project->id) }}" class="project-media-link" aria-label="{{ $project->title }}">
@@ -224,11 +366,9 @@
                                 <span class="project-featured-badge">{{ __('Featured') }}</span>
                             @endif
 
-                            @if($project->image)
-                                <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            @endif
-
-                            @if($isPortfolio)
+                            @if($hasCustomImage)
+                                <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
+                            @elseif($isPortfolio)
                                 <div class="specimen-plate">
                                     <div class="specimen-topbar">
                                         <span class="specimen-dots"><span></span><span></span><span></span></span>
@@ -334,15 +474,16 @@
                             <div class="project-links">
                                 <a href="{{ route('projects.show', $project->id) }}" class="btn btn-primary btn-sm">
                                     <span>{{ __('View Case Study') }}</span>
+                                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
                                 </a>
                                 @if($project->github_url)
-                                <a href="{{ $project->github_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+                                <a href="{{ $project->github_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" title="{{ __('Code') }}">
                                     <i class="fab fa-github" aria-hidden="true"></i>
                                     <span>{{ __('Code') }}</span>
                                 </a>
                                 @endif
                                 @if($project->demo_url)
-                                <a href="{{ $project->demo_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+                                <a href="{{ $project->demo_url }}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" title="{{ __('Demo') }}">
                                     <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                                     <span>{{ __('Demo') }}</span>
                                 </a>
@@ -351,13 +492,36 @@
                         </div>
                     </article>
                 @endforeach
+
+                <div id="noFilterMatch" class="empty-state" style="display:none; grid-column: 1 / -1; margin-top: 1rem;">
+                    <i class="fas fa-filter" aria-hidden="true"></i>
+                    <h3>{{ __('No projects found') }}</h3>
+                    <p>{{ $isVi ? 'Không có dự án nào sử dụng công nghệ này trong danh sách.' : 'No projects found using this technology in the current list.' }}</p>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="resetProjFilter()" style="margin-top:0.75rem;">
+                        <i class="fas fa-rotate-left"></i> {{ __('All Stacks') }}
+                    </button>
+                </div>
             </div>
 
             @if($projects->hasPages())
             <nav class="pagination-wrap" aria-label="Pagination">
-                @foreach($projects->links()->elements[0] as $page => $url)
-                    <a href="{{ $url }}" class="page-link {{ $projects->currentPage() == $page ? 'active' : '' }}" {{ $projects->currentPage() == $page ? 'aria-current="page"' : '' }}>{{ $page }}</a>
+                @if(!$projects->onFirstPage())
+                    <a href="{{ $projects->previousPageUrl() }}" class="page-link" aria-label="{{ __('Previous') }}">&lsaquo;</a>
+                @endif
+
+                @foreach($projects->links()->elements as $element)
+                    @if(is_string($element))
+                        <span class="page-link disabled">{{ $element }}</span>
+                    @elseif(is_array($element))
+                        @foreach($element as $page => $url)
+                            <a href="{{ $url }}" class="page-link {{ $projects->currentPage() == $page ? 'active' : '' }}" {{ $projects->currentPage() == $page ? 'aria-current="page"' : '' }}>{{ $page }}</a>
+                        @endforeach
+                    @endif
                 @endforeach
+
+                @if($projects->hasMorePages())
+                    <a href="{{ $projects->nextPageUrl() }}" class="page-link" aria-label="{{ __('Next') }}">&rsaquo;</a>
+                @endif
             </nav>
             @endif
         @else
@@ -373,17 +537,29 @@
 
 @section('scripts')
 <script>
+function resetProjFilter() {
+    const allBtn = document.querySelector('[data-proj-filter="all"]');
+    if (allBtn) allBtn.click();
+}
+
 document.querySelectorAll('[data-proj-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-proj-filter');
         document.querySelectorAll('[data-proj-filter]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
+        let visibleCount = 0;
         document.querySelectorAll('[data-proj-techs]').forEach(card => {
             const techs = card.getAttribute('data-proj-techs').split('|');
             const match = target === 'all' || techs.includes(target);
             card.classList.toggle('is-hidden', !match);
+            if (match) visibleCount++;
         });
+
+        const noMatchEl = document.getElementById('noFilterMatch');
+        if (noMatchEl) {
+            noMatchEl.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
     });
 });
 </script>

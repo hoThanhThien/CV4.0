@@ -806,7 +806,10 @@
             border-bottom: 1px solid rgba(148, 163, 184, 0.18);
         }
         .specimen-dots { display: inline-flex; align-items: center; gap: 5px; }
-        .specimen-dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(148, 163, 184, 0.35); }
+        .specimen-dots span { width: 8px; height: 8px; border-radius: 50%; }
+        .specimen-dots span:nth-child(1) { background: #EF4444; }
+        .specimen-dots span:nth-child(2) { background: #F59E0B; }
+        .specimen-dots span:nth-child(3) { background: #10B981; }
         .specimen-host {
             font-family: var(--font-mono);
             font-size: 0.72rem;
@@ -842,6 +845,62 @@
             border: 1px solid rgba(56, 189, 248, 0.25);
             color: #E0F2FE;
         }
+
+        .specimen-terminal-body, .specimen-pipeline-body, .specimen-workflow-body {
+            position: relative;
+            z-index: 1;
+            margin: auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+        }
+        .terminal-line { color: #CBD5E1; }
+        .terminal-prompt { color: var(--accent-sky); font-weight: 700; margin-right: 0.35rem; }
+        .terminal-output { color: #94A3B8; padding-left: 0.85rem; font-size: 0.74rem; }
+        .terminal-badge-ok {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34D399;
+            font-weight: 600;
+            margin-right: 0.35rem;
+        }
+        .terminal-highlight { color: #F8FAFC; font-weight: 600; }
+        .terminal-tags-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+
+        .pipeline-flow, .workflow-steps {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin: 0.5rem 0;
+        }
+        .pipeline-node, .wf-step {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            font-size: 0.72rem;
+            color: #CBD5E1;
+        }
+        .pipeline-node.active, .wf-step.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent-sky);
+            color: var(--accent-sky);
+            font-weight: 600;
+        }
+        .wf-step.done {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: #10B981;
+            color: #34D399;
+        }
+        .pipeline-arrow, .wf-sep { color: #64748B; font-weight: 700; }
 
         /* =========================================================
            DARK NAVY FOOTER
