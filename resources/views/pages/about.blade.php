@@ -647,7 +647,9 @@
             </div>
         </div>
 
-        <div class="about-skills-grid" data-stagger>
+        <x-radial-orbit-wheel />
+
+        <div class="about-skills-grid" data-stagger style="margin-top: 2.5rem;">
             @foreach($aboutBuckets as $bucket)
                 <div class="about-skill-panel">
                     <div class="about-skill-head">

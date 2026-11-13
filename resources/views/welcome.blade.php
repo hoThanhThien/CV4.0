@@ -1416,7 +1416,9 @@
             title="{!! __('heading_my_skills') !!}"
             subtitle="{{ __('Technologies and architectural patterns I work with on production systems') }}" />
 
-        <div class="skill-filter-row" role="tablist" aria-label="{{ __('heading_my_skills') }}">
+        <x-radial-orbit-wheel />
+
+        <div class="skill-filter-row" role="tablist" aria-label="{{ __('heading_my_skills') }}" style="margin-top: 2.5rem;">
             <button type="button" class="skill-filter-btn active" data-skill-filter="all">{{ __('All Stacks') }}</button>
             @foreach($skillBuckets as $bucketKey => $bucket)
                 <button type="button" class="skill-filter-btn" data-skill-filter="{{ $bucketKey }}">{{ $bucket['label'] }}</button>
