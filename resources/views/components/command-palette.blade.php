@@ -82,7 +82,7 @@
                         <span class="cmd-item-hint">VI</span>
                     </a>
                 @endif
-                <a href="{{ asset('assets/HoThanhThien_CV_Brochure.pdf') }}" download class="cmd-item" data-tokens="download resume cv brochure pdf ho so">
+                <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" download class="cmd-item" data-tokens="download resume cv brochure pdf ho so">
                     <span class="cmd-item-icon"><i class="fas fa-file-arrow-down"></i></span>
                     <span class="cmd-item-label">{{ $isVi ? 'Tải Brochure / CV Hồ Thành Thiện (PDF 402 KB)' : 'Download Portfolio Brochure (PDF 402 KB)' }}</span>
                     <span class="cmd-item-hint">.PDF</span>
