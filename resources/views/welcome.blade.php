@@ -1199,8 +1199,8 @@
           { name: 'Java', icon: 'devicon-java-plain colored', mastery: 88, domain: { en: 'Enterprise Backend', vi: 'Backend Doanh nghiệp' }, project: { en: 'Laundry Management System', vi: 'Hệ thống Quản lý Giặt ủi' }, desc: { en: 'Spring Boot REST APIs, finite state order lifecycle & JPA', vi: 'Spring Boot REST API, máy trạng thái đơn hàng & JPA' } },
           { name: 'PHP', icon: 'devicon-php-plain colored', mastery: 92, domain: { en: 'Web Architecture', vi: 'Kiến trúc Web' }, project: { en: 'Personal Portfolio & AIPower', vi: 'Portfolio CMS & AIPower' }, desc: { en: 'Laravel 11 SSR, OOP modules & corporate portals', vi: 'Laravel 11 SSR, module OOP & cổng thông tin doanh nghiệp' } },
           { name: 'Python', icon: 'devicon-python-plain colored', mastery: 88, domain: { en: 'AI & Data Pipelines', vi: 'AI & Xử lý dữ liệu' }, project: { en: 'TourRist RAG Chatbot', vi: 'Chatbot RAG TourRist' }, desc: { en: 'FastAPI endpoints, text chunking & embeddings', vi: 'FastAPI endpoints, chia đoạn văn bản & vector embeddings' } },
-          { name: 'Odoo ERP', icon: 'devicon-python-plain', mastery: 85, domain: { en: 'Enterprise ERP', vi: 'Hệ thống ERP' }, project: { en: 'Enmasys Enterprise Internship', vi: 'Thực tập Doanh nghiệp Enmasys' }, desc: { en: 'Configured Retail, Accounting & B2B Sales ORM', vi: 'Cấu hình phân hệ Bán lẻ, Kế toán & Sales B2B' } },
-          { name: 'RAG AI', icon: 'devicon-fastapi-plain colored', mastery: 88, domain: { en: 'Applied GenAI', vi: 'AI Ứng dụng' }, project: { en: 'TourRist AI Concierge', vi: 'Trợ lý Du lịch RAG AI' }, desc: { en: 'ChromaDB semantic cosine retrieval & prompt grounding', vi: 'Tìm kiếm vector ChromaDB & giảm thiểu ảo giác LLM' } },
+          { name: 'Odoo ERP', icon: 'custom:odoo', mastery: 85, domain: { en: 'Enterprise ERP', vi: 'Hệ thống ERP' }, project: { en: 'Enmasys Enterprise Internship', vi: 'Thực tập Doanh nghiệp Enmasys' }, desc: { en: 'Configured Retail, Accounting & B2B Sales ORM', vi: 'Cấu hình phân hệ Bán lẻ, Kế toán & Sales B2B' } },
+          { name: 'RAG AI', icon: 'custom:rag', mastery: 88, domain: { en: 'Applied GenAI', vi: 'AI Ứng dụng' }, project: { en: 'TourRist AI Concierge', vi: 'Trợ lý Du lịch RAG AI' }, desc: { en: 'ChromaDB semantic cosine retrieval & prompt grounding', vi: 'Tìm kiếm vector ChromaDB & giảm thiểu ảo giác LLM' } },
           { name: 'ReactJS', icon: 'devicon-react-original colored', mastery: 90, domain: { en: 'Reactive Frontend', vi: 'Giao diện Phản ứng' }, project: { en: 'Web Admin & Service UIs', vi: 'Giao diện Quản trị Web' }, desc: { en: 'Modular hooks architecture & reactive components', vi: 'Kiến trúc React Hooks tối ưu trạng thái' } },
           { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-original colored', mastery: 94, domain: { en: 'UI Styling Engine', vi: 'Hệ thống Giao diện' }, project: { en: 'Portfolio Design System', vi: 'Hệ thống Design Portfolio' }, desc: { en: 'Design tokens, glassmorphism & dark/light parity', vi: 'Design tokens, hiệu ứng kính mờ & Dark/Light Mode' } },
           { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', mastery: 86, domain: { en: 'Relational Database', vi: 'CSDL Quan hệ' }, project: { en: 'AIPower & Odoo DBs', vi: 'CSDL AIPower & Odoo' }, desc: { en: 'ACID transactions, JSONB columns & query tuning', vi: 'Giao dịch ACID, trường JSONB & tối ưu truy vấn' } },
@@ -1218,8 +1218,8 @@
           { name: 'Laravel 11', icon: 'devicon-laravel-original colored', mastery: 95, domain: { en: 'Fullstack PHP', vi: 'Fullstack PHP' }, project: { en: 'hothanhthien.io.vn CMS', vi: 'CMS hothanhthien.io.vn' }, desc: { en: 'Blade SSR, Eloquent ORM, dynamic sitemaps & Auth', vi: 'Blade SSR, Eloquent ORM, sitemap động & phân quyền' } },
           { name: 'Spring Boot', icon: 'devicon-spring-original colored', mastery: 88, domain: { en: 'Java Microservices', vi: 'Java Backend' }, project: { en: 'Laundry Management API', vi: 'API Quản lý Giặt ủi' }, desc: { en: 'Spring Data JPA, Hibernate & stateless REST', vi: 'Spring Data JPA, Hibernate & RESTful API bảo mật' } },
           { name: 'FastAPI', icon: 'devicon-fastapi-plain colored', mastery: 86, domain: { en: 'Async Python API', vi: 'API Python Bất đồng bộ' }, project: { en: 'TourRist Inference Gateway', vi: 'Cổng API AI TourRist' }, desc: { en: 'Async ingestion, Pydantic validation & OpenAPI', vi: 'Nạp tài liệu bất đồng bộ, Pydantic & OpenAPI docs' } },
-          { name: 'Odoo ORM', icon: 'devicon-python-plain colored', mastery: 85, domain: { en: 'ERP Workflows', vi: 'Nghiệp vụ ERP' }, project: { en: 'Enmasys Enterprise ERP', vi: 'Thực tập Enmasys ERP' }, desc: { en: 'B2B Sales workflow mapping & accounting customization', vi: 'Chuẩn hóa quy trình Sales B2B & kế toán doanh nghiệp' } },
-          { name: 'JWT & RBAC', icon: 'devicon-spring-original', mastery: 90, domain: { en: 'Auth Security', vi: 'Bảo mật & Phân quyền' }, project: { en: 'Laundry Security Guard', vi: 'Lớp bảo vệ JWT Giặt ủi' }, desc: { en: 'Token lifecycle, OTP verification & role guards', vi: 'Vòng đời token, xác thực OTP & kiểm soát vai trò' } }
+          { name: 'Odoo ORM', icon: 'custom:odoo', mastery: 85, domain: { en: 'ERP Workflows', vi: 'Nghiệp vụ ERP' }, project: { en: 'Enmasys Enterprise ERP', vi: 'Thực tập Enmasys ERP' }, desc: { en: 'B2B Sales workflow mapping & accounting customization', vi: 'Chuẩn hóa quy trình Sales B2B & kế toán doanh nghiệp' } },
+          { name: 'JWT & RBAC', icon: 'custom:jwt', mastery: 90, domain: { en: 'Auth Security', vi: 'Bảo mật & Phân quyền' }, project: { en: 'Laundry Security Guard', vi: 'Lớp bảo vệ JWT Giặt ủi' }, desc: { en: 'Token lifecycle, OTP verification & role guards', vi: 'Vòng đời token, xác thực OTP & kiểm soát vai trò' } }
         ]
       },
       {
@@ -1229,8 +1229,8 @@
         icon: 'database',
         iconColor: 'text-sky-500',
         items: [
-          { name: 'Vector Search', icon: 'devicon-python-plain colored', mastery: 88, domain: { en: 'Semantic Retrieval', vi: 'Tìm kiếm Ngữ nghĩa' }, project: { en: 'TourRist Knowledge Store', vi: 'Kho Tri thức TourRist' }, desc: { en: 'ChromaDB HNSW cosine similarity indexing', vi: 'Đánh chỉ mục ChromaDB & truy xuất tương đồng cosine' } },
-          { name: 'LLM Grounding', icon: 'devicon-fastapi-plain colored', mastery: 86, domain: { en: 'RAG Pipeline', vi: 'Chuỗi Xử lý RAG' }, project: { en: 'Zero-Hallucination Chatbot', vi: 'Chatbot Chống Ảo giác' }, desc: { en: 'Context assembly strictly bound to private corpus', vi: 'Tổng hợp ngữ cảnh chặt chẽ từ tài liệu nội bộ' } },
+          { name: 'Vector Search', icon: 'custom:vector', mastery: 88, domain: { en: 'Semantic Retrieval', vi: 'Tìm kiếm Ngữ nghĩa' }, project: { en: 'TourRist Knowledge Store', vi: 'Kho Tri thức TourRist' }, desc: { en: 'ChromaDB HNSW cosine similarity indexing', vi: 'Đánh chỉ mục ChromaDB & truy xuất tương đồng cosine' } },
+          { name: 'LLM Grounding', icon: 'custom:llm', mastery: 86, domain: { en: 'RAG Pipeline', vi: 'Chuỗi Xử lý RAG' }, project: { en: 'Zero-Hallucination Chatbot', vi: 'Chatbot Chống Ảo giác' }, desc: { en: 'Context assembly strictly bound to private corpus', vi: 'Tổng hợp ngữ cảnh chặt chẽ từ tài liệu nội bộ' } },
           { name: 'MySQL 8.0', icon: 'devicon-mysql-original colored', mastery: 90, domain: { en: 'Relational Engine', vi: 'CSDL Quan hệ' }, project: { en: 'Portfolio & Laundry DB', vi: 'CSDL Portfolio & Giặt ủi' }, desc: { en: '3NF normalization, foreign keys & index tuning', vi: 'Chuẩn hóa 3NF, khóa ngoại & tối ưu chỉ mục' } },
           { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', mastery: 86, domain: { en: 'Enterprise SQL', vi: 'SQL Doanh nghiệp' }, project: { en: 'AIPower & Odoo ERP', vi: 'Hệ thống AIPower & Odoo' }, desc: { en: 'Relational views, JSONB indexing & reliability', vi: 'View quan hệ, JSONB & đảm bảo toàn vẹn dữ liệu' } },
           { name: 'SQLite', icon: 'devicon-sqlite-plain colored', mastery: 92, domain: { en: 'Embedded SQL', vi: 'CSDL Nhúng' }, project: { en: 'CI/CD Testing & Dev', vi: 'Kiểm thử & Phát triển' }, desc: { en: 'WAL concurrency & fast in-memory automated tests', vi: 'Chế độ WAL & chạy test tự động tốc độ cao' } }
@@ -1243,7 +1243,7 @@
         icon: 'layers',
         iconColor: 'text-emerald-500',
         items: [
-          { name: 'Next.js', icon: 'devicon-nextjs-plain', mastery: 86, domain: { en: 'React SSR', vi: 'React SSR' }, project: { en: 'Laundry Customer Portal', vi: 'Cổng Khách hàng Giặt ủi' }, desc: { en: 'Server rendering, order tracking & API integration', vi: 'SSR, theo dõi trạng thái đơn hàng & tích hợp API' } },
+          { name: 'Next.js', icon: 'devicon-nextjs-plain text-slate-900 dark:text-white', mastery: 86, domain: { en: 'React SSR', vi: 'React SSR' }, project: { en: 'Laundry Customer Portal', vi: 'Cổng Khách hàng Giặt ủi' }, desc: { en: 'Server rendering, order tracking & API integration', vi: 'SSR, theo dõi trạng thái đơn hàng & tích hợp API' } },
           { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored', mastery: 92, domain: { en: 'Interactive DOM', vi: 'Tương tác DOM' }, project: { en: 'Orbit Wheel & Terminal UI', vi: 'Vòng xoay 3D & Terminal' }, desc: { en: 'Trigonometry orbital math, spotlight & typewriter FX', vi: 'Toán học lượng giác quỹ đạo, spotlight & hiệu ứng gõ chữ' } },
           { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-original colored', mastery: 94, domain: { en: 'Design Systems', vi: 'Hệ thống Thiết kế' }, project: { en: 'Pearl White Portfolio', vi: 'Giao diện Portfolio Sáng' }, desc: { en: 'Responsive bento layout & clean dark/light modes', vi: 'Bố cục bento đáp ứng & chế độ Sáng/Tối đồng bộ' } },
           { name: 'Blade Engine', icon: 'devicon-laravel-original colored', mastery: 96, domain: { en: 'SSR Components', vi: 'Component SSR' }, project: { en: 'hothanhthien.io.vn Core', vi: 'Lõi hothanhthien.io.vn' }, desc: { en: 'Zero hydration lag modular views & i18n bindings', vi: 'Hiển thị tức thì không độ trễ & gắn kết đa ngôn ngữ' } },
@@ -1260,7 +1260,7 @@
           { name: 'Docker Compose', icon: 'devicon-docker-plain colored', mastery: 86, domain: { en: 'Container Ops', vi: 'Vận hành Container' }, project: { en: 'Local & AI Stacks', vi: 'Môi trường Dev & AI' }, desc: { en: 'Multi-container services & environment parity', vi: 'Đa dịch vụ container & đồng bộ dev-to-prod' } },
           { name: 'Nginx', icon: 'devicon-nginx-original colored', mastery: 86, domain: { en: 'Web Server', vi: 'Máy chủ Web' }, project: { en: 'hothanhthien.io.vn Prod', vi: 'Production hothanhthien.io.vn' }, desc: { en: 'Reverse proxy, SSL termination & HTTP/2 tuning', vi: 'Reverse proxy, chứng chỉ SSL & tối ưu HTTP/2' } },
           { name: 'Git & GitHub', icon: 'devicon-git-plain colored', mastery: 92, domain: { en: 'Version Control', vi: 'Quản lý Mã nguồn' }, project: { en: '10+ Production Repos', vi: '10+ Repo Thực tế' }, desc: { en: 'Semantic commits, clean branches & PR workflows', vi: 'Commit chuẩn semantic & quản lý nhánh sạch sẽ' } },
-          { name: 'Linux / Cron', icon: 'devicon-linux-plain', mastery: 88, domain: { en: 'SysAdmin', vi: 'Quản trị Hệ thống' }, project: { en: 'cPanel Scheduled Jobs', vi: 'Tác vụ Tự động cPanel' }, desc: { en: 'Automated schedulers, queues & bash diagnostics', vi: 'Lập lịch cron tự động, worker & xử lý log hệ thống' } }
+          { name: 'Linux / Cron', icon: 'devicon-linux-plain text-slate-900 dark:text-slate-100', mastery: 88, domain: { en: 'SysAdmin', vi: 'Quản trị Hệ thống' }, project: { en: 'cPanel Scheduled Jobs', vi: 'Tác vụ Tự động cPanel' }, desc: { en: 'Automated schedulers, queues & bash diagnostics', vi: 'Lập lịch cron tự động, worker & xử lý log hệ thống' } }
         ]
       }
     ];
@@ -1435,6 +1435,54 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       }
     }
 
+    function renderSkillIcon(item, variant = 'grid') {
+      const iconKey = item.icon || '';
+      const boxSizes = {
+        grid: { svg: 'w-6 h-6', odoo: 'w-8 h-5', orbitText: '' },
+        orbit: { svg: 'w-4 h-4', odoo: 'w-6 h-3.5', orbitText: 'text-base sm:text-lg' },
+        inspector: { svg: 'w-8 h-8', odoo: 'w-11 h-6', orbitText: '' }
+      }[variant] || { svg: 'w-6 h-6', odoo: 'w-8 h-5', orbitText: '' };
+
+      if (iconKey === 'custom:odoo') {
+        return `<svg viewBox="0 7.2 24 9.8" class="${boxSizes.odoo} text-[#714B67] dark:text-[#C58FB7] flex-shrink-0" fill="currentColor" role="img" aria-label="Odoo Logo"><path d="M21.1002 15.7957c-1.6015 0-2.8997-1.2983-2.8997-2.8998s1.2983-2.8997 2.8997-2.8997c1.6015 0 2.8998 1.2982 2.8998 2.8997 0 1.5999-1.2979 2.8998-2.8998 2.8998zm0-1.2c.9388.0006 1.7003-.7601 1.7008-1.6989.0004-.9388-.7602-1.7003-1.699-1.7007h-.0018c-.9388.0004-1.6994.7619-1.699 1.7007.0005.9381.761 1.6985 1.699 1.699zm-6.0655 1.2c-1.6014 0-2.8997-1.2983-2.8997-2.8998s1.2983-2.8997 2.8997-2.8997c1.6015 0 2.8998 1.2982 2.8998 2.8997 0 1.5999-1.2999 2.8998-2.8998 2.8998zm0-1.2c.9389.0006 1.7003-.7601 1.7008-1.6989.0005-.9388-.7602-1.7003-1.699-1.7007h-.0018c-.9388.0004-1.6994.7619-1.699 1.7007.0005.9381.761 1.6985 1.699 1.699zM11.865 12.858c0 1.6199-1.2979 2.9378-2.8977 2.9378s-2.8998-1.314-2.8998-2.9358 1.1799-2.8597 2.8998-2.8597c.6359 0 1.2239.134 1.6998.484v-1.68a.6.6 0 0 1 1.2 0v4.0537h-.002zm-2.8977 1.7399c.9388.0005 1.7002-.7602 1.7007-1.699.0005-.9388-.7602-1.7003-1.699-1.7007h-.0017c-.9389.0004-1.6995.7619-1.699 1.7007.0004.9381.7608 1.6985 1.699 1.699zm-6.0675 1.1979C1.2983 15.7957 0 14.4974 0 12.8959s1.2983-2.8997 2.8998-2.8997 2.8997 1.2982 2.8997 2.8997c0 1.5999-1.2999 2.8998-2.8997 2.8998zm0-1.2c.9388.0006 1.7002-.7601 1.7007-1.699.0005-.9387-.7602-1.7002-1.699-1.7006h-.0017c-.9388.0004-1.6995.7619-1.699 1.7007.0004.9381.7608 1.6985 1.699 1.699z"/></svg>`;
+      }
+
+      if (iconKey === 'custom:rag') {
+        return `<svg viewBox="0 0 24 24" class="${boxSizes.svg} flex-shrink-0" fill="none" role="img" aria-label="RAG AI Logo">
+          <path d="M4.5 3.5h8.2L17 7.8v3.8M4.5 3.5v17a1.5 1.5 0 001.5 1.5h4.2M4.5 3.5A1.5 1.5 0 003 5v14.5" stroke="#0EA5E9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7.2 10h5.2M7.2 13.5h3.2" stroke="#6366F1" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M16.6 11.2l1.25 3.25 3.25 1.25-3.25 1.25-1.25 3.25-1.25-3.25-3.25-1.25 3.25-1.25 1.25-3.25z" fill="#6366F1"/>
+          <circle cx="19.5" cy="11" r="1.1" fill="#10B981"/>
+        </svg>`;
+      }
+
+      if (iconKey === 'custom:vector') {
+        return `<svg viewBox="0 0 24 24" class="${boxSizes.svg} flex-shrink-0" fill="none" role="img" aria-label="Vector Search Logo">
+          <rect x="3" y="6.5" width="9" height="11" rx="4.5" fill="#F43F5E" fill-opacity="0.88"/>
+          <rect x="7.5" y="6.5" width="9" height="11" rx="4.5" fill="#F59E0B" fill-opacity="0.88"/>
+          <rect x="12" y="6.5" width="9" height="11" rx="4.5" fill="#0EA5E9" fill-opacity="0.88"/>
+        </svg>`;
+      }
+
+      if (iconKey === 'custom:llm') {
+        return `<svg viewBox="0 0 24 24" class="${boxSizes.svg} flex-shrink-0" fill="none" role="img" aria-label="LLM Grounding Logo">
+          <circle cx="12" cy="12" r="8.5" stroke="#6366F1" stroke-width="1.7" stroke-dasharray="3 2.5"/>
+          <circle cx="12" cy="5.5" r="2" fill="#0EA5E9"/>
+          <circle cx="6.5" cy="16" r="2" fill="#6366F1"/>
+          <circle cx="17.5" cy="16" r="2" fill="#10B981"/>
+          <path d="M12 7.5v3.2m-3.6 3.7l2.5-1.8m4.7 1.8l-2.5-1.8" stroke="#64748B" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="12" cy="12" r="2.3" fill="#10B981"/>
+        </svg>`;
+      }
+
+      if (iconKey === 'custom:jwt') {
+        return `<img src="https://cdn.simpleicons.org/jsonwebtokens/D63AFF?viewbox=auto" alt="JWT Logo" class="${boxSizes.svg} object-contain flex-shrink-0" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';"><svg viewBox="0 0 24 24" class="${boxSizes.svg} hidden flex-shrink-0" fill="none" role="img" aria-label="JWT Security Logo"><path d="M12 2.5L4.5 5.8v5.9c0 5.1 3.2 9.4 7.5 10.8 4.3-1.4 7.5-5.7 7.5-10.8V5.8L12 2.5z" fill="#D63AFF" fill-opacity="0.18" stroke="#D63AFF" stroke-width="1.8"/><path d="M12 8.2a2.2 2.2 0 00-2.2 2.2v1.1h4.4v-1.1A2.2 2.2 0 0012 8.2zm-3.2 3.3h6.4v4.2H8.8v-4.2z" fill="#D63AFF"/></svg>`;
+      }
+
+      const cls = boxSizes.orbitText ? `${iconKey} ${boxSizes.orbitText}` : iconKey;
+      return `<i class="${cls}"></i>`;
+    }
+
     function render3DSpinFlipGrid(items) {
       const wrap = document.getElementById('skillGridModeWrap');
       wrap.innerHTML = '';
@@ -1451,7 +1499,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
             <div class="grid-flip-front spotlight-card bg-slate-50/70 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 p-4 flex flex-col justify-between">
               <div class="flex items-start justify-between relative z-10">
                 <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-2xl shadow-sm spin-icon-target">
-                  <i class="${item.icon}"></i>
+                  ${renderSkillIcon(item, 'grid')}
                 </div>
                 <span class="font-mono text-[11px] font-bold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-500/15 px-2 py-0.5 rounded-md">${item.mastery}%</span>
               </div>
@@ -1504,7 +1552,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
         node.innerHTML = `
           <div class="orbit-node-pill px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1.5">
-            <i class="${item.icon} text-base sm:text-lg"></i>
+            ${renderSkillIcon(item, 'orbit')}
             <span class="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
           </div>
         `;
@@ -1526,7 +1574,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     }
 
     function updateOrbitInspector(item) {
-      document.getElementById('inspectorIconBox').innerHTML = `<i class="${item.icon}"></i>`;
+      document.getElementById('inspectorIconBox').innerHTML = renderSkillIcon(item, 'inspector');
       document.getElementById('inspectorSkillName').textContent = item.name;
       document.getElementById('inspectorDomain').textContent = item.domain[currentLang];
       document.getElementById('inspectorPercent').textContent = `${item.mastery}%`;
