@@ -42,6 +42,20 @@
       }
     }
 
+    @keyframes radialStageRevolve {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes radialNodeCounterRevolve {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
+
+    #radialOrbitSection .radial-spinning-ring {
+      transform-origin: 50% 50%;
+      animation: radialStageRevolve 32s linear infinite;
+    }
+
     #radialOrbitSection .orbit-node {
       position: absolute;
       top: 50%;
@@ -49,9 +63,28 @@
       opacity: 0;
       animation: orbitNodeEmerge 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       animation-delay: var(--delay);
-      perspective: 1000px;
       user-select: none;
+      pointer-events: auto;
       cursor: pointer;
+      z-index: 20;
+    }
+    #radialOrbitSection .orbit-node:hover {
+      z-index: 40;
+    }
+
+    #radialOrbitSection .radial-node-upright {
+      transform-origin: center center;
+      perspective: 1000px;
+      animation: radialNodeCounterRevolve 32s linear infinite;
+    }
+
+    #radialOrbitStage.is-hover-paused .radial-spinning-ring,
+    #radialOrbitStage.is-hover-paused .radial-node-upright,
+    #radialOrbitStage.is-hover-paused .animate-orbit-ring,
+    #radialOrbitStage:has(.orbit-node:hover) .radial-spinning-ring,
+    #radialOrbitStage:has(.orbit-node:hover) .radial-node-upright,
+    #radialOrbitStage:has(.orbit-node:hover) .animate-orbit-ring {
+      animation-play-state: paused;
     }
 
     /* 3D Flip Card Styling */
@@ -161,7 +194,7 @@
       </div>
 
       <!-- 3. KHUNG SÂN KHẤU CHỨA VÒNG XOAY (Inner Stage) -->
-      <div class="rounded-2xl min-h-[440px] sm:min-h-[480px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 border border-slate-200/70 flex items-center justify-center relative overflow-hidden select-none">
+      <div id="radialOrbitStage" class="rounded-2xl min-h-[440px] sm:min-h-[480px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 border border-slate-200/70 flex items-center justify-center relative overflow-hidden select-none">
 
         <!-- Thông số tọa độ & Technical HUD ở các góc -->
         <div class="absolute top-4 left-4 font-mono text-[11px] text-slate-400 tracking-wider">
@@ -202,7 +235,7 @@
         </div>
 
         <!-- Container chứa các thẻ kỹ năng (Orbit Nodes) -->
-        <div id="radialOrbitNodesContainer" class="absolute inset-0 pointer-events-auto">
+        <div id="radialOrbitNodesContainer" class="absolute inset-0 pointer-events-none radial-spinning-ring">
           <!-- Được gắn động qua JavaScript -->
         </div>
 
@@ -337,6 +370,7 @@
       let currentCatIndex = 0;
 
       const categoryTabs = document.getElementById('radialCategoryTabs');
+      const radialOrbitStage = document.getElementById('radialOrbitStage');
       const orbitNodesContainer = document.getElementById('radialOrbitNodesContainer');
       const hubTitle = document.getElementById('radialHubTitle');
       const hubCount = document.getElementById('radialHubCount');
@@ -379,7 +413,11 @@
         hubCount.textContent = `${N} Skills`;
         coordReadout.textContent = `R=168px • ${N} SKILLS`;
 
+        if (radialOrbitStage) radialOrbitStage.classList.remove('is-hover-paused');
         orbitNodesContainer.innerHTML = '';
+        orbitNodesContainer.classList.remove('radial-spinning-ring');
+        void orbitNodesContainer.offsetWidth;
+        orbitNodesContainer.classList.add('radial-spinning-ring');
 
         items.forEach((item, index) => {
           const angle = Math.round((360 / items.length) * index);
@@ -390,14 +428,16 @@
           node.style.setProperty('--delay', `${index * 65}ms`);
 
           node.innerHTML = `
-            <div class="flip-card-inner">
-              <div class="flip-card-front">
-                <span class="flex-shrink-0">${item.icon}</span>
-                <span class="text-xs font-bold text-slate-800 tracking-tight whitespace-nowrap">${item.name}</span>
-              </div>
-              <div class="flip-card-back">
-                <span class="text-[9px] font-mono font-bold tracking-tight uppercase leading-tight line-clamp-1">${item.proof}</span>
-                <span class="text-[8px] text-sky-100 font-mono line-clamp-1">${item.name}</span>
+            <div class="radial-node-upright">
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <span class="flex-shrink-0">${item.icon}</span>
+                  <span class="text-xs font-bold text-slate-800 tracking-tight whitespace-nowrap">${item.name}</span>
+                </div>
+                <div class="flip-card-back">
+                  <span class="text-[9px] font-mono font-bold tracking-tight uppercase leading-tight line-clamp-1">${item.proof}</span>
+                  <span class="text-[8px] text-sky-100 font-mono line-clamp-1">${item.name}</span>
+                </div>
               </div>
             </div>
           `;
@@ -407,7 +447,13 @@
             proofDetail.textContent = `${item.proof} — ${item.desc}`;
           };
 
-          node.addEventListener('mouseenter', updateProof);
+          node.addEventListener('mouseenter', () => {
+            if (radialOrbitStage) radialOrbitStage.classList.add('is-hover-paused');
+            updateProof();
+          });
+          node.addEventListener('mouseleave', () => {
+            if (radialOrbitStage) radialOrbitStage.classList.remove('is-hover-paused');
+          });
           node.addEventListener('click', () => {
             node.classList.toggle('is-flipped');
             updateProof();

@@ -186,7 +186,7 @@
     }
 
     /* =========================================================================
-       SKILL ANIMATION MODE 2: 3D ORBIT WHEEL (EXACT VORTEX FORMULA)
+       SKILL ANIMATION MODE 2: 3D ORBIT WHEEL (EXACT VORTEX + CONTINUOUS ORBIT)
     ========================================================================= */
     @keyframes orbitNodeEmerge {
       0% {
@@ -198,7 +198,19 @@
         transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--radius))) rotate(calc(-1 * var(--angle))) scale(1);
       }
     }
+    @keyframes orbitStageRevolve {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes orbitNodeCounterRevolve {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
 
+    .orbit-spinning-ring {
+      transform-origin: 50% 50%;
+      animation: orbitStageRevolve 32s linear infinite;
+    }
     .orbit-node {
       position: absolute;
       top: 50%;
@@ -207,7 +219,30 @@
       animation: orbitNodeEmerge 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       user-select: none;
       cursor: pointer;
+      pointer-events: auto;
       z-index: 20;
+    }
+    .orbit-node-upright {
+      transform-origin: center center;
+      animation: orbitNodeCounterRevolve 32s linear infinite;
+    }
+    .orbit-ring-counter {
+      transform-origin: center center;
+      animation: orbitNodeCounterRevolve 48s linear infinite;
+    }
+    #orbitStageBox.is-hover-paused .orbit-spinning-ring,
+    #orbitStageBox.is-hover-paused .orbit-node-upright,
+    #orbitStageBox.is-hover-paused .animate-spin-slow,
+    #orbitStageBox.is-hover-paused .orbit-ring-counter,
+    #orbitStageBox.is-manual-paused .orbit-spinning-ring,
+    #orbitStageBox.is-manual-paused .orbit-node-upright,
+    #orbitStageBox.is-manual-paused .animate-spin-slow,
+    #orbitStageBox.is-manual-paused .orbit-ring-counter,
+    #orbitStageBox:has(.orbit-node:hover) .orbit-spinning-ring,
+    #orbitStageBox:has(.orbit-node:hover) .orbit-node-upright,
+    #orbitStageBox:has(.orbit-node:hover) .animate-spin-slow,
+    #orbitStageBox:has(.orbit-node:hover) .orbit-ring-counter {
+      animation-play-state: paused;
     }
     .orbit-node-pill {
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -218,8 +253,9 @@
       box-shadow: 0 10px 25px -4px rgba(14, 165, 233, 0.28), 0 0 0 2px rgba(14, 165, 233, 0.22);
       transform: scale(1.08);
     }
+    .orbit-node:hover,
     .orbit-node.is-active {
-      z-index: 35;
+      z-index: 40;
     }
 
     /* Terminal Typewriter Cursor */
@@ -482,16 +518,21 @@
         <div id="skillOrbitModeWrap" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           
           <!-- Left Stage: Ice-Blue Radial Orbit Visualizer -->
-          <div class="lg:col-span-7 rounded-2xl min-h-[440px] sm:min-h-[470px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
+          <div id="orbitStageBox" class="lg:col-span-7 rounded-2xl min-h-[440px] sm:min-h-[470px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
             
             <div class="absolute top-3.5 left-4 font-mono text-[11px] text-slate-400">ORBIT // TRIG_ROTATION</div>
-            <div class="absolute bottom-3.5 left-4 font-mono text-[11px] text-slate-400 flex items-center gap-2">
+            <div class="absolute bottom-3.5 left-4 font-mono text-[11px] text-slate-400 flex items-center gap-2 z-30">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <span id="orbitRadiusReadout">R=168px</span>
             </div>
+            <button type="button" id="btnOrbitSpinToggle" onclick="toggleOrbitSpin()" class="absolute bottom-3 right-3.5 z-30 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-700 text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 hover:border-sky-400 shadow-sm transition-all">
+              <i data-lucide="pause" id="orbitSpinPauseIcon" class="w-3 h-3"></i>
+              <i data-lucide="play" id="orbitSpinPlayIcon" class="w-3 h-3 hidden"></i>
+              <span id="orbitSpinToggleLabel">Auto Orbit</span>
+            </button>
 
             <!-- 2 Concentric Dashed Orbit Rings -->
-            <div class="w-[172px] h-[172px] sm:w-[210px] sm:h-[210px] rounded-full border border-indigo-500/20 dark:border-indigo-400/20 absolute pointer-events-none"></div>
+            <div class="w-[172px] h-[172px] sm:w-[210px] sm:h-[210px] rounded-full border border-dashed border-indigo-500/25 dark:border-indigo-400/25 absolute pointer-events-none orbit-ring-counter"></div>
             <div class="w-[258px] h-[258px] sm:w-[330px] sm:h-[330px] rounded-full border border-dashed border-sky-500/35 dark:border-sky-400/35 absolute pointer-events-none animate-spin-slow"></div>
 
             <!-- Central Circular Core Hub -->
@@ -502,7 +543,7 @@
             </div>
 
             <!-- Dynamic Orbit Nodes Container -->
-            <div id="orbitNodesStage" class="absolute inset-0 pointer-events-auto">
+            <div id="orbitNodesStage" class="absolute inset-0 pointer-events-none orbit-spinning-ring">
               <!-- Populated via JS -->
             </div>
           </div>
@@ -1533,7 +1574,32 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       });
     }
 
+    let isOrbitManualPaused = false;
+
+    function updateOrbitSpinLabel() {
+      const label = document.getElementById('orbitSpinToggleLabel');
+      const pauseIcon = document.getElementById('orbitSpinPauseIcon');
+      const playIcon = document.getElementById('orbitSpinPlayIcon');
+      if (pauseIcon) pauseIcon.classList.toggle('hidden', isOrbitManualPaused);
+      if (playIcon) playIcon.classList.toggle('hidden', !isOrbitManualPaused);
+      if (label) {
+        label.textContent = isOrbitManualPaused
+          ? (currentLang === 'vi' ? 'Tạm dừng' : 'Paused')
+          : (currentLang === 'vi' ? 'Đang xoay' : 'Auto Orbit');
+      }
+    }
+
+    function toggleOrbitSpin() {
+      const stageBox = document.getElementById('orbitStageBox');
+      isOrbitManualPaused = !isOrbitManualPaused;
+      if (stageBox) {
+        stageBox.classList.toggle('is-manual-paused', isOrbitManualPaused);
+      }
+      updateOrbitSpinLabel();
+    }
+
     function render3DOrbitWheel(cat, items) {
+      const stageBox = document.getElementById('orbitStageBox');
       const stage = document.getElementById('orbitNodesStage');
       const N = items.length;
 
@@ -1541,7 +1607,15 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       document.getElementById('orbitHubCount').textContent = currentLang === 'vi' ? `${N} Kỹ năng` : `${N} Skills`;
       document.getElementById('orbitRadiusReadout').textContent = window.innerWidth < 640 ? `R=128px • N=${N}` : `R=168px • N=${N}`;
 
+      if (stageBox) {
+        stageBox.classList.remove('is-hover-paused');
+      }
+
       stage.innerHTML = '';
+      // Synchronize outer ring rotation and child counter-rotation clocks at t=0
+      stage.classList.remove('orbit-spinning-ring');
+      void stage.offsetWidth;
+      stage.classList.add('orbit-spinning-ring');
 
       items.forEach((item, index) => {
         const angle = Math.round((360 / items.length) * index);
@@ -1551,9 +1625,11 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         node.style.animationDelay = `${index * 65}ms`;
 
         node.innerHTML = `
-          <div class="orbit-node-pill px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1.5">
-            ${renderSkillIcon(item, 'orbit')}
-            <span class="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
+          <div class="orbit-node-upright">
+            <div class="orbit-node-pill px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1.5">
+              ${renderSkillIcon(item, 'orbit')}
+              <span class="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
+            </div>
           </div>
         `;
 
@@ -1563,7 +1639,13 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
           updateOrbitInspector(item);
         };
 
-        node.addEventListener('mouseenter', handleInspect);
+        node.addEventListener('mouseenter', () => {
+          if (stageBox) stageBox.classList.add('is-hover-paused');
+          handleInspect();
+        });
+        node.addEventListener('mouseleave', () => {
+          if (stageBox) stageBox.classList.remove('is-hover-paused');
+        });
         node.addEventListener('click', handleInspect);
         stage.appendChild(node);
       });
@@ -1571,6 +1653,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       if (items[activeOrbitSkillIndex]) {
         updateOrbitInspector(items[activeOrbitSkillIndex]);
       }
+      updateOrbitSpinLabel();
     }
 
     function updateOrbitInspector(item) {
@@ -1613,6 +1696,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         : 'Ask about GPA, RAG AI, Enmasys...';
 
       updateThemeUI(document.documentElement.classList.contains('dark'));
+      updateOrbitSpinLabel();
       renderSkillTabs();
       renderActiveSkillView();
       renderCopilotPrompts();
