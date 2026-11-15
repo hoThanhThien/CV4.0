@@ -1,514 +1,934 @@
-@extends('layouts.app')
+@php
+    $isVi = app()->getLocale() === 'vi';
+@endphp
+<!DOCTYPE html>
+<html lang="{{ $isVi ? 'vi' : 'en' }}" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ __('Contact') }} | {{ $isVi ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}</title>
+  <meta name="description" content="{{ $isVi ? 'Liên hệ với Hồ Thành Thiện để trao đổi về dự án công nghệ, cơ hội tuyển dụng Full-Stack Developer & AI Engineer hoặc hợp tác freelance.' : 'Get in touch with Ho Thanh Thien for software project inquiries, full-stack & RAG AI engineering roles, or technical collaborations.' }}">
+  <meta name="keywords" content="{{ $isVi ? 'Liên hệ Hồ Thành Thiện, Thuê lập trình viên Laravel, Hợp tác phần mềm, Fullstack Freelancer, RAG AI Engineer' : 'Contact Ho Thanh Thien, Hire Full-Stack Developer, Freelance Laravel Expert, Contact Software Engineer' }}">
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+  <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
 
-@section('title', __('Contact') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', app()->getLocale() == 'vi' ? 'Liên hệ với Hồ Thành Thiện để trao đổi về dự án công nghệ, cơ hội tuyển dụng Full-Stack Developer hoặc hợp tác freelance.' : 'Get in touch with Ho Thanh Thien for software project inquiries, full-stack development roles, or technical collaborations.')
-@section('keywords', app()->getLocale() == 'vi' ? 'Liên hệ Hồ Thành Thiện, Thuê lập trình viên Laravel, Hợp tác phần mềm, Fullstack Freelancer' : 'Contact Ho Thanh Thien, Hire Full-Stack Developer, Freelance Laravel Expert, Contact Software Engineer')
+  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
 
-@section('styles')
-<style>
-    .contact-studio-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
-        gap: clamp(1.75rem, 4vw, 3.25rem);
-        align-items: start;
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          animation: {
+            'blob': 'blob 10s infinite alternate',
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(35px, -45px) scale(1.08)' },
+              '66%': { transform: 'translate(-25px, 25px) scale(0.94)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            }
+          }
+        }
+      }
+    };
+    if (localStorage.getItem('thien_theme') === 'dark') {
+      document.documentElement.classList.add('dark');
     }
+  </script>
 
-    .contact-dossier-panel {
-        background: var(--surface-ink);
-        color: #F3F4F6;
-        border-radius: var(--radius-lg);
-        border: 1px solid #232938;
-        padding: clamp(1.4rem, 3vw, 2rem);
-        box-shadow: var(--shadow-lg);
-    }
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-    .contact-status-box {
-        padding-bottom: 1.25rem;
-        margin-bottom: 1.25rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .contact-status-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        margin-bottom: 0.6rem;
-    }
-    .ledger-row-label {
-        font-family: var(--font-mono);
-        font-size: 0.74rem;
-        color: #9CA3AF;
-        letter-spacing: 0.04em;
-    }
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        padding: 0.28rem 0.7rem;
-        border-radius: 999px;
-        background: rgba(15, 118, 110, 0.22);
-        border: 1px solid rgba(45, 212, 191, 0.35);
-        color: #99F6E4;
-        font-size: 0.78rem;
-        font-weight: 600;
-    }
-    .status-badge .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #2DD4BF;
-    }
-    .contact-status-note {
-        font-size: 0.9rem;
-        color: #D1D5DB;
-        line-height: 1.6;
+  <style>
+    :root {
+      --mouse-x: -999px;
+      --mouse-y: -999px;
     }
 
-    .contact-ledger-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.9rem;
-        padding: 0.95rem 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    .bg-tech-grid {
+      background-color: #f8fafc;
+      background-image:
+        linear-gradient(to right, rgba(15, 23, 42, 0.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+      background-size: 38px 38px;
+      transition: background-color 0.35s ease, color 0.35s ease;
     }
-    .info-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: var(--radius-sm);
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #93C5FD;
-        font-size: 0.9rem;
-        flex-shrink: 0;
-    }
-    .info-content { min-width: 0; }
-    .info-card-value {
-        display: block;
-        color: #FFFFFF;
-        font-family: var(--font-display);
-        font-size: 1rem;
-        font-weight: 600;
-        text-decoration: none;
-        margin: 0.15rem 0 0.1rem;
-        word-break: break-word;
-    }
-    a.info-card-value:hover {
-        color: #93C5FD;
-        text-decoration: underline;
-    }
-    .info-card-sub {
-        font-family: var(--font-mono);
-        font-size: 0.74rem;
-        color: #9CA3AF;
+    html.dark .bg-tech-grid {
+      background-color: #06090F;
+      background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
     }
 
-    .contact-socials-row {
-        padding-top: 1.25rem;
+    .frosted-glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
-    .contact-socials-btns {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.6rem;
-        margin-top: 0.65rem;
-    }
-    .social-dark-btn {
-        flex: 1;
-        min-width: 120px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.45rem;
-        padding: 0.55rem 0.9rem;
-        border-radius: var(--radius-sm);
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        color: #FFFFFF;
-        font-size: 0.86rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease;
-    }
-    .social-dark-btn:hover {
-        background: var(--accent);
-        border-color: var(--accent);
+    html.dark .frosted-glass {
+      background: rgba(11, 17, 30, 0.85);
     }
 
-    /* Tactile Inquiry Form Panel */
-    .form-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: clamp(1.5rem, 3.5vw, 2.35rem);
-        box-shadow: var(--shadow-sm);
+    .spotlight-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    .form-card-title {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        font-family: var(--font-display);
-        font-size: 1.45rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 0.4rem;
+    .spotlight-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        520px circle at var(--mouse-x) var(--mouse-y),
+        rgba(14, 165, 233, 0.09),
+        transparent 45%
+      );
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      z-index: 1;
     }
-    .form-card-title i {
-        color: var(--accent);
-        font-size: 1.15rem;
+    html.dark .spotlight-card::before {
+      background: radial-gradient(
+        520px circle at var(--mouse-x) var(--mouse-y),
+        rgba(56, 189, 248, 0.14),
+        transparent 45%
+      );
     }
-    .form-card-subtitle {
-        color: var(--text-secondary);
-        font-size: 0.94rem;
-        margin-bottom: 1.65rem;
-        line-height: 1.6;
+    .spotlight-card:hover::before {
+      opacity: 1;
     }
+  </style>
+</head>
+<body class="bg-tech-grid text-slate-900 dark:text-slate-100 antialiased selection:bg-sky-500/20 selection:text-sky-700 dark:selection:text-sky-300 relative overflow-x-clip min-h-screen flex flex-col">
 
-    .alert-custom-success {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-        padding: 1rem 1.15rem;
-        border-radius: var(--radius-sm);
-        background: rgba(15, 118, 110, 0.08);
-        border: 1px solid rgba(15, 118, 110, 0.3);
-        color: #0F766E;
-        margin-bottom: 1.5rem;
-    }
-    .alert-custom-success i { font-size: 1.15rem; margin-top: 0.1rem; }
+  <!-- Ambient Pastel Blobs -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+    <div class="absolute -top-24 -left-20 w-96 h-96 bg-sky-300/30 dark:bg-sky-600/15 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-blob"></div>
+    <div class="absolute top-1/3 -right-24 w-[420px] h-[420px] bg-indigo-300/25 dark:bg-indigo-600/15 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-blob" style="animation-delay: 2.5s;"></div>
+    <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-emerald-200/30 dark:bg-emerald-600/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-blob" style="animation-delay: 5s;"></div>
+  </div>
 
-    .form-row-2col {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
-    }
-    .form-group { margin-bottom: 1.15rem; }
-    .form-label {
-        display: block;
-        font-size: 0.86rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 0.42rem;
-    }
-    .form-label .required { color: var(--danger); }
+  <!-- =========================================================================
+       NAVIGATION HEADER (SYNCHRONIZED WITH HOMEPAGE PEARL WHITE + DARK TOGGLE)
+  ========================================================================= -->
+  <header class="sticky top-0 z-50 frosted-glass border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
-    .form-control {
-        width: 100%;
-        padding: 0.68rem 0.88rem;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--border-strong);
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        font-family: var(--font-sans);
-        font-size: 0.95rem;
-        transition: border-color var(--duration-fast) ease, background var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
-    }
-    .form-control:focus {
-        outline: none;
-        border-color: var(--accent);
-        background: var(--bg-card);
-        box-shadow: 0 0 0 3px var(--accent-soft);
-    }
-    .form-control.is-invalid {
-        border-color: var(--danger);
-    }
-    .invalid-feedback {
-        display: block;
-        color: var(--danger);
-        font-size: 0.82rem;
-        font-weight: 500;
-        margin-top: 0.35rem;
-    }
+      <!-- Brand Identity -->
+      <a href="{{ route('home') }}" class="flex items-center gap-2.5 font-display font-extrabold text-lg tracking-tight text-slate-900 dark:text-white group">
+        <span class="w-9 h-9 rounded-xl overflow-hidden bg-gradient-to-br from-sky-500 to-indigo-600 shadow-md shadow-indigo-500/20 ring-1 ring-slate-900/5 dark:ring-white/15 flex-shrink-0 inline-flex items-center justify-center group-hover:scale-105 transition-transform">
+          <img src="{{ asset('android-chrome-192x192.png') }}" alt="Ho Thanh Thien Logo" class="w-full h-full object-cover scale-[1.12]">
+        </span>
+        <span class="hidden sm:inline" data-i18n="brand_name">{{ $isVi ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}</span>
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Available for Hire"></span>
+      </a>
 
-    .btn-submit {
-        width: 100%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.55rem;
-        padding: 0.82rem 1.5rem;
-        border: none;
-        border-radius: var(--radius-sm);
-        background: var(--surface-ink);
-        color: #FFFFFF;
-        font-family: var(--font-sans);
-        font-size: 0.96rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background var(--duration-fast) ease, transform var(--duration-fast) ease;
-    }
-    .btn-submit:hover {
-        background: var(--accent);
-        transform: translateY(-1px);
-    }
-    .btn-submit:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-    }
+      <!-- Center Nav Links -->
+      <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <a href="{{ route('home') }}#projects" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_projects">Selected Work</a>
+        <a href="{{ route('home') }}#skills" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_skills">Tech Stack</a>
+        <a href="{{ route('home') }}#credentials" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_credentials">Credentials</a>
+        <a href="{{ route('home') }}#blog" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_blog">Engineering Blog</a>
+        <a href="{{ route('projects.index') }}" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_all_projects">Archive</a>
+      </nav>
 
-    .recaptcha-v3-text {
-        margin-top: 1rem;
-        text-align: center;
-        font-size: 0.76rem;
-        color: var(--text-muted);
-        line-height: 1.5;
-    }
-    .recaptcha-v3-text a { color: var(--text-secondary); text-decoration: underline; }
-
-    @media (max-width: 960px) {
-        .contact-studio-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 600px) {
-        .form-row-2col { grid-template-columns: 1fr; gap: 0; }
-    }
-</style>
-@endsection
-
-@section('content')
-<section class="page-header-band">
-    <div class="container hero-animate">
-        <div class="section-kicker" style="color:var(--accent-sky);">DIRECT CHANNELS // AVAILABILITY</div>
-        <h1>{!! __('heading_contact') !!}</h1>
-        <p>{{ __('Feel free to reach out for collaborations, project inquiries, or just to say hello!') }}</p>
-    </div>
-</section>
-
-<section class="section" style="padding-top:2.5rem">
-    <div class="container">
-        <div class="contact-studio-grid hero-animate">
-            <!-- Left: Contact Ledger -->
-            <aside class="contact-dossier-panel">
-                <div class="contact-status-box">
-                    <div class="contact-status-top">
-                        <span class="ledger-row-label">{{ __('Availability') }}</span>
-                        <span class="status-badge">
-                            <span class="dot"></span>
-                            {{ __('Available for opportunities') }}
-                        </span>
-                    </div>
-                    <p class="contact-status-note">
-                        {{ __('I\'m currently open to freelance projects, remote roles, and engineering collaborations.') }}
-                    </p>
-                </div>
-
-                <div class="contact-ledger-item">
-                    <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
-                    <div class="info-content">
-                        <div class="ledger-row-label">{{ __('Phone') }}</div>
-                        <a href="tel:0375227764" class="info-card-value" title="{{ app()->getLocale() === 'vi' ? 'Nhấp để gọi' : 'Click to call' }}">0375 &bull;&bull;&bull; 764</a>
-                        <div class="info-card-sub">{{ __('Call / Zalo') }} &bull; {{ app()->getLocale() === 'vi' ? 'Nhấp để kết nối' : 'Click to call' }}</div>
-                    </div>
-                </div>
-
-                <div class="contact-ledger-item">
-                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="info-content">
-                        <div class="ledger-row-label">Email</div>
-                        <a href="mailto:hothanhthien119@gmail.com" class="info-card-value">hothanhthien119@gmail.com</a>
-                        <div class="info-card-sub">{{ __('Response time: Usually within 24 hours') }}</div>
-                    </div>
-                </div>
-
-                <div class="contact-ledger-item">
-                    <div class="info-icon"><i class="fas fa-globe"></i></div>
-                    <div class="info-content">
-                        <div class="ledger-row-label">{{ __('Website') }}</div>
-                        <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="info-card-value">hothanhthien.io.vn</a>
-                        <div class="info-card-sub">https://hothanhthien.io.vn/</div>
-                    </div>
-                </div>
-
-                <div class="contact-ledger-item">
-                    <div class="info-icon"><i class="fas fa-location-dot"></i></div>
-                    <div class="info-content">
-                        <div class="ledger-row-label">{{ __('Location') }}</div>
-                        <span class="info-card-value">{{ __('Hồ Chí Minh, Việt Nam') }}</span>
-                        <div class="info-card-sub">HCM / UTC+7</div>
-                    </div>
-                </div>
-
-                <div class="contact-socials-row">
-                    <div class="ledger-row-label">{{ __('Follow & Connect') }}</div>
-                    <div class="contact-socials-btns">
-                        <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="social-dark-btn">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
-                        <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="social-dark-btn">
-                            <i class="fab fa-linkedin"></i> LinkedIn
-                        </a>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Right: Contact Form -->
-            <div class="form-card">
-                <h2 class="form-card-title">
-                    <i class="fas fa-paper-plane"></i>
-                    {{ __('Send Me a Message') }}
-                </h2>
-                <p class="form-card-subtitle">
-                    {{ __('Fill out the form below and I will get back to you as soon as possible.') }}
-                </p>
-
-                @if(session('success'))
-                <div class="alert-custom-success">
-                    <i class="fas fa-circle-check"></i>
-                    <div>
-                        <strong style="font-size:0.96rem">{{ __('Sent successfully!') }}</strong>
-                        <div style="margin-top:0.2rem; font-size:0.9rem">{{ session('success') }}</div>
-                    </div>
-                </div>
-                @endif
-
-                <form method="POST" action="{{ route('contact.send') }}" id="contactForm" novalidate>
-                    @csrf
-
-                    <div class="form-row-2col">
-                        <div class="form-group">
-                            <label for="name" class="form-label">
-                                {{ __('Your Name') }} <span class="required">*</span>
-                            </label>
-                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="{{ __('Enter your full name...') }}" required>
-                            @error('name')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email" class="form-label">
-                                {{ __('Your Email') }} <span class="required">*</span>
-                            </label>
-                            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="name@example.com" required>
-                            @error('email')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="subject" class="form-label">{{ __('Subject') }}</label>
-                        <input type="text" name="subject" id="subject" class="form-control @error('subject') is-invalid @enderror" value="{{ old('subject') }}" placeholder="{{ __('Project inquiry, collaboration, etc.') }}">
-                        @error('subject')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message" class="form-label">
-                            {{ __('Message') }} <span class="required">*</span>
-                        </label>
-                        <textarea name="message" id="message" rows="5" class="form-control @error('message') is-invalid @enderror" placeholder="{{ __('Describe your project or message in detail...') }}" required>{{ old('message') }}</textarea>
-                        @error('message')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- Invisible Google reCAPTCHA v3 Elements -->
-                    <input type="hidden" name="g-recaptcha-response" id="gRecaptchaResponse" value="">
-                    <!-- Anti-spam Honeypot -->
-                    <input type="text" name="website_hp_check" value="" tabindex="-1" autocomplete="off" style="display:none !important" aria-hidden="true">
-
-                    @error('recaptcha')
-                    <div class="invalid-feedback" style="display:block; text-align:center; margin-bottom:1rem; font-size:0.9rem">
-                        <i class="fas fa-triangle-exclamation"></i> {{ $message }}
-                    </div>
-                    @enderror
-
-                    <button type="submit" class="btn-submit" id="btnSubmit">
-                        <i class="fas fa-paper-plane"></i>
-                        <span>{{ __('Send Message') }}</span>
-                    </button>
-
-                    <div class="recaptcha-v3-text">
-                        {{ __('This site is protected by reCAPTCHA and the Google') }}
-                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">{{ __('Privacy Policy') }}</a>
-                        {{ __('and') }}
-                        <a href="https://policies.google.com/terms" target="_blank" rel="noopener">{{ __('Terms of Service') }}</a>
-                        {{ __('apply.') }}
-                    </div>
-                </form>
-            </div>
+      <!-- Right Controls: Language Switcher + Dark Mode Toggle + Active Contact CTA -->
+      <div class="flex items-center gap-2">
+        <div class="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 font-mono text-xs">
+          <button type="button" id="btnLangEn" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg font-bold transition-all">EN</button>
+          <button type="button" id="btnLangVi" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-lg font-bold transition-all">VI</button>
         </div>
+
+        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all shadow-sm">
+          <i data-lucide="moon" id="themeIconDark" class="w-3.5 h-3.5 text-indigo-500"></i>
+          <i data-lucide="sun" id="themeIconLight" class="w-3.5 h-3.5 text-amber-400 hidden"></i>
+          <span id="themeToggleLabel" class="hidden sm:inline">Dark BG</span>
+        </button>
+
+        <a href="{{ route('contact') }}" aria-current="page" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-sky-500 text-white text-xs font-semibold shadow-lg shadow-sky-500/20 hover:bg-sky-600 transition-all" data-i18n="nav_hire">
+          Hire Me
+        </a>
+
+        <button type="button" id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200" aria-label="Menu">
+          <i data-lucide="menu" class="w-4 h-4"></i>
+        </button>
+      </div>
+
     </div>
-</section>
-@endsection
 
-@section('scripts')
-<script>
-    function setContactSubmitLoading() {
-        const btn = document.getElementById('btnSubmit');
-        if (!btn) return;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i><span>{{ app()->getLocale() === "vi" ? "Đang gửi..." : "Sending..." }}</span>';
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobileMenuPanel" class="hidden md:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-3 space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+      <a href="{{ route('home') }}#projects" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_projects">Selected Work</a>
+      <a href="{{ route('home') }}#skills" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_skills">Tech Stack</a>
+      <a href="{{ route('home') }}#credentials" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_credentials">Credentials</a>
+      <a href="{{ route('home') }}#blog" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_blog">Engineering Blog</a>
+      <a href="{{ route('projects.index') }}" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_all_projects">Archive</a>
+      <a href="{{ route('contact') }}" aria-current="page" class="block px-3 py-2 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 text-center font-semibold mt-2" data-i18n="nav_hire">Hire Me</a>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
+
+    <!-- =========================================================================
+         SECTION 1: CONTACT HERO BAND (PEARL WHITE FROSTED BENTO HEADER)
+    ========================================================================= -->
+    <section class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+        <div class="lg:col-span-8 space-y-4">
+          <!-- Breadcrumb -->
+          <nav class="flex items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+              <i data-lucide="home" class="w-3.5 h-3.5"></i>
+              <span data-i18n="breadcrumb_home">{{ __('Home') }}</span>
+            </a>
+            <span>/</span>
+            <span class="text-slate-900 dark:text-white font-semibold" data-i18n="breadcrumb_contact">{{ __('Contact') }}</span>
+          </nav>
+
+          <!-- Kicker Badge -->
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-[11px] font-bold tracking-widest uppercase text-emerald-700 dark:text-emerald-300">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span data-i18n="contact_kicker">DIRECT CHANNELS // AVAILABILITY</span>
+          </div>
+
+          <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
+            <span data-i18n="contact_title_1">{{ $isVi ? 'Liên hệ & Hợp tác' : 'Get in Touch &' }}</span>
+            <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="contact_title_highlight">
+              {{ $isVi ? 'Cùng xây dựng' : 'Build Together' }}
+            </span>
+          </h1>
+
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed" data-i18n="contact_subtitle">
+            {{ $isVi
+              ? 'Sẵn sàng trao đổi về cơ hội Kỹ sư Phần mềm Full-Stack, kiến trúc RAG AI / LLM, hệ thống Laravel & Spring Boot, tùy chỉnh Odoo ERP hoặc các dự án freelance.'
+              : 'Feel free to reach out for Full-Stack & RAG AI engineering roles, Laravel & Spring Boot system architecture, Odoo ERP consulting, or technical collaborations.' }}
+          </p>
+        </div>
+
+        <!-- Right Quick SLA & Actions -->
+        <div class="lg:col-span-4 space-y-3">
+          <div class="grid grid-cols-3 gap-2.5">
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+              <div class="font-display text-xl sm:text-2xl font-extrabold text-sky-600 dark:text-sky-400">&lt; 24h</div>
+              <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_reply">Response</div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+              <div class="font-display text-xl sm:text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">UTC+7</div>
+              <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_tz">Ho Chi Minh</div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+              <div class="font-display text-xl sm:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="stat_status_val">Open</div>
+              <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_status_lbl">Hire / Work</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap sm:flex-nowrap gap-2">
+            <a href="{{ route('home') }}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all">
+              <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+              <span data-i18n="btn_back_home">Overview</span>
+            </a>
+            <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" download class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-semibold hover:bg-slate-800 dark:hover:bg-sky-600 transition-all shadow-sm">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span data-i18n="btn_brochure">Brochure PDF</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 2: SPLIT CONTACT WORKSPACE (5:7 CHANNELS DOSSIER & FORM)
+    ========================================================================= -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+      <!-- Left Column (5 cols): Contact Dossier & Direct Channels -->
+      <aside class="lg:col-span-5 spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 hover:-translate-y-0.5">
+        <div class="relative z-10 space-y-6">
+
+          <!-- Availability Summary Box -->
+          <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-50/90 via-white to-emerald-50/70 dark:from-sky-950/50 dark:via-slate-900 dark:to-emerald-950/30 border border-sky-200/70 dark:border-sky-500/25 space-y-2.5">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <span class="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400" data-i18n="availability_label">{{ __('Availability') }}</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-mono text-[11px] font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span data-i18n="availability_badge">{{ __('Available for opportunities') }}</span>
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="availability_note">
+              {{ $isVi
+                ? 'Hiện tôi đang sẵn sàng cho các vị trí Full-Stack Web / AI Engineer chính thức, làm việc từ xa (remote) hoặc hợp tác triển khai dự án.'
+                : "I'm currently open to freelance projects, full-time software engineering roles, remote teams, and technical collaborations." }}
+            </p>
+          </div>
+
+          <!-- Direct Contact Ledger Items -->
+          <div class="divide-y divide-slate-200/70 dark:divide-slate-800/80">
+
+            <!-- Email Row with One-Click Copy -->
+            <div class="py-4 first:pt-0 flex items-start justify-between gap-3">
+              <div class="flex items-start gap-3.5 min-w-0">
+                <span class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200/70 dark:border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400 flex-shrink-0">
+                  <i data-lucide="mail" class="w-4 h-4"></i>
+                </span>
+                <div class="min-w-0">
+                  <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500">Email</div>
+                  <a href="mailto:hothanhthien119@gmail.com" class="block font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-sky-600 dark:hover:text-sky-400 transition-colors break-all mt-0.5">
+                    hothanhthien119@gmail.com
+                  </a>
+                  <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="email_sub">Usually replies within 24 hours</div>
+                </div>
+              </div>
+              <button type="button" onclick="copyContactValue('hothanhthien119@gmail.com', this)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-500/20 border border-slate-200/80 dark:border-slate-700 text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-300 transition-all inline-flex items-center gap-1 flex-shrink-0" title="Copy Email">
+                <i data-lucide="copy" class="w-3 h-3"></i>
+                <span class="copy-label" data-i18n="btn_copy">Copy</span>
+              </button>
+            </div>
+
+            <!-- Phone / Zalo Row with One-Click Copy -->
+            <div class="py-4 flex items-start justify-between gap-3">
+              <div class="flex items-start gap-3.5 min-w-0">
+                <span class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/70 dark:border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0">
+                  <i data-lucide="phone" class="w-4 h-4"></i>
+                </span>
+                <div class="min-w-0">
+                  <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="phone_label">Phone / Zalo</div>
+                  <a href="tel:+84375227764" class="block font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors mt-0.5">
+                    0375 227 764
+                  </a>
+                  <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="phone_sub">Call or message via Zalo / SMS</div>
+                </div>
+              </div>
+              <button type="button" onclick="copyContactValue('0375227764', this)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-500/20 border border-slate-200/80 dark:border-slate-700 text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-300 transition-all inline-flex items-center gap-1 flex-shrink-0" title="Copy Phone">
+                <i data-lucide="copy" class="w-3 h-3"></i>
+                <span class="copy-label" data-i18n="btn_copy">Copy</span>
+              </button>
+            </div>
+
+            <!-- Website Row -->
+            <div class="py-4 flex items-start gap-3.5">
+              <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200/70 dark:border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 flex-shrink-0">
+                <i data-lucide="globe" class="w-4 h-4"></i>
+              </span>
+              <div class="min-w-0">
+                <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="website_label">Portfolio &amp; Blog</div>
+                <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mt-0.5">
+                  <span>hothanhthien.io.vn</span>
+                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-60"></i>
+                </a>
+                <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">https://hothanhthien.io.vn/</div>
+              </div>
+            </div>
+
+            <!-- Location Row -->
+            <div class="py-4 last:pb-0 flex items-start gap-3.5">
+              <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/15 border border-amber-200/70 dark:border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0">
+                <i data-lucide="map-pin" class="w-4 h-4"></i>
+              </span>
+              <div class="min-w-0">
+                <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="location_label">Location</div>
+                <div class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white mt-0.5" data-i18n="location_val">
+                  {{ $isVi ? 'Hồ Chí Minh, Việt Nam' : 'Ho Chi Minh City, Vietnam' }}
+                </div>
+                <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">HCM • UTC+7</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Subject Presets -->
+          <div class="pt-4 border-t border-slate-200/80 dark:border-slate-800 space-y-2.5">
+            <div class="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-sky-500"></i>
+              <span data-i18n="presets_label">Quick Inquiry Topics (Click to prefill)</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Interview / Full-Stack & AI Engineer Role" data-topic-vi="Mời phỏng vấn vị trí Kỹ sư Full-Stack & AI" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_1">
+                Full-Stack / AI Role
+              </button>
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Applied RAG AI & LLM Chatbot Project" data-topic-vi="Tư vấn & Xây dựng Hệ thống RAG AI / LLM" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_2">
+                RAG AI / LLM System
+              </button>
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Odoo ERP & Business Workflow Customization" data-topic-vi="Triển khai & Tùy chỉnh phân hệ Odoo ERP" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_3">
+                Odoo ERP Consulting
+              </button>
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Laravel / Spring Boot Web Application" data-topic-vi="Hợp tác phát triển Web App Laravel / Spring Boot" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_4">
+                Freelance Web App
+              </button>
+            </div>
+          </div>
+
+          <!-- Social Profiles -->
+          <div class="pt-4 border-t border-slate-200/80 dark:border-slate-800 space-y-2.5">
+            <div class="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="social_label">Follow &amp; Connect</div>
+            <div class="grid grid-cols-2 gap-3">
+              <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-950 border border-slate-800 dark:border-slate-700 text-white text-xs font-semibold hover:bg-sky-600 dark:hover:bg-sky-500 hover:border-sky-500 transition-all shadow-sm">
+                <i data-lucide="github" class="w-4 h-4"></i>
+                <span>GitHub</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-70"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200/90 dark:border-sky-500/30 text-sky-700 dark:text-sky-300 text-xs font-semibold hover:bg-sky-500 hover:text-white dark:hover:bg-sky-500 dark:hover:text-white transition-all shadow-sm">
+                <i data-lucide="linkedin" class="w-4 h-4"></i>
+                <span>LinkedIn</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-70"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- Right Column (7 cols): Frosted Inquiry Form Panel -->
+      <div class="lg:col-span-7 spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
+        <div class="relative z-10 space-y-6">
+
+          <!-- Form Header -->
+          <div class="space-y-2 border-b border-slate-200/80 dark:border-slate-800 pb-5">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-sky-500/20 flex-shrink-0">
+                <i data-lucide="send" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="form_title">
+                  {{ __('Send Me a Message') }}
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400" data-i18n="form_subtitle">
+                  {{ __('Fill out the form below and I will get back to you as soon as possible.') }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Success Feedback Alert -->
+          @if(session('success'))
+          <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-700/60 text-emerald-800 dark:text-emerald-200 flex items-start gap-3">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5"></i>
+            <div class="space-y-0.5">
+              <div class="font-display font-bold text-sm" data-i18n="success_title">{{ __('Sent successfully!') }}</div>
+              <p class="text-xs sm:text-sm opacity-90">{{ session('success') }}</p>
+            </div>
+          </div>
+          @endif
+
+          <!-- reCAPTCHA / Anti-Spam Alert -->
+          @error('recaptcha')
+          <div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-700/60 text-rose-700 dark:text-rose-200 flex items-center gap-2.5 text-sm font-medium">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0"></i>
+            <span>{{ $message }}</span>
+          </div>
+          @enderror
+
+          <form method="POST" action="{{ route('contact.send') }}" id="contactForm" class="space-y-5" novalidate>
+            @csrf
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Name Field -->
+              <div class="space-y-1.5">
+                <label for="name" class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                  <span data-i18n="label_name">{{ __('Your Name') }}</span>
+                  <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative">
+                  <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    value="{{ old('name') }}"
+                    data-i18n-placeholder="placeholder_name"
+                    placeholder="{{ __('Enter your full name...') }}"
+                    required
+                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/80 border {{ $errors->has('name') ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-sky-500 focus:ring-sky-500/20' }} text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 transition-all"
+                  >
+                </div>
+                @error('name')
+                <p class="text-xs font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1 mt-1">
+                  <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                  <span>{{ $message }}</span>
+                </p>
+                @enderror
+              </div>
+
+              <!-- Email Field -->
+              <div class="space-y-1.5">
+                <label for="email" class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                  <span data-i18n="label_email">{{ __('Your Email') }}</span>
+                  <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative">
+                  <i data-lucide="at-sign" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    value="{{ old('email') }}"
+                    placeholder="name@company.com"
+                    required
+                    class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/80 border {{ $errors->has('email') ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-sky-500 focus:ring-sky-500/20' }} text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 transition-all"
+                  >
+                </div>
+                @error('email')
+                <p class="text-xs font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1 mt-1">
+                  <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                  <span>{{ $message }}</span>
+                </p>
+                @enderror
+              </div>
+            </div>
+
+            <!-- Subject Field -->
+            <div class="space-y-1.5">
+              <label for="subject" class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                <span data-i18n="label_subject">{{ __('Subject') }}</span>
+              </label>
+              <div class="relative">
+                <i data-lucide="tag" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                <input
+                  type="text"
+                  name="subject"
+                  id="subject"
+                  value="{{ old('subject') }}"
+                  data-i18n-placeholder="placeholder_subject"
+                  placeholder="{{ __('Project inquiry, collaboration, etc.') }}"
+                  class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/80 border {{ $errors->has('subject') ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-sky-500 focus:ring-sky-500/20' }} text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 transition-all"
+                >
+              </div>
+              @error('subject')
+              <p class="text-xs font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1 mt-1">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                <span>{{ $message }}</span>
+              </p>
+              @enderror
+            </div>
+
+            <!-- Message Field -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label for="message" class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                  <span data-i18n="label_message">{{ __('Message') }}</span>
+                  <span class="text-rose-500">*</span>
+                </label>
+                <span id="messageCharCount" class="font-mono text-[11px] text-slate-400 dark:text-slate-500">0 / 4000</span>
+              </div>
+              <textarea
+                name="message"
+                id="message"
+                rows="5"
+                maxlength="4000"
+                data-i18n-placeholder="placeholder_message"
+                placeholder="{{ __('Describe your project or message in detail...') }}"
+                required
+                class="w-full px-4 py-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/80 border {{ $errors->has('message') ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-sky-500 focus:ring-sky-500/20' }} text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 transition-all resize-y min-h-[140px]"
+              >{{ old('message') }}</textarea>
+              @error('message')
+              <p class="text-xs font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1 mt-1">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+                <span>{{ $message }}</span>
+              </p>
+              @enderror
+            </div>
+
+            <!-- Invisible Google reCAPTCHA v3 & Honeypot Elements -->
+            <input type="hidden" name="g-recaptcha-response" id="gRecaptchaResponse" value="">
+            <input type="text" name="website_hp_check" value="" tabindex="-1" autocomplete="off" style="display:none !important" aria-hidden="true">
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              id="btnSubmit"
+              class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-900 dark:bg-sky-500 text-white font-semibold text-sm hover:bg-sky-600 dark:hover:bg-sky-400 active:scale-[0.99] transition-all shadow-lg shadow-slate-900/15 dark:shadow-sky-500/25 disabled:opacity-65 disabled:cursor-not-allowed"
+            >
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span data-i18n="btn_submit">{{ __('Send Message') }}</span>
+            </button>
+
+            <!-- reCAPTCHA Notice -->
+            <p class="text-center text-[11px] font-mono text-slate-400 dark:text-slate-500 leading-relaxed">
+              <span data-i18n="recaptcha_prefix">{{ __('This site is protected by reCAPTCHA and the Google') }}</span>
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="underline hover:text-sky-600 dark:hover:text-sky-400" data-i18n="recaptcha_privacy">{{ __('Privacy Policy') }}</a>
+              <span data-i18n="recaptcha_and">{{ __('and') }}</span>
+              <a href="https://policies.google.com/terms" target="_blank" rel="noopener" class="underline hover:text-sky-600 dark:hover:text-sky-400" data-i18n="recaptcha_terms">{{ __('Terms of Service') }}</a>
+              <span data-i18n="recaptcha_suffix">{{ __('apply.') }}</span>
+            </p>
+          </form>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER (SYNCHRONIZED WITH HOMEPAGE PEARL WHITE + DARK TOGGLE)
+  ========================================================================= -->
+  <footer class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/70 backdrop-blur-md py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-1 text-center md:text-left">
+        <div class="font-display font-extrabold text-base text-slate-900 dark:text-white flex items-center justify-center md:justify-start gap-2">
+          <span class="w-6 h-6 rounded-lg overflow-hidden bg-gradient-to-br from-sky-500 to-indigo-600 inline-flex items-center justify-center shadow-sm">
+            <img src="{{ asset('android-chrome-192x192.png') }}" alt="Logo" class="w-full h-full object-cover scale-[1.12]">
+          </span>
+          <span data-i18n="brand_name">{{ $isVi ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}</span>
+        </div>
+        <p class="text-xs font-mono text-slate-500 dark:text-slate-400" data-i18n="footer_subtitle">
+          Full-Stack Web Systems &amp; Applied RAG AI Engineer &bull; Ho Chi Minh City, Vietnam
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-600 dark:text-slate-300">
+        <a href="mailto:hothanhthien119@gmail.com" class="inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+          <i data-lucide="mail" class="w-3.5 h-3.5 text-sky-500"></i>
+          <span>hothanhthien119@gmail.com</span>
+        </a>
+        <a href="tel:+84375227764" class="inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+          <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-500"></i>
+          <span>+84 375 227 764</span>
+        </a>
+        <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+          <i data-lucide="github" class="w-3.5 h-3.5"></i>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       VANILLA JS ENGINE (THEME, EN/VI SYNC, SPOTLIGHT, COPY, PRESETS, RECAPTCHA)
+  ========================================================================= -->
+  <script>
+    let currentLang = "{{ $isVi ? 'vi' : 'en' }}";
+
+    // 1. Mouse-Tracking Spotlight Glow
+    document.addEventListener('mousemove', (e) => {
+      document.querySelectorAll('.spotlight-card').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      });
+    });
+
+    // 2. White BG / Dark BG Toggle
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('thien_theme', isDark ? 'dark' : 'light');
+      updateThemeUI(isDark);
     }
-</script>
-@if(config('services.recaptcha.site_key'))
-<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
-<script>
+
+    function updateThemeUI(isDark) {
+      const iconDark = document.getElementById('themeIconDark');
+      const iconLight = document.getElementById('themeIconLight');
+      const label = document.getElementById('themeToggleLabel');
+      if (iconDark) iconDark.classList.toggle('hidden', isDark);
+      if (iconLight) iconLight.classList.toggle('hidden', !isDark);
+      if (label) {
+        label.textContent = isDark
+          ? (currentLang === 'vi' ? 'Nền Trắng' : 'White BG')
+          : (currentLang === 'vi' ? 'Nền Tối' : 'Dark BG');
+      }
+    }
+
+    // 3. Mobile Nav Toggle
+    function toggleMobileMenu() {
+      const panel = document.getElementById('mobileMenuPanel');
+      if (panel) panel.classList.toggle('hidden');
+    }
+
+    // 4. EN / VI UI Dictionary
+    const I18N = {
+      en: {
+        brand_name: 'Ho Thanh Thien',
+        nav_projects: 'Selected Work',
+        nav_skills: 'Tech Stack',
+        nav_credentials: 'Credentials',
+        nav_blog: 'Engineering Blog',
+        nav_all_projects: 'Archive',
+        nav_hire: 'Hire Me',
+        breadcrumb_home: 'Home',
+        breadcrumb_contact: 'Contact',
+        contact_kicker: 'DIRECT CHANNELS // AVAILABILITY',
+        contact_title_1: 'Get in Touch &',
+        contact_title_highlight: 'Build Together',
+        contact_subtitle: 'Feel free to reach out for Full-Stack & RAG AI engineering roles, Laravel & Spring Boot system architecture, Odoo ERP consulting, or technical collaborations.',
+        stat_reply: 'Response',
+        stat_tz: 'Ho Chi Minh',
+        stat_status_val: 'Open',
+        stat_status_lbl: 'Hire / Work',
+        btn_back_home: 'Overview',
+        btn_brochure: 'Brochure PDF',
+        availability_label: 'Availability',
+        availability_badge: 'Available for opportunities',
+        availability_note: "I'm currently open to freelance projects, full-time software engineering roles, remote teams, and technical collaborations.",
+        email_sub: 'Usually replies within 24 hours',
+        phone_label: 'Phone / Zalo',
+        phone_sub: 'Call or message via Zalo / SMS',
+        website_label: 'Portfolio & Blog',
+        location_label: 'Location',
+        location_val: 'Ho Chi Minh City, Vietnam',
+        btn_copy: 'Copy',
+        btn_copied: 'Copied',
+        presets_label: 'Quick Inquiry Topics (Click to prefill)',
+        topic_1: 'Full-Stack / AI Role',
+        topic_2: 'RAG AI / LLM System',
+        topic_3: 'Odoo ERP Consulting',
+        topic_4: 'Freelance Web App',
+        social_label: 'Follow & Connect',
+        form_title: 'Send Me a Message',
+        form_subtitle: 'Fill out the form below and I will get back to you as soon as possible.',
+        success_title: 'Sent successfully!',
+        label_name: 'Your Name',
+        label_email: 'Your Email',
+        label_subject: 'Subject',
+        label_message: 'Message',
+        placeholder_name: 'Enter your full name...',
+        placeholder_subject: 'Project inquiry, collaboration, etc.',
+        placeholder_message: 'Describe your project or message in detail...',
+        btn_submit: 'Send Message',
+        btn_sending: 'Sending...',
+        recaptcha_prefix: 'This site is protected by reCAPTCHA and the Google',
+        recaptcha_privacy: 'Privacy Policy',
+        recaptcha_and: 'and',
+        recaptcha_terms: 'Terms of Service',
+        recaptcha_suffix: 'apply.',
+        footer_subtitle: 'Full-Stack Web Systems & Applied RAG AI Engineer • Ho Chi Minh City, Vietnam'
+      },
+      vi: {
+        brand_name: 'Hồ Thành Thiện',
+        nav_projects: 'Dự án Nổi bật',
+        nav_skills: 'Kỹ năng',
+        nav_credentials: 'Bằng cấp & PDF',
+        nav_blog: 'Blog Kỹ thuật',
+        nav_all_projects: 'Kho Dự án',
+        nav_hire: 'Liên hệ ngay',
+        breadcrumb_home: 'Trang chủ',
+        breadcrumb_contact: 'Liên hệ',
+        contact_kicker: 'KÊNH KẾT NỐI TRỰC TIẾP // SẴN SÀNG',
+        contact_title_1: 'Liên hệ & Hợp tác',
+        contact_title_highlight: 'Cùng xây dựng',
+        contact_subtitle: 'Sẵn sàng trao đổi về cơ hội Kỹ sư Phần mềm Full-Stack, kiến trúc RAG AI / LLM, hệ thống Laravel & Spring Boot, tùy chỉnh Odoo ERP hoặc các dự án freelance.',
+        stat_reply: 'Phản hồi',
+        stat_tz: 'Hồ Chí Minh',
+        stat_status_val: 'Sẵn sàng',
+        stat_status_lbl: 'Tuyển dụng',
+        btn_back_home: 'Trang chủ',
+        btn_brochure: 'Brochure PDF',
+        availability_label: 'Trạng thái',
+        availability_badge: 'Sẵn sàng đón nhận cơ hội',
+        availability_note: 'Hiện tôi đang sẵn sàng cho các vị trí Kỹ sư Full-Stack / AI chính thức, làm việc từ xa (remote) hoặc hợp tác triển khai dự án.',
+        email_sub: 'Thường phản hồi trong vòng 24 giờ',
+        phone_label: 'Điện thoại / Zalo',
+        phone_sub: 'Gọi trực tiếp hoặc nhắn qua Zalo / SMS',
+        website_label: 'Portfolio & Blog',
+        location_label: 'Địa điểm',
+        location_val: 'Hồ Chí Minh, Việt Nam',
+        btn_copy: 'Sao chép',
+        btn_copied: 'Đã chép',
+        presets_label: 'Chủ đề gợi ý (Nhấn để điền nhanh)',
+        topic_1: 'Tuyển dụng Full-Stack / AI',
+        topic_2: 'Hệ thống RAG AI / LLM',
+        topic_3: 'Tư vấn Odoo ERP',
+        topic_4: 'Dự án Web Freelance',
+        social_label: 'Kết nối Mạng xã hội',
+        form_title: 'Gửi tin nhắn trực tiếp',
+        form_subtitle: 'Điền thông tin bên dưới, tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất.',
+        success_title: 'Gửi thành công!',
+        label_name: 'Họ và tên',
+        label_email: 'Địa chỉ Email',
+        label_subject: 'Tiêu đề',
+        label_message: 'Nội dung tin nhắn',
+        placeholder_name: 'Nhập họ và tên của bạn...',
+        placeholder_subject: 'Trao đổi dự án, cơ hội việc làm, v.v.',
+        placeholder_message: 'Mô tả chi tiết nhu cầu hoặc lời nhắn của bạn...',
+        btn_submit: 'Gửi tin nhắn',
+        btn_sending: 'Đang gửi...',
+        recaptcha_prefix: 'Trang được bảo vệ bởi reCAPTCHA cùng',
+        recaptcha_privacy: 'Chính sách bảo mật',
+        recaptcha_and: 'và',
+        recaptcha_terms: 'Điều khoản dịch vụ',
+        recaptcha_suffix: 'của Google.',
+        footer_subtitle: 'Kỹ sư Hệ thống Web Full-Stack & Ứng dụng RAG AI • TP. Hồ Chí Minh, Việt Nam'
+      }
+    };
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('thien_lang', lang);
+
+      const btnEn = document.getElementById('btnLangEn');
+      const btnVi = document.getElementById('btnLangVi');
+      if (btnEn && btnVi) {
+        btnEn.className = lang === 'en'
+          ? 'px-2.5 py-1 rounded-lg font-bold bg-white dark:bg-slate-700 text-sky-600 dark:text-sky-300 shadow-sm'
+          : 'px-2.5 py-1 rounded-lg font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white';
+        btnVi.className = lang === 'vi'
+          ? 'px-2.5 py-1 rounded-lg font-bold bg-white dark:bg-slate-700 text-sky-600 dark:text-sky-300 shadow-sm'
+          : 'px-2.5 py-1 rounded-lg font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white';
+      }
+
+      const dict = I18N[lang] || I18N.en;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+          el.setAttribute('placeholder', dict[key]);
+        }
+      });
+
+      updateThemeUI(document.documentElement.classList.contains('dark'));
+      try { fetch(`/lang/${lang}`, { method: 'GET', credentials: 'same-origin' }); } catch (e) {}
+    }
+
+    // 5. One-Click Clipboard Helper
+    function copyContactValue(text, btn) {
+      const applyCopiedFeedback = () => {
+        const label = btn.querySelector('.copy-label');
+        const dict = I18N[currentLang] || I18N.en;
+        if (label) label.textContent = dict.btn_copied;
+        btn.classList.add('border-emerald-400', 'text-emerald-600', 'dark:text-emerald-400');
+        setTimeout(() => {
+          if (label) label.textContent = dict.btn_copy;
+          btn.classList.remove('border-emerald-400', 'text-emerald-600', 'dark:text-emerald-400');
+        }, 1800);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(applyCopiedFeedback).catch(() => {});
+      } else {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.select();
+        try { document.execCommand('copy'); applyCopiedFeedback(); } catch (e) {}
+        document.body.removeChild(temp);
+      }
+    }
+
+    // 6. Quick Subject Preset Pills
+    function selectInquiryTopic(btn) {
+      const subjectInput = document.getElementById('subject');
+      const messageInput = document.getElementById('message');
+      const val = currentLang === 'vi'
+        ? btn.getAttribute('data-topic-vi')
+        : btn.getAttribute('data-topic-en');
+
+      if (subjectInput && val) {
+        subjectInput.value = val;
+      }
+
+      document.querySelectorAll('.topic-preset-btn').forEach(chip => {
+        const isActive = chip === btn;
+        chip.className = isActive
+          ? 'topic-preset-btn px-3 py-1.5 rounded-xl bg-sky-500 border border-sky-500 text-xs font-medium text-white shadow-sm transition-all'
+          : 'topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all';
+      });
+
+      if (messageInput && !messageInput.value.trim()) {
+        messageInput.focus();
+      }
+    }
+
+    // 7. Submit Loading State
+    function setContactSubmitLoading() {
+      const btn = document.getElementById('btnSubmit');
+      if (!btn) return;
+      const sendingLabel = (I18N[currentLang] || I18N.en).btn_sending;
+      btn.disabled = true;
+      btn.innerHTML = `<svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle><path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"></path></svg><span>${sendingLabel}</span>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage(currentLang);
+      if (window.lucide) lucide.createIcons();
+
+      const msgEl = document.getElementById('message');
+      const counterEl = document.getElementById('messageCharCount');
+      const updateCounter = () => {
+        if (msgEl && counterEl) {
+          counterEl.textContent = `${msgEl.value.length} / 4000`;
+        }
+      };
+      if (msgEl) {
+        updateCounter();
+        msgEl.addEventListener('input', updateCounter);
+      }
+
+      const nameInput = document.getElementById('name');
+      if (window.innerWidth > 768 && nameInput && !nameInput.value && !document.querySelector('.bg-emerald-50')) {
+        nameInput.focus();
+      }
+    });
+  </script>
+
+  @if(config('services.recaptcha.site_key'))
+  <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const contactForm = document.getElementById('contactForm');
-        const tokenInput = document.getElementById('gRecaptchaResponse');
+      const contactForm = document.getElementById('contactForm');
+      const tokenInput = document.getElementById('gRecaptchaResponse');
 
-        if (contactForm) {
-            contactForm.addEventListener('submit', function(e) {
-                setContactSubmitLoading();
-                if (!tokenInput.value) {
-                    e.preventDefault();
-                    grecaptcha.ready(function() {
-                        grecaptcha.execute("{{ config('services.recaptcha.site_key') }}", {action: 'contact_submit'})
-                            .then(function(token) {
-                                tokenInput.value = token;
-                                contactForm.submit();
-                            })
-                            .catch(function(err) {
-                                contactForm.submit();
-                            });
-                    });
-                }
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          setContactSubmitLoading();
+          if (!tokenInput.value) {
+            e.preventDefault();
+            grecaptcha.ready(function() {
+              grecaptcha.execute("{{ config('services.recaptcha.site_key') }}", { action: 'contact_submit' })
+                .then(function(token) {
+                  tokenInput.value = token;
+                  contactForm.submit();
+                })
+                .catch(function() {
+                  contactForm.submit();
+                });
             });
-        }
+          }
+        });
+      }
     });
-</script>
-@else
-<script>
+  </script>
+  @else
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const tokenInput = document.getElementById('gRecaptchaResponse');
-        const contactForm = document.getElementById('contactForm');
-        if (tokenInput) {
-            tokenInput.value = 'invisible_v3_' + Date.now() + '_' + Math.random().toString(36).substring(2);
-        }
-        if (contactForm) {
-            contactForm.addEventListener('submit', function() {
-                setContactSubmitLoading();
-            });
-        }
+      const tokenInput = document.getElementById('gRecaptchaResponse');
+      const contactForm = document.getElementById('contactForm');
+      if (tokenInput) {
+        tokenInput.value = 'invisible_v3_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+      }
+      if (contactForm) {
+        contactForm.addEventListener('submit', function() {
+          setContactSubmitLoading();
+        });
+      }
     });
-</script>
-@endif
-
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const nameInput = document.getElementById('name');
-        if (window.innerWidth > 768 && nameInput && !nameInput.value) {
-            nameInput.focus();
-        }
-
-        const backToTopBtn = document.getElementById('backToTop');
-        const contactForm = document.getElementById('contactForm');
-        if (contactForm && backToTopBtn) {
-            contactForm.addEventListener('focusin', () => {
-                backToTopBtn.classList.add('hide-on-focus');
-            });
-            contactForm.addEventListener('focusout', () => {
-                setTimeout(() => {
-                    if (!contactForm.contains(document.activeElement)) {
-                        backToTopBtn.classList.remove('hide-on-focus');
-                    }
-                }, 100);
-            });
-        }
-    });
-</script>
-@endsection
+  </script>
+  @endif
+</body>
+</html>
