@@ -6,6 +6,10 @@
   <title>{{ app()->getLocale() === 'vi' ? 'Hồ Thành Thiện — Kỹ sư Phần mềm Full-Stack & RAG AI' : 'Ho Thanh Thien — Full-Stack & RAG AI Engineer' }}</title>
   <meta name="description" content="{{ app()->getLocale() === 'vi' ? 'Portfolio chính thức của Kỹ sư Phần mềm Hồ Thành Thiện (UTH - Loại Xuất sắc, GPA 4.0/4.0). Chuyên sâu Java Spring Boot, Laravel, Odoo ERP và RAG AI.' : 'Official portfolio of Software Engineer Ho Thanh Thien (B.Eng IT Distinction @ UTH, 4.0/4.0 GPA). Specialized in Java Spring Boot, Laravel, Odoo ERP & Applied RAG AI.' }}">
   <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+  <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
 
   <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -255,10 +259,10 @@
       
       <!-- Brand Identity -->
       <a href="{{ route('home') }}" class="flex items-center gap-2.5 font-display font-extrabold text-lg tracking-tight text-slate-900 dark:text-white group">
-        <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white flex items-center justify-center font-mono text-sm shadow-md shadow-sky-500/20 group-hover:scale-105 transition-transform">
-          &lt;T/&gt;
+        <span class="w-9 h-9 rounded-xl overflow-hidden bg-gradient-to-br from-sky-500 to-indigo-600 shadow-md shadow-indigo-500/20 ring-1 ring-slate-900/5 dark:ring-white/15 flex-shrink-0 inline-flex items-center justify-center group-hover:scale-105 transition-transform">
+          <img src="{{ asset('android-chrome-192x192.png') }}" alt="Ho Thanh Thien Logo" class="w-full h-full object-cover scale-[1.12]">
         </span>
-        <span class="hidden sm:inline">Ho Thanh Thien</span>
+        <span class="hidden sm:inline" data-i18n="brand_name">{{ app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}</span>
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Available for Hire"></span>
       </a>
 
@@ -885,9 +889,11 @@
   <footer class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
       <div class="space-y-2">
-        <div class="flex items-center gap-2 font-display font-extrabold text-lg text-slate-900 dark:text-white">
-          <span class="w-7 h-7 rounded-lg bg-sky-500 text-white flex items-center justify-center font-mono text-xs">&lt;T/&gt;</span>
-          <span>Hồ Thành Thiện</span>
+        <div class="flex items-center gap-2.5 font-display font-extrabold text-lg text-slate-900 dark:text-white">
+          <span class="w-8 h-8 rounded-[10px] overflow-hidden bg-gradient-to-br from-sky-500 to-indigo-600 shadow-sm shadow-indigo-500/20 ring-1 ring-slate-900/5 dark:ring-white/15 flex-shrink-0 inline-flex items-center justify-center">
+            <img src="{{ asset('android-chrome-192x192.png') }}" alt="Hồ Thành Thiện Logo" class="w-full h-full object-cover scale-[1.12]">
+          </span>
+          <span data-i18n="brand_name">{{ app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}</span>
         </div>
         <p class="text-xs font-mono text-slate-500 dark:text-slate-400" data-i18n="footer_subtitle">
           Full-Stack Web Systems &amp; Applied RAG AI Engineer • Ho Chi Minh City, Vietnam
@@ -1016,6 +1022,7 @@
     // 4. COMPLETE EN / VI TRANSLATION DICTIONARY (100% SYNCHRONIZED)
     const I18N = {
       en: {
+        brand_name: 'Ho Thanh Thien',
         nav_projects: 'Selected Work',
         nav_skills: 'Tech Stack',
         nav_credentials: 'Credentials',
@@ -1097,6 +1104,7 @@
         copilot_btn: "Ask Thien's RAG AI"
       },
       vi: {
+        brand_name: 'Hồ Thành Thiện',
         nav_projects: 'Dự án Nổi bật',
         nav_skills: 'Kỹ năng',
         nav_credentials: 'Bằng cấp & PDF',
