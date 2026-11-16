@@ -26,6 +26,13 @@
         linear-gradient(to bottom, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
       background-size: 38px 38px, 38px 38px, 38px 38px;
     }
+    html.dark #radialOrbitSection .orbit-outer-wrapper {
+      background-color: rgba(15, 23, 42, 0.72);
+      background-image:
+        radial-gradient(rgba(148, 163, 184, 0.09) 1px, transparent 1px),
+        linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    }
 
     /* Vortex Spin-Out Keyframe Formula */
     @keyframes orbitNodeEmerge {
@@ -131,6 +138,11 @@
       padding: 0 8px;
       gap: 7px;
     }
+    html.dark #radialOrbitSection .flip-card-front {
+      background: #0f172a;
+      border-color: rgba(51, 65, 85, 0.9);
+      box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.4);
+    }
 
     /* Mặt sau: Nền xanh gradient đại dương, hiển thị minh chứng dự án thực tế */
     #radialOrbitSection .flip-card-back {
@@ -163,10 +175,10 @@
   </style>
 
   <!-- 1. TÔNG MÀU & NỀN (CLEAN PEARL WHITE UI) -->
-  <div class="orbit-outer-wrapper p-3 sm:p-6 rounded-[2rem] border border-slate-200/60 shadow-inner">
+  <div class="orbit-outer-wrapper p-3 sm:p-6 rounded-[2rem] border border-slate-200/60 dark:border-slate-800 shadow-inner">
     
     <!-- Khung chứa chính (Outer Card) -->
-    <div class="max-w-4xl w-full mx-auto bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5 sm:p-8 space-y-6">
+    <div class="max-w-4xl w-full mx-auto bg-white dark:bg-slate-900/95 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-5 sm:p-8 space-y-6">
 
       <!-- 2. THANH TAB LỌC NHÓM KỸ NĂNG & NÚT SPIN AGAIN (Ở TRÊN) -->
       <div class="space-y-4">
@@ -177,13 +189,13 @@
         </div>
 
         <!-- Hàng 2: Dòng chữ hướng dẫn & Nút Spin Again -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1 border-t border-slate-100">
-          <div class="flex items-center gap-1.5 font-mono text-xs text-sky-600 font-semibold tracking-wide">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1 border-t border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-1.5 font-mono text-xs text-sky-600 dark:text-sky-400 font-semibold tracking-wide">
             <span>✨</span>
             <span>{{ $isVi ? 'Rê chuột hoặc chạm vào thẻ kỹ năng để lật 3D & xem minh chứng dự án' : 'Hover or tap any skill card to 3D-flip & inspect real project usage' }}</span>
           </div>
 
-          <button id="radialBtnSpinAgain" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-sky-600 font-mono text-xs font-bold hover:bg-sky-50/70 hover:border-sky-300 transition-all active:scale-95 shadow-sm self-start sm:self-auto">
+          <button id="radialBtnSpinAgain" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-sky-600 dark:text-sky-400 font-mono text-xs font-bold hover:bg-sky-50/70 dark:hover:bg-slate-800 hover:border-sky-300 transition-all active:scale-95 shadow-sm self-start sm:self-auto">
             <svg class="w-3.5 h-3.5 text-sky-500" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
             </svg>
@@ -194,7 +206,7 @@
       </div>
 
       <!-- 3. KHUNG SÂN KHẤU CHỨA VÒNG XOAY (Inner Stage) -->
-      <div id="radialOrbitStage" class="rounded-2xl min-h-[440px] sm:min-h-[480px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 border border-slate-200/70 flex items-center justify-center relative overflow-hidden select-none">
+      <div id="radialOrbitStage" class="rounded-2xl min-h-[440px] sm:min-h-[480px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/50 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden select-none">
 
         <!-- Thông số tọa độ & Technical HUD ở các góc -->
         <div class="absolute top-4 left-4 font-mono text-[11px] text-slate-400 tracking-wider">
@@ -215,20 +227,20 @@
         <div class="w-[330px] h-[330px] rounded-full border border-dashed border-sky-500/35 absolute pointer-events-none animate-orbit-ring"></div>
 
         <!-- VÒNG TRÒN LÕI Ở CHÍNH GIỮA (Central Core Hub) -->
-        <div class="relative z-20 w-32 h-32 rounded-full bg-white border-2 border-sky-400/60 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-2 transition-transform hover:scale-105 duration-300">
+        <div class="relative z-20 w-32 h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 dark:border-sky-500/50 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-2 transition-transform hover:scale-105 duration-300">
           <div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-sky-400/20 via-indigo-400/15 to-emerald-400/20 blur-sm pointer-events-none"></div>
           
           <div class="relative z-10 space-y-1">
             <!-- Dòng 1: ACTIVE CORE -->
-            <div class="text-[10px] font-mono tracking-widest text-sky-600 font-bold uppercase">
+            <div class="text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">
               ACTIVE CORE
             </div>
             <!-- Dòng 2: Tên nhóm đang chọn -->
-            <div id="radialHubTitle" class="text-sm font-extrabold text-slate-900 leading-tight px-1" style="font-family: var(--font-display);">
+            <div id="radialHubTitle" class="text-sm font-extrabold text-slate-900 dark:text-white leading-tight px-1" style="font-family: var(--font-display);">
               Core Stack
             </div>
             <!-- Dòng 3: Số lượng kỹ năng -->
-            <div id="radialHubCount" class="text-[10px] font-mono text-emerald-600 font-semibold">
+            <div id="radialHubCount" class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
               10 Skills
             </div>
           </div>
@@ -242,13 +254,13 @@
       </div>
 
       <!-- Thanh hiển thị chi tiết dự án thực tế khi hover / tap -->
-      <div id="radialFooterProofBar" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
-        <div class="flex items-center gap-2 text-slate-600">
+      <div id="radialFooterProofBar" class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200/70 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
+        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
           <span class="w-2 h-2 rounded-full bg-sky-500"></span>
-          <span class="font-bold text-slate-800" id="radialProofSkillName">Laravel 11:</span>
-          <span id="radialProofDetail" class="text-slate-600">Personal Portfolio &amp; CMS (hothanhthien.io.vn) — Fullstack SSR &amp; REST APIs</span>
+          <span class="font-bold text-slate-800 dark:text-white" id="radialProofSkillName">Laravel 11:</span>
+          <span id="radialProofDetail" class="text-slate-600 dark:text-slate-300">Personal Portfolio &amp; CMS (hothanhthien.io.vn) — Fullstack SSR &amp; REST APIs</span>
         </div>
-        <span class="text-sky-600 font-bold self-end sm:self-auto">{{ $isVi ? 'Minh chứng Kiểm nghiệm Thực tế' : 'Verified Production Proof' }}</span>
+        <span class="text-sky-600 dark:text-sky-400 font-bold self-end sm:self-auto">{{ $isVi ? 'Minh chứng Kiểm nghiệm Thực tế' : 'Verified Production Proof' }}</span>
       </div>
 
     </div>
@@ -390,7 +402,7 @@
 
           btn.className = isActive
             ? 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all duration-200'
-            : 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 flex items-center gap-2 transition-all duration-200';
+            : 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 flex items-center gap-2 transition-all duration-200';
 
           btn.innerHTML = `${cat.icon} <span>${cat.title}</span>`;
           btn.addEventListener('click', () => {
@@ -432,7 +444,7 @@
               <div class="flip-card-inner">
                 <div class="flip-card-front">
                   <span class="flex-shrink-0">${item.icon}</span>
-                  <span class="text-xs font-bold text-slate-800 tracking-tight whitespace-nowrap">${item.name}</span>
+                  <span class="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight whitespace-nowrap">${item.name}</span>
                 </div>
                 <div class="flip-card-back">
                   <span class="text-[9px] font-mono font-bold tracking-tight uppercase leading-tight line-clamp-1">${item.proof}</span>

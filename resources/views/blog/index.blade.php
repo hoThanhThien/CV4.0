@@ -1,296 +1,302 @@
-@extends('layouts.app')
+@extends('layouts.pearl')
 
-@section('title', __('Blog') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', app()->getLocale() == 'vi' ? 'Tổng hợp các bài viết, hướng dẫn lập trình Laravel, PHP, JavaScript và kinh nghiệm phát triển phần mềm thực chiến của Hồ Thành Thiện.' : 'Articles, architectural insights, and practical web development tutorials on Laravel, PHP, and modern JavaScript by Ho Thanh Thien.')
-@section('keywords', app()->getLocale() == 'vi' ? 'Blog Hồ Thành Thiện, Lập trình web, Kiến thức Laravel, PHP Tips, Clean Code, Web Development' : 'Ho Thanh Thien Blog, Web Development Tutorials, Laravel Insights, Software Engineering, Clean Code')
-
-@section('styles')
-<style>
-    .blog-lead-banner {
-        display: grid;
-        grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        overflow: hidden;
-        text-decoration: none;
-        color: inherit;
-        margin-bottom: 2rem;
-        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out);
-    }
-    .blog-lead-banner:hover {
-        border-color: var(--text-primary);
-        box-shadow: var(--shadow-md);
-    }
-    .blog-lead-visual {
-        aspect-ratio: 16 / 9;
-        background: var(--surface-ink);
-        overflow: hidden;
-    }
-    .blog-lead-visual img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-    .blog-typo-plate {
-        width: 100%;
-        height: 100%;
-        min-height: 220px;
-        padding: 1.75rem;
-        background: var(--surface-ink);
-        background-image: radial-gradient(circle at 85% 20%, rgba(29, 78, 216, 0.28), transparent 55%);
-        color: #FFFFFF;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .blog-typo-kicker {
-        font-family: var(--font-mono);
-        font-size: 0.74rem;
-        color: #93C5FD;
-    }
-    .blog-typo-heading {
-        font-family: var(--font-display);
-        font-size: clamp(1.2rem, 2.3vw, 1.65rem);
-        font-weight: 700;
-        line-height: 1.25;
-        color: #FFFFFF;
-    }
-
-    .blog-lead-info {
-        padding: clamp(1.4rem, 3vw, 2.15rem);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .blog-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.4rem;
-    }
-
-    .blog-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: inherit;
-        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
-    }
-    .blog-card:hover {
-        border-color: var(--text-primary);
-        box-shadow: var(--shadow-md);
-        transform: translateY(-2px);
-    }
-    .blog-card:hover .blog-title {
-        color: var(--accent);
-    }
-
-    .blog-image {
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        background: var(--surface-ink);
-        border-bottom: 1px solid var(--border);
-    }
-    .blog-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .blog-body {
-        padding: 1.3rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    .blog-meta {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.7rem;
-        font-family: var(--font-mono);
-        font-size: 0.74rem;
-        color: var(--text-muted);
-        margin-bottom: 0.6rem;
-    }
-    .blog-title {
-        font-family: var(--font-display);
-        font-size: 1.14rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 0.55rem;
-        line-height: 1.35;
-        transition: color var(--duration-fast) ease;
-    }
-    .blog-excerpt {
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-        line-height: 1.62;
-        flex: 1;
-    }
-    .blog-read-more {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: var(--accent);
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin-top: 1rem;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: var(--text-secondary);
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-    }
-
-    @media (max-width: 1024px) {
-        .blog-lead-banner { grid-template-columns: 1fr; }
-        .blog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 640px) {
-        .blog-grid { grid-template-columns: 1fr; }
-    }
-</style>
-@endsection
+@section('active_nav', 'blog')
+@section('title', (app()->getLocale() === 'vi' ? 'Blog & Ghi chú Kỹ thuật | Hồ Thành Thiện' : 'Blog & Technical Notes | Ho Thanh Thien'))
+@section('description', app()->getLocale() === 'vi'
+    ? 'Tổng hợp bài viết chuyên sâu về Lập trình Web, Spring Boot, Laravel, ReactJS và Kiến trúc RAG AI của Kỹ sư Hồ Thành Thiện.'
+    : 'Technical articles, system architecture notes, and hands-on engineering guides on Laravel, Spring Boot, React, and RAG AI by Ho Thanh Thien.')
+@section('keywords', 'Ho Thanh Thien Blog, RAG AI Tutorials, Spring Boot Architecture, Laravel Blog, React Hooks')
 
 @section('content')
-@php $isVi = app()->getLocale() === 'vi'; @endphp
+@php
+    $isVi = app()->getLocale() === 'vi';
+    $lead = ($posts->count() > 1 && $posts->currentPage() === 1) ? $posts->first() : null;
+    $gridPosts = $lead ? $posts->skip(1) : $posts;
+@endphp
 
-<section class="page-header-band">
-    <div class="container hero-animate">
-        <div class="page-header-inner">
-            <div>
-                <div class="section-kicker" style="color:var(--accent-sky);">PUBLICATIONS // {{ __('Engineering Journal') }}</div>
-                <h1>{!! __('heading_my_blog') !!}</h1>
-                <p>{{ __('Thoughts, tutorials and learnings from the dev trenches') }}</p>
-            </div>
-            <div class="mono-label">{{ $posts->total() }} {{ $isVi ? 'BÀI VIẾT' : 'ARTICLES' }}</div>
+<!-- =========================================================================
+     SECTION 1: PUBLICATIONS HERO BENTO HEADER
+========================================================================= -->
+<section class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
+  <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+    <div class="lg:col-span-8 space-y-4">
+      <nav class="flex items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
+        <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span data-i18n="breadcrumb_home">{{ $isVi ? 'Trang chủ' : 'Home' }}</span>
+        </a>
+        <span>/</span>
+        <span class="text-slate-900 dark:text-white font-semibold" data-i18n="nav_blog">{{ $isVi ? 'Blog Kỹ thuật' : 'Engineering Blog' }}</span>
+      </nav>
+
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200/80 dark:border-sky-500/30 font-mono text-[11px] font-bold tracking-widest uppercase text-sky-700 dark:text-sky-300">
+        <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+        <span data-i18n="blog_kicker">PUBLICATIONS // ENGINEERING JOURNAL</span>
+      </div>
+
+      <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.8rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
+        <span data-i18n="blog_title_1">{{ $isVi ? 'Ghi chú Kỹ thuật &' : 'Engineering Notes &' }}</span>
+        <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="blog_title_highlight">
+          {{ $isVi ? 'Kiến trúc Hệ thống' : 'Technical Deep Dives' }}
+        </span>
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed" data-i18n="blog_subtitle">
+        {{ $isVi
+            ? 'Chia sẻ kiến thức thực chiến về xây dựng hệ thống RAG AI, bảo mật RESTful API với Spring Boot, Laravel và tối ưu trạng thái React.'
+            : 'Articles, engineering architecture breakdowns, and production learnings covering RAG AI pipelines, Spring Boot APIs, Laravel, and React.' }}
+      </p>
+    </div>
+
+    <!-- Right Quick Stats & Actions -->
+    <div class="lg:col-span-4 space-y-3">
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-2xl font-extrabold text-sky-600 dark:text-sky-400">{{ $posts->total() }}</div>
+          <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_articles">
+            {{ $isVi ? 'Bài viết' : 'Articles' }}
+          </div>
         </div>
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">{{ $posts->lastPage() }}</div>
+          <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_pages">
+            {{ $isVi ? 'Trang' : 'Pages' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap sm:flex-nowrap gap-2">
+        <a href="{{ route('home') }}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span data-i18n="btn_back_home">{{ $isVi ? 'Trang chủ' : 'Overview' }}</span>
+        </a>
+        <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" download class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-semibold hover:bg-slate-800 dark:hover:bg-sky-600 transition-all shadow-sm">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span data-i18n="btn_brochure">Brochure PDF</span>
+        </a>
+      </div>
     </div>
+
+  </div>
 </section>
 
-<section class="section" style="padding-top: 2.25rem">
-    <div class="container">
-        @if($posts->count())
-            @php
-                $showLead = $posts->currentPage() === 1 && $posts->count() > 1;
-                $lead = $showLead ? $posts->first() : null;
-                $gridPosts = $showLead ? $posts->skip(1) : $posts;
-            @endphp
+@if($posts->count())
+  <!-- =========================================================================
+       SECTION 2: LEAD FEATURED ARTICLE (PAGE 1 ONLY WHEN >1 POST)
+  ========================================================================= -->
+  @if($lead)
+    @php
+        $leadWords = str_word_count(strip_tags((string) $lead->content));
+        $leadMinutes = max(1, (int) ceil($leadWords / 200));
+        $leadThumb = $lead->thumbnail_url;
+    @endphp
+    <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 transition-all group">
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12">
 
-            @if($lead)
-            <a href="{{ route('blog.show', $lead->slug) }}" class="blog-lead-banner" data-reveal>
-                <div class="blog-lead-visual">
-                    @if($lead->thumbnail_url)
-                        <img src="{{ $lead->thumbnail_url }}" alt="{{ $lead->title }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="blog-typo-plate" style="display:none;">
-                            <span class="blog-typo-kicker">{{ __('Latest Article') }}</span>
-                            <div class="blog-typo-heading">{{ $lead->title }}</div>
-                        </div>
-                    @else
-                        <div class="blog-typo-plate">
-                            <span class="blog-typo-kicker">{{ __('Latest Article') }}</span>
-                            <div class="blog-typo-heading">{{ $lead->title }}</div>
-                        </div>
-                    @endif
-                </div>
+        <!-- Cover Visual / Typographic Fallback -->
+        <a href="{{ route('blog.show', $lead->slug) }}" class="lg:col-span-6 relative min-h-[260px] lg:min-h-[340px] bg-slate-100 dark:bg-slate-950 overflow-hidden block border-b lg:border-b-0 lg:border-r border-slate-200/80 dark:border-slate-800">
+          @if($leadThumb)
+            <img src="{{ $leadThumb }}" alt="{{ $lead->title }}" loading="lazy" decoding="async"
+                 class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div style="display:none;" class="w-full h-full flex-col justify-between p-7 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
+              <div class="font-mono text-xs uppercase tracking-widest text-sky-400">FEATURED // JOURNAL</div>
+              <div class="font-display text-xl sm:text-2xl font-extrabold leading-tight line-clamp-3">{{ $lead->title }}</div>
+              <div class="font-mono text-xs text-slate-400">hothanhthien.io.vn</div>
+            </div>
+          @else
+            <div class="w-full h-full flex flex-col justify-between p-7 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
+              <div class="font-mono text-xs uppercase tracking-widest text-sky-400">FEATURED // JOURNAL</div>
+              <div class="font-display text-xl sm:text-2xl font-extrabold leading-tight line-clamp-3">{{ $lead->title }}</div>
+              <div class="font-mono text-xs text-slate-400">hothanhthien.io.vn</div>
+            </div>
+          @endif
+        </a>
 
-                <div class="blog-lead-info">
-                    <div class="blog-meta">
-                        @if($lead->published_at)
-                            <span>{{ $lead->published_at->format('M d, Y') }}</span>
-                        @endif
-                        <span>·</span>
-                        <span>{{ max(1, ceil(str_word_count(strip_tags($lead->content)) / 200)) }} {{ __('min read') }}</span>
-                    </div>
-                    <h2 class="blog-title" style="font-size: clamp(1.35rem, 2.5vw, 1.75rem); margin-bottom:0.75rem;">{{ $lead->title }}</h2>
-                    @if($lead->excerpt)
-                        <p class="blog-excerpt" style="margin-bottom:0.5rem;">{{ Str::limit($lead->excerpt, 185) }}</p>
-                    @endif
-                    <span class="blog-read-more">
-                        <span>{{ __('Read Article') }}</span>
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </span>
-                </div>
+        <!-- Content -->
+        <div class="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
+          <div class="space-y-4">
+            <div class="flex flex-wrap items-center gap-3 font-mono text-xs">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold uppercase tracking-wider text-[11px]">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span data-i18n="featured_badge">{{ $isVi ? 'Nổi bật' : 'Featured' }}</span>
+              </span>
+              <span class="text-slate-500 dark:text-slate-400 inline-flex items-center gap-1">
+                <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                {{ $lead->published_at ? $lead->published_at->format('M d, Y') : '' }}
+              </span>
+              <span class="text-slate-500 dark:text-slate-400 inline-flex items-center gap-1">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                {{ $leadMinutes }} <span data-i18n="min_read">{{ $isVi ? 'phút đọc' : 'min read' }}</span>
+              </span>
+            </div>
+
+            <a href="{{ route('blog.show', $lead->slug) }}" class="block group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+              <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-snug">
+                {{ $lead->title }}
+              </h2>
             </a>
+
+            @if($lead->excerpt)
+              <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
+                {{ $lead->excerpt }}
+              </p>
             @endif
+          </div>
 
-            <div class="blog-grid" data-stagger>
-                @foreach($gridPosts as $post)
-                <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
-                    <div class="blog-image">
-                        @if($post->thumbnail_url)
-                            <img src="{{ $post->thumbnail_url }}" alt="{{ $post->title }}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div class="blog-typo-plate" style="display:none; min-height:100%;">
-                                <span class="blog-typo-kicker">{{ __('Engineering Journal') }}</span>
-                                <div class="blog-typo-heading" style="font-size:1.05rem;">{{ Str::limit($post->title, 65) }}</div>
-                            </div>
-                        @else
-                            <div class="blog-typo-plate" style="min-height:100%;">
-                                <span class="blog-typo-kicker">{{ __('Engineering Journal') }}</span>
-                                <div class="blog-typo-heading" style="font-size:1.05rem;">{{ Str::limit($post->title, 65) }}</div>
-                            </div>
-                        @endif
-                    </div>
+          <div>
+            <a href="{{ route('blog.show', $lead->slug) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 dark:hover:bg-sky-400 transition-all shadow-sm">
+              <span data-i18n="read_article">{{ $isVi ? 'Đọc bài viết' : 'Read Article' }}</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
 
-                    <div class="blog-body">
-                        <div class="blog-meta">
-                            @if($post->published_at)
-                                <span>{{ $post->published_at->format('M d, Y') }}</span>
-                            @endif
-                            <span>·</span>
-                            <span>{{ max(1, ceil(str_word_count(strip_tags($post->content)) / 200)) }} {{ __('min read') }}</span>
-                        </div>
-                        <h3 class="blog-title">{{ $post->title }}</h3>
-                        @if($post->excerpt)
-                            <p class="blog-excerpt">{{ Str::limit($post->excerpt, 130) }}</p>
-                        @endif
-                        <span class="blog-read-more">
-                            <span>{{ __('Read more') }}</span>
-                            <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                </a>
-                @endforeach
+      </div>
+    </article>
+  @endif
+
+  <!-- =========================================================================
+       SECTION 3: ARTICLES BENTO GRID
+  ========================================================================= -->
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach($gridPosts as $idx => $post)
+      @php
+          $words = str_word_count(strip_tags((string) $post->content));
+          $minutes = max(1, (int) ceil($words / 200));
+          $thumbUrl = $post->thumbnail_url;
+      @endphp
+      <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 transition-all flex flex-col group">
+        <a href="{{ route('blog.show', $post->slug) }}" class="relative z-10 aspect-[16/9] bg-slate-100 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 overflow-hidden block">
+          @if($thumbUrl)
+            <img src="{{ $thumbUrl }}" alt="{{ $post->title }}" loading="lazy" decoding="async"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <div style="display:none;" class="w-full h-full flex-col justify-between p-5 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+              <span class="font-mono text-[10px] uppercase tracking-widest text-sky-400">ARTICLE // NOTE</span>
+              <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->title }}</span>
+              <span class="font-mono text-[10px] text-slate-400">hothanhthien.io.vn</span>
+            </div>
+          @else
+            <div class="w-full h-full flex flex-col justify-between p-5 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
+              <span class="font-mono text-[10px] uppercase tracking-widest text-sky-400">ARTICLE // NOTE</span>
+              <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->title }}</span>
+              <span class="font-mono text-[10px] text-slate-400">hothanhthien.io.vn</span>
+            </div>
+          @endif
+        </a>
+
+        <div class="relative z-10 p-6 flex-1 flex flex-col justify-between gap-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2 font-mono text-[11px] text-slate-500 dark:text-slate-400">
+              <span class="inline-flex items-center gap-1">
+                <i data-lucide="calendar" class="w-3 h-3 text-sky-500"></i>
+                {{ $post->published_at ? $post->published_at->format('M d, Y') : '' }}
+              </span>
+              <span class="inline-flex items-center gap-1">
+                <i data-lucide="clock" class="w-3 h-3 text-indigo-500"></i>
+                {{ $minutes }} <span data-i18n="min_read">{{ $isVi ? 'phút đọc' : 'min read' }}</span>
+              </span>
             </div>
 
-            @if($posts->hasPages())
-            <nav class="pagination-wrap" aria-label="Pagination">
-                @if($posts->onFirstPage())
-                    <span class="page-link" aria-disabled="true" style="opacity:0.45; pointer-events:none;">« {{ __('Prev') }}</span>
-                @else
-                    <a href="{{ $posts->previousPageUrl() }}" class="page-link" rel="prev">« {{ __('Prev') }}</a>
-                @endif
+            <a href="{{ route('blog.show', $post->slug) }}" class="block group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+              <h3 class="font-display text-lg font-extrabold text-slate-900 dark:text-white leading-snug line-clamp-2">
+                {{ $post->title }}
+              </h3>
+            </a>
 
-                @foreach($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
-                    <a href="{{ $url }}" class="page-link {{ $posts->currentPage() == $page ? 'active' : '' }}" {{ $posts->currentPage() == $page ? 'aria-current="page"' : '' }}>{{ $page }}</a>
-                @endforeach
-
-                @if($posts->hasMorePages())
-                    <a href="{{ $posts->nextPageUrl() }}" class="page-link" rel="next">{{ __('Next') }} »</a>
-                @else
-                    <span class="page-link" aria-disabled="true" style="opacity:0.45; pointer-events:none;">{{ __('Next') }} »</span>
-                @endif
-            </nav>
+            @if($post->excerpt)
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
+                {{ $post->excerpt }}
+              </p>
             @endif
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+            <a href="{{ route('blog.show', $post->slug) }}" class="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-sky-600 dark:text-sky-400 group-hover:gap-2.5 transition-all">
+              <span data-i18n="read_more">{{ $isVi ? 'Đọc tiếp' : 'Read More' }}</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+      </article>
+    @endforeach
+  </section>
+
+  <!-- Pagination -->
+  @if($posts->hasPages())
+    <div class="flex flex-wrap items-center justify-center gap-2 pt-4">
+      @if($posts->onFirstPage())
+        <span class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-400 cursor-not-allowed">&laquo;</span>
+      @else
+        <a href="{{ $posts->previousPageUrl() }}" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">&laquo;</a>
+      @endif
+
+      @foreach($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
+        @if($page == $posts->currentPage())
+          <span class="px-3.5 py-2 rounded-xl bg-sky-500 border border-sky-500 text-xs font-mono font-bold text-white shadow-sm">{{ $page }}</span>
         @else
-            <div class="empty-state">
-                <i class="fas fa-pen-nib" aria-hidden="true"></i>
-                <h3>{{ __('No articles yet') }}</h3>
-                <p>{{ __('Stay tuned for upcoming posts!') }}</p>
-            </div>
+          <a href="{{ $url }}" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">{{ $page }}</a>
         @endif
+      @endforeach
+
+      @if($posts->hasMorePages())
+        <a href="{{ $posts->nextPageUrl() }}" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">&raquo;</a>
+      @else
+        <span class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-400 cursor-not-allowed">&raquo;</span>
+      @endif
     </div>
-</section>
+  @endif
+
+@else
+  <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-14 text-center space-y-4">
+    <div class="relative z-10 flex flex-col items-center space-y-3">
+      <div class="w-14 h-14 rounded-2xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400">
+        <i data-lucide="newspaper" class="w-7 h-7"></i>
+      </div>
+      <h2 class="font-display text-xl font-extrabold text-slate-900 dark:text-white" data-i18n="empty_title">
+        {{ $isVi ? 'Chưa có bài viết nào' : 'No articles published yet' }}
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-400 max-w-md" data-i18n="empty_desc">
+        {{ $isVi ? 'Vui lòng quay lại sau để đọc các bài viết và ghi chú kỹ thuật mới nhất.' : 'Check back soon for new engineering notes, tutorials, and system write-ups.' }}
+      </p>
+    </div>
+  </div>
+@endif
+@endsection
+
+@section('scripts')
+<script>
+  window.PAGE_I18N = {
+    en: {
+      blog_kicker: 'PUBLICATIONS // ENGINEERING JOURNAL',
+      blog_title_1: 'Engineering Notes &',
+      blog_title_highlight: 'Technical Deep Dives',
+      blog_subtitle: 'Articles, engineering architecture breakdowns, and production learnings covering RAG AI pipelines, Spring Boot APIs, Laravel, and React.',
+      stat_articles: 'Articles',
+      stat_pages: 'Pages',
+      featured_badge: 'Featured',
+      read_article: 'Read Article',
+      read_more: 'Read More',
+      min_read: 'min read',
+      empty_title: 'No articles published yet',
+      empty_desc: 'Check back soon for new engineering notes, tutorials, and system write-ups.'
+    },
+    vi: {
+      blog_kicker: 'BÀI VIẾT // TẠP CHÍ KỸ THUẬT',
+      blog_title_1: 'Ghi chú Kỹ thuật &',
+      blog_title_highlight: 'Kiến trúc Hệ thống',
+      blog_subtitle: 'Chia sẻ kiến thức thực chiến về xây dựng hệ thống RAG AI, bảo mật RESTful API với Spring Boot, Laravel và tối ưu trạng thái React.',
+      stat_articles: 'Bài viết',
+      stat_pages: 'Trang',
+      featured_badge: 'Nổi bật',
+      read_article: 'Đọc bài viết',
+      read_more: 'Đọc tiếp',
+      min_read: 'phút đọc',
+      empty_title: 'Chưa có bài viết nào',
+      empty_desc: 'Vui lòng quay lại sau để đọc các bài viết và ghi chú kỹ thuật mới nhất.'
+    }
+  };
+</script>
 @endsection

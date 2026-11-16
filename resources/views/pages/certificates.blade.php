@@ -1,678 +1,576 @@
-@extends('layouts.app')
+@extends('layouts.pearl')
 
-@section('title', __('Brochures & Certificates') . ' | ' . __('Hồ Thành Thiện'))
-@section('description', app()->getLocale() == 'vi' ? 'Xem và tải xuống Brochure hồ sơ năng lực, Bằng Cử nhân loại Xuất sắc, Giấy khen giải thưởng và các chứng chỉ chuyên môn của Hồ Thành Thiện.' : 'Explore and download official portfolio brochures, University of Transport HCMC degree credentials, awards, and verified certificates of Ho Thanh Thien.')
-@section('keywords', app()->getLocale() == 'vi' ? 'Brochure Hồ Thành Thiện, Bằng Cử nhân CNTT, Giấy khen Thiết kế Logo, Hồ sơ năng lực Portfolio PDF' : 'Ho Thanh Thien Brochure, Official Degree UTH, Academic Certificates, Portfolio PDF Download')
+@section('active_nav', 'credentials')
+@section('title', (app()->getLocale() === 'vi' ? 'Bằng cấp, Giấy khen & Brochure | Hồ Thành Thiện' : 'Credentials, Certificates & Brochure | Ho Thanh Thien'))
+@section('description', app()->getLocale() === 'vi'
+    ? 'Xem và tải về Bằng Cử nhân CNTT, Giải thưởng Thiết kế Logo và Hồ sơ Năng lực (Brochure PDF) chính thức của Kỹ sư Hồ Thành Thiện.'
+    : 'View and download official academic degree credentials, competition awards, and the Portfolio Brochure PDF of Software Engineer Ho Thanh Thien.')
 
 @section('styles')
-<style>
-    .cert-filter-bar {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 1.5rem;
-        overflow-x: auto;
-        padding-bottom: 0.4rem;
-        scrollbar-width: thin;
-        scrollbar-color: var(--border-strong) transparent;
-        -webkit-overflow-scrolling: touch;
-    }
-    .cert-filter-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        padding: 0.45rem 0.9rem;
-        border-radius: var(--radius-sm);
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-decoration: none;
-        white-space: nowrap;
-        flex-shrink: 0;
-        transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease, background var(--duration-fast) ease;
-    }
-    .cert-filter-btn i {
-        color: var(--text-muted);
-        font-size: 0.8rem;
-    }
-    .cert-filter-btn:hover {
-        border-color: var(--accent);
-        color: var(--text-primary);
-    }
-    .cert-filter-btn.active {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #070B14;
-        font-weight: 700;
-        box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
-    }
-    .cert-filter-btn.active i {
-        color: #070B14;
-    }
-    .cert-count-badge {
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        padding: 0.08rem 0.42rem;
-        border-radius: 3px;
-        background: var(--bg-primary);
-        color: var(--text-muted);
-    }
-    .cert-filter-btn.active .cert-count-badge {
-        background: rgba(7, 11, 20, 0.2);
-        color: #070B14;
-        font-weight: 700;
-    }
-
-    .cert-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1.4rem;
-    }
-
-    .cert-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        transition: border-color var(--duration-fast) ease, box-shadow var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
-    }
-    .cert-card:hover {
-        border-color: var(--text-primary);
-        box-shadow: var(--shadow-md);
-        transform: translateY(-2px);
-    }
-
-    .cert-preview-wrap {
-        position: relative;
-        height: 190px;
-        background: var(--bg-primary);
-        border-bottom: 1px solid var(--border);
-        padding: 1.1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow: hidden;
-    }
-    .cert-preview-img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-    .cert-preview-badges {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-    }
-    .cert-cat-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.24rem 0.58rem;
-        border-radius: var(--radius-sm);
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-    .cert-featured-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        padding: 0.22rem 0.52rem;
-        border-radius: var(--radius-sm);
-        background: var(--surface-ink);
-        color: #FFFFFF;
-        font-family: var(--font-mono);
-        font-size: 0.7rem;
-        font-weight: 600;
-    }
-
-    .pdf-spec-lines {
-        position: relative;
-        z-index: 1;
-        margin-top: auto;
-        padding-top: 0.9rem;
-        border-top: 1px dashed var(--border-strong);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        color: var(--text-muted);
-    }
-
-    .cert-body {
-        padding: 1.3rem 1.35rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-    .cert-meta-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem 0.9rem;
-        font-family: var(--font-mono);
-        font-size: 0.74rem;
-        color: var(--accent);
-        margin-bottom: 0.5rem;
-    }
-    .cert-title {
-        font-family: var(--font-display);
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        line-height: 1.35;
-        margin-bottom: 0.55rem;
-    }
-    .cert-desc {
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-        line-height: 1.6;
-        margin-bottom: 1.15rem;
-        flex: 1;
-    }
-
-    .cert-extras {
-        border-top: 1px dashed var(--border);
-        padding-top: 0.75rem;
-        margin-bottom: 1rem;
-    }
-    .cert-extras-title {
-        font-family: var(--font-mono);
-        font-size: 0.74rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        margin-bottom: 0.45rem;
-    }
-    .cert-extras-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-    .cert-extra-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        padding: 0.35rem 0.55rem;
-        background: var(--bg-primary);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        font-size: 0.8rem;
-    }
-    .cert-extra-name {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        min-width: 0;
-        color: var(--text-primary);
-    }
-    .cert-extra-name span.truncate {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .cert-extra-actions {
-        display: inline-flex;
-        gap: 0.25rem;
-        flex-shrink: 0;
-    }
-    .cert-mini-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 26px;
-        height: 26px;
-        border-radius: 3px;
-        border: 1px solid var(--border);
-        background: var(--bg-card);
-        color: var(--text-secondary);
-        cursor: pointer;
-        text-decoration: none;
-    }
-    .cert-mini-btn:hover {
-        border-color: var(--text-primary);
-        color: var(--text-primary);
-    }
-
-    .cert-footer {
-        padding-top: 0.9rem;
-        border-top: 1px solid var(--border);
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-    .cert-footer-meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-family: var(--font-mono);
-        font-size: 0.74rem;
-        color: var(--text-muted);
-    }
-    .cert-action-btns {
-        display: flex;
-        gap: 0.5rem;
-    }
-    .cert-action-btns .btn {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .cert-empty {
-        text-align: center;
-        padding: 4rem 2rem;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-    }
-    .cert-empty i.empty-icon {
-        font-size: 2.25rem;
-        color: var(--text-muted);
-        margin-bottom: 0.75rem;
-    }
-
-    /* Document Viewer Modal */
-    .cert-modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 2000;
-        background: rgba(17, 20, 27, 0.65);
-        backdrop-filter: blur(5px);
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        opacity: 0;
-        transition: opacity 0.22s ease;
-    }
-    .cert-modal.active { display: flex; opacity: 1; }
-    .cert-modal-box {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        width: 100%;
-        max-width: 980px;
-        height: 88vh;
-        max-height: 840px;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        box-shadow: var(--shadow-lg);
-    }
-    .cert-modal-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 0.85rem 1.25rem;
-        border-bottom: 1px solid var(--border);
-        background: var(--bg-card);
-    }
-    .cert-modal-title {
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
-        font-family: var(--font-display);
-        font-size: 0.98rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        min-width: 0;
-    }
-    .cert-modal-title span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .cert-modal-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        flex-shrink: 0;
-    }
-    .btn-modal-close {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 34px;
-        height: 34px;
-        border-radius: var(--radius-sm);
-        background: var(--bg-primary);
-        border: 1px solid var(--border);
-        color: var(--text-primary);
-        cursor: pointer;
-    }
-    .cert-modal-body {
-        flex: 1;
-        background: var(--bg-secondary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: auto;
-        padding: 0.75rem;
-    }
-    .cert-modal-body iframe { width: 100%; height: 100%; border: none; border-radius: var(--radius-sm); background: #FFFFFF; }
-    .cert-modal-body img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--radius-sm); }
-
-    @media (max-width: 1024px) {
-        .cert-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 640px) {
-        .cert-grid { grid-template-columns: 1fr; }
-        .cert-action-btns { flex-direction: column; }
-        .cert-modal-actions .btn span { display: none; }
-    }
-</style>
+  .cert-modal-backdrop {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  .cert-modal-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
 @endsection
 
 @section('content')
-@php $isVi = app()->getLocale() === 'vi'; @endphp
+@php
+    $isVi = app()->getLocale() === 'vi';
+    $activeCategory = request('category', 'all');
 
-<section class="page-header-band">
-    <div class="container hero-animate">
-        <div class="section-kicker" style="color:var(--accent-sky);">VERIFIED ARCHIVE // CREDENTIALS</div>
-        <h1>{!! __('heading_credentials') !!}</h1>
-        <p>{{ __('credentials_subtitle') }}</p>
+    $totalCount = \App\Models\Certificate::count();
+    $brochureCount = \App\Models\Certificate::where('category', 'brochure')->count();
+    $degreeCount = \App\Models\Certificate::where('category', 'degree')->count();
+    $awardCount = \App\Models\Certificate::where('category', 'award')->count();
+    $certCount = \App\Models\Certificate::where('category', 'certificate')->count();
 
-        <div class="cert-filter-bar">
-            <a href="{{ route('certificates') }}" class="cert-filter-btn {{ !request('category') ? 'active' : '' }}">
-                <i class="fas fa-th-large" aria-hidden="true"></i>
-                <span>{{ __('All Documents') }}</span>
-                <span class="cert-count-badge">{{ \App\Models\Certificate::count() }}</span>
-            </a>
-            <a href="{{ route('certificates', ['category' => 'brochure']) }}" class="cert-filter-btn {{ request('category') == 'brochure' ? 'active' : '' }}">
-                <i class="fas fa-book-open" aria-hidden="true"></i>
-                <span>{{ __('Portfolio Brochure') }}</span>
-                <span class="cert-count-badge">{{ \App\Models\Certificate::where('category', 'brochure')->count() }}</span>
-            </a>
-            <a href="{{ route('certificates', ['category' => 'degree']) }}" class="cert-filter-btn {{ request('category') == 'degree' ? 'active' : '' }}">
-                <i class="fas fa-graduation-cap" aria-hidden="true"></i>
-                <span>{{ __('Official Degree') }}</span>
-                <span class="cert-count-badge">{{ \App\Models\Certificate::where('category', 'degree')->count() }}</span>
-            </a>
-            <a href="{{ route('certificates', ['category' => 'award']) }}" class="cert-filter-btn {{ request('category') == 'award' ? 'active' : '' }}">
-                <i class="fas fa-trophy" aria-hidden="true"></i>
-                <span>{{ __('Award & Honor') }}</span>
-                <span class="cert-count-badge">{{ \App\Models\Certificate::where('category', 'award')->count() }}</span>
-            </a>
-            <a href="{{ route('certificates', ['category' => 'certificate']) }}" class="cert-filter-btn {{ request('category') == 'certificate' ? 'active' : '' }}">
-                <i class="fas fa-certificate" aria-hidden="true"></i>
-                <span>{{ __('Certificate') }}</span>
-                <span class="cert-count-badge">{{ \App\Models\Certificate::where('category', 'certificate')->count() }}</span>
-            </a>
+    $catFilters = [
+        ['key' => 'all', 'icon' => 'layers', 'count' => $totalCount, 'en' => 'All Documents', 'vi' => 'Tất cả Tài liệu', 'url' => route('certificates')],
+        ['key' => 'brochure', 'icon' => 'book-open', 'count' => $brochureCount, 'en' => 'Brochure / CV', 'vi' => 'Brochure / Hồ sơ', 'url' => route('certificates', ['category' => 'brochure'])],
+        ['key' => 'degree', 'icon' => 'graduation-cap', 'count' => $degreeCount, 'en' => 'Official Degree', 'vi' => 'Bằng cấp chính quy', 'url' => route('certificates', ['category' => 'degree'])],
+        ['key' => 'award', 'icon' => 'trophy', 'count' => $awardCount, 'en' => 'Honors & Awards', 'vi' => 'Giải thưởng', 'url' => route('certificates', ['category' => 'award'])],
+        ['key' => 'certificate', 'icon' => 'award', 'count' => $certCount, 'en' => 'Certificates', 'vi' => 'Chứng chỉ', 'url' => route('certificates', ['category' => 'certificate'])],
+    ];
+
+    $lucideForCategory = static function (string $cat): string {
+        return match ($cat) {
+            'brochure' => 'book-open',
+            'degree' => 'graduation-cap',
+            'award' => 'trophy',
+            'certificate' => 'award',
+            default => 'file-text',
+        };
+    };
+
+    $labelEnForCategory = static function (string $cat): string {
+        return match ($cat) {
+            'brochure' => 'Brochure / Portfolio',
+            'degree' => 'Degree / Diploma',
+            'award' => 'Award / Honor',
+            'certificate' => 'Certificate',
+            default => 'Document',
+        };
+    };
+
+    $labelViForCategory = static function (string $cat): string {
+        return match ($cat) {
+            'brochure' => 'Brochure / Hồ sơ',
+            'degree' => 'Bằng cấp chính quy',
+            'award' => 'Giải thưởng',
+            'certificate' => 'Giấy khen / Chứng chỉ',
+            default => 'Tài liệu',
+        };
+    };
+@endphp
+
+<!-- =========================================================================
+     SECTION 1: CREDENTIALS HERO BENTO HEADER
+========================================================================= -->
+<section class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
+  <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+    <div class="lg:col-span-8 space-y-4">
+      <nav class="flex items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
+        <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span data-i18n="breadcrumb_home">{{ $isVi ? 'Trang chủ' : 'Home' }}</span>
+        </a>
+        <span>/</span>
+        <span class="text-slate-900 dark:text-white font-semibold" data-i18n="nav_credentials">{{ $isVi ? 'Bằng cấp & PDF' : 'Credentials' }}</span>
+      </nav>
+
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/15 border border-amber-200/80 dark:border-amber-500/30 font-mono text-[11px] font-bold tracking-widest uppercase text-amber-700 dark:text-amber-300">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+        <span data-i18n="cred_kicker">CREDENTIALS // VERIFIED ARCHIVE</span>
+      </div>
+
+      <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
+        <span data-i18n="cred_title_1">{{ $isVi ? 'Bằng cấp, Giải thưởng &' : 'Degrees, Honors &' }}</span>
+        <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="cred_title_highlight">
+          {{ $isVi ? 'Hồ sơ Năng lực PDF' : 'Portfolio Brochure' }}
+        </span>
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed" data-i18n="cred_subtitle">
+        {{ $isVi
+            ? 'Lưu trữ minh chứng học thuật chính quy tại ĐH GTVT TP.HCM (UTH), giải thưởng thiết kế sáng tạo và bản Hồ sơ Năng lực kỹ thuật dạng PDF sẵn sàng tải về.'
+            : 'Verified academic degrees from UTH, UI/UX design honors, and downloadable Engineering Brochure PDF documents for recruiters and engineering teams.' }}
+      </p>
+    </div>
+
+    <!-- Right Stats & Actions -->
+    <div class="lg:col-span-4 space-y-3">
+      <div class="grid grid-cols-3 gap-2.5">
+        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-2xl font-extrabold text-sky-600 dark:text-sky-400">{{ $totalCount }}</div>
+          <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_total_docs">{{ $isVi ? 'Tài liệu' : 'Records' }}</div>
         </div>
+        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">4.0</div>
+          <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">Latest GPA</div>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-2xl font-extrabold text-amber-600 dark:text-amber-400">2nd</div>
+          <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">UTH Award</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap sm:flex-nowrap gap-2">
+        <a href="{{ route('home') }}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span data-i18n="btn_back_home">{{ $isVi ? 'Trang chủ' : 'Overview' }}</span>
+        </a>
+        <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" download class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-semibold hover:bg-slate-800 dark:hover:bg-sky-600 transition-all shadow-sm">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span data-i18n="btn_brochure">Brochure PDF</span>
+        </a>
+      </div>
     </div>
+
+  </div>
 </section>
 
-<section class="section" style="padding-top:2.25rem">
-    <div class="container">
-        @if($certificates->isEmpty())
-            <div class="cert-empty">
-                <i class="fas fa-folder-open empty-icon" aria-hidden="true"></i>
-                <h3>{{ __('No documents found') }}</h3>
-                <p style="margin:0.5rem 0 1.25rem;">{{ $isVi ? 'Hiện tại chưa có tài liệu nào trong danh mục này.' : 'No documents are currently available in this category.' }}</p>
-                <a href="{{ route('certificates') }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-arrow-left" aria-hidden="true"></i> {{ __('All Documents') }}
-                </a>
-            </div>
-        @else
-            <div class="cert-grid" data-stagger>
-                @foreach($certificates as $cert)
-                    <article class="cert-card">
-                        <div class="cert-preview-wrap">
-                            @if($cert->thumbnail && !$cert->thumbnail_is_pdf)
-                                <img src="{{ $cert->thumbnail_url }}" alt="{{ $cert->title }}" class="cert-preview-img" loading="lazy">
-                            @elseif(!$cert->is_pdf)
-                                <img src="{{ $cert->file_url }}" alt="{{ $cert->title }}" class="cert-preview-img" loading="lazy">
-                            @endif
-
-                            <div class="cert-preview-badges">
-                                <span class="cert-cat-pill">
-                                    <i class="{{ $cert->category_icon }}" aria-hidden="true"></i>
-                                    <span>{{ $cert->category_label }}</span>
-                                </span>
-                                @if($cert->featured)
-                                    <span class="cert-featured-pill">{{ __('Featured') }}</span>
-                                @endif
-                            </div>
-
-                            @php
-                                $isBrochure = ($cert->category === 'brochure');
-                            @endphp
-                            @if($isBrochure)
-                                <div class="pdf-spec-lines">
-                                    <span><i class="fas fa-file-pdf" style="color:var(--accent);" aria-hidden="true"></i> PDF &bull; 402 KB</span>
-                                    <span style="color:#34D399;"><i class="fas fa-check-circle"></i> {{ $isVi ? 'Đã số hóa' : 'Verified' }}</span>
-                                </div>
-                            @else
-                                <div class="pdf-spec-lines">
-                                    <span><i class="fas fa-award" style="color:var(--accent);" aria-hidden="true"></i> {{ $isVi ? 'Bản chính quy UTH' : 'UTH Official Record' }}</span>
-                                    <span style="color:#FBBF24;"><i class="fas fa-shield-alt"></i> {{ $isVi ? 'Scan theo yêu cầu' : 'Scan on request' }}</span>
-                                </div>
-                            @endif
-                        </div>
-
-                        <div class="cert-body">
-                            <div class="cert-meta-row">
-                                @if($cert->issuer)
-                                    <span>{{ $cert->issuer }}</span>
-                                @endif
-                                @if($cert->issue_date)
-                                    <span>· {{ $cert->issue_date }}</span>
-                                @endif
-                            </div>
-
-                            <h2 class="cert-title">{{ $cert->title }}</h2>
-
-                            <p class="cert-desc">
-                                {{ $cert->description ?: ($isVi ? 'Tài liệu xác thực chính thức và hồ sơ năng lực cá nhân.' : 'Verified credential and portfolio documentation.') }}
-                            </p>
-
-                            @if(count($cert->extra_files_with_urls) > 0)
-                                <div class="cert-extras">
-                                    <div class="cert-extras-title">
-                                        <i class="fas fa-paperclip" aria-hidden="true"></i>
-                                        <span>{{ $isVi ? 'Tệp đính kèm' : 'Attachments' }} ({{ count($cert->extra_files_with_urls) }})</span>
-                                    </div>
-                                    <div class="cert-extras-list">
-                                        @foreach($cert->extra_files_with_urls as $extra)
-                                            <div class="cert-extra-item">
-                                                <div class="cert-extra-name">
-                                                    <i class="fas {{ $extra['is_pdf'] ? 'fa-file-pdf' : 'fa-file-image' }}" style="color:{{ $extra['is_pdf'] ? '#B91C1C' : '#1D4ED8' }}" aria-hidden="true"></i>
-                                                    <span class="truncate" title="{{ $extra['name'] }}">{{ $extra['name'] }}</span>
-                                                </div>
-                                                <div class="cert-extra-actions">
-                                                    <button type="button" class="cert-mini-btn" onclick="openCertModal('{{ $extra['url'] }}', '{{ addslashes($extra['name']) }}', '{{ $extra['type'] }}')" title="{{ __('View Document') }}">
-                                                        <i class="fas fa-eye" aria-hidden="true"></i>
-                                                    </button>
-                                                    <a href="{{ $extra['url'] }}" download class="cert-mini-btn" title="{{ __('Download') }}">
-                                                        <i class="fas fa-download" aria-hidden="true"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
-
-                            <div class="cert-footer">
-                                <div class="cert-footer-meta">
-                                    @if($isBrochure)
-                                        <span>PDF / 402.15 KB</span>
-                                        <span style="color:#34D399;">{{ $isVi ? 'Bản số hóa chính thức' : 'Official Digital Copy' }}</span>
-                                    @else
-                                        <span>{{ $isVi ? 'Bản cứng lưu trữ' : 'Physical Archive' }}</span>
-                                        <span style="color:#FBBF24;">{{ $isVi ? 'Cập nhật theo yêu cầu' : 'Available On Request' }}</span>
-                                    @endif
-                                </div>
-
-                                <div class="cert-action-btns">
-                                    @if($isBrochure)
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="openCertModal('{{ $cert->file_url }}', '{{ addslashes($cert->title) }}', '{{ $cert->file_type }}')">
-                                            <i class="fas fa-eye" aria-hidden="true"></i>
-                                            <span>{{ $isVi ? 'Xem PDF' : 'View PDF' }}</span>
-                                        </button>
-                                        <a href="{{ $cert->file_url }}" download class="btn btn-outline btn-sm">
-                                            <i class="fas fa-download" aria-hidden="true"></i>
-                                            <span>{{ __('Download') }}</span>
-                                        </a>
-                                    @else
-                                        <button type="button" class="btn btn-navy btn-sm" onclick="openCertDetailModal('{{ addslashes($cert->title) }}', '{{ addslashes($cert->issuer ?? 'UTH') }}', '{{ addslashes($cert->description) }}')">
-                                            <i class="fas fa-info-circle" aria-hidden="true"></i>
-                                            <span>{{ $isVi ? 'Xem hồ sơ' : 'View Details' }}</span>
-                                        </button>
-                                        <a href="{{ route('contact') }}?subject={{ urlencode($cert->title) }}" class="btn btn-outline btn-sm">
-                                            <i class="fas fa-envelope" aria-hidden="true"></i>
-                                            <span>{{ $isVi ? 'Yêu cầu scan' : 'Request Scan' }}</span>
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
-        @endif
-    </div>
+<!-- =========================================================================
+     SECTION 2: CATEGORY FILTER PILLS
+========================================================================= -->
+<section class="flex flex-wrap items-center gap-2.5">
+  @foreach($catFilters as $f)
+    @if($f['count'] > 0 || $f['key'] === 'all')
+      @php $isActive = $activeCategory === $f['key']; @endphp
+      <a href="{{ $f['url'] }}"
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-mono font-bold border transition-all {{ $isActive ? 'bg-sky-500 border-sky-500 text-white shadow-lg shadow-sky-500/20' : 'bg-white/95 dark:bg-slate-900/95 border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-sky-400' }}">
+        <i data-lucide="{{ $f['icon'] }}" class="w-3.5 h-3.5"></i>
+        <span data-en="{{ $f['en'] }}" data-vi="{{ $f['vi'] }}">{{ $isVi ? $f['vi'] : $f['en'] }}</span>
+        <span class="px-1.5 py-0.5 rounded-md text-[10px] {{ $isActive ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300' }}">
+          {{ $f['count'] }}
+        </span>
+      </a>
+    @endif
+  @endforeach
 </section>
 
-<!-- Document Viewer Modal -->
-<div class="cert-modal" id="certModal" role="dialog" aria-modal="true" aria-labelledby="certModalTitleText" onclick="closeCertModal(event)">
-    <div class="cert-modal-box" onclick="event.stopPropagation()">
-        <div class="cert-modal-header">
-            <div class="cert-modal-title" id="certModalTitle">
-                <i class="fas fa-file-pdf" style="color:var(--accent)" aria-hidden="true"></i>
-                <span id="certModalTitleText">{{ $isVi ? 'Tài liệu' : 'Document' }}</span>
+<!-- =========================================================================
+     SECTION 3: CREDENTIAL BENTO GRID
+========================================================================= -->
+@if($certificates->count())
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach($certificates as $cert)
+      @php
+          $isBrochure = $cert->category === 'brochure';
+          $catIcon = $lucideForCategory($cert->category);
+          $catEn = $labelEnForCategory($cert->category);
+          $catVi = $labelViForCategory($cert->category);
+
+          $viewPayload = [
+              'mode' => $isBrochure ? 'file' : 'detail',
+              'url' => $cert->file_url,
+              'type' => strtolower((string) $cert->file_type) === 'pdf' || $cert->is_pdf ? 'pdf' : 'image',
+              'title' => $cert->title,
+              'issuer' => $cert->issuer ?: 'University of Transport Ho Chi Minh City (UTH)',
+              'description' => $cert->description ?: '',
+          ];
+      @endphp
+      <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 transition-all flex flex-col">
+
+        <!-- Preview Specimen Window -->
+        <button type="button"
+                onclick="openCertModalFromEl(this)"
+                data-cert-json="{{ json_encode($viewPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
+                class="relative z-10 aspect-[16/10] w-full text-left bg-slate-100 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 overflow-hidden group cursor-pointer focus:outline-none">
+          @if($cert->thumbnail && !$cert->thumbnail_is_pdf)
+            <img src="{{ $cert->thumbnail_url }}" alt="{{ $cert->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+              <span class="px-3 py-1 rounded-full bg-white/90 text-slate-900 font-mono text-[11px] font-bold inline-flex items-center gap-1.5">
+                <i data-lucide="eye" class="w-3.5 h-3.5 text-sky-600"></i>
+                <span data-i18n="btn_inspect">{{ $isVi ? 'Xem chi tiết' : 'Inspect' }}</span>
+              </span>
             </div>
-            <div class="cert-modal-actions">
-                <a id="certModalExternalBtn" href="#" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
-                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                    <span>{{ $isVi ? 'Mở tab mới' : 'New Tab' }}</span>
-                </a>
-                <a id="certModalDownloadBtn" href="#" download class="btn btn-primary btn-sm">
-                    <i class="fas fa-download" aria-hidden="true"></i>
-                    <span>{{ __('Download') }}</span>
-                </a>
-                <button type="button" id="certModalCloseBtn" class="btn-modal-close" onclick="closeCertModalDirect()" aria-label="{{ $isVi ? 'Đóng' : 'Close' }}">
-                    <i class="fas fa-xmark" aria-hidden="true"></i>
+          @elseif($isBrochure)
+            <div class="w-full h-full bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950 p-6 flex flex-col justify-between text-white relative">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full bg-sky-500/20 border border-sky-400/30 font-mono text-[10px] font-bold tracking-widest uppercase text-sky-300">CV &amp; BROCHURE</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold">PDF</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-300 group-hover:scale-110 transition-transform">
+                  <i data-lucide="file-text" class="w-6 h-6"></i>
+                </div>
+                <div class="space-y-0.5">
+                  <div class="font-display font-bold text-sm leading-tight">Portfolio Brochure</div>
+                  <div class="font-mono text-[11px] text-slate-400">PDF / {{ $cert->file_size ?: '402.15 KB' }}</div>
+                </div>
+              </div>
+              <div class="font-mono text-[11px] text-sky-300 inline-flex items-center gap-1">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span data-i18n="click_preview_pdf">{{ $isVi ? 'Nhấn để xem trực tuyến' : 'Click to inspect PDF' }}</span>
+              </div>
+            </div>
+          @else
+            <div class="w-full h-full bg-gradient-to-br from-sky-50 via-white to-indigo-50 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/60 p-6 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full bg-white/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300" data-en="{{ $catEn }}" data-vi="{{ $catVi }}">
+                  {{ $isVi ? $catVi : $catEn }}
+                </span>
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              </div>
+              <div class="flex items-center justify-center">
+                <div class="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm flex items-center justify-center text-sky-600 dark:text-sky-400 group-hover:scale-110 transition-transform">
+                  <i data-lucide="{{ $catIcon }}" class="w-7 h-7"></i>
+                </div>
+              </div>
+              <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                <span data-i18n="verified_record">{{ $isVi ? 'Bản gốc lưu trữ' : 'Verified Record' }}</span>
+                <span class="text-sky-600 dark:text-sky-400 font-bold" data-i18n="btn_inspect">{{ $isVi ? 'Xem hồ sơ' : 'View Details' }}</span>
+              </div>
+            </div>
+          @endif
+        </button>
+
+        <!-- Card Body -->
+        <div class="relative z-10 p-6 flex-1 flex flex-col justify-between gap-5">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2 flex-wrap font-mono text-[11px]">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200/80 dark:border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold">
+                <i data-lucide="{{ $catIcon }}" class="w-3 h-3"></i>
+                <span data-en="{{ $catEn }}" data-vi="{{ $catVi }}">{{ $isVi ? $catVi : $catEn }}</span>
+              </span>
+
+              @if($cert->featured)
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span data-i18n="badge_featured">{{ $isVi ? 'Nổi bật' : 'Featured' }}</span>
+                </span>
+              @endif
+            </div>
+
+            <h2 class="font-display text-lg font-extrabold text-slate-900 dark:text-white leading-snug">
+              {{ $cert->title }}
+            </h2>
+
+            <div class="space-y-1 text-xs font-mono text-slate-500 dark:text-slate-400">
+              @if($cert->issuer)
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="building-2" class="w-3.5 h-3.5 text-indigo-500 flex-shrink-0"></i>
+                  <span class="truncate">{{ $cert->issuer }}</span>
+                </div>
+              @endif
+              @if($cert->issue_date)
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-500 flex-shrink-0"></i>
+                  <span>{{ $cert->issue_date }}</span>
+                </div>
+              @endif
+            </div>
+
+            @if($cert->description)
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
+                {{ $cert->description }}
+              </p>
+            @endif
+
+            @if(count($cert->extra_files_with_urls) > 0)
+              <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                <div class="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400" data-i18n="extra_files_label">
+                  {{ $isVi ? 'Tài liệu đính kèm' : 'Attachments' }}
+                </div>
+                <div class="space-y-1.5">
+                  @foreach($cert->extra_files_with_urls as $extra)
+                    @php
+                        $extraPayload = [
+                            'mode' => 'file',
+                            'url' => $extra['url'],
+                            'type' => $extra['is_pdf'] ? 'pdf' : 'image',
+                            'title' => $extra['name'],
+                        ];
+                    @endphp
+                    <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-xs">
+                      <span class="inline-flex items-center gap-2 min-w-0 font-medium text-slate-700 dark:text-slate-200">
+                        <i data-lucide="{{ $extra['is_pdf'] ? 'file-text' : 'image' }}" class="w-3.5 h-3.5 {{ $extra['is_pdf'] ? 'text-rose-500' : 'text-sky-500' }} flex-shrink-0"></i>
+                        <span class="truncate" title="{{ $extra['name'] }}">{{ $extra['name'] }}</span>
+                      </span>
+                      <div class="flex items-center gap-1 flex-shrink-0">
+                        <button type="button"
+                                onclick="openCertModalFromEl(this)"
+                                data-cert-json="{{ json_encode($extraPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
+                                class="p-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-sky-400 hover:text-sky-600 transition-colors"
+                                title="Inspect">
+                          <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <a href="{{ $extra['url'] }}" download class="p-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-sky-400 hover:text-sky-600 transition-colors" title="Download">
+                          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                        </a>
+                      </div>
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+            @endif
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-3">
+            <div class="flex items-center justify-between text-[11px] font-mono">
+              @if($isBrochure)
+                <span class="text-slate-500 dark:text-slate-400">PDF / {{ $cert->file_size ?: '402.15 KB' }}</span>
+                <span class="text-emerald-600 dark:text-emerald-400 font-bold" data-i18n="status_digital">{{ $isVi ? 'Bản số hóa chính thức' : 'Official Digital Copy' }}</span>
+              @else
+                <span class="text-slate-500 dark:text-slate-400" data-i18n="status_archive">{{ $isVi ? 'Bản cứng lưu trữ' : 'Physical Archive' }}</span>
+                <span class="text-amber-600 dark:text-amber-400 font-bold" data-i18n="status_request">{{ $isVi ? 'Cập nhật theo yêu cầu' : 'Available On Request' }}</span>
+              @endif
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              @if($isBrochure)
+                <button type="button"
+                        onclick="openCertModalFromEl(this)"
+                        data-cert-json="{{ json_encode($viewPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
+                        class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 transition-all shadow-sm">
+                  <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                  <span data-i18n="btn_view_pdf">{{ $isVi ? 'Xem PDF' : 'View PDF' }}</span>
                 </button>
+                <a href="{{ $cert->file_url }}" download class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all">
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                  <span data-i18n="btn_download">{{ $isVi ? 'Tải xuống' : 'Download' }}</span>
+                </a>
+              @else
+                <button type="button"
+                        onclick="openCertModalFromEl(this)"
+                        data-cert-json="{{ json_encode($viewPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
+                        class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-bold hover:bg-slate-800 dark:hover:bg-sky-600 transition-all shadow-sm">
+                  <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                  <span data-i18n="btn_view_details">{{ $isVi ? 'Xem hồ sơ' : 'View Details' }}</span>
+                </button>
+                <a href="{{ route('contact') }}?subject={{ urlencode($cert->title) }}" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all">
+                  <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                  <span data-i18n="btn_request_scan">{{ $isVi ? 'Yêu cầu scan' : 'Request Scan' }}</span>
+                </a>
+              @endif
             </div>
+          </div>
         </div>
-        <div class="cert-modal-body" id="certModalBody"></div>
+
+      </article>
+    @endforeach
+  </section>
+@else
+  <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-14 text-center">
+    <div class="relative z-10 flex flex-col items-center space-y-3">
+      <div class="w-14 h-14 rounded-2xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400">
+        <i data-lucide="folder-open" class="w-7 h-7"></i>
+      </div>
+      <h2 class="font-display text-xl font-extrabold text-slate-900 dark:text-white" data-i18n="empty_title">
+        {{ $isVi ? 'Không tìm thấy tài liệu trong mục này' : 'No credentials found in this category' }}
+      </h2>
+      <a href="{{ route('certificates') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 transition-all">
+        <span data-i18n="view_all">{{ $isVi ? 'Xem tất cả' : 'View All' }}</span>
+      </a>
     </div>
+  </div>
+@endif
+
+<!-- =========================================================================
+     DOCUMENT VIEWER MODAL (FROSTED PEARL WHITE & DARK SLATE)
+========================================================================= -->
+<div id="certModal" class="cert-modal-backdrop fixed inset-0 z-[100] bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="certModalTitleText" onclick="closeCertModal(event)">
+  <div class="w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden" onclick="event.stopPropagation()">
+
+    <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4 bg-slate-50/80 dark:bg-slate-950/60">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center flex-shrink-0">
+          <i data-lucide="file-text" class="w-4 h-4"></i>
+        </span>
+        <span id="certModalTitleText" class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate">Document</span>
+      </div>
+
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <a id="certModalExternalBtn" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline" data-i18n="modal_new_tab">{{ $isVi ? 'Mở tab mới' : 'New Tab' }}</span>
+        </a>
+        <a id="certModalDownloadBtn" href="#" download class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 transition-colors">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span id="certModalDlText">{{ $isVi ? 'Tải xuống' : 'Download' }}</span>
+        </a>
+        <button type="button" id="certModalCloseBtn" onclick="closeCertModalDirect()" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors" aria-label="Close">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="certModalBody" class="flex-1 overflow-y-auto bg-slate-100/70 dark:bg-slate-950/80 min-h-[380px] flex items-center justify-center"></div>
+
+  </div>
 </div>
 @endsection
 
 @section('scripts')
 <script>
-let lastCertTrigger = null;
+  window.PAGE_I18N = {
+    en: {
+      cred_kicker: 'CREDENTIALS // VERIFIED ARCHIVE',
+      cred_title_1: 'Degrees, Honors &',
+      cred_title_highlight: 'Portfolio Brochure',
+      cred_subtitle: 'Verified academic degrees from UTH, UI/UX design honors, and downloadable Engineering Brochure PDF documents for recruiters and engineering teams.',
+      stat_total_docs: 'Records',
+      badge_featured: 'Featured',
+      btn_inspect: 'Inspect',
+      click_preview_pdf: 'Click to inspect PDF',
+      verified_record: 'Verified Record',
+      extra_files_label: 'Attachments',
+      status_digital: 'Official Digital Copy',
+      status_archive: 'Physical Archive',
+      status_request: 'Available On Request',
+      btn_view_pdf: 'View PDF',
+      btn_download: 'Download',
+      btn_view_details: 'View Details',
+      btn_request_scan: 'Request Scan',
+      empty_title: 'No credentials found in this category',
+      view_all: 'View All',
+      modal_new_tab: 'New Tab'
+    },
+    vi: {
+      cred_kicker: 'MINH CHỨNG // HỒ SƠ XÁC THỰC',
+      cred_title_1: 'Bằng cấp, Giải thưởng &',
+      cred_title_highlight: 'Hồ sơ Năng lực PDF',
+      cred_subtitle: 'Lưu trữ minh chứng học thuật chính quy tại ĐH GTVT TP.HCM (UTH), giải thưởng thiết kế sáng tạo và bản Hồ sơ Năng lực kỹ thuật dạng PDF sẵn sàng tải về.',
+      stat_total_docs: 'Tài liệu',
+      badge_featured: 'Nổi bật',
+      btn_inspect: 'Xem chi tiết',
+      click_preview_pdf: 'Nhấn để xem trực tuyến',
+      verified_record: 'Bản gốc lưu trữ',
+      extra_files_label: 'Tài liệu đính kèm',
+      status_digital: 'Bản số hóa chính thức',
+      status_archive: 'Bản cứng lưu trữ',
+      status_request: 'Cập nhật theo yêu cầu',
+      btn_view_pdf: 'Xem PDF',
+      btn_download: 'Tải xuống',
+      btn_view_details: 'Xem hồ sơ',
+      btn_request_scan: 'Yêu cầu scan',
+      empty_title: 'Không tìm thấy tài liệu trong mục này',
+      view_all: 'Xem tất cả',
+      modal_new_tab: 'Mở tab mới'
+    }
+  };
 
-function openCertModal(url, title, type) {
+  let lastCertTrigger = null;
+
+  function escapeHtmlText(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function openCertModalFromEl(el) {
+    const raw = el.getAttribute('data-cert-json');
+    if (!raw) return;
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch (e) {
+      return;
+    }
+
     lastCertTrigger = document.activeElement;
     const modal = document.getElementById('certModal');
     const titleTextEl = document.getElementById('certModalTitleText');
     const bodyEl = document.getElementById('certModalBody');
     const extBtn = document.getElementById('certModalExternalBtn');
     const dlBtn = document.getElementById('certModalDownloadBtn');
+    const dlTextEl = document.getElementById('certModalDlText');
 
-    if (titleTextEl) titleTextEl.textContent = title;
-    if (extBtn) extBtn.href = url;
-    if (dlBtn) dlBtn.href = url;
+    if (titleTextEl) titleTextEl.textContent = payload.title || 'Document';
 
-    if (type === 'pdf') {
-        bodyEl.innerHTML = `<iframe src="${url}#toolbar=1" title="${title}"></iframe>`;
-    } else {
-        bodyEl.innerHTML = `<img src="${url}" alt="${title}">`;
-    }
-
-    if (extBtn) extBtn.style.display = 'inline-flex';
-    if (dlBtn) {
-        dlBtn.innerHTML = '<i class="fas fa-download"></i> <span>{{ __("Download") }}</span>';
-        dlBtn.setAttribute('download', '');
-    }
-
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => {
-        const closeBtn = document.getElementById('certModalCloseBtn');
-        if (closeBtn) closeBtn.focus();
-    }, 50);
-}
-
-function openCertDetailModal(title, issuer, desc) {
-    lastCertTrigger = document.activeElement;
-    const modal = document.getElementById('certModal');
-    const titleTextEl = document.getElementById('certModalTitleText');
-    const bodyEl = document.getElementById('certModalBody');
-    const extBtn = document.getElementById('certModalExternalBtn');
-    const dlBtn = document.getElementById('certModalDownloadBtn');
-
-    if (titleTextEl) titleTextEl.textContent = title;
-    if (extBtn) extBtn.style.display = 'none';
-    if (dlBtn) {
-        dlBtn.innerHTML = '<i class="fas fa-envelope"></i> <span>{{ $isVi ? "Yêu cầu bản scan" : "Request Scan" }}</span>';
-        dlBtn.href = '{{ route("contact") }}?subject=' + encodeURIComponent(title);
+    if (payload.mode === 'detail') {
+      if (extBtn) extBtn.style.display = 'none';
+      if (dlBtn) {
+        dlBtn.href = '{{ route("contact") }}?subject=' + encodeURIComponent(payload.title || '');
         dlBtn.removeAttribute('download');
-    }
+      }
+      if (dlTextEl) {
+        dlTextEl.textContent = currentLang === 'vi' ? 'Yêu cầu scan' : 'Request Scan';
+      }
 
-    bodyEl.innerHTML = `
-        <div style="padding:2rem; max-width:620px; margin:auto; text-align:left; color:#CBD5E1; font-family:var(--font-sans);">
-            <div style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.3rem 0.8rem; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:4px; color:#38BDF8; font-family:var(--font-mono); font-size:0.78rem; font-weight:600; margin-bottom:1rem;">
-                <i class="fas fa-check-circle"></i> {{ $isVi ? "Hồ sơ chính quy đã xác thực" : "Verified Official Record" }}
-            </div>
-            <h3 style="color:#FFFFFF; font-size:1.35rem; font-weight:700; margin-bottom:0.4rem;">${title}</h3>
-            <div style="color:#94A3B8; font-size:0.92rem; font-weight:600; margin-bottom:1.1rem;">${issuer}</div>
-            <p style="font-size:0.95rem; line-height:1.7; color:#CBD5E1; margin-bottom:1.5rem;">${desc}</p>
-            <div style="background:#0F172A; border:1px solid rgba(148,163,184,0.14); border-radius:8px; padding:1.2rem; font-size:0.86rem; line-height:1.6; color:#94A3B8;">
-                <strong style="color:#F8FAFC;">{{ $isVi ? "Tình trạng lưu trữ:" : "Filing status:" }}</strong> {{ $isVi ? "Văn bằng và giải thưởng gốc được lưu giữ tại trường và hồ sơ cá nhân. Nhà tuyển dụng cần bản sao công chứng hoặc scan số hóa độ nét cao vui lòng liên hệ xác nhận trực tiếp." : "The original degree and award credentials are preserved in official personal archives. Recruiters and hiring managers requiring a high-resolution notarized digital scan can request one directly." }}
-            </div>
+      const verifiedLbl = currentLang === 'vi' ? 'Hồ sơ chính quy đã xác thực' : 'Verified Official Record';
+      const filingLbl = currentLang === 'vi' ? 'Tình trạng lưu trữ:' : 'Filing status:';
+      const filingDesc = currentLang === 'vi'
+        ? 'Văn bằng và giải thưởng gốc được lưu giữ tại trường và hồ sơ cá nhân. Nhà tuyển dụng cần bản sao công chứng hoặc scan số hóa độ nét cao vui lòng liên hệ xác nhận trực tiếp.'
+        : 'Original degree and award credentials are preserved in official personal archives. Recruiters requiring a notarized digital scan may request one directly.';
+
+      bodyEl.innerHTML = `
+        <div class="p-6 sm:p-8 max-w-2xl w-full mx-auto space-y-5 text-left">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            ${escapeHtmlText(verifiedLbl)}
+          </span>
+          <div class="space-y-1">
+            <h3 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">${escapeHtmlText(payload.title)}</h3>
+            <div class="font-mono text-xs font-semibold text-sky-600 dark:text-sky-400">${escapeHtmlText(payload.issuer)}</div>
+          </div>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">${escapeHtmlText(payload.description)}</p>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <strong class="text-slate-900 dark:text-white">${escapeHtmlText(filingLbl)}</strong> ${escapeHtmlText(filingDesc)}
+          </div>
         </div>
-    `;
+      `;
+    } else {
+      if (extBtn) {
+        extBtn.style.display = 'inline-flex';
+        extBtn.href = payload.url;
+      }
+      if (dlBtn) {
+        dlBtn.href = payload.url;
+        dlBtn.setAttribute('download', '');
+      }
+      if (dlTextEl) {
+        dlTextEl.textContent = currentLang === 'vi' ? 'Tải xuống' : 'Download';
+      }
+
+      if (payload.type === 'pdf') {
+        bodyEl.innerHTML = `<iframe src="${escapeHtmlText(payload.url)}#toolbar=1" title="${escapeHtmlText(payload.title)}" class="w-full h-[68vh] border-0"></iframe>`;
+      } else {
+        bodyEl.innerHTML = `<img src="${escapeHtmlText(payload.url)}" alt="${escapeHtmlText(payload.title)}" class="max-h-[68vh] w-auto object-contain p-4">`;
+      }
+    }
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     setTimeout(() => {
-        const closeBtn = document.getElementById('certModalCloseBtn');
-        if (closeBtn) closeBtn.focus();
+      const closeBtn = document.getElementById('certModalCloseBtn');
+      if (closeBtn) closeBtn.focus();
     }, 50);
-}
+  }
 
-function closeCertModalDirect() {
+  function closeCertModalDirect() {
     const modal = document.getElementById('certModal');
     const bodyEl = document.getElementById('certModalBody');
     if (!modal || !modal.classList.contains('active')) return;
     modal.classList.remove('active');
     setTimeout(() => {
-        if (bodyEl && !modal.classList.contains('active')) bodyEl.innerHTML = '';
+      if (bodyEl && !modal.classList.contains('active')) bodyEl.innerHTML = '';
     }, 240);
     document.body.style.overflow = '';
     if (lastCertTrigger && typeof lastCertTrigger.focus === 'function') {
-        lastCertTrigger.focus();
+      lastCertTrigger.focus();
     }
-}
+  }
 
-function closeCertModal(e) {
+  function closeCertModal(e) {
     if (e.target && e.target.id === 'certModal') {
-        closeCertModalDirect();
+      closeCertModalDirect();
     }
-}
+  }
 
-document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        closeCertModalDirect();
+      closeCertModalDirect();
     }
-});
+  });
 </script>
 @endsection

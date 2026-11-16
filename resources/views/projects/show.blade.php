@@ -1,162 +1,36 @@
-@extends('layouts.app')
+@extends('layouts.pearl')
 
-@section('title', $project->title . ' | ' . __('Hồ Thành Thiện'))
-@section('description', Str::limit(strip_tags($project->clean_description ?? $project->description), 155))
+@section('active_nav', 'projects')
+@section('title', $project->title . ' | ' . (app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien'))
+@section('description', \Illuminate\Support\Str::limit($project->clean_description, 160))
 @section('og_type', 'article')
-@section('og_image', $project->image ? asset('storage/' . $project->image) : asset('images/og-image.webp'))
+@if($project->image && !str_ends_with(strtolower($project->image), '.svg'))
+@section('og_image', asset('storage/' . $project->image))
+@endif
 
 @section('structured_data')
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "{{ e($project->title) }}",
-  "description": "{{ e(Str::limit(strip_tags($project->clean_description ?? $project->description), 200)) }}",
-  "applicationCategory": "WebApplication",
-  "operatingSystem": "All",
-  "author": {
-    "@type": "Person",
-    "name": "Hồ Thành Thiện",
-    "url": "{{ url('/') }}"
-  }
-  @if($project->image)
-  ,"image": "{{ asset('storage/' . $project->image) }}"
-  @endif
-  @if($project->demo_url)
-  ,"url": "{{ $project->demo_url }}"
-  @endif
-}
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'SoftwareApplication',
+    'name' => $project->title,
+    'description' => \Illuminate\Support\Str::limit($project->clean_description, 300),
+    'applicationCategory' => 'WebApplication',
+    'operatingSystem' => 'Web',
+    'url' => url()->current(),
+    'author' => [
+        '@type' => 'Person',
+        'name' => 'Hồ Thành Thiện',
+        'url' => url('/'),
+    ],
+    'keywords' => $project->technologies->pluck('name')->implode(', '),
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>
-@endsection
-
-@section('styles')
-<style>
-    .project-hero {
-        padding: 2rem 0 1.25rem;
-        border-bottom: 1px solid var(--border);
-        background: var(--bg-primary);
-    }
-    .project-hero .breadcrumb {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.45rem;
-        font-family: var(--font-mono);
-        font-size: 0.78rem;
-        color: var(--text-muted);
-    }
-    .project-hero .breadcrumb a {
-        color: var(--text-secondary);
-        text-decoration: none;
-    }
-    .project-hero .breadcrumb a:hover {
-        color: var(--accent);
-        text-decoration: underline;
-    }
-
-    .project-detail {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 330px;
-        gap: clamp(1.75rem, 4vw, 3.25rem);
-        align-items: start;
-        width: 100%;
-    }
-    .project-detail > div:first-child {
-        min-width: 0;
-        max-width: 100%;
-    }
-
-    .project-image-full {
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        margin-bottom: 2rem;
-        border: 1px solid var(--border-strong);
-        background: var(--surface-ink);
-        aspect-ratio: 16 / 9;
-        width: 100%;
-        box-shadow: var(--shadow-md);
-    }
-    .project-image-full img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .project-title {
-        font-family: var(--font-display);
-        font-size: clamp(1.85rem, 3.8vw, 2.75rem);
-        font-weight: 800;
-        color: var(--text-primary);
-        margin-bottom: 1.15rem;
-        letter-spacing: -0.03em;
-        line-height: 1.15;
-        word-break: break-word;
-    }
-    .project-desc {
-        color: var(--text-secondary);
-        font-size: 1.02rem;
-        line-height: 1.8;
-        max-width: 68ch;
-        word-break: break-word;
-        overflow-wrap: break-word;
-        white-space: pre-line;
-    }
-
-    .project-sidebar {
-        min-width: 0;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    @media (min-width: 961px) {
-        .project-sidebar {
-            position: sticky;
-            top: 90px;
-        }
-    }
-    .project-sidebar .card {
-        padding: 1.3rem;
-    }
-    .project-sidebar .card h4 {
-        font-family: var(--font-mono);
-        font-size: 0.76rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        margin-bottom: 0.85rem;
-        display: flex;
-        align-items: center;
-        gap: 0.45rem;
-    }
-
-    .tech-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-    }
-
-    .project-meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 0.65rem 0;
-        border-bottom: 1px solid var(--border);
-        font-size: 0.92rem;
-    }
-    .project-meta-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .project-meta-item i { color: var(--accent); width: 16px; text-align: center; flex-shrink: 0; }
-    .project-meta-item a { color: var(--text-primary); text-decoration: none; font-weight: 600; word-break: break-word; }
-    .project-meta-item a:hover { color: var(--accent); text-decoration: underline; }
-
-    @media (max-width: 960px) {
-        .project-detail { grid-template-columns: 100%; gap: 2rem; }
-    }
-</style>
 @endsection
 
 @section('content')
 @php
+    $isVi = app()->getLocale() === 'vi';
     $hostLabel = $project->demo_url
         ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
         : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'architecture.spec');
@@ -166,199 +40,371 @@
     $hasCustomImage = $project->has_real_image;
 @endphp
 
-<section class="project-hero">
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="{{ route('home') }}">{{ __('Home') }}</a>
-            <span>/</span>
-            <a href="{{ route('projects.index') }}">{{ __('Projects') }}</a>
-            <span>/</span>
-            <span>{{ $project->title }}</span>
-        </div>
+<!-- =========================================================================
+     SECTION 1: PROJECT HEADER & BREADCRUMB BENTO
+========================================================================= -->
+<section class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
+  <div class="relative z-10 space-y-5">
+
+    <!-- Breadcrumb -->
+    <nav class="flex flex-wrap items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
+      <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+        <i data-lucide="home" class="w-3.5 h-3.5"></i>
+        <span data-i18n="breadcrumb_home">{{ $isVi ? 'Trang chủ' : 'Home' }}</span>
+      </a>
+      <span>/</span>
+      <a href="{{ route('projects.index') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors" data-i18n="nav_all_projects">
+        {{ $isVi ? 'Kho Dự án' : 'Projects' }}
+      </a>
+      <span>/</span>
+      <span class="text-slate-900 dark:text-white font-semibold truncate max-w-xs sm:max-w-md">{{ $project->title }}</span>
+    </nav>
+
+    <!-- Meta Pills -->
+    <div class="flex flex-wrap items-center gap-2.5 font-mono text-xs">
+      @if($project->period)
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold">
+          <i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-500"></i>
+          <span>{{ $project->period }}</span>
+        </span>
+      @endif
+      @if($project->role)
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200/80 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-semibold">
+          <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+          <span>{{ $project->role }}</span>
+        </span>
+      @endif
+      @if($project->featured)
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span data-i18n="badge_featured">{{ $isVi ? 'Dự án Nổi bật' : 'Featured System' }}</span>
+        </span>
+      @endif
     </div>
+
+    <!-- Title + Quick Actions -->
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+      <div class="space-y-3 max-w-3xl">
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
+          {{ $project->title }}
+        </h1>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+          {{ $project->summary }}
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 flex-shrink-0">
+        @if($project->demo_url)
+          <a href="{{ $project->demo_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 transition-all shadow-lg shadow-sky-500/20">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span data-i18n="btn_live_demo">{{ $isVi ? 'Xem Demo Trực tiếp' : 'Live Demo' }}</span>
+          </a>
+        @endif
+        @if($project->github_url)
+          <a href="{{ $project->github_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 border border-slate-900 dark:border-slate-700 text-white text-xs font-mono font-bold hover:bg-slate-800 dark:hover:border-sky-400 transition-all shadow-sm">
+            <i data-lucide="github" class="w-3.5 h-3.5"></i>
+            <span data-i18n="btn_source">{{ $isVi ? 'Mã nguồn GitHub' : 'Source Code' }}</span>
+          </a>
+        @endif
+        <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span data-i18n="btn_all_projects">{{ $isVi ? 'Tất cả dự án' : 'All Projects' }}</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
 </section>
 
-<section class="section" style="padding-top:2.25rem">
-    <div class="container">
-        <div class="project-detail hero-animate">
-            <!-- Main Content -->
-            <div>
-                <div class="project-image-full">
-                    @if($hasCustomImage)
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
-                    @elseif($isPortfolio)
-                        <div class="specimen-plate">
-                            <div class="specimen-topbar">
-                                <span class="specimen-dots"><span></span><span></span><span></span></span>
-                                <span class="specimen-host">hothanhthien.io.vn</span>
-                            </div>
-                            <div class="specimen-terminal-body">
-                                <div class="terminal-line"><span class="terminal-prompt">$</span> curl -I https://hothanhthien.io.vn/</div>
-                                <div class="terminal-output"><span class="terminal-badge-ok">HTTP/2 200 OK</span> server: nginx/cpanel</div>
-                                <div class="terminal-line"><span class="terminal-prompt">$</span> php artisan --version</div>
-                                <div class="terminal-output">Laravel Framework <span class="terminal-highlight">11.x</span> (PHP 8.2)</div>
-                                <div class="terminal-tags-row">
-                                    <span class="specimen-pill">Blade Engine</span>
-                                    <span class="specimen-pill">MySQL/SQLite</span>
-                                    <span class="specimen-pill">Bilingual VI/EN</span>
-                                </div>
-                            </div>
-                        </div>
-                    @elseif($isTourrist)
-                        <div class="specimen-plate">
-                            <div class="specimen-topbar">
-                                <span class="specimen-dots"><span></span><span></span><span></span></span>
-                                <span class="specimen-host">github.com/hoThanhThien/TourRist</span>
-                            </div>
-                            <div class="specimen-pipeline-body">
-                                <div class="terminal-line" style="color:var(--accent-sky); font-weight:600;">PIPELINE // RAG ARCHITECTURE</div>
-                                <div class="pipeline-flow">
-                                    <div class="pipeline-node"><i class="fas fa-file-lines"></i> Docs</div>
-                                    <div class="pipeline-arrow">&rarr;</div>
-                                    <div class="pipeline-node"><i class="fas fa-layer-group"></i> Chunks</div>
-                                    <div class="pipeline-arrow">&rarr;</div>
-                                    <div class="pipeline-node active"><i class="fas fa-database"></i> ChromaDB</div>
-                                    <div class="pipeline-arrow">&rarr;</div>
-                                    <div class="pipeline-node"><i class="fas fa-robot"></i> LLM</div>
-                                </div>
-                                <div class="terminal-tags-row">
-                                    <span class="specimen-pill">FastAPI</span>
-                                    <span class="specimen-pill">Python</span>
-                                    <span class="specimen-pill">Vector Search</span>
-                                </div>
-                            </div>
-                        </div>
-                    @elseif($isLaundry)
-                        <div class="specimen-plate">
-                            <div class="specimen-topbar">
-                                <span class="specimen-dots"><span></span><span></span><span></span></span>
-                                <span class="specimen-host">github.com/hoThanhThien/LT_JAVA...</span>
-                            </div>
-                            <div class="specimen-workflow-body">
-                                <div class="terminal-line" style="color:#A78BFA; font-weight:600;">STATE MACHINE // ORDER LIFECYCLE</div>
-                                <div class="workflow-steps">
-                                    <div class="wf-step done">RECEIVED</div>
-                                    <div class="wf-sep">&rsaquo;</div>
-                                    <div class="wf-step active">WASHING</div>
-                                    <div class="wf-sep">&rsaquo;</div>
-                                    <div class="wf-step">READY</div>
-                                    <div class="wf-sep">&rsaquo;</div>
-                                    <div class="wf-step">DELIVERED</div>
-                                </div>
-                                <div class="terminal-tags-row">
-                                    <span class="specimen-pill">Spring Boot</span>
-                                    <span class="specimen-pill">NextJS</span>
-                                    <span class="specimen-pill">JWT + RBAC</span>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <div class="specimen-plate">
-                            <div class="specimen-topbar">
-                                <span class="specimen-dots"><span></span><span></span><span></span></span>
-                                <span class="specimen-host">{{ $hostLabel }}</span>
-                            </div>
-                            <div class="specimen-terminal-body">
-                                <div class="terminal-line" style="color:var(--accent-cyan); font-weight:600;">ENTERPRISE // WEB PLATFORM</div>
-                                <div class="terminal-line"><span class="terminal-prompt">&bull;</span> Responsive Architecture</div>
-                                <div class="terminal-line"><span class="terminal-prompt">&bull;</span> Normalized Relational DB</div>
-                                <div class="terminal-tags-row">
-                                    <span class="specimen-pill">PHP</span>
-                                    <span class="specimen-pill">PostgreSQL</span>
-                                    <span class="specimen-pill">Responsive UI</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                </div>
+<!-- =========================================================================
+     SECTION 2: MAIN ARCHITECTURE SHOWCASE + STICKY METADATA SIDEBAR
+========================================================================= -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:0.55rem; margin-bottom:0.85rem; font-family:var(--font-mono); font-size:0.76rem;">
-                    @if($project->period)
-                        <span style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.55rem; border-radius:var(--radius-sm); background:rgba(255,255,255,0.03); border:1px solid var(--border); color:#CBD5E1;">
-                            <i class="fas fa-calendar-alt"></i> {{ $project->period }}
-                        </span>
-                    @endif
-                    @if($project->role)
-                        <span style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.55rem; border-radius:var(--radius-sm); background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--text-primary);">
-                            <i class="fas fa-user-tag"></i> {{ $project->role }}
-                        </span>
-                    @endif
-                    @if($project->featured)
-                        <span style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.55rem; border-radius:var(--radius-sm); background:rgba(198,244,50,0.12); border:1px solid rgba(198,244,50,0.3); color:var(--accent-lime); font-weight:700;">
-                            <span style="display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--accent-lime);"></span>
-                            {{ __('Featured') }}
-                        </span>
-                    @endif
-                </div>
+  <!-- Left Column: Visual Architecture Specimen + Overview + Highlights -->
+  <div class="lg:col-span-8 space-y-6">
 
-                <h1 class="project-title">{{ $project->title }}</h1>
-                <div class="project-desc">
-                    <p style="font-size:1.06rem; line-height:1.75; color:var(--text-primary); margin-bottom:1.5rem;">
-                        {{ $project->summary }}
-                    </p>
-
-                    @if(count($project->highlights) > 1)
-                        <h3 style="font-size:1.15rem; font-weight:700; color:var(--text-primary); margin:1.75rem 0 0.85rem;">
-                            {{ (app()->getLocale() === 'vi') ? 'Điểm nhấn kỹ thuật & Triển khai' : 'Key Engineering Highlights' }}
-                        </h3>
-                        <ul style="margin-left:1.25rem; display:flex; flex-direction:column; gap:0.65rem; color:var(--text-secondary); line-height:1.68;">
-                            @foreach(array_slice($project->highlights, 1) as $item)
-                                <li>{{ $item }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
+    <!-- Visual Specimen Frame -->
+    <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-4 sm:p-6 shadow-sm">
+      <div class="relative z-10">
+        @if($hasCustomImage)
+          <div class="rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 aspect-[16/9]">
+            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
+          </div>
+        @else
+          <!-- Terminal / Architecture Specimen Plate (Crisp Dark Slate Window contrasting clean Pearl White card) -->
+          <div class="rounded-2xl overflow-hidden bg-[#0F172A] border border-slate-800 shadow-inner">
+            <!-- macOS Window Header -->
+            <div class="h-10 px-4 bg-slate-900/95 border-b border-slate-800 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500/90"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400/90"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/90"></span>
+              </div>
+              <span class="font-mono text-[11px] text-slate-400 truncate">{{ $hostLabel }}</span>
+              <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">SPECIMEN</span>
             </div>
 
-            <!-- Sidebar -->
-            <aside class="project-sidebar">
-                @if($project->technologies->count())
-                <div class="card">
-                    <h4><i class="fas fa-microchip"></i> {{ __('Technologies') }}</h4>
-                    <div class="tech-tags">
-                        @foreach($project->technologies as $tech)
-                            <span class="tag">{{ $tech->name }}</span>
-                        @endforeach
-                    </div>
+            @if($isPortfolio)
+              <div class="p-6 sm:p-8 font-mono text-xs sm:text-sm space-y-4 text-slate-300">
+                <div class="text-sky-400 text-[11px] uppercase tracking-widest font-bold">PRODUCTION // LARAVEL SSR + AI CMS</div>
+                <div class="space-y-2 bg-slate-950/70 rounded-xl p-4 border border-slate-800">
+                  <div><span class="text-emerald-400 font-bold">$</span> curl -I https://hothanhthien.io.vn/</div>
+                  <div class="text-slate-400 pl-3"><span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[11px]">HTTP/2 200 OK</span> server: nginx / cpanel</div>
+                  <div class="pt-1"><span class="text-emerald-400 font-bold">$</span> php artisan --version</div>
+                  <div class="text-slate-400 pl-3">Laravel Framework <span class="text-sky-400 font-bold">11.x</span> (PHP 8.2 &bull; Bilingual VI/EN)</div>
                 </div>
-                @endif
-
-                <div class="card">
-                    <h4><i class="fas fa-link"></i> {{ __('Links') }}</h4>
-                    @if($project->github_url)
-                    <div class="project-meta-item">
-                        <i class="fab fa-github"></i>
-                        <a href="{{ $project->github_url }}" target="_blank" rel="noopener">{{ __('View on GitHub') }}</a>
-                    </div>
-                    @endif
-                    @if($project->demo_url)
-                    <div class="project-meta-item">
-                        <i class="fas fa-external-link-alt"></i>
-                        <a href="{{ $project->demo_url }}" target="_blank" rel="noopener">{{ __('Live Demo') }}</a>
-                    </div>
-                    @endif
-                    @if(!$project->github_url && !$project->demo_url)
-                    <p style="color: var(--text-muted); font-size: 0.88rem;">{{ __('No links available') }}</p>
-                    @endif
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Blade Engine</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">MySQL / SQLite</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Bilingual EN / VI</span>
+                </div>
+              </div>
+            @elseif($isTourrist)
+              <div class="p-6 sm:p-8 font-mono space-y-6">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <span class="text-xs font-bold tracking-widest uppercase text-sky-400">PIPELINE // RAG ARCHITECTURE</span>
+                  <span class="text-[11px] text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">Cosine Match 98.4% &bull; 180ms</span>
                 </div>
 
-                @if($project->featured)
-                <div class="card" style="background: var(--bg-secondary);">
-                    <div style="display:flex; align-items:center; gap:0.5rem; color: var(--text-primary); font-weight:600; font-size: 0.9rem;">
-                        <i class="fas fa-bookmark" style="color: var(--accent);"></i> {{ __('Featured Project') }}
-                    </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center text-center gap-2">
+                    <i data-lucide="file-text" class="w-5 h-5 text-slate-300"></i>
+                    <span class="text-xs font-bold text-white">1. Docs</span>
+                    <span class="text-[10px] text-slate-400">PDF / Guides</span>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center text-center gap-2">
+                    <i data-lucide="layers" class="w-5 h-5 text-indigo-400"></i>
+                    <span class="text-xs font-bold text-white">2. Chunks</span>
+                    <span class="text-[10px] text-slate-400">Token Overlap</span>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-sky-500/15 border border-sky-400/50 flex flex-col items-center text-center gap-2 shadow-lg shadow-sky-500/10">
+                    <i data-lucide="database" class="w-5 h-5 text-sky-400"></i>
+                    <span class="text-xs font-bold text-sky-300">3. ChromaDB</span>
+                    <span class="text-[10px] text-sky-200/80">k-NN Vector</span>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center text-center gap-2">
+                    <i data-lucide="bot" class="w-5 h-5 text-emerald-400"></i>
+                    <span class="text-xs font-bold text-white">4. LLM Reply</span>
+                    <span class="text-[10px] text-slate-400">Cited Output</span>
+                  </div>
                 </div>
-                @endif
 
-                <a href="{{ route('contact') }}" class="btn btn-primary" style="width:100%;">
-                    <i class="fas fa-paper-plane"></i> {{ __('Contact Me') }}
-                </a>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">FastAPI Async</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Python Embeddings</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Vector Search</span>
+                </div>
+              </div>
+            @elseif($isLaundry)
+              <div class="p-6 sm:p-8 font-mono space-y-6">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <span class="text-xs font-bold tracking-widest uppercase text-indigo-400">STATE MACHINE // ORDER LIFECYCLE</span>
+                  <span class="text-[11px] text-sky-300 bg-sky-500/15 border border-sky-500/30 px-2.5 py-0.5 rounded-full">Spring Boot + Next.js</span>
+                </div>
 
-                <a href="{{ route('projects.index') }}" class="btn btn-outline" style="width:100%;">
-                    <i class="fas fa-arrow-left"></i> {{ __('Back to Projects') }}
-                </a>
-            </aside>
-        </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-center space-y-1">
+                    <div class="text-[10px] text-emerald-400 font-bold">STEP 01</div>
+                    <div class="text-xs font-bold text-white">RECEIVED</div>
+                    <div class="text-[10px] text-emerald-300/80">Check-in &amp; Tag</div>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-indigo-500/20 border border-indigo-400 text-center space-y-1 shadow-lg shadow-indigo-500/15">
+                    <div class="text-[10px] text-indigo-300 font-bold">STEP 02 &bull; ACTIVE</div>
+                    <div class="text-xs font-bold text-white">WASHING</div>
+                    <div class="text-[10px] text-indigo-200/80">Service Queue</div>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-700 text-center space-y-1">
+                    <div class="text-[10px] text-slate-400 font-bold">STEP 03</div>
+                    <div class="text-xs font-bold text-slate-200">READY</div>
+                    <div class="text-[10px] text-slate-400">QA &amp; Notify</div>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-700 text-center space-y-1">
+                    <div class="text-[10px] text-slate-400 font-bold">STEP 04</div>
+                    <div class="text-xs font-bold text-slate-200">DELIVERED</div>
+                    <div class="text-[10px] text-slate-400">Invoice Settled</div>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Java Spring Boot</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Next.js Frontend</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">JWT + OTP Security</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">MySQL Normalized Schema</span>
+                </div>
+              </div>
+            @else
+              <div class="p-6 sm:p-8 font-mono text-xs sm:text-sm space-y-4 text-slate-300">
+                <div class="text-sky-400 text-[11px] uppercase tracking-widest font-bold">ENTERPRISE // WEB PLATFORM</div>
+                <div class="space-y-2 bg-slate-950/70 rounded-xl p-4 border border-slate-800">
+                  <div><span class="text-sky-400 font-bold">&bull;</span> Production-ready Modular Architecture</div>
+                  <div><span class="text-sky-400 font-bold">&bull;</span> Normalized Relational Database &amp; Clean APIs</div>
+                  <div><span class="text-emerald-400 font-bold">&bull;</span> Responsive UI/UX Across Viewports</div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Full-Stack Web</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">PostgreSQL / MySQL</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-[11px] text-slate-300">Clean Architecture</span>
+                </div>
+              </div>
+            @endif
+          </div>
+        @endif
+      </div>
     </div>
-</section>
+
+    <!-- Engineering Overview & Highlights Card -->
+    <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
+      <div class="relative z-10 space-y-6">
+        <div class="space-y-2">
+          <div class="font-mono text-[11px] font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400" data-i18n="overview_kicker">
+            {{ $isVi ? 'MÔ TẢ HỆ THỐNG' : 'SYSTEM OVERVIEW' }}
+          </div>
+          <h2 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="overview_heading">
+            {{ $isVi ? 'Bối cảnh & Mục tiêu Xây dựng' : 'Architecture & Problem Statement' }}
+          </h2>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
+            {{ $project->summary }}
+          </p>
+        </div>
+
+        @if(count($project->highlights) > 1)
+          <div class="pt-5 border-t border-slate-200/80 dark:border-slate-800 space-y-4">
+            <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500"></i>
+              <span data-i18n="highlights_heading">{{ $isVi ? 'Điểm nhấn Kỹ thuật & Triển khai' : 'Key Engineering Highlights' }}</span>
+            </h3>
+            <ul class="space-y-3">
+              @foreach(array_slice($project->highlights, 1) as $item)
+                <li class="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50/90 dark:bg-slate-950/70 border border-slate-200/70 dark:border-slate-800/90 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                  <span class="w-5 h-5 rounded-lg bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <span>{{ $item }}</span>
+                </li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right Column: Sticky Sidebar (Technologies, Links, CTA) -->
+  <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+
+    @if($project->technologies->count())
+      <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
+        <div class="relative z-10 space-y-4">
+          <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 flex items-center gap-2">
+            <i data-lucide="cpu" class="w-4 h-4 text-sky-500"></i>
+            <span data-i18n="sidebar_tech">{{ $isVi ? 'Công nghệ sử dụng' : 'Technologies Used' }}</span>
+          </h3>
+
+          <div class="flex flex-wrap gap-2">
+            @foreach($project->technologies as $tech)
+              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-xs">
+                {!! \App\Support\TechIcon::render($tech->name) !!}
+                <span>{{ $tech->name }}</span>
+              </span>
+            @endforeach
+          </div>
+        </div>
+      </div>
+    @endif
+
+    @if($project->github_url || $project->demo_url)
+      <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
+        <div class="relative z-10 space-y-4">
+          <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 flex items-center gap-2">
+            <i data-lucide="link" class="w-4 h-4 text-indigo-500"></i>
+            <span data-i18n="sidebar_links">{{ $isVi ? 'Liên kết Dự án' : 'Project Links' }}</span>
+          </h3>
+
+          <div class="space-y-2.5 text-sm">
+            @if($project->github_url)
+              <a href="{{ $project->github_url }}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 hover:border-sky-400 transition-all group">
+                <span class="inline-flex items-center gap-2.5 font-semibold text-slate-800 dark:text-slate-100">
+                  <i data-lucide="github" class="w-4 h-4 text-slate-700 dark:text-slate-300"></i>
+                  <span>GitHub Repository</span>
+                </span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-sky-500 transition-colors"></i>
+              </a>
+            @endif
+
+            @if($project->demo_url)
+              <a href="{{ $project->demo_url }}" target="_blank" rel="noopener" class="flex items-center justify-between gap-3 p-3 rounded-2xl bg-sky-50/70 dark:bg-sky-500/10 border border-sky-200/80 dark:border-sky-500/30 hover:border-sky-400 transition-all group">
+                <span class="inline-flex items-center gap-2.5 font-semibold text-sky-700 dark:text-sky-300">
+                  <i data-lucide="globe" class="w-4 h-4"></i>
+                  <span data-i18n="btn_live_demo">{{ $isVi ? 'Xem Demo Trực tiếp' : 'Live Demo' }}</span>
+                </span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-sky-500"></i>
+              </a>
+            @endif
+          </div>
+        </div>
+      </div>
+    @endif
+
+    <!-- Contact CTA Box -->
+    <div class="spotlight-card bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-900 dark:to-indigo-950/90 border border-slate-800 dark:border-sky-500/30 rounded-3xl p-6 text-white shadow-md">
+      <div class="relative z-10 space-y-4">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-mono text-[10px] font-bold uppercase tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span data-i18n="cta_kicker">{{ $isVi ? 'HỢP TÁC & TUYỂN DỤNG' : 'DISCUSS ARCHITECTURE' }}</span>
+        </div>
+        <h3 class="font-display text-xl font-extrabold" data-i18n="cta_title">
+          {{ $isVi ? 'Quan tâm đến hệ thống tương tự?' : 'Interested in a similar system?' }}
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed" data-i18n="cta_desc">
+          {{ $isVi ? 'Trao đổi trực tiếp về giải pháp Backend, RAG AI hoặc cơ hội Full-Stack Engineer.' : 'Let’s discuss how I can architect reliable backend services or applied AI pipelines for your team.' }}
+        </p>
+        <a href="{{ route('contact') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-400 transition-all shadow-lg shadow-sky-500/25">
+          <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+          <span data-i18n="cta_btn">{{ $isVi ? 'Liên hệ với Thiện' : 'Contact Thien' }}</span>
+        </a>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+@endsection
+
+@section('scripts')
+<script>
+  window.PAGE_I18N = {
+    en: {
+      badge_featured: 'Featured System',
+      btn_live_demo: 'Live Demo',
+      btn_source: 'Source Code',
+      btn_all_projects: 'All Projects',
+      overview_kicker: 'SYSTEM OVERVIEW',
+      overview_heading: 'Architecture & Problem Statement',
+      highlights_heading: 'Key Engineering Highlights',
+      sidebar_tech: 'Technologies Used',
+      sidebar_links: 'Project Links',
+      cta_kicker: 'DISCUSS ARCHITECTURE',
+      cta_title: 'Interested in a similar system?',
+      cta_desc: 'Let’s discuss how I can architect reliable backend services or applied AI pipelines for your team.',
+      cta_btn: 'Contact Thien'
+    },
+    vi: {
+      badge_featured: 'Dự án Nổi bật',
+      btn_live_demo: 'Xem Demo Trực tiếp',
+      btn_source: 'Mã nguồn GitHub',
+      btn_all_projects: 'Tất cả dự án',
+      overview_kicker: 'MÔ TẢ HỆ THỐNG',
+      overview_heading: 'Bối cảnh & Mục tiêu Xây dựng',
+      highlights_heading: 'Điểm nhấn Kỹ thuật & Triển khai',
+      sidebar_tech: 'Công nghệ sử dụng',
+      sidebar_links: 'Liên kết Dự án',
+      cta_kicker: 'HỢP TÁC & TUYỂN DỤNG',
+      cta_title: 'Quan tâm đến hệ thống tương tự?',
+      cta_desc: 'Trao đổi trực tiếp về giải pháp Backend, RAG AI hoặc cơ hội Full-Stack Engineer.',
+      cta_btn: 'Liên hệ với Thiện'
+    }
+  };
+</script>
 @endsection
