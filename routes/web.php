@@ -25,7 +25,9 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/certificates', [PageController::class, 'certificates'])->name('certificates');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+Route::post('/contact', [ContactController::class, 'send'])
+    ->middleware('throttle:contact-form')
+    ->name('contact.send');
 
 Route::get('/sitemap.xml', function () {
     $projects = \App\Models\Project::all();
@@ -111,79 +113,11 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
-Route::get('/setup-migrate', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        \App\Services\AI\Support\AiSchemaManager::flushCache();
-        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-        return response()->json([
-            'status' => 'ok',
-            'message' => 'Database migrated and caches cleared successfully!',
-            'ai_schema_ready' => \App\Services\AI\Support\AiSchemaManager::isReady(),
-        ]);
-    } catch (\Throwable $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $e->getMessage(),
-        ], 500);
-    }
-});
-
-// Web-cron endpoint for cPanel Cron Jobs / GitHub Actions / Uptime monitors
-Route::get('/cron/schedule-run', function (\Illuminate\Http\Request $request) {
-    $configuredSecret = env('CRON_SECRET');
-    if (!empty($configuredSecret) && !hash_equals((string) $configuredSecret, (string) $request->query('token', ''))) {
-        abort(403, 'Invalid cron token.');
-    }
-
-    @set_time_limit(300);
-    @ignore_user_abort(true);
-
-    try {
-        if (!\App\Services\AI\Support\AiSchemaManager::isReady()) {
-            \App\Services\AI\Support\AiSchemaManager::ensureMigrated();
-        }
-
-        \Illuminate\Support\Facades\Artisan::call('blog:publish-scheduled');
-        $publishOutput = trim(\Illuminate\Support\Facades\Artisan::output());
-
-        \Illuminate\Support\Facades\Artisan::call('blog:run-automations');
-        $automationOutput = trim(\Illuminate\Support\Facades\Artisan::output());
-
-        return response()->json([
-            'status' => 'ok',
-            'timestamp_utc' => now()->toIso8601String(),
-            'timestamp_vn' => now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s'),
-            'publish_scheduled' => $publishOutput,
-            'run_automations' => $automationOutput,
-        ]);
-    } catch (\Throwable $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $e->getMessage(),
-        ], 500);
-    }
-})->name('cron.schedule-run');
-
-Route::get('/setup-db', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
-        return 'Database migrated, seeded, and storage linked successfully!';
-    } catch (\Exception $e) {
-        return 'Error: ' . $e->getMessage();
-    }
-});
-
-Route::get('/setup-storage', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
-        return 'Storage symlink created successfully!';
-    } catch (\Exception $e) {
-        return 'Error: ' . $e->getMessage();
-    }
-});
+// Protected maintenance & web-cron endpoints (token/auth enforced in OpsController)
+Route::get('/setup-migrate', [\App\Http\Controllers\OpsController::class, 'setupMigrate'])->name('ops.setup-migrate');
+Route::get('/cron/schedule-run', [\App\Http\Controllers\OpsController::class, 'cronScheduleRun'])->name('cron.schedule-run');
+Route::get('/setup-db', [\App\Http\Controllers\OpsController::class, 'setupDb'])->name('ops.setup-db');
+Route::get('/setup-storage', [\App\Http\Controllers\OpsController::class, 'setupStorage'])->name('ops.setup-storage');
 
 // Fallback direct storage route if symlink is missing on hosting
 Route::get('/storage/{path}', function ($path) {
@@ -211,7 +145,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Auth (guest only)
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-        Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+        Route::post('/login', [AuthController::class, 'login'])
+            ->middleware('throttle:auth-strict')
+            ->name('login.post');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

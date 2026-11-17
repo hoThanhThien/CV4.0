@@ -27,7 +27,7 @@ Route::get('/docs/openapi.json', [DocsController::class, 'openapi'])->name('api.
 Route::prefix('v1')->group(function () {
 
     // === Authentication ===
-    Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:auth-strict');
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/auth/me', [AuthController::class, 'me']);
         Route::post('/auth/logout', [AuthController::class, 'logout']);
@@ -79,5 +79,5 @@ Route::prefix('v1')->group(function () {
     });
 
     // === Contact Submission ===
-    Route::post('/contact', [ContactController::class, 'store']);
+    Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:contact-form');
 });

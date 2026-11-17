@@ -12,11 +12,11 @@ services:
     healthCheckPath: /
     envVars:
       - key: APP_KEY
-        value: base64:Rzz68lGeiDWUlALy8OCrHkhnT9h9bzmQH9hPuYdjYg4=
+        generateValue: true
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: true
+        value: false
       - key: APP_URL
         value: https://hothanhthien.io.vn
       - key: LOG_CHANNEL

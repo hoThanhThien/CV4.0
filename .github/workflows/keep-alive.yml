@@ -10,5 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Scheduled Blog & AI Tasks on hothanhthien.io.vn
-        run: curl -sSf --max-time 240 https://hothanhthien.io.vn/cron/schedule-run
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: curl -sSf --max-time 240 -H "X-Cron-Token: ${CRON_SECRET}" https://hothanhthien.io.vn/cron/schedule-run
         continue-on-error: true

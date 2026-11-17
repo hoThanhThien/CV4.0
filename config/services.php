@@ -36,4 +36,8 @@ return [
         'min_score' => env('RECAPTCHA_MIN_SCORE', 0.5),
     ],
 
+    'cron' => [
+        'secret' => env('CRON_SECRET', ''),
+    ],
+
 ];
