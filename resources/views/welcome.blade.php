@@ -1552,18 +1552,16 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
             <!-- Back Face (180deg Flipped Project Proof) -->
             <div class="grid-flip-back bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 text-white p-4 flex flex-col justify-between border border-sky-400/40 shadow-lg">
-              <div class="space-y-1 text-left">
-                <div class="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold truncate">${item.project[currentLang]}</div>
-                <p class="text-[11px] text-slate-200 leading-snug line-clamp-2">${item.desc[currentLang]}</p>
+              <div class="space-y-1.5 text-left">
+                <div class="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold leading-snug line-clamp-1">${item.project[currentLang]}</div>
+                <p class="text-[11px] text-slate-200 leading-relaxed line-clamp-3">${item.desc[currentLang]}</p>
               </div>
-              <div class="space-y-1">
-                <div class="flex justify-between font-mono text-[10px] text-sky-200">
-                  <span>${currentLang === 'vi' ? 'Thành thạo' : 'Mastery'}</span>
-                  <span class="font-bold">${item.mastery}%</span>
-                </div>
-                <div class="w-full h-1.5 rounded-full bg-slate-700 overflow-hidden">
-                  <div class="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400" style="width: ${item.mastery}%"></div>
-                </div>
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-700/70 font-mono text-[10px]">
+                <span class="inline-flex items-center gap-1.5 text-emerald-300 font-semibold whitespace-nowrap">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span>${currentLang === 'vi' ? 'Đã áp dụng' : 'Production Proof'}</span>
+                </span>
+                <span class="text-sky-300/90 font-bold truncate">${item.name}</span>
               </div>
             </div>
           </div>
