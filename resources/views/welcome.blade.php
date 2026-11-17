@@ -58,19 +58,26 @@
 
   <style>
     :root {
-      --radius: 168px;
+      --radius: 184px;
+      --orbit-scale: 1;
       --mouse-x: -999px;
       --mouse-y: -999px;
     }
-    @media (max-width: 639px) {
-      :root {
-        --radius: 112px;
-      }
+
+    .orbit-canvas-viewport {
+      position: relative;
+      width: 100%;
+      height: calc(468px * var(--orbit-scale, 1));
     }
-    @media (max-width: 479px) {
-      :root {
-        --radius: 92px;
-      }
+    .orbit-canvas {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 486px;
+      height: 468px;
+      --radius: 184px;
+      transform: translate(-50%, -50%) scale(var(--orbit-scale, 1));
+      transform-origin: center center;
     }
 
     /* 1. CLEAN PEARL WHITE TECHNICAL GRID & DARK MODE */
@@ -363,7 +370,7 @@
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
       
       <!-- Cột Trái (7 cols) -->
-      <div class="lg:col-span-7 space-y-6">
+      <div class="lg:col-span-7 min-w-0 space-y-6">
         
         <!-- Status Availability Badge -->
         <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700/80 shadow-sm text-xs font-mono font-semibold text-slate-700 dark:text-slate-200">
@@ -419,7 +426,7 @@
       </div>
 
       <!-- Cột Phải (5 cols): Interactive CLI Terminal + 3 Mini Bento KPI Cards -->
-      <div class="lg:col-span-5 space-y-4">
+      <div class="lg:col-span-5 min-w-0 space-y-4">
         
         <!-- 1. Interactive CLI Terminal (macOS Dark Slate #0f172a) -->
         <div class="rounded-2xl bg-[#0f172a] border border-slate-800 shadow-2xl shadow-slate-900/20 overflow-hidden">
@@ -538,12 +545,13 @@
         <div id="skillOrbitModeWrap" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
           
           <!-- Left Stage: Ice-Blue Radial Orbit Visualizer -->
-          <div id="orbitStageBox" class="lg:col-span-7 rounded-2xl min-h-[320px] sm:min-h-[470px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
+          <div id="orbitStageBox" class="lg:col-span-7 min-w-0 w-full rounded-2xl pt-10 pb-12 px-3 sm:px-4 bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
             
             <div class="absolute top-3 left-3 sm:top-3.5 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 z-30">ORBIT // TRIG_ROTATION</div>
+            <div class="absolute top-3 right-3 sm:top-3.5 sm:right-4 font-mono text-[10px] sm:text-[11px] text-sky-600/70 font-semibold z-30 hidden sm:block">3D PRESERVE</div>
             <div class="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1.5 sm:gap-2 z-30">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="orbitRadiusReadout">R=168px</span>
+              <span id="orbitRadiusReadout">R=184px</span>
             </div>
             <button type="button" id="btnOrbitSpinToggle" onclick="toggleOrbitSpin()" class="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3.5 z-30 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-700 text-[10px] sm:text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 hover:border-sky-400 shadow-sm transition-all">
               <i data-lucide="pause" id="orbitSpinPauseIcon" class="w-3 h-3"></i>
@@ -551,25 +559,30 @@
               <span id="orbitSpinToggleLabel">Auto Orbit</span>
             </button>
 
-            <!-- 2 Concentric Dashed Orbit Rings (Scaled Dynamically via JS for 0px Mobile Clipping) -->
-            <div id="orbitInnerRing" class="w-[140px] h-[140px] sm:w-[210px] sm:h-[210px] rounded-full border border-dashed border-indigo-500/25 dark:border-indigo-400/25 absolute pointer-events-none orbit-ring-counter"></div>
-            <div id="orbitOuterRing" class="w-[210px] h-[210px] sm:w-[330px] sm:h-[330px] rounded-full border border-dashed border-sky-500/35 dark:border-sky-400/35 absolute pointer-events-none animate-spin-slow"></div>
+            <!-- Proportional Scaling Orbit Viewport (Prevents Overflow & Adjacent Pill Overlap at Every Screen Width) -->
+            <div id="orbitCanvasViewport" class="orbit-canvas-viewport">
+              <div id="orbitCanvas" class="orbit-canvas flex items-center justify-center">
+                <!-- 2 Concentric Dashed Orbit Rings -->
+                <div id="orbitInnerRing" class="w-[228px] h-[228px] rounded-full border border-dashed border-indigo-500/25 dark:border-indigo-400/25 absolute pointer-events-none orbit-ring-counter"></div>
+                <div id="orbitOuterRing" class="w-[368px] h-[368px] rounded-full border border-dashed border-sky-500/35 dark:border-sky-400/35 absolute pointer-events-none animate-spin-slow"></div>
 
-            <!-- Central Circular Core Hub -->
-            <div class="relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-1.5 sm:p-2">
-              <div class="text-[9px] sm:text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">ACTIVE CORE</div>
-              <div id="orbitHubCategory" class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white leading-tight mt-0.5 px-1">Core Stack</div>
-              <div id="orbitHubCount" class="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">10 Skills</div>
-            </div>
+                <!-- Central Circular Core Hub -->
+                <div class="relative z-10 w-32 h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-2">
+                  <div class="text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">ACTIVE CORE</div>
+                  <div id="orbitHubCategory" class="text-sm font-extrabold text-slate-900 dark:text-white leading-tight mt-0.5 px-1">Core Stack</div>
+                  <div id="orbitHubCount" class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">10 Skills</div>
+                </div>
 
-            <!-- Dynamic Orbit Nodes Container -->
-            <div id="orbitNodesStage" class="absolute inset-0 pointer-events-none orbit-spinning-ring">
-              <!-- Populated via JS -->
+                <!-- Dynamic Orbit Nodes Container -->
+                <div id="orbitNodesStage" class="absolute inset-0 pointer-events-none orbit-spinning-ring">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Right Column: 3D Orbit Inspector Card -->
-          <div class="lg:col-span-5 spotlight-card bg-slate-50/70 dark:bg-slate-950/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 flex flex-col justify-between space-y-6">
+          <div class="lg:col-span-5 min-w-0 w-full spotlight-card bg-slate-50/70 dark:bg-slate-950/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 flex flex-col justify-between space-y-6">
             <div class="space-y-5 relative z-10">
               <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-3.5">
                 <span class="font-mono text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400" data-i18n="inspector_title">3D Orbit Inspector</span>
@@ -646,9 +659,9 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         <!-- THẺ 1 (Chiếm 2 cột - lg:col-span-2): TourRist RAG AI Concierge -->
-        <article class="lg:col-span-2 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between gap-6">
+        <article class="lg:col-span-2 min-w-0 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between gap-6">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
-            <div class="md:col-span-6 space-y-4">
+            <div class="md:col-span-6 min-w-0 space-y-4">
               <div class="flex items-center gap-2">
                 <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-500/30">
                   FLAGSHIP // APPLIED AI
@@ -684,7 +697,7 @@
             </div>
 
             <!-- Embedded Live RAG AI Chat Simulation -->
-            <div class="md:col-span-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 p-4 space-y-3 font-mono text-xs">
+            <div class="md:col-span-6 min-w-0 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 p-4 space-y-3 font-mono text-xs">
               <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-2">
                 <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
                   <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -794,7 +807,7 @@
         </article>
 
         <!-- THẺ 4 (Chiếm 2 cột - lg:col-span-2): Kinh nghiệm Odoo ERP (Enmasys) & Full-Stack (AIPower) -->
-        <article class="lg:col-span-2 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between space-y-6">
+        <article class="lg:col-span-2 min-w-0 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between space-y-6">
           <div class="space-y-3 relative z-10">
             <div class="flex items-center justify-between flex-wrap gap-2">
               <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
@@ -840,7 +853,7 @@
     <section id="credentials" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
       <!-- Credentials & Brochure PDF (5 cols) -->
-      <div class="lg:col-span-5 space-y-5">
+      <div class="lg:col-span-5 min-w-0 space-y-5">
         <div class="space-y-1.5">
           <div class="font-mono text-xs font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400" data-i18n="cred_kicker">03 // OFFICIAL CREDENTIALS</div>
           <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="cred_title">Degrees &amp; Portfolio PDF</h2>
@@ -895,7 +908,7 @@
       </div>
 
       <!-- Engineering Blog (7 cols) -->
-      <div id="blog" class="lg:col-span-7 space-y-5">
+      <div id="blog" class="lg:col-span-7 min-w-0 space-y-5">
         <div class="flex items-end justify-between">
           <div class="space-y-1.5">
             <div class="font-mono text-xs font-bold tracking-widest uppercase text-sky-600 dark:text-sky-400" data-i18n="blog_kicker">04 // ENGINEERING JOURNAL</div>
@@ -1600,34 +1613,20 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
     function syncOrbitGeometry(nodeCount) {
       const stageBox = document.getElementById('orbitStageBox');
-      if (!stageBox) return 168;
+      const viewport = document.getElementById('orbitCanvasViewport');
+      if (!stageBox || !viewport) return 184;
 
-      const boxWidth = stageBox.clientWidth || window.innerWidth;
-      const isCompact = boxWidth < 460;
-      const pillAllowance = isCompact ? 104 : 136;
-      const safeRadius = Math.max(76, Math.min(168, Math.floor((boxWidth - pillAllowance) / 2)));
+      const availableWidth = viewport.clientWidth || stageBox.clientWidth || window.innerWidth;
+      const scale = Math.max(0.52, Math.min(1, availableWidth / 486));
 
-      stageBox.style.setProperty('--radius', `${safeRadius}px`);
-      stageBox.style.minHeight = `${Math.max(300, safeRadius * 2 + (isCompact ? 116 : 138))}px`;
-
-      const outerRing = document.getElementById('orbitOuterRing');
-      const innerRing = document.getElementById('orbitInnerRing');
-      if (outerRing) {
-        const dOuter = Math.max(150, safeRadius * 2 - 4);
-        outerRing.style.width = `${dOuter}px`;
-        outerRing.style.height = `${dOuter}px`;
-      }
-      if (innerRing) {
-        const dInner = Math.max(112, Math.round(safeRadius * 1.25));
-        innerRing.style.width = `${dInner}px`;
-        innerRing.style.height = `${dInner}px`;
-      }
+      viewport.style.setProperty('--orbit-scale', scale.toFixed(4));
 
       const readout = document.getElementById('orbitRadiusReadout');
       if (readout && typeof nodeCount === 'number') {
-        readout.textContent = `R=${safeRadius}px • N=${nodeCount}`;
+        const effR = Math.round(184 * scale);
+        readout.textContent = `R=${effR}px • N=${nodeCount}`;
       }
-      return safeRadius;
+      return 184;
     }
 
     function render3DOrbitWheel(cat, items) {
@@ -1644,6 +1643,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
       stage.innerHTML = '';
       syncOrbitGeometry(N);
+      requestAnimationFrame(() => syncOrbitGeometry(N));
       // Synchronize outer ring rotation and child counter-rotation clocks at t=0
       stage.classList.remove('orbit-spinning-ring');
       void stage.offsetWidth;
@@ -1658,9 +1658,9 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
         node.innerHTML = `
           <div class="orbit-node-upright">
-            <div class="orbit-node-pill px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1 sm:gap-1.5">
+            <div class="orbit-node-pill px-2 py-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1">
               ${renderSkillIcon(item, 'orbit')}
-              <span class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
+              <span class="text-[11px] font-bold tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
             </div>
           </div>
         `;

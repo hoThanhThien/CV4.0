@@ -9,12 +9,23 @@
 <div id="radialOrbitSection" class="radial-orbit-wrapper w-full my-8">
   <style>
     #radialOrbitSection {
-      --radius: 168px;
+      --radius: 184px;
+      --radial-scale: 1;
     }
-    @media (max-width: 640px) {
-      #radialOrbitSection {
-        --radius: 128px;
-      }
+    #radialOrbitSection .radial-canvas-viewport {
+      position: relative;
+      width: 100%;
+      height: calc(468px * var(--radial-scale, 1));
+    }
+    #radialOrbitSection .radial-canvas {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 486px;
+      height: 468px;
+      --radius: 184px;
+      transform: translate(-50%, -50%) scale(var(--radial-scale, 1));
+      transform-origin: center center;
     }
 
     /* Ambient blueprint grid pattern */
@@ -97,25 +108,12 @@
     /* 3D Flip Card Styling */
     #radialOrbitSection .flip-card-inner {
       position: relative;
-      width: 108px;
-      height: 48px;
+      width: 100px;
+      height: 42px;
       text-align: center;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
       transform-style: preserve-3d;
-      border-radius: 14px;
-    }
-
-    @media (max-width: 640px) {
-      #radialOrbitSection .flip-card-inner {
-        width: 92px;
-        height: 40px;
-      }
-    }
-    @media (max-width: 479px) {
-      #radialOrbitSection .flip-card-inner {
-        width: 80px;
-        height: 36px;
-      }
+      border-radius: 12px;
     }
 
     #radialOrbitSection .orbit-node:hover .flip-card-inner,
@@ -141,8 +139,8 @@
       background: #ffffff;
       border: 1px solid rgba(226, 232, 240, 0.9);
       box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
-      padding: 0 8px;
-      gap: 7px;
+      padding: 0 6px;
+      gap: 5px;
     }
     html.dark #radialOrbitSection .flip-card-front {
       background: #0f172a;
@@ -212,7 +210,7 @@
       </div>
 
       <!-- 3. KHUNG SÂN KHẤU CHỨA VÒNG XOAY (Inner Stage) -->
-      <div id="radialOrbitStage" class="rounded-2xl min-h-[320px] sm:min-h-[480px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/50 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden select-none">
+      <div id="radialOrbitStage" class="rounded-2xl pt-10 pb-11 px-3 sm:px-4 bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/50 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden select-none">
 
         <!-- Thông số tọa độ & Technical HUD ở các góc -->
         <div class="absolute top-3 left-3 sm:top-4 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 tracking-wider z-30">
@@ -220,41 +218,42 @@
         </div>
         <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1.5 sm:gap-2 z-30">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span id="radialCoordReadout">R=168px • TOP 10</span>
+          <span id="radialCoordReadout">R=184px • TOP 10</span>
         </div>
         <div class="absolute top-3 right-3 sm:top-4 sm:right-4 font-mono text-[10px] sm:text-[11px] text-sky-600/70 font-semibold z-30">
           3D PRESERVE
         </div>
 
-        <!-- Vòng tròn quỹ đạo trong -->
-        <div id="radialInnerRing" class="w-[140px] h-[140px] sm:w-[210px] sm:h-[210px] rounded-full border border-indigo-500/20 absolute pointer-events-none"></div>
+        <div id="radialCanvasViewport" class="radial-canvas-viewport">
+          <div id="radialCanvas" class="radial-canvas flex items-center justify-center">
+            <!-- Vòng tròn quỹ đạo trong -->
+            <div id="radialInnerRing" class="w-[228px] h-[228px] rounded-full border border-indigo-500/20 absolute pointer-events-none"></div>
 
-        <!-- Vòng tròn quỹ đạo ngoài nét đứt (Scale động theo độ rộng màn hình) -->
-        <div id="radialOuterRing" class="w-[210px] h-[210px] sm:w-[330px] sm:h-[330px] rounded-full border border-dashed border-sky-500/35 absolute pointer-events-none animate-orbit-ring"></div>
+            <!-- Vòng tròn quỹ đạo ngoài nét đứt -->
+            <div id="radialOuterRing" class="w-[368px] h-[368px] rounded-full border border-dashed border-sky-500/35 absolute pointer-events-none animate-orbit-ring"></div>
 
-        <!-- VÒNG TRÒN LÕI Ở CHÍNH GIỮA (Central Core Hub) -->
-        <div class="relative z-20 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 dark:border-sky-500/50 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-1.5 sm:p-2 transition-transform hover:scale-105 duration-300">
-          <div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-sky-400/20 via-indigo-400/15 to-emerald-400/20 blur-sm pointer-events-none"></div>
-          
-          <div class="relative z-10 space-y-0.5 sm:space-y-1">
-            <!-- Dòng 1: ACTIVE CORE -->
-            <div class="text-[9px] sm:text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">
-              ACTIVE CORE
+            <!-- VÒNG TRÒN LÕI Ở CHÍNH GIỮA (Central Core Hub) -->
+            <div class="relative z-20 w-32 h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 dark:border-sky-500/50 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-2 transition-transform hover:scale-105 duration-300">
+              <div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-sky-400/20 via-indigo-400/15 to-emerald-400/20 blur-sm pointer-events-none"></div>
+              
+              <div class="relative z-10 space-y-1">
+                <div class="text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">
+                  ACTIVE CORE
+                </div>
+                <div id="radialHubTitle" class="text-sm font-extrabold text-slate-900 dark:text-white leading-tight px-1" style="font-family: var(--font-display);">
+                  Core Stack
+                </div>
+                <div id="radialHubCount" class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                  10 Skills
+                </div>
+              </div>
             </div>
-            <!-- Dòng 2: Tên nhóm đang chọn -->
-            <div id="radialHubTitle" class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white leading-tight px-1" style="font-family: var(--font-display);">
-              Core Stack
-            </div>
-            <!-- Dòng 3: Số lượng kỹ năng -->
-            <div id="radialHubCount" class="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
-              10 Skills
+
+            <!-- Container chứa các thẻ kỹ năng (Orbit Nodes) -->
+            <div id="radialOrbitNodesContainer" class="absolute inset-0 pointer-events-none radial-spinning-ring">
+              <!-- Được gắn động qua JavaScript -->
             </div>
           </div>
-        </div>
-
-        <!-- Container chứa các thẻ kỹ năng (Orbit Nodes) -->
-        <div id="radialOrbitNodesContainer" class="absolute inset-0 pointer-events-none radial-spinning-ring">
-          <!-- Được gắn động qua JavaScript -->
         </div>
 
       </div>
@@ -428,32 +427,20 @@
       }
 
       function syncRadialGeometry(nodeCount) {
-        if (!radialOrbitStage) return 168;
-        const boxWidth = radialOrbitStage.clientWidth || window.innerWidth;
-        const isCompact = boxWidth < 460;
-        const pillAllowance = isCompact ? 104 : 136;
-        const safeRadius = Math.max(76, Math.min(168, Math.floor((boxWidth - pillAllowance) / 2)));
+        const viewport = document.getElementById('radialCanvasViewport');
+        const section = document.getElementById('radialOrbitSection');
+        if (!radialOrbitStage || !viewport || !section) return 184;
 
-        radialOrbitStage.style.setProperty('--radius', `${safeRadius}px`);
-        radialOrbitStage.style.minHeight = `${Math.max(300, safeRadius * 2 + (isCompact ? 116 : 140))}px`;
+        const availWidth = viewport.clientWidth || radialOrbitStage.clientWidth || window.innerWidth;
+        const scale = Math.max(0.52, Math.min(1, availWidth / 486));
 
-        const outerRing = document.getElementById('radialOuterRing');
-        const innerRing = document.getElementById('radialInnerRing');
-        if (outerRing) {
-          const dOuter = Math.max(150, safeRadius * 2 - 4);
-          outerRing.style.width = `${dOuter}px`;
-          outerRing.style.height = `${dOuter}px`;
-        }
-        if (innerRing) {
-          const dInner = Math.max(112, Math.round(safeRadius * 1.25));
-          innerRing.style.width = `${dInner}px`;
-          innerRing.style.height = `${dInner}px`;
-        }
+        section.style.setProperty('--radial-scale', scale.toFixed(4));
 
         if (coordReadout && typeof nodeCount === 'number') {
-          coordReadout.textContent = `R=${safeRadius}px • ${nodeCount} SKILLS`;
+          const effR = Math.round(184 * scale);
+          coordReadout.textContent = `R=${effR}px • ${nodeCount} SKILLS`;
         }
-        return safeRadius;
+        return 184;
       }
 
       function renderWheel(animate = true) {
@@ -466,6 +453,7 @@
 
         if (radialOrbitStage) radialOrbitStage.classList.remove('is-hover-paused');
         syncRadialGeometry(N);
+        requestAnimationFrame(() => syncRadialGeometry(N));
         orbitNodesContainer.innerHTML = '';
         orbitNodesContainer.classList.remove('radial-spinning-ring');
         void orbitNodesContainer.offsetWidth;
@@ -484,7 +472,7 @@
               <div class="flip-card-inner">
                 <div class="flip-card-front">
                   <span class="flex-shrink-0">${item.icon}</span>
-                  <span class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight whitespace-nowrap">${item.name}</span>
+                  <span class="text-[11px] font-bold text-slate-800 dark:text-slate-100 tracking-tight whitespace-nowrap">${item.name}</span>
                 </div>
                 <div class="flip-card-back">
                   <span class="text-[9px] font-mono font-bold tracking-tight uppercase leading-tight line-clamp-1">${item.proof}</span>
