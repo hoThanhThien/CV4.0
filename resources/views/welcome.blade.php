@@ -62,9 +62,14 @@
       --mouse-x: -999px;
       --mouse-y: -999px;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 639px) {
       :root {
-        --radius: 128px;
+        --radius: 112px;
+      }
+    }
+    @media (max-width: 479px) {
+      :root {
+        --radius: 92px;
       }
     }
 
@@ -320,22 +325,37 @@
         </div>
 
         <!-- White BG / Dark BG Toggle -->
-        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all shadow-sm">
+        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all shadow-sm">
           <i data-lucide="moon" id="themeIconDark" class="w-3.5 h-3.5 text-indigo-500"></i>
           <i data-lucide="sun" id="themeIconLight" class="w-3.5 h-3.5 text-amber-400 hidden"></i>
-          <span id="themeToggleLabel">Dark BG</span>
+          <span id="themeToggleLabel" class="hidden sm:inline">Dark BG</span>
         </button>
 
         <!-- Primary Contact CTA -->
         <a href="{{ route('contact') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-sky-600 transition-all shadow-sm" data-i18n="nav_hire">
           Hire Me
         </a>
+
+        <!-- Mobile Menu Toggle -->
+        <button type="button" id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200" aria-label="Menu">
+          <i data-lucide="menu" class="w-4 h-4"></i>
+        </button>
       </div>
 
     </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobileMenuPanel" class="hidden md:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-3 space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+      <a href="#projects" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_projects">Selected Work</a>
+      <a href="#skills" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_skills">Tech Stack</a>
+      <a href="#credentials" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_credentials">Credentials</a>
+      <a href="#blog" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_blog">Engineering Blog</a>
+      <a href="{{ route('projects.index') }}" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_all_projects">Archive</a>
+      <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-center font-semibold mt-2" data-i18n="nav_hire">Hire Me</a>
+    </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-24">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-16 sm:space-y-24">
 
     <!-- =========================================================================
          SECTION 1: HERO SECTION (SPLIT LAYOUT 7:5 — IMPRESSIVE IN 3 SECONDS)
@@ -355,7 +375,7 @@
         </div>
 
         <!-- Giant Gradient Headline -->
-        <h1 class="font-display text-4xl sm:text-5xl lg:text-[3.45rem] font-extrabold tracking-tight leading-[1.08] text-slate-900 dark:text-white">
+        <h1 class="font-display text-[1.95rem] sm:text-5xl lg:text-[3.45rem] font-extrabold tracking-tight leading-[1.1] text-slate-900 dark:text-white">
           <span data-i18n="hero_title_1">Building scalable</span>
           <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="hero_title_highlight">
             Web Systems &amp; RAG AI
@@ -404,14 +424,14 @@
         <!-- 1. Interactive CLI Terminal (macOS Dark Slate #0f172a) -->
         <div class="rounded-2xl bg-[#0f172a] border border-slate-800 shadow-2xl shadow-slate-900/20 overflow-hidden">
           <!-- macOS Titlebar -->
-          <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
+          <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 flex-shrink-0">
               <span class="w-3 h-3 rounded-full bg-rose-500"></span>
               <span class="w-3 h-3 rounded-full bg-amber-400"></span>
               <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
             </div>
-            <span class="font-mono text-[11px] text-slate-400">thien@hothanhthien.io.vn — zsh</span>
-            <span class="w-10"></span>
+            <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 truncate">thien@hothanhthien.io.vn — zsh</span>
+            <span class="hidden sm:inline-block w-10"></span>
           </div>
 
           <!-- 4 Interactive Command Triggers -->
@@ -431,28 +451,28 @@
           </div>
 
           <!-- Terminal Output Window with Typewriter -->
-          <div class="p-4 font-mono text-xs leading-relaxed min-h-[185px] text-slate-200 space-y-2">
+          <div class="p-4 font-mono text-xs leading-relaxed min-h-[185px] text-slate-200 space-y-2 overflow-x-auto">
             <div class="text-slate-400">
               <span class="text-emerald-400 font-bold">$</span> <span id="cliTypedCommand" class="text-sky-300 font-semibold">whoami</span>
             </div>
-            <pre id="cliOutputBody" class="whitespace-pre-wrap text-slate-300 font-mono text-[11.5px] leading-relaxed"></pre>
+            <pre id="cliOutputBody" class="whitespace-pre-wrap break-words text-slate-300 font-mono text-[11px] sm:text-[11.5px] leading-relaxed"></pre>
           </div>
         </div>
 
         <!-- 2. Hàng 3 thẻ Mini Bento khoe 3 con số đắt giá -->
-        <div class="grid grid-cols-3 gap-3">
-          <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
-            <div class="font-display text-xl sm:text-2xl font-extrabold text-sky-600 dark:text-sky-400">4.0/4.0</div>
+        <div class="grid grid-cols-1 min-[420px]:grid-cols-3 gap-2.5 sm:gap-3">
+          <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-sm">
+            <div class="font-display text-lg sm:text-2xl font-extrabold text-sky-600 dark:text-sky-400">4.0/4.0</div>
             <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_gpa">Latest Term GPA</div>
           </div>
 
-          <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
-            <div class="font-display text-lg sm:text-xl font-extrabold text-indigo-600 dark:text-indigo-400 truncate" data-i18n="kpi_degree_val">Distinction</div>
+          <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-sm">
+            <div class="font-display text-base sm:text-xl font-extrabold text-indigo-600 dark:text-indigo-400 leading-tight" data-i18n="kpi_degree_val">Distinction</div>
             <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_degree">B.Eng IT @ UTH</div>
           </div>
 
-          <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
-            <div class="font-display text-lg sm:text-xl font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="kpi_award_val">2nd Prize</div>
+          <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-sm">
+            <div class="font-display text-base sm:text-xl font-extrabold text-emerald-600 dark:text-emerald-400 leading-tight" data-i18n="kpi_award_val">2nd Prize</div>
             <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_award">UTH IT Logo Design</div>
           </div>
         </div>
@@ -476,19 +496,19 @@
         </div>
 
         <!-- Mode Switcher Toggle + Spin Again -->
-        <div class="flex flex-wrap items-center gap-2.5">
-          <div class="inline-flex p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm font-mono text-xs">
-            <button type="button" id="btnModeGrid" onclick="switchSkillMode('grid')" class="px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all">
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex flex-wrap p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm font-mono text-[11px] sm:text-xs">
+            <button type="button" id="btnModeGrid" onclick="switchSkillMode('grid')" class="px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all">
               <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
               <span data-i18n="mode_grid">3D Spin &amp; Flip Grid</span>
             </button>
-            <button type="button" id="btnModeOrbit" onclick="switchSkillMode('orbit')" class="px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all">
+            <button type="button" id="btnModeOrbit" onclick="switchSkillMode('orbit')" class="px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all">
               <i data-lucide="orbit" class="w-3.5 h-3.5"></i>
               <span data-i18n="mode_orbit">3D Orbit Wheel</span>
             </button>
           </div>
 
-          <button type="button" id="btnSkillReplay" onclick="replaySkillsAnimation()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sky-600 dark:text-sky-400 font-mono text-xs font-bold hover:bg-sky-50 dark:hover:bg-slate-800 shadow-sm active:scale-95 transition-all">
+          <button type="button" id="btnSkillReplay" onclick="replaySkillsAnimation()" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sky-600 dark:text-sky-400 font-mono text-[11px] sm:text-xs font-bold hover:bg-sky-50 dark:hover:bg-slate-800 shadow-sm active:scale-95 transition-all">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
             <span data-i18n="btn_spin_again">Spin Again</span>
           </button>
@@ -496,7 +516,7 @@
       </div>
 
       <!-- Outer Card Wrapper -->
-      <div class="bg-white dark:bg-slate-900/90 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-5 sm:p-8 space-y-6">
+      <div class="bg-white dark:bg-slate-900/90 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-4 sm:p-8 space-y-5 sm:space-y-6">
         
         <!-- Category Filter Tabs (5 Category Pills) -->
         <div id="skillCategoryTabs" class="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
@@ -504,42 +524,42 @@
         </div>
 
         <!-- Hint Line -->
-        <div class="flex items-center justify-between text-xs font-mono text-sky-600 dark:text-sky-400 font-medium">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-sky-600 dark:text-sky-400 font-medium">
           <span data-i18n="skill_hint">✨ Hover or tap any skill card to 3D-flip &amp; inspect real project usage</span>
-          <span id="activeSkillCountMeta" class="hidden sm:inline text-slate-400">10 ITEMS</span>
+          <span id="activeSkillCountMeta" class="text-slate-400 text-[11px]">10 SKILLS</span>
         </div>
 
         <!-- CHẾ ĐỘ 1: 3D SPIN & FLIP GRID -->
-        <div id="skillGridModeWrap" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div id="skillGridModeWrap" class="grid grid-cols-1 min-[440px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
           <!-- Dynamically populated by JS -->
         </div>
 
         <!-- CHẾ ĐỘ 2: 3D ORBIT WHEEL + RIGHT INSPECTOR -->
-        <div id="skillOrbitModeWrap" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div id="skillOrbitModeWrap" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
           
           <!-- Left Stage: Ice-Blue Radial Orbit Visualizer -->
-          <div id="orbitStageBox" class="lg:col-span-7 rounded-2xl min-h-[440px] sm:min-h-[470px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
+          <div id="orbitStageBox" class="lg:col-span-7 rounded-2xl min-h-[320px] sm:min-h-[470px] bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
             
-            <div class="absolute top-3.5 left-4 font-mono text-[11px] text-slate-400">ORBIT // TRIG_ROTATION</div>
-            <div class="absolute bottom-3.5 left-4 font-mono text-[11px] text-slate-400 flex items-center gap-2 z-30">
+            <div class="absolute top-3 left-3 sm:top-3.5 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 z-30">ORBIT // TRIG_ROTATION</div>
+            <div class="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1.5 sm:gap-2 z-30">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <span id="orbitRadiusReadout">R=168px</span>
             </div>
-            <button type="button" id="btnOrbitSpinToggle" onclick="toggleOrbitSpin()" class="absolute bottom-3 right-3.5 z-30 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-700 text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 hover:border-sky-400 shadow-sm transition-all">
+            <button type="button" id="btnOrbitSpinToggle" onclick="toggleOrbitSpin()" class="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3.5 z-30 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-700 text-[10px] sm:text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 hover:border-sky-400 shadow-sm transition-all">
               <i data-lucide="pause" id="orbitSpinPauseIcon" class="w-3 h-3"></i>
               <i data-lucide="play" id="orbitSpinPlayIcon" class="w-3 h-3 hidden"></i>
               <span id="orbitSpinToggleLabel">Auto Orbit</span>
             </button>
 
-            <!-- 2 Concentric Dashed Orbit Rings -->
-            <div class="w-[172px] h-[172px] sm:w-[210px] sm:h-[210px] rounded-full border border-dashed border-indigo-500/25 dark:border-indigo-400/25 absolute pointer-events-none orbit-ring-counter"></div>
-            <div class="w-[258px] h-[258px] sm:w-[330px] sm:h-[330px] rounded-full border border-dashed border-sky-500/35 dark:border-sky-400/35 absolute pointer-events-none animate-spin-slow"></div>
+            <!-- 2 Concentric Dashed Orbit Rings (Scaled Dynamically via JS for 0px Mobile Clipping) -->
+            <div id="orbitInnerRing" class="w-[140px] h-[140px] sm:w-[210px] sm:h-[210px] rounded-full border border-dashed border-indigo-500/25 dark:border-indigo-400/25 absolute pointer-events-none orbit-ring-counter"></div>
+            <div id="orbitOuterRing" class="w-[210px] h-[210px] sm:w-[330px] sm:h-[330px] rounded-full border border-dashed border-sky-500/35 dark:border-sky-400/35 absolute pointer-events-none animate-spin-slow"></div>
 
             <!-- Central Circular Core Hub -->
-            <div class="relative z-10 w-32 h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-2">
-              <div class="text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">ACTIVE CORE</div>
-              <div id="orbitHubCategory" class="text-sm font-extrabold text-slate-900 dark:text-white leading-tight mt-0.5 px-1">Core Stack</div>
-              <div id="orbitHubCount" class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">10 Skills</div>
+            <div class="relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-1.5 sm:p-2">
+              <div class="text-[9px] sm:text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">ACTIVE CORE</div>
+              <div id="orbitHubCategory" class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white leading-tight mt-0.5 px-1">Core Stack</div>
+              <div id="orbitHubCount" class="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">10 Skills</div>
             </div>
 
             <!-- Dynamic Orbit Nodes Container -->
@@ -962,12 +982,12 @@
   <!-- =========================================================================
        SECTION 6: FLOATING RAG AI COPILOT ("ASK THIEN'S RAG AI")
   ========================================================================= -->
-  <div class="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+  <div class="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-50 flex flex-col items-end gap-3 max-w-[calc(100vw-2rem)]">
     
     <!-- Chat Copilot Drawer Window -->
-    <div id="ragCopilotPanel" class="hidden w-[340px] sm:w-[385px] bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden transition-all">
+    <div id="ragCopilotPanel" class="hidden w-[calc(100vw-2rem)] max-w-[385px] max-h-[min(78vh,540px)] flex flex-col bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden transition-all">
       <!-- Header -->
-      <div class="px-5 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex items-center justify-between">
+      <div class="px-4 sm:px-5 py-3.5 sm:py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex items-center justify-between flex-shrink-0">
         <div class="flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-300">
             <i data-lucide="bot" class="w-4 h-4"></i>
@@ -986,7 +1006,7 @@
       </div>
 
       <!-- Messages Container -->
-      <div id="copilotMessages" class="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50/70 dark:bg-slate-950/60 text-xs">
+      <div id="copilotMessages" class="p-4 flex-1 min-h-[160px] max-h-[260px] overflow-y-auto space-y-3 bg-slate-50/70 dark:bg-slate-950/60 text-xs">
         <div class="p-3 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 leading-relaxed shadow-sm" data-i18n="copilot_welcome">
           Hi recruiter! I am indexed with Ho Thanh Thien's UTH academic records (4.0/4.0 latest GPA, Distinction), TourRist RAG AI architecture, and Enmasys/AIPower engineering logs. Click any quick prompt below!
         </div>
@@ -1058,6 +1078,16 @@
 
     if (localStorage.getItem('thien_theme') === 'dark') {
       document.documentElement.classList.add('dark');
+    }
+
+    function toggleMobileMenu() {
+      const panel = document.getElementById('mobileMenuPanel');
+      if (panel) panel.classList.toggle('hidden');
+    }
+
+    function closeMobileMenu() {
+      const panel = document.getElementById('mobileMenuPanel');
+      if (panel) panel.classList.add('hidden');
     }
 
     // 4. COMPLETE EN / VI TRANSLATION DICTIONARY (100% SYNCHRONIZED)
@@ -1237,16 +1267,16 @@
         icon: 'star',
         iconColor: 'text-amber-500',
         items: [
-          { name: 'Java', icon: 'devicon-java-plain colored', mastery: 88, domain: { en: 'Enterprise Backend', vi: 'Backend Doanh nghiệp' }, project: { en: 'Laundry Management System', vi: 'Hệ thống Quản lý Giặt ủi' }, desc: { en: 'Spring Boot REST APIs, finite state order lifecycle & JPA', vi: 'Spring Boot REST API, máy trạng thái đơn hàng & JPA' } },
-          { name: 'PHP', icon: 'devicon-php-plain colored', mastery: 92, domain: { en: 'Web Architecture', vi: 'Kiến trúc Web' }, project: { en: 'Personal Portfolio & AIPower', vi: 'Portfolio CMS & AIPower' }, desc: { en: 'Laravel 11 SSR, OOP modules & corporate portals', vi: 'Laravel 11 SSR, module OOP & cổng thông tin doanh nghiệp' } },
-          { name: 'Python', icon: 'devicon-python-plain colored', mastery: 88, domain: { en: 'AI & Data Pipelines', vi: 'AI & Xử lý dữ liệu' }, project: { en: 'TourRist RAG Chatbot', vi: 'Chatbot RAG TourRist' }, desc: { en: 'FastAPI endpoints, text chunking & embeddings', vi: 'FastAPI endpoints, chia đoạn văn bản & vector embeddings' } },
+          { name: 'Java', icon: 'custom:java', mastery: 88, domain: { en: 'Enterprise Backend', vi: 'Backend Doanh nghiệp' }, project: { en: 'Laundry Management System', vi: 'Hệ thống Quản lý Giặt ủi' }, desc: { en: 'Spring Boot REST APIs, finite state order lifecycle & JPA', vi: 'Spring Boot REST API, máy trạng thái đơn hàng & JPA' } },
+          { name: 'PHP', icon: 'custom:php', mastery: 92, domain: { en: 'Web Architecture', vi: 'Kiến trúc Web' }, project: { en: 'Personal Portfolio & AIPower', vi: 'Portfolio CMS & AIPower' }, desc: { en: 'Laravel 11 SSR, OOP modules & corporate portals', vi: 'Laravel 11 SSR, module OOP & cổng thông tin doanh nghiệp' } },
+          { name: 'Python', icon: 'custom:python', mastery: 88, domain: { en: 'AI & Data Pipelines', vi: 'AI & Xử lý dữ liệu' }, project: { en: 'TourRist RAG Chatbot', vi: 'Chatbot RAG TourRist' }, desc: { en: 'FastAPI endpoints, text chunking & embeddings', vi: 'FastAPI endpoints, chia đoạn văn bản & vector embeddings' } },
           { name: 'Odoo ERP', icon: 'custom:odoo', mastery: 85, domain: { en: 'Enterprise ERP', vi: 'Hệ thống ERP' }, project: { en: 'Enmasys Enterprise Internship', vi: 'Thực tập Doanh nghiệp Enmasys' }, desc: { en: 'Configured Retail, Accounting & B2B Sales ORM', vi: 'Cấu hình phân hệ Bán lẻ, Kế toán & Sales B2B' } },
           { name: 'RAG AI', icon: 'custom:rag', mastery: 88, domain: { en: 'Applied GenAI', vi: 'AI Ứng dụng' }, project: { en: 'TourRist AI Concierge', vi: 'Trợ lý Du lịch RAG AI' }, desc: { en: 'ChromaDB semantic cosine retrieval & prompt grounding', vi: 'Tìm kiếm vector ChromaDB & giảm thiểu ảo giác LLM' } },
           { name: 'ReactJS', icon: 'devicon-react-original colored', mastery: 90, domain: { en: 'Reactive Frontend', vi: 'Giao diện Phản ứng' }, project: { en: 'Web Admin & Service UIs', vi: 'Giao diện Quản trị Web' }, desc: { en: 'Modular hooks architecture & reactive components', vi: 'Kiến trúc React Hooks tối ưu trạng thái' } },
           { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-original colored', mastery: 94, domain: { en: 'UI Styling Engine', vi: 'Hệ thống Giao diện' }, project: { en: 'Portfolio Design System', vi: 'Hệ thống Design Portfolio' }, desc: { en: 'Design tokens, glassmorphism & dark/light parity', vi: 'Design tokens, hiệu ứng kính mờ & Dark/Light Mode' } },
           { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', mastery: 86, domain: { en: 'Relational Database', vi: 'CSDL Quan hệ' }, project: { en: 'AIPower & Odoo DBs', vi: 'CSDL AIPower & Odoo' }, desc: { en: 'ACID transactions, JSONB columns & query tuning', vi: 'Giao dịch ACID, trường JSONB & tối ưu truy vấn' } },
           { name: 'Docker', icon: 'devicon-docker-plain colored', mastery: 86, domain: { en: 'Containerization', vi: 'Đóng gói Container' }, project: { en: 'Microservice Compose Stacks', vi: 'Môi trường Docker Compose' }, desc: { en: 'Isolated container networking & clean CI/CD parity', vi: 'Cô lập dịch vụ container & đồng bộ môi trường deploy' } },
-          { name: 'Figma', icon: 'devicon-figma-plain colored', mastery: 90, domain: { en: 'UI/UX & Branding', vi: 'Thiết kế UI/UX' }, project: { en: '2nd Prize UTH IT Logo', vi: 'Giải Nhì Logo CNTT UTH' }, desc: { en: 'Editorial grid layouts, wireframes & vector brand art', vi: 'Lưới bố cục tạp chí, wireframe & thiết kế nhận diện vector' } }
+          { name: 'Figma', icon: 'custom:figma', mastery: 90, domain: { en: 'UI/UX & Branding', vi: 'Thiết kế UI/UX' }, project: { en: '2nd Prize UTH IT Logo', vi: 'Giải Nhì Logo CNTT UTH' }, desc: { en: 'Editorial grid layouts, wireframes & vector brand art', vi: 'Lưới bố cục tạp chí, wireframe & thiết kế nhận diện vector' } }
         ]
       },
       {
@@ -1272,9 +1302,9 @@
         items: [
           { name: 'Vector Search', icon: 'custom:vector', mastery: 88, domain: { en: 'Semantic Retrieval', vi: 'Tìm kiếm Ngữ nghĩa' }, project: { en: 'TourRist Knowledge Store', vi: 'Kho Tri thức TourRist' }, desc: { en: 'ChromaDB HNSW cosine similarity indexing', vi: 'Đánh chỉ mục ChromaDB & truy xuất tương đồng cosine' } },
           { name: 'LLM Grounding', icon: 'custom:llm', mastery: 86, domain: { en: 'RAG Pipeline', vi: 'Chuỗi Xử lý RAG' }, project: { en: 'Zero-Hallucination Chatbot', vi: 'Chatbot Chống Ảo giác' }, desc: { en: 'Context assembly strictly bound to private corpus', vi: 'Tổng hợp ngữ cảnh chặt chẽ từ tài liệu nội bộ' } },
-          { name: 'MySQL 8.0', icon: 'devicon-mysql-original colored', mastery: 90, domain: { en: 'Relational Engine', vi: 'CSDL Quan hệ' }, project: { en: 'Portfolio & Laundry DB', vi: 'CSDL Portfolio & Giặt ủi' }, desc: { en: '3NF normalization, foreign keys & index tuning', vi: 'Chuẩn hóa 3NF, khóa ngoại & tối ưu chỉ mục' } },
+          { name: 'MySQL 8.0', icon: 'custom:mysql', mastery: 90, domain: { en: 'Relational Engine', vi: 'CSDL Quan hệ' }, project: { en: 'Portfolio & Laundry DB', vi: 'CSDL Portfolio & Giặt ủi' }, desc: { en: '3NF normalization, foreign keys & index tuning', vi: 'Chuẩn hóa 3NF, khóa ngoại & tối ưu chỉ mục' } },
           { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', mastery: 86, domain: { en: 'Enterprise SQL', vi: 'SQL Doanh nghiệp' }, project: { en: 'AIPower & Odoo ERP', vi: 'Hệ thống AIPower & Odoo' }, desc: { en: 'Relational views, JSONB indexing & reliability', vi: 'View quan hệ, JSONB & đảm bảo toàn vẹn dữ liệu' } },
-          { name: 'SQLite', icon: 'devicon-sqlite-plain colored', mastery: 92, domain: { en: 'Embedded SQL', vi: 'CSDL Nhúng' }, project: { en: 'CI/CD Testing & Dev', vi: 'Kiểm thử & Phát triển' }, desc: { en: 'WAL concurrency & fast in-memory automated tests', vi: 'Chế độ WAL & chạy test tự động tốc độ cao' } }
+          { name: 'SQLite', icon: 'custom:sqlite', mastery: 92, domain: { en: 'Embedded SQL', vi: 'CSDL Nhúng' }, project: { en: 'CI/CD Testing & Dev', vi: 'Kiểm thử & Phát triển' }, desc: { en: 'WAL concurrency & fast in-memory automated tests', vi: 'Chế độ WAL & chạy test tự động tốc độ cao' } }
         ]
       },
       {
@@ -1284,11 +1314,11 @@
         icon: 'layers',
         iconColor: 'text-emerald-500',
         items: [
-          { name: 'Next.js', icon: 'devicon-nextjs-plain text-slate-900 dark:text-white', mastery: 86, domain: { en: 'React SSR', vi: 'React SSR' }, project: { en: 'Laundry Customer Portal', vi: 'Cổng Khách hàng Giặt ủi' }, desc: { en: 'Server rendering, order tracking & API integration', vi: 'SSR, theo dõi trạng thái đơn hàng & tích hợp API' } },
-          { name: 'JavaScript ES6+', icon: 'devicon-javascript-plain colored', mastery: 92, domain: { en: 'Interactive DOM', vi: 'Tương tác DOM' }, project: { en: 'Orbit Wheel & Terminal UI', vi: 'Vòng xoay 3D & Terminal' }, desc: { en: 'Trigonometry orbital math, spotlight & typewriter FX', vi: 'Toán học lượng giác quỹ đạo, spotlight & hiệu ứng gõ chữ' } },
+          { name: 'Next.js', icon: 'custom:nextjs', mastery: 86, domain: { en: 'React SSR', vi: 'React SSR' }, project: { en: 'Laundry Customer Portal', vi: 'Cổng Khách hàng Giặt ủi' }, desc: { en: 'Server rendering, order tracking & API integration', vi: 'SSR, theo dõi trạng thái đơn hàng & tích hợp API' } },
+          { name: 'JavaScript ES6+', icon: 'custom:js', mastery: 92, domain: { en: 'Interactive DOM', vi: 'Tương tác DOM' }, project: { en: 'Orbit Wheel & Terminal UI', vi: 'Vòng xoay 3D & Terminal' }, desc: { en: 'Trigonometry orbital math, spotlight & typewriter FX', vi: 'Toán học lượng giác quỹ đạo, spotlight & hiệu ứng gõ chữ' } },
           { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-original colored', mastery: 94, domain: { en: 'Design Systems', vi: 'Hệ thống Thiết kế' }, project: { en: 'Pearl White Portfolio', vi: 'Giao diện Portfolio Sáng' }, desc: { en: 'Responsive bento layout & clean dark/light modes', vi: 'Bố cục bento đáp ứng & chế độ Sáng/Tối đồng bộ' } },
           { name: 'Blade Engine', icon: 'devicon-laravel-original colored', mastery: 96, domain: { en: 'SSR Components', vi: 'Component SSR' }, project: { en: 'hothanhthien.io.vn Core', vi: 'Lõi hothanhthien.io.vn' }, desc: { en: 'Zero hydration lag modular views & i18n bindings', vi: 'Hiển thị tức thì không độ trễ & gắn kết đa ngôn ngữ' } },
-          { name: 'UI/UX Craft', icon: 'devicon-figma-plain colored', mastery: 90, domain: { en: 'Visual Identity', vi: 'Nhận diện Thương hiệu' }, project: { en: '2nd Prize Logo UTH', vi: 'Giải Nhì Logo CNTT UTH' }, desc: { en: 'Typography hierarchy, WCAG contrast & micro-UX', vi: 'Phân cấp chữ, độ tương phản WCAG & vi tương tác' } }
+          { name: 'UI/UX Craft', icon: 'custom:figma', mastery: 90, domain: { en: 'Visual Identity', vi: 'Nhận diện Thương hiệu' }, project: { en: '2nd Prize Logo UTH', vi: 'Giải Nhì Logo CNTT UTH' }, desc: { en: 'Typography hierarchy, WCAG contrast & micro-UX', vi: 'Phân cấp chữ, độ tương phản WCAG & vi tương tác' } }
         ]
       },
       {
@@ -1301,7 +1331,7 @@
           { name: 'Docker Compose', icon: 'devicon-docker-plain colored', mastery: 86, domain: { en: 'Container Ops', vi: 'Vận hành Container' }, project: { en: 'Local & AI Stacks', vi: 'Môi trường Dev & AI' }, desc: { en: 'Multi-container services & environment parity', vi: 'Đa dịch vụ container & đồng bộ dev-to-prod' } },
           { name: 'Nginx', icon: 'devicon-nginx-original colored', mastery: 86, domain: { en: 'Web Server', vi: 'Máy chủ Web' }, project: { en: 'hothanhthien.io.vn Prod', vi: 'Production hothanhthien.io.vn' }, desc: { en: 'Reverse proxy, SSL termination & HTTP/2 tuning', vi: 'Reverse proxy, chứng chỉ SSL & tối ưu HTTP/2' } },
           { name: 'Git & GitHub', icon: 'devicon-git-plain colored', mastery: 92, domain: { en: 'Version Control', vi: 'Quản lý Mã nguồn' }, project: { en: '10+ Production Repos', vi: '10+ Repo Thực tế' }, desc: { en: 'Semantic commits, clean branches & PR workflows', vi: 'Commit chuẩn semantic & quản lý nhánh sạch sẽ' } },
-          { name: 'Linux / Cron', icon: 'devicon-linux-plain text-slate-900 dark:text-slate-100', mastery: 88, domain: { en: 'SysAdmin', vi: 'Quản trị Hệ thống' }, project: { en: 'cPanel Scheduled Jobs', vi: 'Tác vụ Tự động cPanel' }, desc: { en: 'Automated schedulers, queues & bash diagnostics', vi: 'Lập lịch cron tự động, worker & xử lý log hệ thống' } }
+          { name: 'Linux / Cron', icon: 'custom:linux', mastery: 88, domain: { en: 'SysAdmin', vi: 'Quản trị Hệ thống' }, project: { en: 'cPanel Scheduled Jobs', vi: 'Tác vụ Tự động cPanel' }, desc: { en: 'Automated schedulers, queues & bash diagnostics', vi: 'Lập lịch cron tự động, worker & xử lý log hệ thống' } }
         ]
       }
     ];
@@ -1442,13 +1472,13 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       const orbitWrap = document.getElementById('skillOrbitModeWrap');
 
       if (mode === 'grid') {
-        btnGrid.className = 'px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-500 text-white shadow-sm transition-all';
-        btnOrbit.className = 'px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
+        btnGrid.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-500 text-white shadow-sm transition-all';
+        btnOrbit.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
         gridWrap.classList.remove('hidden');
         orbitWrap.classList.add('hidden');
       } else {
-        btnOrbit.className = 'px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-500 text-white shadow-sm transition-all';
-        btnGrid.className = 'px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
+        btnOrbit.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-500 text-white shadow-sm transition-all';
+        btnGrid.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
         gridWrap.classList.add('hidden');
         orbitWrap.classList.remove('hidden');
       }
@@ -1476,6 +1506,8 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       }
     }
 
+    const CUSTOM_BRAND_SVGS = @json(\App\Support\TechIcon::jsSvgMap());
+
     function renderSkillIcon(item, variant = 'grid') {
       const iconKey = item.icon || '';
       const boxSizes = {
@@ -1484,40 +1516,10 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         inspector: { svg: 'w-8 h-8', odoo: 'w-11 h-6', orbitText: '' }
       }[variant] || { svg: 'w-6 h-6', odoo: 'w-8 h-5', orbitText: '' };
 
-      if (iconKey === 'custom:odoo') {
-        return `<svg viewBox="0 7.2 24 9.8" class="${boxSizes.odoo} text-[#714B67] dark:text-[#C58FB7] flex-shrink-0" fill="currentColor" role="img" aria-label="Odoo Logo"><path d="M21.1002 15.7957c-1.6015 0-2.8997-1.2983-2.8997-2.8998s1.2983-2.8997 2.8997-2.8997c1.6015 0 2.8998 1.2982 2.8998 2.8997 0 1.5999-1.2979 2.8998-2.8998 2.8998zm0-1.2c.9388.0006 1.7003-.7601 1.7008-1.6989.0004-.9388-.7602-1.7003-1.699-1.7007h-.0018c-.9388.0004-1.6994.7619-1.699 1.7007.0005.9381.761 1.6985 1.699 1.699zm-6.0655 1.2c-1.6014 0-2.8997-1.2983-2.8997-2.8998s1.2983-2.8997 2.8997-2.8997c1.6015 0 2.8998 1.2982 2.8998 2.8997 0 1.5999-1.2999 2.8998-2.8998 2.8998zm0-1.2c.9389.0006 1.7003-.7601 1.7008-1.6989.0005-.9388-.7602-1.7003-1.699-1.7007h-.0018c-.9388.0004-1.6994.7619-1.699 1.7007.0005.9381.761 1.6985 1.699 1.699zM11.865 12.858c0 1.6199-1.2979 2.9378-2.8977 2.9378s-2.8998-1.314-2.8998-2.9358 1.1799-2.8597 2.8998-2.8597c.6359 0 1.2239.134 1.6998.484v-1.68a.6.6 0 0 1 1.2 0v4.0537h-.002zm-2.8977 1.7399c.9388.0005 1.7002-.7602 1.7007-1.699.0005-.9388-.7602-1.7003-1.699-1.7007h-.0017c-.9389.0004-1.6995.7619-1.699 1.7007.0004.9381.7608 1.6985 1.699 1.699zm-6.0675 1.1979C1.2983 15.7957 0 14.4974 0 12.8959s1.2983-2.8997 2.8998-2.8997 2.8997 1.2982 2.8997 2.8997c0 1.5999-1.2999 2.8998-2.8997 2.8998zm0-1.2c.9388.0006 1.7002-.7601 1.7007-1.699.0005-.9387-.7602-1.7002-1.699-1.7006h-.0017c-.9388.0004-1.6995.7619-1.699 1.7007.0004.9381.7608 1.6985 1.699 1.699z"/></svg>`;
-      }
-
-      if (iconKey === 'custom:rag') {
-        return `<svg viewBox="0 0 24 24" class="${boxSizes.svg} flex-shrink-0" fill="none" role="img" aria-label="RAG AI Logo">
-          <path d="M4.5 3.5h8.2L17 7.8v3.8M4.5 3.5v17a1.5 1.5 0 001.5 1.5h4.2M4.5 3.5A1.5 1.5 0 003 5v14.5" stroke="#0EA5E9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M7.2 10h5.2M7.2 13.5h3.2" stroke="#6366F1" stroke-width="1.8" stroke-linecap="round"/>
-          <path d="M16.6 11.2l1.25 3.25 3.25 1.25-3.25 1.25-1.25 3.25-1.25-3.25-3.25-1.25 3.25-1.25 1.25-3.25z" fill="#6366F1"/>
-          <circle cx="19.5" cy="11" r="1.1" fill="#10B981"/>
-        </svg>`;
-      }
-
-      if (iconKey === 'custom:vector') {
-        return `<svg viewBox="0 0 24 24" class="${boxSizes.svg} flex-shrink-0" fill="none" role="img" aria-label="Vector Search Logo">
-          <rect x="3" y="6.5" width="9" height="11" rx="4.5" fill="#F43F5E" fill-opacity="0.88"/>
-          <rect x="7.5" y="6.5" width="9" height="11" rx="4.5" fill="#F59E0B" fill-opacity="0.88"/>
-          <rect x="12" y="6.5" width="9" height="11" rx="4.5" fill="#0EA5E9" fill-opacity="0.88"/>
-        </svg>`;
-      }
-
-      if (iconKey === 'custom:llm') {
-        return `<svg viewBox="0 0 24 24" class="${boxSizes.svg} flex-shrink-0" fill="none" role="img" aria-label="LLM Grounding Logo">
-          <circle cx="12" cy="12" r="8.5" stroke="#6366F1" stroke-width="1.7" stroke-dasharray="3 2.5"/>
-          <circle cx="12" cy="5.5" r="2" fill="#0EA5E9"/>
-          <circle cx="6.5" cy="16" r="2" fill="#6366F1"/>
-          <circle cx="17.5" cy="16" r="2" fill="#10B981"/>
-          <path d="M12 7.5v3.2m-3.6 3.7l2.5-1.8m4.7 1.8l-2.5-1.8" stroke="#64748B" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="12" cy="12" r="2.3" fill="#10B981"/>
-        </svg>`;
-      }
-
-      if (iconKey === 'custom:jwt') {
-        return `<img src="https://cdn.simpleicons.org/jsonwebtokens/D63AFF?viewbox=auto" alt="JWT Logo" class="${boxSizes.svg} object-contain flex-shrink-0" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';"><svg viewBox="0 0 24 24" class="${boxSizes.svg} hidden flex-shrink-0" fill="none" role="img" aria-label="JWT Security Logo"><path d="M12 2.5L4.5 5.8v5.9c0 5.1 3.2 9.4 7.5 10.8 4.3-1.4 7.5-5.7 7.5-10.8V5.8L12 2.5z" fill="#D63AFF" fill-opacity="0.18" stroke="#D63AFF" stroke-width="1.8"/><path d="M12 8.2a2.2 2.2 0 00-2.2 2.2v1.1h4.4v-1.1A2.2 2.2 0 0012 8.2zm-3.2 3.3h6.4v4.2H8.8v-4.2z" fill="#D63AFF"/></svg>`;
+      if (CUSTOM_BRAND_SVGS[iconKey]) {
+        return CUSTOM_BRAND_SVGS[iconKey]
+          .replace(/__SZ__/g, boxSizes.svg)
+          .replace(/__ODOO__/g, boxSizes.odoo);
       }
 
       const cls = boxSizes.orbitText ? `${iconKey} ${boxSizes.orbitText}` : iconKey;
@@ -1596,6 +1598,38 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       updateOrbitSpinLabel();
     }
 
+    function syncOrbitGeometry(nodeCount) {
+      const stageBox = document.getElementById('orbitStageBox');
+      if (!stageBox) return 168;
+
+      const boxWidth = stageBox.clientWidth || window.innerWidth;
+      const isCompact = boxWidth < 460;
+      const pillAllowance = isCompact ? 104 : 136;
+      const safeRadius = Math.max(76, Math.min(168, Math.floor((boxWidth - pillAllowance) / 2)));
+
+      stageBox.style.setProperty('--radius', `${safeRadius}px`);
+      stageBox.style.minHeight = `${Math.max(300, safeRadius * 2 + (isCompact ? 116 : 138))}px`;
+
+      const outerRing = document.getElementById('orbitOuterRing');
+      const innerRing = document.getElementById('orbitInnerRing');
+      if (outerRing) {
+        const dOuter = Math.max(150, safeRadius * 2 - 4);
+        outerRing.style.width = `${dOuter}px`;
+        outerRing.style.height = `${dOuter}px`;
+      }
+      if (innerRing) {
+        const dInner = Math.max(112, Math.round(safeRadius * 1.25));
+        innerRing.style.width = `${dInner}px`;
+        innerRing.style.height = `${dInner}px`;
+      }
+
+      const readout = document.getElementById('orbitRadiusReadout');
+      if (readout && typeof nodeCount === 'number') {
+        readout.textContent = `R=${safeRadius}px • N=${nodeCount}`;
+      }
+      return safeRadius;
+    }
+
     function render3DOrbitWheel(cat, items) {
       const stageBox = document.getElementById('orbitStageBox');
       const stage = document.getElementById('orbitNodesStage');
@@ -1603,13 +1637,13 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
       document.getElementById('orbitHubCategory').textContent = cat.hubName[currentLang];
       document.getElementById('orbitHubCount').textContent = currentLang === 'vi' ? `${N} Kỹ năng` : `${N} Skills`;
-      document.getElementById('orbitRadiusReadout').textContent = window.innerWidth < 640 ? `R=128px • N=${N}` : `R=168px • N=${N}`;
 
       if (stageBox) {
         stageBox.classList.remove('is-hover-paused');
       }
 
       stage.innerHTML = '';
+      syncOrbitGeometry(N);
       // Synchronize outer ring rotation and child counter-rotation clocks at t=0
       stage.classList.remove('orbit-spinning-ring');
       void stage.offsetWidth;
@@ -1624,9 +1658,9 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
         node.innerHTML = `
           <div class="orbit-node-upright">
-            <div class="orbit-node-pill px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1.5">
+            <div class="orbit-node-pill px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1 sm:gap-1.5">
               ${renderSkillIcon(item, 'orbit')}
-              <span class="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
+              <span class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
             </div>
           </div>
         `;
@@ -1805,6 +1839,24 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       switchSkillMode('grid', false);
       setLanguage(currentLang);
       if (window.lucide) lucide.createIcons();
+
+      const orbitBox = document.getElementById('orbitStageBox');
+      if (orbitBox && typeof ResizeObserver !== 'undefined') {
+        const ro = new ResizeObserver(() => {
+          if (currentSkillMode === 'orbit') {
+            const items = SKILL_CATEGORIES[currentSkillCategory].items;
+            syncOrbitGeometry(items.length);
+          }
+        });
+        ro.observe(orbitBox);
+      } else {
+        window.addEventListener('resize', () => {
+          if (currentSkillMode === 'orbit') {
+            const items = SKILL_CATEGORIES[currentSkillCategory].items;
+            syncOrbitGeometry(items.length);
+          }
+        });
+      }
     });
   </script>
 </body>

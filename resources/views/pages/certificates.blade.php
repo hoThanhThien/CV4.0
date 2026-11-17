@@ -105,17 +105,17 @@
 
     <!-- Right Stats & Actions -->
     <div class="lg:col-span-4 space-y-3">
-      <div class="grid grid-cols-3 gap-2.5">
-        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-          <div class="font-display text-2xl font-extrabold text-sky-600 dark:text-sky-400">{{ $totalCount }}</div>
+      <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
+        <div class="p-2.5 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-xl sm:text-2xl font-extrabold text-sky-600 dark:text-sky-400">{{ $totalCount }}</div>
           <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_total_docs">{{ $isVi ? 'Tài liệu' : 'Records' }}</div>
         </div>
-        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-          <div class="font-display text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">4.0</div>
+        <div class="p-2.5 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-xl sm:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">4.0</div>
           <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">Latest GPA</div>
         </div>
-        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-          <div class="font-display text-2xl font-extrabold text-amber-600 dark:text-amber-400">2nd</div>
+        <div class="p-2.5 sm:p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="font-display text-xl sm:text-2xl font-extrabold text-amber-600 dark:text-amber-400">2nd</div>
           <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">UTH Award</div>
         </div>
       </div>
