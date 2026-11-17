@@ -591,7 +591,7 @@
 
               <!-- Icon & Name -->
               <div class="flex items-center gap-4">
-                <div id="inspectorIconBox" class="w-14 h-14 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-3xl">
+                <div id="inspectorIconBox" class="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-3xl">
                   <i class="devicon-laravel-original colored"></i>
                 </div>
                 <div>
@@ -600,15 +600,16 @@
                 </div>
               </div>
 
-              <!-- Proficiency Animated Progress Bar -->
-              <div class="space-y-2 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/70 dark:border-slate-800">
-                <div class="flex items-center justify-between text-xs font-mono font-semibold">
-                  <span class="text-slate-600 dark:text-slate-300" data-i18n="inspector_mastery">Engineering Mastery</span>
-                  <span id="inspectorPercent" class="text-sky-600 dark:text-sky-400 font-bold">95%</span>
+              <!-- Stack Specialization & Production Validation -->
+              <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-3">
+                <div class="space-y-0.5 min-w-0">
+                  <div class="text-[10px] font-mono uppercase tracking-wider text-slate-400" data-i18n="inspector_mastery">Engineering Scope</div>
+                  <div id="inspectorScopeVal" class="text-xs font-mono font-bold text-slate-800 dark:text-slate-100 truncate">Web Architecture</div>
                 </div>
-                <div class="w-full h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                  <div id="inspectorProgressBar" class="h-full rounded-full bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-500 transition-all duration-500" style="width: 95%;"></div>
-                </div>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-[10px] font-bold text-emerald-700 dark:text-emerald-300 flex-shrink-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span data-i18n="inspector_status_val">Production Ready</span>
+                </span>
               </div>
 
               <!-- Production Project Proof -->
@@ -1136,7 +1137,8 @@
         skill_hint: '✨ Hover or tap any skill card to 3D-flip & inspect real project usage',
         inspector_title: '3D Orbit Inspector',
         inspector_verified: 'Verified Proof',
-        inspector_mastery: 'Engineering Mastery',
+        inspector_mastery: 'Engineering Scope',
+        inspector_status_val: 'Production Ready',
         inspector_proof_label: 'Real-World Production Proof',
         inspector_footer_hint: 'Hover / Tap wheel nodes to inspect',
         bento_kicker: '02 // ASYMMETRIC CASE STUDIES & HONORS',
@@ -1218,7 +1220,8 @@
         skill_hint: '✨ Rê chuột hoặc chạm vào thẻ kỹ năng để lật 3D 180° & xem dự án áp dụng thực tế',
         inspector_title: 'Bảng soi Kỹ năng 3D',
         inspector_verified: 'Đã kiểm chứng',
-        inspector_mastery: 'Độ thành thạo thực chiến',
+        inspector_mastery: 'Lĩnh vực Ứng dụng',
+        inspector_status_val: 'Đã triển khai',
         inspector_proof_label: 'Minh chứng Dự án Production',
         inspector_footer_hint: 'Rê chuột / Chạm node trên vòng quay để xem',
         bento_kicker: '02 // DỰ ÁN TRỌNG ĐIỂM & VINH DANH',
@@ -1287,7 +1290,7 @@
           { name: 'RAG AI', icon: 'custom:rag', mastery: 88, domain: { en: 'Applied GenAI', vi: 'AI Ứng dụng' }, project: { en: 'TourRist AI Concierge', vi: 'Trợ lý Du lịch RAG AI' }, desc: { en: 'ChromaDB semantic cosine retrieval & prompt grounding', vi: 'Tìm kiếm vector ChromaDB & giảm thiểu ảo giác LLM' } },
           { name: 'ReactJS', icon: 'devicon-react-original colored', mastery: 90, domain: { en: 'Reactive Frontend', vi: 'Giao diện Phản ứng' }, project: { en: 'Web Admin & Service UIs', vi: 'Giao diện Quản trị Web' }, desc: { en: 'Modular hooks architecture & reactive components', vi: 'Kiến trúc React Hooks tối ưu trạng thái' } },
           { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-original colored', mastery: 94, domain: { en: 'UI Styling Engine', vi: 'Hệ thống Giao diện' }, project: { en: 'Portfolio Design System', vi: 'Hệ thống Design Portfolio' }, desc: { en: 'Design tokens, glassmorphism & dark/light parity', vi: 'Design tokens, hiệu ứng kính mờ & Dark/Light Mode' } },
-          { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', mastery: 86, domain: { en: 'Relational Database', vi: 'CSDL Quan hệ' }, project: { en: 'AIPower & Odoo DBs', vi: 'CSDL AIPower & Odoo' }, desc: { en: 'ACID transactions, JSONB columns & query tuning', vi: 'Giao dịch ACID, trường JSONB & tối ưu truy vấn' } },
+          { name: 'PostgreSQL', icon: 'custom:postgresql', mastery: 86, domain: { en: 'Relational Database', vi: 'CSDL Quan hệ' }, project: { en: 'AIPower & Odoo DBs', vi: 'CSDL AIPower & Odoo' }, desc: { en: 'ACID transactions, JSONB columns & query tuning', vi: 'Giao dịch ACID, trường JSONB & tối ưu truy vấn' } },
           { name: 'Docker', icon: 'devicon-docker-plain colored', mastery: 86, domain: { en: 'Containerization', vi: 'Đóng gói Container' }, project: { en: 'Microservice Compose Stacks', vi: 'Môi trường Docker Compose' }, desc: { en: 'Isolated container networking & clean CI/CD parity', vi: 'Cô lập dịch vụ container & đồng bộ môi trường deploy' } },
           { name: 'Figma', icon: 'custom:figma', mastery: 90, domain: { en: 'UI/UX & Branding', vi: 'Thiết kế UI/UX' }, project: { en: '2nd Prize UTH IT Logo', vi: 'Giải Nhì Logo CNTT UTH' }, desc: { en: 'Editorial grid layouts, wireframes & vector brand art', vi: 'Lưới bố cục tạp chí, wireframe & thiết kế nhận diện vector' } }
         ]
@@ -1316,7 +1319,7 @@
           { name: 'Vector Search', icon: 'custom:vector', mastery: 88, domain: { en: 'Semantic Retrieval', vi: 'Tìm kiếm Ngữ nghĩa' }, project: { en: 'TourRist Knowledge Store', vi: 'Kho Tri thức TourRist' }, desc: { en: 'ChromaDB HNSW cosine similarity indexing', vi: 'Đánh chỉ mục ChromaDB & truy xuất tương đồng cosine' } },
           { name: 'LLM Grounding', icon: 'custom:llm', mastery: 86, domain: { en: 'RAG Pipeline', vi: 'Chuỗi Xử lý RAG' }, project: { en: 'Zero-Hallucination Chatbot', vi: 'Chatbot Chống Ảo giác' }, desc: { en: 'Context assembly strictly bound to private corpus', vi: 'Tổng hợp ngữ cảnh chặt chẽ từ tài liệu nội bộ' } },
           { name: 'MySQL 8.0', icon: 'custom:mysql', mastery: 90, domain: { en: 'Relational Engine', vi: 'CSDL Quan hệ' }, project: { en: 'Portfolio & Laundry DB', vi: 'CSDL Portfolio & Giặt ủi' }, desc: { en: '3NF normalization, foreign keys & index tuning', vi: 'Chuẩn hóa 3NF, khóa ngoại & tối ưu chỉ mục' } },
-          { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', mastery: 86, domain: { en: 'Enterprise SQL', vi: 'SQL Doanh nghiệp' }, project: { en: 'AIPower & Odoo ERP', vi: 'Hệ thống AIPower & Odoo' }, desc: { en: 'Relational views, JSONB indexing & reliability', vi: 'View quan hệ, JSONB & đảm bảo toàn vẹn dữ liệu' } },
+          { name: 'PostgreSQL', icon: 'custom:postgresql', mastery: 86, domain: { en: 'Enterprise SQL', vi: 'SQL Doanh nghiệp' }, project: { en: 'AIPower & Odoo ERP', vi: 'Hệ thống AIPower & Odoo' }, desc: { en: 'Relational views, JSONB indexing & reliability', vi: 'View quan hệ, JSONB & đảm bảo toàn vẹn dữ liệu' } },
           { name: 'SQLite', icon: 'custom:sqlite', mastery: 92, domain: { en: 'Embedded SQL', vi: 'CSDL Nhúng' }, project: { en: 'CI/CD Testing & Dev', vi: 'Kiểm thử & Phát triển' }, desc: { en: 'WAL concurrency & fast in-memory automated tests', vi: 'Chế độ WAL & chạy test tự động tốc độ cao' } }
         ]
       },
@@ -1554,10 +1557,13 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
             <!-- Front Face -->
             <div class="grid-flip-front spotlight-card bg-slate-50/70 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 p-4 flex flex-col justify-between">
               <div class="flex items-start justify-between relative z-10">
-                <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-2xl shadow-sm spin-icon-target">
+                <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-center text-2xl shadow-sm spin-icon-target">
                   ${renderSkillIcon(item, 'grid')}
                 </div>
-                <span class="font-mono text-[11px] font-bold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-500/15 px-2 py-0.5 rounded-md">${item.mastery}%</span>
+                <span class="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-slate-400 dark:text-slate-500 bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/70 px-2 py-0.5 rounded-md">
+                  <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 0114.93-4M20 4v4h-4m4 4a8 8 0 01-14.93 4M4 20v-4h4"/></svg>
+                  <span>3D</span>
+                </span>
               </div>
               <div class="relative z-10 text-left">
                 <div class="font-display font-bold text-sm text-slate-900 dark:text-white">${item.name}</div>
@@ -1658,7 +1664,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
         node.innerHTML = `
           <div class="orbit-node-upright">
-            <div class="orbit-node-pill px-2 py-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 shadow-md flex items-center gap-1">
+            <div class="orbit-node-pill px-2 py-1 rounded-xl bg-white dark:bg-slate-800/95 border border-slate-200/90 dark:border-slate-600/80 shadow-md flex items-center gap-1">
               ${renderSkillIcon(item, 'orbit')}
               <span class="text-[11px] font-bold tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
             </div>
@@ -1692,8 +1698,8 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       document.getElementById('inspectorIconBox').innerHTML = renderSkillIcon(item, 'inspector');
       document.getElementById('inspectorSkillName').textContent = item.name;
       document.getElementById('inspectorDomain').textContent = item.domain[currentLang];
-      document.getElementById('inspectorPercent').textContent = `${item.mastery}%`;
-      document.getElementById('inspectorProgressBar').style.width = `${item.mastery}%`;
+      const scopeEl = document.getElementById('inspectorScopeVal');
+      if (scopeEl) scopeEl.textContent = item.domain[currentLang];
       document.getElementById('inspectorProjectTitle').textContent = item.project[currentLang];
       document.getElementById('inspectorProjectDesc').textContent = item.desc[currentLang];
     }
