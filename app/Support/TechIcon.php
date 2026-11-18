@@ -116,6 +116,28 @@ class TechIcon
     }
 
     /**
+     * Resolve a compact icon key for frontend JS icon renderers (`custom:*`, devicon class, or `lucide:*`).
+     */
+    public static function jsKey(string $name): string
+    {
+        $key = strtolower(trim($name));
+
+        if (isset(self::CUSTOM_MAP[$key])) {
+            return 'custom:' . self::CUSTOM_MAP[$key];
+        }
+
+        if (isset(self::DEVICON_MAP[$key])) {
+            return self::DEVICON_MAP[$key];
+        }
+
+        if (isset(self::LUCIDE_MAP[$key])) {
+            return 'lucide:' . self::LUCIDE_MAP[$key];
+        }
+
+        return 'lucide:cpu';
+    }
+
+    /**
      * Export brand SVG templates for frontend JS modules with placeholder size tokens.
      *
      * @return array<string, string>

@@ -656,6 +656,16 @@
         </a>
       </div>
 
+      @php
+          $isVi = app()->getLocale() === 'vi';
+          $tourRist = $featuredProjects->first(fn ($p) => stripos($p->title, 'tourrist') !== false);
+          $laundry = $featuredProjects->first(fn ($p) => stripos($p->title, 'laundry') !== false);
+          $awardCert = $certificates->firstWhere('category', 'award');
+          $extraProjects = $featuredProjects
+              ->reject(fn ($p) => ($tourRist && $p->id === $tourRist->id) || ($laundry && $p->id === $laundry->id))
+              ->take(3);
+      @endphp
+
       <!-- Bento Grid 3 Columns -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -663,38 +673,74 @@
         <article class="lg:col-span-2 min-w-0 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between gap-6">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
             <div class="md:col-span-6 min-w-0 space-y-4">
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
                 <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-500/30">
-                  FLAGSHIP // APPLIED AI
+                  {{ $tourRist && $tourRist->role ? strtoupper($tourRist->role) . ' // APPLIED AI' : 'FLAGSHIP // APPLIED AI' }}
                 </span>
-                <span class="font-mono text-[11px] text-slate-400">01/2026 — 06/2026</span>
+                <span class="font-mono text-[11px] text-slate-400">{{ $tourRist && $tourRist->period ? $tourRist->period : '01/2026 — 06/2026' }}</span>
               </div>
 
-              <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug" data-i18n="proj1_title">
-                TourRist — Smart Travel Platform &amp; RAG AI Concierge
-              </h3>
-
-              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="proj1_desc">
-                Engineered a document-based RAG chatbot pairing semantic ChromaDB vector search with LLM grounding to generate zero-hallucination travel itineraries from curated local knowledge bases.
-              </p>
-
-              <div class="flex flex-wrap gap-1.5">
-                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
-                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
-                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
-                <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Vector Search</span>
-              </div>
-
-              <div class="flex items-center gap-3 pt-1">
-                <a href="{{ url('/projects/2') }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
-                  <span data-i18n="btn_case_study">Read Case Study</span>
-                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-                </a>
-                <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white">
-                  <i data-lucide="github" class="w-3.5 h-3.5"></i>
-                  <span>GitHub</span>
-                </a>
-              </div>
+              @if($tourRist)
+                <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug">
+                  {{ $tourRist->title }}
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  {{ \Illuminate\Support\Str::limit($tourRist->summary ?: $tourRist->clean_description, 220) }}
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  @forelse($tourRist->technologies->take(5) as $tech)
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                      {!! \App\Support\TechIcon::render($tech->name, 'w-3 h-3') !!}
+                      <span>{{ $tech->name }}</span>
+                    </span>
+                  @empty
+                    <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
+                    <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
+                    <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
+                  @endforelse
+                </div>
+                <div class="flex items-center gap-3 pt-1 flex-wrap">
+                  <a href="{{ route('projects.show', $tourRist->id) }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+                    <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                  </a>
+                  @if($tourRist->github_url)
+                    <a href="{{ $tourRist->github_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                      <i data-lucide="github" class="w-3.5 h-3.5"></i>
+                      <span>GitHub</span>
+                    </a>
+                  @endif
+                  @if($tourRist->demo_url)
+                    <a href="{{ $tourRist->demo_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-emerald-600 dark:text-emerald-400 hover:underline">
+                      <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                      <span>Live</span>
+                    </a>
+                  @endif
+                </div>
+              @else
+                <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug" data-i18n="proj1_title">
+                  TourRist — Smart Travel Platform &amp; RAG AI Concierge
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="proj1_desc">
+                  Engineered a document-based RAG chatbot pairing semantic ChromaDB vector search with LLM grounding to generate zero-hallucination travel itineraries from curated local knowledge bases.
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
+                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
+                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
+                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Vector Search</span>
+                </div>
+                <div class="flex items-center gap-3 pt-1">
+                  <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+                    <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                  </a>
+                  <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                    <i data-lucide="github" class="w-3.5 h-3.5"></i>
+                    <span>GitHub</span>
+                  </a>
+                </div>
+              @endif
             </div>
 
             <!-- Embedded Live RAG AI Chat Simulation -->
@@ -756,8 +802,8 @@
             </p>
           </div>
 
-          <a href="{{ route('certificates') }}" class="mt-4 inline-flex items-center gap-1.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 hover:underline relative z-10">
-            <span data-i18n="award_verify">Verify Official Certificate</span>
+          <a href="{{ route('certificates', $awardCert ? ['category' => 'award'] : []) }}" class="mt-4 inline-flex items-center gap-1.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 hover:underline relative z-10">
+            <span data-i18n="award_verify">{{ $isVi ? 'Xác thực Giấy khen & Bằng cấp' : 'Verify Official Certificate' }}</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </a>
         </article>
@@ -765,87 +811,208 @@
         <!-- THẺ 3 (Chiếm 1 cột): Laundry & Multi-Service Platform (Spring Boot) -->
         <article class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between space-y-5">
           <div class="space-y-3 relative z-10">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-2">
               <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-500/30">
                 ENTERPRISE JAVA
               </span>
-              <span class="font-mono text-[11px] text-slate-400">01/2025 — 05/2025</span>
+              <span class="font-mono text-[11px] text-slate-400">{{ $laundry && $laundry->period ? $laundry->period : '01/2025 — 05/2025' }}</span>
             </div>
 
-            <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white leading-snug" data-i18n="proj3_title">
-              Laundry &amp; Multi-Service Platform
-            </h3>
-
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="proj3_desc">
-              Order lifecycle state machine (Received -> Washing -> Ready -> Delivered) with Spring Boot REST APIs, JWT/OTP Auth &amp; Role-Based Access Control.
-            </p>
+            @if($laundry)
+              <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white leading-snug">
+                {{ $laundry->title }}
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                {{ \Illuminate\Support\Str::limit($laundry->summary ?: $laundry->clean_description, 185) }}
+              </p>
+            @else
+              <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white leading-snug" data-i18n="proj3_title">
+                Laundry &amp; Multi-Service Platform
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="proj3_desc">
+                Order lifecycle state machine (Received -> Washing -> Ready -> Delivered) with Spring Boot REST APIs, JWT/OTP Auth &amp; Role-Based Access Control.
+              </p>
+            @endif
 
             <!-- Microservices Architecture Flow Diagram -->
             <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono text-[10px] space-y-2">
               <div class="text-slate-400 font-bold">MICROSERVICES FLOW</div>
               <div class="flex flex-wrap items-center gap-1.5 text-slate-700 dark:text-slate-200">
-                <span class="px-2 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">NextJS</span>
-                <span class="text-sky-500">&rarr;</span>
-                <span class="px-2 py-1 rounded bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-400/40 font-bold">JWT Guard</span>
-                <span class="text-sky-500">&rarr;</span>
-                <span class="px-2 py-1 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-400/40 font-bold">Spring Boot</span>
-                <span class="text-sky-500">&rarr;</span>
-                <span class="px-2 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">MySQL</span>
+                @if($laundry && $laundry->technologies->isNotEmpty())
+                  @foreach($laundry->technologies->take(4) as $tIdx => $tech)
+                    @if($tIdx > 0)<span class="text-sky-500">&rarr;</span>@endif
+                    <span class="px-2 py-1 rounded {{ $tIdx === 1 ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-400/40 font-bold' : ($tIdx === 2 ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-400/40 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700') }}">{{ $tech->name }}</span>
+                  @endforeach
+                @else
+                  <span class="px-2 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">NextJS</span>
+                  <span class="text-sky-500">&rarr;</span>
+                  <span class="px-2 py-1 rounded bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-400/40 font-bold">JWT Guard</span>
+                  <span class="text-sky-500">&rarr;</span>
+                  <span class="px-2 py-1 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-400/40 font-bold">Spring Boot</span>
+                  <span class="text-sky-500">&rarr;</span>
+                  <span class="px-2 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">MySQL</span>
+                @endif
               </div>
             </div>
           </div>
 
           <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 relative z-10">
-            <a href="{{ url('/projects/3') }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
-              <span data-i18n="btn_case_study">Read Case Study</span>
+            <a href="{{ $laundry ? route('projects.show', $laundry->id) : route('projects.index') }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+              <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
-            <a href="https://github.com/hoThanhThien/LT_JAVA_010412213603" target="_blank" rel="noopener" class="text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
+            <a href="{{ $laundry && $laundry->github_url ? $laundry->github_url : 'https://github.com/hoThanhThien/LT_JAVA_010412213603' }}" target="_blank" rel="noopener" class="text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
               <i data-lucide="github" class="w-3.5 h-3.5"></i>
               <span>Code</span>
             </a>
           </div>
         </article>
 
-        <!-- THẺ 4 (Chiếm 2 cột - lg:col-span-2): Kinh nghiệm Odoo ERP (Enmasys) & Full-Stack (AIPower) -->
+        <!-- THẺ 4 (Chiếm 2 cột - lg:col-span-2): Kinh nghiệm Thực tế từ DB ($experiences) -->
         <article class="lg:col-span-2 min-w-0 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between space-y-6">
-          <div class="space-y-3 relative z-10">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-              <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
-                INDUSTRY EXPERIENCE
-              </span>
-              <span class="font-mono text-[11px] text-slate-400" data-i18n="exp_period">03/2026 — PRESENT</span>
+          @if($experiences->isNotEmpty())
+            <div class="space-y-3 relative z-10">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
+                  {{ $isVi ? 'KINH NGHIỆM THỰC TẾ' : 'INDUSTRY EXPERIENCE' }}
+                </span>
+                <span class="font-mono text-[11px] text-slate-400">{{ $experiences->first()->formatted_date }}</span>
+              </div>
+
+              <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug">
+                {{ $experiences->take(2)->map(fn ($e) => trim($e->localized_position . ' @ ' . $e->localized_company))->implode(' & ') }}
+              </h3>
             </div>
 
-            <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="exp_bento_title">
-              Odoo ERP Engineering @ Enmasys &amp; Full-Stack Web @ AIPower
-            </h3>
+            <div class="grid grid-cols-1 {{ $experiences->count() >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2' }} gap-4 relative z-10">
+              @foreach($experiences->take(3) as $expIdx => $exp)
+                @php
+                    $expAccent = ['text-indigo-600 dark:text-indigo-400', 'text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400'][$expIdx % 3];
+                @endphp
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800 flex flex-col justify-between gap-2.5">
+                  <div class="space-y-1.5">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="font-mono text-[10px] font-semibold text-slate-400">{{ $exp->formatted_date }}</span>
+                      @if($exp->current)
+                        <span class="px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono text-[9px] font-bold">ACTIVE</span>
+                      @endif
+                    </div>
+                    <div class="font-display text-base font-extrabold {{ $expAccent }} leading-snug">{{ $exp->localized_company }}</div>
+                    <div class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $exp->localized_position }}</div>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
+                      {{ \Illuminate\Support\Str::limit(strip_tags((string) $exp->localized_description), 125) }}
+                    </p>
+                  </div>
+                  @if(!empty($exp->tech_tags))
+                    <div class="flex flex-wrap gap-1 pt-1">
+                      @foreach(array_slice($exp->tech_tags, 0, 3) as $tag)
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300">{{ $tag }}</span>
+                      @endforeach
+                    </div>
+                  @endif
+                </div>
+              @endforeach
+            </div>
+          @else
+            <div class="space-y-3 relative z-10">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
+                  INDUSTRY EXPERIENCE
+                </span>
+                <span class="font-mono text-[11px] text-slate-400" data-i18n="exp_period">03/2026 — PRESENT</span>
+              </div>
 
-            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl" data-i18n="exp_bento_desc">
-              Configured enterprise Odoo modules (Retail, Attendance, Accounting, B2B Sales) at Enmasys; engineered corporate &amp; education platforms using PHP, WordPress &amp; PostgreSQL at AIPower while maintaining hothanhthien.io.vn CMS in production.
-            </p>
-          </div>
+              <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="exp_bento_title">
+                Odoo ERP Engineering @ Enmasys &amp; Full-Stack Web @ AIPower
+              </h3>
 
-          <!-- 3 Hộp Chỉ Số Kết Quả Thực Tế -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
-            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
-              <div class="font-display text-xl font-extrabold text-indigo-600 dark:text-indigo-400" data-i18n="exp_stat1_val">4+ Modules</div>
-              <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat1_lbl">Odoo Retail, Sales, Accounting &amp; HR configured</div>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl" data-i18n="exp_bento_desc">
+                Configured enterprise Odoo modules (Retail, Attendance, Accounting, B2B Sales) at Enmasys; engineered corporate &amp; education platforms using PHP, WordPress &amp; PostgreSQL at AIPower while maintaining hothanhthien.io.vn CMS in production.
+              </p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
-              <div class="font-display text-xl font-extrabold text-sky-600 dark:text-sky-400" data-i18n="exp_stat2_val">PHP &amp; PostgreSQL</div>
-              <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat2_lbl">Production corporate &amp; education portals shipped</div>
-            </div>
+            <!-- 3 Hộp Chỉ Số Kết Quả Thực Tế -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
+                <div class="font-display text-xl font-extrabold text-indigo-600 dark:text-indigo-400" data-i18n="exp_stat1_val">4+ Modules</div>
+                <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat1_lbl">Odoo Retail, Sales, Accounting &amp; HR configured</div>
+              </div>
 
-            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
-              <div class="font-display text-xl font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="exp_stat3_val">Laravel 11 SSR</div>
-              <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat3_lbl">Live bilingual CMS running at hothanhthien.io.vn</div>
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
+                <div class="font-display text-xl font-extrabold text-sky-600 dark:text-sky-400" data-i18n="exp_stat2_val">PHP &amp; PostgreSQL</div>
+                <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat2_lbl">Production corporate &amp; education portals shipped</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
+                <div class="font-display text-xl font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="exp_stat3_val">Laravel 11 SSR</div>
+                <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat3_lbl">Live bilingual CMS running at hothanhthien.io.vn</div>
+              </div>
             </div>
-          </div>
+          @endif
         </article>
 
       </div>
+
+      @if($extraProjects->isNotEmpty())
+        <div class="grid grid-cols-1 {{ $extraProjects->count() === 1 ? '' : ($extraProjects->count() === 2 ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3') }} gap-6">
+          @foreach($extraProjects as $proj)
+            <article class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 flex flex-col justify-between gap-4">
+              <div class="space-y-3 relative z-10">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700">
+                    {{ strtoupper($proj->role ?: 'FEATURED SYSTEM') }}
+                  </span>
+                  @if($proj->period)
+                    <span class="font-mono text-[11px] text-slate-400">{{ $proj->period }}</span>
+                  @endif
+                </div>
+
+                <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white leading-snug">
+                  <a href="{{ route('projects.show', $proj->id) }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                    {{ $proj->title }}
+                  </a>
+                </h3>
+
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
+                  {{ \Illuminate\Support\Str::limit($proj->summary ?: $proj->clean_description, 165) }}
+                </p>
+
+                @if($proj->technologies->isNotEmpty())
+                  <div class="flex flex-wrap gap-1.5">
+                    @foreach($proj->technologies->take(5) as $tech)
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                        {!! \App\Support\TechIcon::render($tech->name, 'w-3 h-3') !!}
+                        <span>{{ $tech->name }}</span>
+                      </span>
+                    @endforeach
+                  </div>
+                @endif
+              </div>
+
+              <div class="flex items-center justify-between pt-2.5 border-t border-slate-100 dark:border-slate-800 relative z-10">
+                <a href="{{ route('projects.show', $proj->id) }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+                  <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+                <div class="flex items-center gap-3">
+                  @if($proj->github_url)
+                    <a href="{{ $proj->github_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-1">
+                      <i data-lucide="github" class="w-3.5 h-3.5"></i>
+                      <span>Code</span>
+                    </a>
+                  @endif
+                  @if($proj->demo_url)
+                    <a href="{{ $proj->demo_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                      <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                      <span>Demo</span>
+                    </a>
+                  @endif
+                </div>
+              </div>
+            </article>
+          @endforeach
+        </div>
+      @endif
     </section>
 
     <!-- =========================================================================
@@ -855,56 +1022,92 @@
 
       <!-- Credentials & Brochure PDF (5 cols) -->
       <div class="lg:col-span-5 min-w-0 space-y-5">
-        <div class="space-y-1.5">
-          <div class="font-mono text-xs font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400" data-i18n="cred_kicker">03 // OFFICIAL CREDENTIALS</div>
-          <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="cred_title">Degrees &amp; Portfolio PDF</h2>
+        <div class="flex items-end justify-between gap-3">
+          <div class="space-y-1.5">
+            <div class="font-mono text-xs font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400" data-i18n="cred_kicker">03 // OFFICIAL CREDENTIALS</div>
+            <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="cred_title">Degrees &amp; Portfolio PDF</h2>
+          </div>
+          <a href="{{ route('certificates') }}" class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline whitespace-nowrap">
+            {{ $isVi ? 'Xem tất cả' : 'View Vault' }} &rarr;
+          </a>
         </div>
 
         <div class="space-y-3">
-          <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" target="_blank" rel="noopener" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-            <div class="flex items-start justify-between gap-3 relative z-10">
-              <div class="flex items-start gap-3">
-                <span class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="file-text" class="w-5 h-5"></i>
-                </span>
-                <div>
-                  <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert1_title">Engineer Portfolio &amp; CV Brochure (PDF)</h3>
-                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert1_sub">Ho Thanh Thien &bull; Ready for Instant Download</p>
+          @forelse($certificates->take(4) as $cert)
+            @php
+                $certMeta = match ($cert->category) {
+                    'brochure' => ['icon' => 'file-text', 'box' => 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400', 'action' => 'download'],
+                    'degree' => ['icon' => 'graduation-cap', 'box' => 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400', 'action' => 'external-link'],
+                    'award' => ['icon' => 'award', 'box' => 'bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400', 'action' => 'external-link'],
+                    default => ['icon' => 'badge-check', 'box' => 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400', 'action' => 'external-link'],
+                };
+                $hasLocalFile = !empty($cert->file_path) && is_file(public_path('storage/' . ltrim($cert->file_path, '/')));
+                $certUrl = ($cert->category === 'brochure' && $hasLocalFile)
+                    ? $cert->file_url
+                    : route('certificates', ['category' => $cert->category ?: 'all']);
+                $isDirectFile = ($cert->category === 'brochure' && $hasLocalFile);
+                $certSub = collect([$cert->issuer, $cert->issue_date])->filter()->implode(' • ');
+            @endphp
+            <a href="{{ $certUrl }}" @if($isDirectFile) target="_blank" rel="noopener" @endif class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+              <div class="flex items-start justify-between gap-3 relative z-10">
+                <div class="flex items-start gap-3">
+                  <span class="w-10 h-10 rounded-xl {{ $certMeta['box'] }} flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="{{ $certMeta['icon'] }}" class="w-5 h-5"></i>
+                  </span>
+                  <div>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white leading-snug">{{ $cert->title }}</h3>
+                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">{{ $certSub ?: ($cert->description ?: 'Verified Portfolio Credential') }}</p>
+                  </div>
                 </div>
+                <i data-lucide="{{ $certMeta['action'] }}" class="w-4 h-4 {{ $isDirectFile ? 'text-sky-500' : 'text-slate-400' }} flex-shrink-0"></i>
               </div>
-              <i data-lucide="download" class="w-4 h-4 text-sky-500 flex-shrink-0"></i>
-            </div>
-          </a>
+            </a>
+          @empty
+            <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" target="_blank" rel="noopener" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+              <div class="flex items-start justify-between gap-3 relative z-10">
+                <div class="flex items-start gap-3">
+                  <span class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                  </span>
+                  <div>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert1_title">Engineer Portfolio &amp; CV Brochure (PDF)</h3>
+                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert1_sub">Ho Thanh Thien &bull; Ready for Instant Download</p>
+                  </div>
+                </div>
+                <i data-lucide="download" class="w-4 h-4 text-sky-500 flex-shrink-0"></i>
+              </div>
+            </a>
 
-          <a href="{{ route('certificates') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-            <div class="flex items-start justify-between gap-3 relative z-10">
-              <div class="flex items-start gap-3">
-                <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="graduation-cap" class="w-5 h-5"></i>
-                </span>
-                <div>
-                  <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert2_title">B.Eng in Information Technology — Distinction</h3>
-                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert2_sub">University of Transport HCMC (UTH) &bull; GPA 3.6 / 4.0</p>
+            <a href="{{ route('certificates') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+              <div class="flex items-start justify-between gap-3 relative z-10">
+                <div class="flex items-start gap-3">
+                  <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                  </span>
+                  <div>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert2_title">B.Eng in Information Technology — Distinction</h3>
+                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert2_sub">University of Transport HCMC (UTH) &bull; GPA 3.6 / 4.0</p>
+                  </div>
                 </div>
+                <i data-lucide="external-link" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
               </div>
-              <i data-lucide="external-link" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
-            </div>
-          </a>
+            </a>
 
-          <a href="{{ route('certificates') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-            <div class="flex items-start justify-between gap-3 relative z-10">
-              <div class="flex items-start gap-3">
-                <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
-                  <i data-lucide="award" class="w-5 h-5"></i>
-                </span>
-                <div>
-                  <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert3_title">2nd Prize — IT Faculty Logo Design Contest</h3>
-                  <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert3_sub">Faculty of Information Technology &bull; UTH Official Award</p>
+            <a href="{{ route('certificates') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+              <div class="flex items-start justify-between gap-3 relative z-10">
+                <div class="flex items-start gap-3">
+                  <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="award" class="w-5 h-5"></i>
+                  </span>
+                  <div>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert3_title">2nd Prize — IT Faculty Logo Design Contest</h3>
+                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert3_sub">Faculty of Information Technology &bull; UTH Official Award</p>
+                  </div>
                 </div>
+                <i data-lucide="external-link" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
               </div>
-              <i data-lucide="external-link" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
-            </div>
-          </a>
+            </a>
+          @endforelse
         </div>
       </div>
 
@@ -919,38 +1122,45 @@
         </div>
 
         <div class="space-y-3">
-          <a href="{{ url('/blog/building-document-based-rag-systems') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
-            <div class="flex items-center justify-between gap-4 relative z-10">
-              <div class="space-y-1">
-                <div class="font-mono text-[11px] text-sky-600 dark:text-sky-400 font-bold">RAG AI // ARCHITECTURE</div>
-                <h3 class="font-display font-bold text-base text-slate-900 dark:text-white" data-i18n="post1_title">Building Document-Based RAG Systems with LLMs</h3>
-                <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-1" data-i18n="post1_desc">How to design a retrieval-augmented generation pipeline using vector search, chunking, and modern LLMs.</p>
+          @forelse($recentPosts as $idx => $post)
+            @php
+                $postAccent = ['text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400', 'text-indigo-600 dark:text-indigo-400'][$idx % 3];
+                $postCategory = !empty($post->category)
+                    ? strtoupper($post->category)
+                    : ($post->ai_generated ? 'AI STUDIO // ENGINEERING' : 'ENGINEERING JOURNAL');
+                $postSummary = $post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags((string) $post->content), 145);
+            @endphp
+            <a href="{{ route('blog.show', $post->slug) }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
+              <div class="flex items-center justify-between gap-4 relative z-10">
+                <div class="space-y-1 min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap font-mono text-[11px]">
+                    <span class="{{ $postAccent }} font-bold">{{ $postCategory }}</span>
+                    @if($post->published_at)
+                      <span class="text-slate-400">&bull; {{ $post->published_at->format('M d, Y') }}</span>
+                    @endif
+                  </div>
+                  <h3 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">{{ $post->title }}</h3>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">{{ $postSummary }}</p>
+                </div>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
               </div>
-              <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
-            </div>
-          </a>
-
-          <a href="{{ url('/blog/building-restful-apis-with-spring-boot') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
-            <div class="flex items-center justify-between gap-4 relative z-10">
-              <div class="space-y-1">
-                <div class="font-mono text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">JAVA // SPRING BOOT</div>
-                <h3 class="font-display font-bold text-base text-slate-900 dark:text-white" data-i18n="post2_title">Building Secure RESTful APIs with Spring Boot</h3>
-                <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-1" data-i18n="post2_desc">A comprehensive guide to creating scalable, production-ready REST APIs using Java Spring Boot and JWT security.</p>
+            </a>
+          @empty
+            <a href="{{ route('blog.index') }}" class="spotlight-card block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+              <div class="flex items-center justify-between gap-4 relative z-10">
+                <div class="space-y-1">
+                  <div class="font-mono text-[11px] text-sky-600 dark:text-sky-400 font-bold">ENGINEERING JOURNAL</div>
+                  <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">
+                    {{ $isVi ? 'Các bài viết kỹ thuật đang được xuất bản' : 'Technical Articles Coming Soon' }}
+                  </h3>
+                  <p class="text-xs text-slate-600 dark:text-slate-400">
+                    {{ $isVi ? 'Xem toàn bộ ghi chú kiến trúc tại trang Blog.' : 'Browse all engineering notes on the blog archive.' }}
+                  </p>
+                </div>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
               </div>
-              <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
-            </div>
-          </a>
-
-          <a href="{{ url('/blog/mastering-react-hooks') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
-            <div class="flex items-center justify-between gap-4 relative z-10">
-              <div class="space-y-1">
-                <div class="font-mono text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">FRONTEND // REACTJS</div>
-                <h3 class="font-display font-bold text-base text-slate-900 dark:text-white" data-i18n="post3_title">Mastering React Hooks &amp; State Management</h3>
-                <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-1" data-i18n="post3_desc">Learn how to utilize React Hooks effectively for scalable state management and functional components.</p>
-              </div>
-              <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
-            </div>
-          </a>
+            </a>
+          @endforelse
         </div>
       </div>
 
@@ -1274,83 +1484,8 @@
       }
     };
 
-    // 5. VERIFIED SKILL CATEGORIES DATASET (WITH EN/VI TRANSLATED PROOFS)
-    const SKILL_CATEGORIES = [
-      {
-        id: 'core',
-        label: { en: 'Core Stack (Top 10)', vi: 'Công nghệ Cốt lõi (Top 10)' },
-        hubName: { en: 'Core Stack', vi: 'Core Stack' },
-        icon: 'star',
-        iconColor: 'text-amber-500',
-        items: [
-          { name: 'Java', icon: 'custom:java', mastery: 88, domain: { en: 'Enterprise Backend', vi: 'Backend Doanh nghiệp' }, project: { en: 'Laundry Management System', vi: 'Hệ thống Quản lý Giặt ủi' }, desc: { en: 'Spring Boot REST APIs, finite state order lifecycle & JPA', vi: 'Spring Boot REST API, máy trạng thái đơn hàng & JPA' } },
-          { name: 'PHP', icon: 'custom:php', mastery: 92, domain: { en: 'Web Architecture', vi: 'Kiến trúc Web' }, project: { en: 'Personal Portfolio & AIPower', vi: 'Portfolio CMS & AIPower' }, desc: { en: 'Laravel 11 SSR, OOP modules & corporate portals', vi: 'Laravel 11 SSR, module OOP & cổng thông tin doanh nghiệp' } },
-          { name: 'Python', icon: 'custom:python', mastery: 88, domain: { en: 'AI & Data Pipelines', vi: 'AI & Xử lý dữ liệu' }, project: { en: 'TourRist RAG Chatbot', vi: 'Chatbot RAG TourRist' }, desc: { en: 'FastAPI endpoints, text chunking & embeddings', vi: 'FastAPI endpoints, chia đoạn văn bản & vector embeddings' } },
-          { name: 'Odoo ERP', icon: 'custom:odoo', mastery: 85, domain: { en: 'Enterprise ERP', vi: 'Hệ thống ERP' }, project: { en: 'Enmasys Enterprise Internship', vi: 'Thực tập Doanh nghiệp Enmasys' }, desc: { en: 'Configured Retail, Accounting & B2B Sales ORM', vi: 'Cấu hình phân hệ Bán lẻ, Kế toán & Sales B2B' } },
-          { name: 'RAG AI', icon: 'custom:rag', mastery: 88, domain: { en: 'Applied GenAI', vi: 'AI Ứng dụng' }, project: { en: 'TourRist AI Concierge', vi: 'Trợ lý Du lịch RAG AI' }, desc: { en: 'ChromaDB semantic cosine retrieval & prompt grounding', vi: 'Tìm kiếm vector ChromaDB & giảm thiểu ảo giác LLM' } },
-          { name: 'ReactJS', icon: 'devicon-react-original colored', mastery: 90, domain: { en: 'Reactive Frontend', vi: 'Giao diện Phản ứng' }, project: { en: 'Web Admin & Service UIs', vi: 'Giao diện Quản trị Web' }, desc: { en: 'Modular hooks architecture & reactive components', vi: 'Kiến trúc React Hooks tối ưu trạng thái' } },
-          { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-original colored', mastery: 94, domain: { en: 'UI Styling Engine', vi: 'Hệ thống Giao diện' }, project: { en: 'Portfolio Design System', vi: 'Hệ thống Design Portfolio' }, desc: { en: 'Design tokens, glassmorphism & dark/light parity', vi: 'Design tokens, hiệu ứng kính mờ & Dark/Light Mode' } },
-          { name: 'PostgreSQL', icon: 'custom:postgresql', mastery: 86, domain: { en: 'Relational Database', vi: 'CSDL Quan hệ' }, project: { en: 'AIPower & Odoo DBs', vi: 'CSDL AIPower & Odoo' }, desc: { en: 'ACID transactions, JSONB columns & query tuning', vi: 'Giao dịch ACID, trường JSONB & tối ưu truy vấn' } },
-          { name: 'Docker', icon: 'devicon-docker-plain colored', mastery: 86, domain: { en: 'Containerization', vi: 'Đóng gói Container' }, project: { en: 'Microservice Compose Stacks', vi: 'Môi trường Docker Compose' }, desc: { en: 'Isolated container networking & clean CI/CD parity', vi: 'Cô lập dịch vụ container & đồng bộ môi trường deploy' } },
-          { name: 'Figma', icon: 'custom:figma', mastery: 90, domain: { en: 'UI/UX & Branding', vi: 'Thiết kế UI/UX' }, project: { en: '2nd Prize UTH IT Logo', vi: 'Giải Nhì Logo CNTT UTH' }, desc: { en: 'Editorial grid layouts, wireframes & vector brand art', vi: 'Lưới bố cục tạp chí, wireframe & thiết kế nhận diện vector' } }
-        ]
-      },
-      {
-        id: 'backend',
-        label: { en: 'Backend & ERP', vi: 'Backend & ERP' },
-        hubName: { en: 'Backend / ERP', vi: 'Backend / ERP' },
-        icon: 'server',
-        iconColor: 'text-indigo-500',
-        items: [
-          { name: 'Laravel 11', icon: 'devicon-laravel-original colored', mastery: 95, domain: { en: 'Fullstack PHP', vi: 'Fullstack PHP' }, project: { en: 'hothanhthien.io.vn CMS', vi: 'CMS hothanhthien.io.vn' }, desc: { en: 'Blade SSR, Eloquent ORM, dynamic sitemaps & Auth', vi: 'Blade SSR, Eloquent ORM, sitemap động & phân quyền' } },
-          { name: 'Spring Boot', icon: 'devicon-spring-original colored', mastery: 88, domain: { en: 'Java Microservices', vi: 'Java Backend' }, project: { en: 'Laundry Management API', vi: 'API Quản lý Giặt ủi' }, desc: { en: 'Spring Data JPA, Hibernate & stateless REST', vi: 'Spring Data JPA, Hibernate & RESTful API bảo mật' } },
-          { name: 'FastAPI', icon: 'devicon-fastapi-plain colored', mastery: 86, domain: { en: 'Async Python API', vi: 'API Python Bất đồng bộ' }, project: { en: 'TourRist Inference Gateway', vi: 'Cổng API AI TourRist' }, desc: { en: 'Async ingestion, Pydantic validation & OpenAPI', vi: 'Nạp tài liệu bất đồng bộ, Pydantic & OpenAPI docs' } },
-          { name: 'Odoo ORM', icon: 'custom:odoo', mastery: 85, domain: { en: 'ERP Workflows', vi: 'Nghiệp vụ ERP' }, project: { en: 'Enmasys Enterprise ERP', vi: 'Thực tập Enmasys ERP' }, desc: { en: 'B2B Sales workflow mapping & accounting customization', vi: 'Chuẩn hóa quy trình Sales B2B & kế toán doanh nghiệp' } },
-          { name: 'JWT & RBAC', icon: 'custom:jwt', mastery: 90, domain: { en: 'Auth Security', vi: 'Bảo mật & Phân quyền' }, project: { en: 'Laundry Security Guard', vi: 'Lớp bảo vệ JWT Giặt ủi' }, desc: { en: 'Token lifecycle, OTP verification & role guards', vi: 'Vòng đời token, xác thực OTP & kiểm soát vai trò' } }
-        ]
-      },
-      {
-        id: 'rag',
-        label: { en: 'RAG AI & Databases', vi: 'RAG AI & Cơ sở Dữ liệu' },
-        hubName: { en: 'RAG & Data', vi: 'RAG & Dữ liệu' },
-        icon: 'database',
-        iconColor: 'text-sky-500',
-        items: [
-          { name: 'Vector Search', icon: 'custom:vector', mastery: 88, domain: { en: 'Semantic Retrieval', vi: 'Tìm kiếm Ngữ nghĩa' }, project: { en: 'TourRist Knowledge Store', vi: 'Kho Tri thức TourRist' }, desc: { en: 'ChromaDB HNSW cosine similarity indexing', vi: 'Đánh chỉ mục ChromaDB & truy xuất tương đồng cosine' } },
-          { name: 'LLM Grounding', icon: 'custom:llm', mastery: 86, domain: { en: 'RAG Pipeline', vi: 'Chuỗi Xử lý RAG' }, project: { en: 'Zero-Hallucination Chatbot', vi: 'Chatbot Chống Ảo giác' }, desc: { en: 'Context assembly strictly bound to private corpus', vi: 'Tổng hợp ngữ cảnh chặt chẽ từ tài liệu nội bộ' } },
-          { name: 'MySQL 8.0', icon: 'custom:mysql', mastery: 90, domain: { en: 'Relational Engine', vi: 'CSDL Quan hệ' }, project: { en: 'Portfolio & Laundry DB', vi: 'CSDL Portfolio & Giặt ủi' }, desc: { en: '3NF normalization, foreign keys & index tuning', vi: 'Chuẩn hóa 3NF, khóa ngoại & tối ưu chỉ mục' } },
-          { name: 'PostgreSQL', icon: 'custom:postgresql', mastery: 86, domain: { en: 'Enterprise SQL', vi: 'SQL Doanh nghiệp' }, project: { en: 'AIPower & Odoo ERP', vi: 'Hệ thống AIPower & Odoo' }, desc: { en: 'Relational views, JSONB indexing & reliability', vi: 'View quan hệ, JSONB & đảm bảo toàn vẹn dữ liệu' } },
-          { name: 'SQLite', icon: 'custom:sqlite', mastery: 92, domain: { en: 'Embedded SQL', vi: 'CSDL Nhúng' }, project: { en: 'CI/CD Testing & Dev', vi: 'Kiểm thử & Phát triển' }, desc: { en: 'WAL concurrency & fast in-memory automated tests', vi: 'Chế độ WAL & chạy test tự động tốc độ cao' } }
-        ]
-      },
-      {
-        id: 'frontend',
-        label: { en: 'Frontend & UI/UX', vi: 'Frontend & UI/UX' },
-        hubName: { en: 'Frontend / UI', vi: 'Giao diện UI' },
-        icon: 'layers',
-        iconColor: 'text-emerald-500',
-        items: [
-          { name: 'Next.js', icon: 'custom:nextjs', mastery: 86, domain: { en: 'React SSR', vi: 'React SSR' }, project: { en: 'Laundry Customer Portal', vi: 'Cổng Khách hàng Giặt ủi' }, desc: { en: 'Server rendering, order tracking & API integration', vi: 'SSR, theo dõi trạng thái đơn hàng & tích hợp API' } },
-          { name: 'JavaScript ES6+', icon: 'custom:js', mastery: 92, domain: { en: 'Interactive DOM', vi: 'Tương tác DOM' }, project: { en: 'Orbit Wheel & Terminal UI', vi: 'Vòng xoay 3D & Terminal' }, desc: { en: 'Trigonometry orbital math, spotlight & typewriter FX', vi: 'Toán học lượng giác quỹ đạo, spotlight & hiệu ứng gõ chữ' } },
-          { name: 'Tailwind CSS', icon: 'devicon-tailwindcss-original colored', mastery: 94, domain: { en: 'Design Systems', vi: 'Hệ thống Thiết kế' }, project: { en: 'Pearl White Portfolio', vi: 'Giao diện Portfolio Sáng' }, desc: { en: 'Responsive bento layout & clean dark/light modes', vi: 'Bố cục bento đáp ứng & chế độ Sáng/Tối đồng bộ' } },
-          { name: 'Blade Engine', icon: 'devicon-laravel-original colored', mastery: 96, domain: { en: 'SSR Components', vi: 'Component SSR' }, project: { en: 'hothanhthien.io.vn Core', vi: 'Lõi hothanhthien.io.vn' }, desc: { en: 'Zero hydration lag modular views & i18n bindings', vi: 'Hiển thị tức thì không độ trễ & gắn kết đa ngôn ngữ' } },
-          { name: 'UI/UX Craft', icon: 'custom:figma', mastery: 90, domain: { en: 'Visual Identity', vi: 'Nhận diện Thương hiệu' }, project: { en: '2nd Prize Logo UTH', vi: 'Giải Nhì Logo CNTT UTH' }, desc: { en: 'Typography hierarchy, WCAG contrast & micro-UX', vi: 'Phân cấp chữ, độ tương phản WCAG & vi tương tác' } }
-        ]
-      },
-      {
-        id: 'devops',
-        label: { en: 'DevOps & Architecture', vi: 'DevOps & Kiến trúc' },
-        hubName: { en: 'DevOps / Ops', vi: 'Vận hành' },
-        icon: 'box',
-        iconColor: 'text-rose-500',
-        items: [
-          { name: 'Docker Compose', icon: 'devicon-docker-plain colored', mastery: 86, domain: { en: 'Container Ops', vi: 'Vận hành Container' }, project: { en: 'Local & AI Stacks', vi: 'Môi trường Dev & AI' }, desc: { en: 'Multi-container services & environment parity', vi: 'Đa dịch vụ container & đồng bộ dev-to-prod' } },
-          { name: 'Nginx', icon: 'devicon-nginx-original colored', mastery: 86, domain: { en: 'Web Server', vi: 'Máy chủ Web' }, project: { en: 'hothanhthien.io.vn Prod', vi: 'Production hothanhthien.io.vn' }, desc: { en: 'Reverse proxy, SSL termination & HTTP/2 tuning', vi: 'Reverse proxy, chứng chỉ SSL & tối ưu HTTP/2' } },
-          { name: 'Git & GitHub', icon: 'devicon-git-plain colored', mastery: 92, domain: { en: 'Version Control', vi: 'Quản lý Mã nguồn' }, project: { en: '10+ Production Repos', vi: '10+ Repo Thực tế' }, desc: { en: 'Semantic commits, clean branches & PR workflows', vi: 'Commit chuẩn semantic & quản lý nhánh sạch sẽ' } },
-          { name: 'Linux / Cron', icon: 'custom:linux', mastery: 88, domain: { en: 'SysAdmin', vi: 'Quản trị Hệ thống' }, project: { en: 'cPanel Scheduled Jobs', vi: 'Tác vụ Tự động cPanel' }, desc: { en: 'Automated schedulers, queues & bash diagnostics', vi: 'Lập lịch cron tự động, worker & xử lý log hệ thống' } }
-        ]
-      }
-    ];
+    // 5. DB-SYNCHRONIZED SKILL CATEGORIES DATASET (HYBRID CMS + EN/VI PROOFS)
+    const SKILL_CATEGORIES = @json($skillCategories ?? \App\Support\SkillMatrixBuilder::build(collect()));
 
     // 6. TERMINAL COMMANDS & TYPEWRITER ENGINE
     const CLI_RESPONSES = {
@@ -1435,6 +1570,15 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     }
 
     // 7. SKILLS ENGINE (TABS, 3D SPIN/FLIP GRID, 3D ORBIT WHEEL & INSPECTOR)
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function renderSkillTabs() {
       const container = document.getElementById('skillCategoryTabs');
       container.innerHTML = '';
@@ -1448,8 +1592,9 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
           ? 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all'
           : 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-all';
 
-        const iconColor = isActive ? 'text-white' : cat.iconColor;
-        btn.innerHTML = `<i data-lucide="${cat.icon}" class="w-3.5 h-3.5 ${iconColor}"></i><span>${cat.label[currentLang]}</span>`;
+        const iconColor = isActive ? 'text-white' : escapeHtml(cat.iconColor);
+        const tabLabel = (cat.label && (cat.label[currentLang] || cat.label.en)) || '';
+        btn.innerHTML = `<i data-lucide="${escapeHtml(cat.icon)}" class="w-3.5 h-3.5 ${iconColor}"></i><span>${escapeHtml(tabLabel)}</span>`;
 
         btn.addEventListener('click', () => {
           if (currentSkillCategory !== idx) {
@@ -1527,10 +1672,10 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     function renderSkillIcon(item, variant = 'grid') {
       const iconKey = item.icon || '';
       const boxSizes = {
-        grid: { svg: 'w-6 h-6', odoo: 'w-8 h-5', orbitText: '' },
-        orbit: { svg: 'w-4 h-4', odoo: 'w-6 h-3.5', orbitText: 'text-base sm:text-lg' },
-        inspector: { svg: 'w-8 h-8', odoo: 'w-11 h-6', orbitText: '' }
-      }[variant] || { svg: 'w-6 h-6', odoo: 'w-8 h-5', orbitText: '' };
+        grid: { svg: 'w-6 h-6', odoo: 'w-8 h-5', orbitText: '', lucide: 'w-5 h-5' },
+        orbit: { svg: 'w-4 h-4', odoo: 'w-6 h-3.5', orbitText: 'text-base sm:text-lg', lucide: 'w-3.5 h-3.5' },
+        inspector: { svg: 'w-8 h-8', odoo: 'w-11 h-6', orbitText: '', lucide: 'w-7 h-7' }
+      }[variant] || { svg: 'w-6 h-6', odoo: 'w-8 h-5', orbitText: '', lucide: 'w-5 h-5' };
 
       if (CUSTOM_BRAND_SVGS[iconKey]) {
         return CUSTOM_BRAND_SVGS[iconKey]
@@ -1538,8 +1683,13 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
           .replace(/__ODOO__/g, boxSizes.odoo);
       }
 
+      if (iconKey.startsWith('lucide:')) {
+        const lucideName = iconKey.slice(7);
+        return `<i data-lucide="${escapeHtml(lucideName)}" class="${boxSizes.lucide} text-sky-600 dark:text-sky-400"></i>`;
+      }
+
       const cls = boxSizes.orbitText ? `${iconKey} ${boxSizes.orbitText}` : iconKey;
-      return `<i class="${cls}"></i>`;
+      return `<i class="${escapeHtml(cls)}"></i>`;
     }
 
     function render3DSpinFlipGrid(items) {
@@ -1551,6 +1701,10 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         card.className = 'skill-grid-item';
         card.style.setProperty('--index', index);
         card.style.animationDelay = `${index * 55}ms`;
+
+        const domainTxt = (item.domain && (item.domain[currentLang] || item.domain.en)) || '';
+        const projectTxt = (item.project && (item.project[currentLang] || item.project.en)) || '';
+        const descTxt = (item.desc && (item.desc[currentLang] || item.desc.en)) || '';
 
         card.innerHTML = `
           <div class="grid-flip-inner">
@@ -1566,23 +1720,23 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
                 </span>
               </div>
               <div class="relative z-10 text-left">
-                <div class="font-display font-bold text-sm text-slate-900 dark:text-white">${item.name}</div>
-                <div class="font-mono text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">${item.domain[currentLang]}</div>
+                <div class="font-display font-bold text-sm text-slate-900 dark:text-white">${escapeHtml(item.name)}</div>
+                <div class="font-mono text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">${escapeHtml(domainTxt)}</div>
               </div>
             </div>
 
             <!-- Back Face (180deg Flipped Project Proof) -->
             <div class="grid-flip-back bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 text-white p-4 flex flex-col justify-between border border-sky-400/40 shadow-lg">
               <div class="space-y-1.5 text-left">
-                <div class="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold leading-snug line-clamp-1">${item.project[currentLang]}</div>
-                <p class="text-[11px] text-slate-200 leading-relaxed line-clamp-3">${item.desc[currentLang]}</p>
+                <div class="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold leading-snug line-clamp-1">${escapeHtml(projectTxt)}</div>
+                <p class="text-[11px] text-slate-200 leading-relaxed line-clamp-3">${escapeHtml(descTxt)}</p>
               </div>
               <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-700/70 font-mono text-[10px]">
                 <span class="inline-flex items-center gap-1.5 text-emerald-300 font-semibold whitespace-nowrap">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                   <span>${currentLang === 'vi' ? 'Đã áp dụng' : 'Production Proof'}</span>
                 </span>
-                <span class="text-sky-300/90 font-bold truncate">${item.name}</span>
+                <span class="text-sky-300/90 font-bold truncate">${escapeHtml(item.name)}</span>
               </div>
             </div>
           </div>
@@ -1591,6 +1745,8 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         card.addEventListener('click', () => card.classList.toggle('is-flipped'));
         wrap.appendChild(card);
       });
+
+      if (window.lucide) lucide.createIcons();
     }
 
     let isOrbitManualPaused = false;
@@ -1640,7 +1796,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       const stage = document.getElementById('orbitNodesStage');
       const N = items.length;
 
-      document.getElementById('orbitHubCategory').textContent = cat.hubName[currentLang];
+      document.getElementById('orbitHubCategory').textContent = (cat.hubName && (cat.hubName[currentLang] || cat.hubName.en)) || '';
       document.getElementById('orbitHubCount').textContent = currentLang === 'vi' ? `${N} Kỹ năng` : `${N} Skills`;
 
       if (stageBox) {
@@ -1666,7 +1822,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
           <div class="orbit-node-upright">
             <div class="orbit-node-pill px-2 py-1 rounded-xl bg-white dark:bg-slate-800/95 border border-slate-200/90 dark:border-slate-600/80 shadow-md flex items-center gap-1">
               ${renderSkillIcon(item, 'orbit')}
-              <span class="text-[11px] font-bold tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">${item.name}</span>
+              <span class="text-[11px] font-bold tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">${escapeHtml(item.name)}</span>
             </div>
           </div>
         `;
@@ -1692,16 +1848,21 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         updateOrbitInspector(items[activeOrbitSkillIndex]);
       }
       updateOrbitSpinLabel();
+      if (window.lucide) lucide.createIcons();
     }
 
     function updateOrbitInspector(item) {
       document.getElementById('inspectorIconBox').innerHTML = renderSkillIcon(item, 'inspector');
       document.getElementById('inspectorSkillName').textContent = item.name;
-      document.getElementById('inspectorDomain').textContent = item.domain[currentLang];
+      const domainTxt = (item.domain && (item.domain[currentLang] || item.domain.en)) || '';
+      const projectTxt = (item.project && (item.project[currentLang] || item.project.en)) || '';
+      const descTxt = (item.desc && (item.desc[currentLang] || item.desc.en)) || '';
+      document.getElementById('inspectorDomain').textContent = domainTxt;
       const scopeEl = document.getElementById('inspectorScopeVal');
-      if (scopeEl) scopeEl.textContent = item.domain[currentLang];
-      document.getElementById('inspectorProjectTitle').textContent = item.project[currentLang];
-      document.getElementById('inspectorProjectDesc').textContent = item.desc[currentLang];
+      if (scopeEl) scopeEl.textContent = domainTxt;
+      document.getElementById('inspectorProjectTitle').textContent = projectTxt;
+      document.getElementById('inspectorProjectDesc').textContent = descTxt;
+      if (window.lucide) lucide.createIcons();
     }
 
     // 8. COMPLETE 100% LANGUAGE SWITCHER (EN | VI)
