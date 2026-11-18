@@ -155,7 +155,7 @@ class PortfolioRagService
 
         $top = array_slice($scored, 0, self::TOP_K);
         $topRaw = (float) ($top[0]['score'] ?? 0.0);
-        $matchPct = $topRaw > 0.0 ? round(min(99.2, max(48.0, $topRaw * 100.0)), 1) : 0.0;
+        $matchPct = $topRaw > 0.0 ? round(min(99.2, $topRaw * 100.0), 1) : 0.0;
 
         return [
             'chunks' => $top,

@@ -1256,6 +1256,14 @@ class GeminiProvider implements AIProviderInterface
         }
 
         $requestedModel = $this->normalizeModel($modelOverride ?: $provider->model);
+        $chatCacheKey = ($modelOverride === null && $provider->exists)
+            ? 'gemini_chat_working_model_' . $provider->id
+            : null;
+        $cachedWorkingModel = $chatCacheKey ? Cache::get($chatCacheKey) : null;
+        if (is_string($cachedWorkingModel) && $cachedWorkingModel !== '') {
+            $requestedModel = $cachedWorkingModel;
+        }
+
         $modelsToTry = $requestedModel !== '' ? [$requestedModel] : [];
         $discoveryAttempted = false;
 
@@ -1343,6 +1351,10 @@ class GeminiProvider implements AIProviderInterface
                     $tokens = $this->extractTokenUsage($json);
 
                     if ($text !== '') {
+                        if ($chatCacheKey && $idx > 0) {
+                            Cache::put($chatCacheKey, $model, now()->addMinutes(20));
+                        }
+
                         return [
                             'success' => true,
                             'text' => $text,
