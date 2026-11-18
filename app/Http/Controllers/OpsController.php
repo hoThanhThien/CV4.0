@@ -143,4 +143,38 @@ class OpsController extends Controller
             return response('Error: ' . $e->getMessage(), 500);
         }
     }
+
+    /**
+     * Switch session UI locale (`en` | `vi`).
+     */
+    public function switchLocale(string $locale)
+    {
+        if (in_array($locale, ['en', 'vi'], true)) {
+            session()->put('locale', $locale);
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Fallback handler serving files under public storage when hosting lacks symlinks.
+     */
+    public function serveStorage(string $path)
+    {
+        if (str_contains($path, '..')) {
+            abort(404);
+        }
+
+        $filePath = storage_path('app/public/' . ltrim($path, '/'));
+        if (!file_exists($filePath) || !is_file($filePath)) {
+            abort(404);
+        }
+
+        $headers = [];
+        if (str_ends_with(strtolower($filePath), '.svg')) {
+            $headers['Content-Type'] = 'image/svg+xml';
+        }
+
+        return response()->file($filePath, $headers);
+    }
 }

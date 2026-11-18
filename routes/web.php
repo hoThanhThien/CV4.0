@@ -29,89 +29,9 @@ Route::post('/contact', [ContactController::class, 'send'])
     ->middleware('throttle:contact-form')
     ->name('contact.send');
 
-Route::get('/sitemap.xml', function () {
-    $projects = \App\Models\Project::all();
-    $posts = \App\Models\BlogPost::published()->get();
-
-    $staticPages = [
-        ['url' => url('/'), 'freq' => 'weekly', 'priority' => '1.0'],
-        ['url' => url('/about'), 'freq' => 'monthly', 'priority' => '0.8'],
-        ['url' => url('/contact'), 'freq' => 'monthly', 'priority' => '0.9'],
-        ['url' => url('/projects'), 'freq' => 'weekly', 'priority' => '0.9'],
-        ['url' => url('/certificates'), 'freq' => 'weekly', 'priority' => '0.85'],
-        ['url' => url('/blog'), 'freq' => 'weekly', 'priority' => '0.8'],
-    ];
-
-    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">' . "\n";
-
-    // Static pages with bilingual alternates
-    foreach ($staticPages as $page) {
-        foreach (['vi', 'en'] as $lang) {
-            $xml .= "  <url>\n";
-            $xml .= "    <loc>" . htmlspecialchars($page['url'] . '?lang=' . $lang, ENT_XML1) . "</loc>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"vi\" href=\"" . htmlspecialchars($page['url'] . '?lang=vi', ENT_XML1) . "\"/>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" . htmlspecialchars($page['url'] . '?lang=en', ENT_XML1) . "\"/>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" . htmlspecialchars($page['url'], ENT_XML1) . "\"/>\n";
-            $xml .= "    <lastmod>" . now()->toAtomString() . "</lastmod>\n";
-            $xml .= "    <changefreq>{$page['freq']}</changefreq>\n";
-            $xml .= "    <priority>{$page['priority']}</priority>\n";
-            $xml .= "  </url>\n";
-        }
-    }
-
-    // Dynamic project pages
-    foreach ($projects as $project) {
-        $pUrl = url('/projects/' . $project->id);
-        $lastmod = $project->updated_at ? $project->updated_at->toAtomString() : now()->toAtomString();
-        foreach (['vi', 'en'] as $lang) {
-            $xml .= "  <url>\n";
-            $xml .= "    <loc>" . htmlspecialchars($pUrl . '?lang=' . $lang, ENT_XML1) . "</loc>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"vi\" href=\"" . htmlspecialchars($pUrl . '?lang=vi', ENT_XML1) . "\"/>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" . htmlspecialchars($pUrl . '?lang=en', ENT_XML1) . "\"/>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" . htmlspecialchars($pUrl, ENT_XML1) . "\"/>\n";
-            $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
-            $xml .= "    <changefreq>monthly</changefreq>\n";
-            $xml .= "    <priority>0.7</priority>\n";
-            $xml .= "  </url>\n";
-        }
-    }
-
-    // Dynamic blog posts
-    foreach ($posts as $post) {
-        $bUrl = url('/blog/' . $post->slug);
-        $lastmod = $post->updated_at ? $post->updated_at->toAtomString() : now()->toAtomString();
-        foreach (['vi', 'en'] as $lang) {
-            $xml .= "  <url>\n";
-            $xml .= "    <loc>" . htmlspecialchars($bUrl . '?lang=' . $lang, ENT_XML1) . "</loc>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"vi\" href=\"" . htmlspecialchars($bUrl . '?lang=vi', ENT_XML1) . "\"/>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"" . htmlspecialchars($bUrl . '?lang=en', ENT_XML1) . "\"/>\n";
-            $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"" . htmlspecialchars($bUrl, ENT_XML1) . "\"/>\n";
-            $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
-            $xml .= "    <changefreq>monthly</changefreq>\n";
-            $xml .= "    <priority>0.7</priority>\n";
-            $xml .= "  </url>\n";
-        }
-    }
-
-    $xml .= '</urlset>';
-
-    return response($xml, 200, [
-        'Content-Type' => 'text/xml; charset=utf-8'
-    ]);
-});
-
-Route::get('/robots.txt', function () {
-    $sitemapUrl = url('/sitemap.xml');
-    $content = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /admin/\nDisallow: /setup-db\nDisallow: /setup-db/\nDisallow: /setup-migrate\nDisallow: /cron/\n\nSitemap: {$sitemapUrl}\n";
-    return response($content, 200, ['Content-Type' => 'text/plain']);
-});
-Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'vi'])) {
-        session()->put('locale', $locale);
-    }
-    return redirect()->back();
-})->name('lang.switch');
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
+Route::get('/robots.txt', [\App\Http\Controllers\RobotsController::class, 'index']);
+Route::get('/lang/{locale}', [\App\Http\Controllers\OpsController::class, 'switchLocale'])->name('lang.switch');
 
 // Protected maintenance & web-cron endpoints (token/auth enforced in OpsController)
 Route::get('/setup-migrate', [\App\Http\Controllers\OpsController::class, 'setupMigrate'])->name('ops.setup-migrate');
@@ -120,20 +40,7 @@ Route::get('/setup-db', [\App\Http\Controllers\OpsController::class, 'setupDb'])
 Route::get('/setup-storage', [\App\Http\Controllers\OpsController::class, 'setupStorage'])->name('ops.setup-storage');
 
 // Fallback direct storage route if symlink is missing on hosting
-Route::get('/storage/{path}', function ($path) {
-    if (str_contains($path, '..')) {
-        abort(404);
-    }
-    $filePath = storage_path('app/public/' . ltrim($path, '/'));
-    if (!file_exists($filePath) || !is_file($filePath)) {
-        abort(404);
-    }
-    $headers = [];
-    if (str_ends_with(strtolower($filePath), '.svg')) {
-        $headers['Content-Type'] = 'image/svg+xml';
-    }
-    return response()->file($filePath, $headers);
-})->where('path', '.*');
+Route::get('/storage/{path}', [\App\Http\Controllers\OpsController::class, 'serveStorage'])->where('path', '.*');
 
 /*
 |--------------------------------------------------------------------------

@@ -155,6 +155,29 @@ class PortfolioRagTest extends TestCase
             ->assertJsonPath('success', true)
             ->assertJsonPath('mode', 'retrieval-fallback')
             ->assertJsonPath('fallback_reason', 'INSUFFICIENT_QUOTA');
+
+        // Case C: Nonsense query with 0 lexical overlap returns clear guidance
+        $nonsenseResp = $this->postJson('/api/v1/copilot/ask', [
+            'query' => 'fghjfgh',
+            'locale' => 'vi',
+        ]);
+
+        $nonsenseResp->assertStatus(200)
+            ->assertJsonPath('mode', 'retrieval-fallback')
+            ->assertJsonPath('match_score', 0);
+
+        $this->assertStringContainsString('fghjfgh', $nonsenseResp->json('answer'));
+    }
+
+    public function test_no_closure_routes_exist_so_ci_route_cache_never_fails()
+    {
+        foreach (\Illuminate\Support\Facades\Route::getRoutes() as $route) {
+            $action = $route->getAction();
+            $this->assertIsString($action['uses'] ?? null, 'Closure route breaks deploy route:cache on URI: ' . $route->uri());
+        }
+
+        $this->get('/sitemap.xml')->assertStatus(200)->assertHeader('Content-Type', 'text/xml; charset=utf-8');
+        $this->get('/robots.txt')->assertStatus(200);
     }
 
     public function test_copilot_validates_input_and_enforces_rate_limiter_outside_testing()
