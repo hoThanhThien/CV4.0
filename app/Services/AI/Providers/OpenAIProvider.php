@@ -548,6 +548,180 @@ class OpenAIProvider implements AIProviderInterface
         return null;
     }
 
+    /**
+     * Generate a natural-language chat completion for grounded RAG answers.
+     */
+    public function generateChatReply(
+        AiProvider $provider,
+        string $systemPrompt,
+        string $userPrompt,
+        ?string $modelOverride = null,
+        int $maxTokens = 800,
+        float $temperature = 0.35
+    ): array {
+        if (!$provider->canDecryptApiKey()) {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'Cannot decrypt AI provider API key.',
+                'error_code' => 'DECRYPT_ERROR',
+            ];
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        if ($apiKey === '') {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'API Key is missing or invalid.',
+                'error_code' => 'MISSING_API_KEY',
+            ];
+        }
+
+        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl(), '/');
+        $model = trim((string) ($modelOverride ?: $provider->model));
+        if ($model === '') {
+            $discovered = $this->discoverModels($apiKey, $baseUrl);
+            $model = $discovered[0]['id'] ?? '';
+        }
+        if ($model === '') {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'No chat completion model configured.',
+                'error_code' => 'MODEL_NOT_FOUND',
+            ];
+        }
+
+        $timeout = min(35, max(15, (int) ($provider->timeout ?? 25)));
+
+        try {
+            $response = $this->httpClient($apiKey, $timeout)->post($baseUrl . '/chat/completions', [
+                'model' => $model,
+                'messages' => [
+                    ['role' => 'system', 'content' => $systemPrompt],
+                    ['role' => 'user', 'content' => $userPrompt],
+                ],
+                'temperature' => $temperature,
+                'max_tokens' => $maxTokens,
+            ]);
+
+            if ($response->successful()) {
+                $json = $response->json();
+                $text = trim((string) ($json['choices'][0]['message']['content'] ?? ''));
+                $usage = $json['usage'] ?? [];
+
+                if ($text === '') {
+                    return [
+                        'success' => false,
+                        'text' => null,
+                        'model_used' => $model,
+                        'prompt_tokens' => (int) ($usage['prompt_tokens'] ?? 0),
+                        'completion_tokens' => (int) ($usage['completion_tokens'] ?? 0),
+                        'total_tokens' => (int) ($usage['total_tokens'] ?? 0),
+                        'error' => 'Empty response returned from chat model.',
+                        'error_code' => 'EMPTY_RESPONSE',
+                    ];
+                }
+
+                return [
+                    'success' => true,
+                    'text' => $text,
+                    'model_used' => (string) ($json['model'] ?? $model),
+                    'prompt_tokens' => (int) ($usage['prompt_tokens'] ?? 0),
+                    'completion_tokens' => (int) ($usage['completion_tokens'] ?? 0),
+                    'total_tokens' => (int) ($usage['total_tokens'] ?? 0),
+                    'error' => null,
+                    'error_code' => null,
+                ];
+            }
+
+            $classified = $this->classifyError($response->status(), $response->json(), $response->body(), $model);
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => $model,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => $classified['message'],
+                'error_code' => $classified['code'],
+            ];
+        } catch (Throwable $e) {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => $model,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => $e->getMessage(),
+                'error_code' => 'RUNTIME_ERROR',
+            ];
+        }
+    }
+
+    /**
+     * Generate dense text embeddings for semantic vector retrieval when supported.
+     *
+     * @param  array<int, string>  $texts
+     * @return array<int, array<int, float>>|null
+     */
+    public function embedTexts(AiProvider $provider, array $texts): ?array
+    {
+        if (empty($texts) || !$provider->canDecryptApiKey()) {
+            return null;
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        $baseUrl = rtrim($provider->base_url ?: $this->defaultBaseUrl(), '/');
+        if ($apiKey === '' || !str_contains(strtolower($baseUrl), 'api.openai.com')) {
+            return null;
+        }
+
+        try {
+            $resp = $this->httpClient($apiKey, 10)->post($baseUrl . '/embeddings', [
+                'model' => 'text-embedding-3-small',
+                'input' => array_values($texts),
+            ]);
+
+            if (!$resp->successful()) {
+                return null;
+            }
+
+            $items = $resp->json('data');
+            if (!is_array($items) || count($items) !== count($texts)) {
+                return null;
+            }
+
+            usort($items, fn (array $a, array $b) => ($a['index'] ?? 0) <=> ($b['index'] ?? 0));
+            $vectors = [];
+            foreach ($items as $item) {
+                $vec = $item['embedding'] ?? null;
+                if (!is_array($vec) || empty($vec)) {
+                    return null;
+                }
+                $vectors[] = array_map('floatval', $vec);
+            }
+
+            return $vectors;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
     protected function classifyError(int $statusCode, ?array $bodyJson, string $rawBody, string $model): array
     {
         $apiMessage = $bodyJson['error']['message'] ?? '';

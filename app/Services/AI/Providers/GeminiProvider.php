@@ -1218,6 +1218,291 @@ class GeminiProvider implements AIProviderInterface
     }
 
     /**
+     * Generate a grounded natural-language chat completion for RAG/Copilot queries.
+     */
+    public function generateChatReply(
+        AiProvider $provider,
+        string $systemPrompt,
+        string $userPrompt,
+        ?string $modelOverride = null,
+        int $maxTokens = 800,
+        float $temperature = 0.35
+    ): array {
+        if (!$provider->canDecryptApiKey()) {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'Cannot decrypt Gemini API key.',
+                'error_code' => 'DECRYPT_ERROR',
+            ];
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        if ($apiKey === '') {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'Gemini API key is missing.',
+                'error_code' => 'MISSING_API_KEY',
+            ];
+        }
+
+        $requestedModel = $this->normalizeModel($modelOverride ?: $provider->model);
+        $modelsToTry = $requestedModel !== '' ? [$requestedModel] : [];
+        $discoveryAttempted = false;
+
+        if (empty($modelsToTry)) {
+            $discoveryAttempted = true;
+            $modelsToTry = $this->selectDiverseFallbackModels($this->discoverModels($apiKey, $provider->base_url), false);
+        }
+
+        if (empty($modelsToTry)) {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'No Gemini text generation model available.',
+                'error_code' => 'MODEL_NOT_FOUND',
+            ];
+        }
+
+        $timeout = min(30, max(15, (int) ($provider->timeout ?? 25)));
+
+        try {
+            $lastStatusCode = 500;
+            $lastJson = null;
+
+            for ($idx = 0; $idx < count($modelsToTry); $idx++) {
+                $model = $modelsToTry[$idx];
+                $response = null;
+
+                if ($this->canUseInteractionsEndpoint($provider->base_url)) {
+                    $interResp = $this->httpClient($timeout, $apiKey)->post($this->resolveInteractionsUrl($provider->base_url), [
+                        'model' => $model,
+                        'system_instruction' => $systemPrompt,
+                        'input' => $userPrompt,
+                        'generation_config' => [
+                            'temperature' => $temperature,
+                            'max_output_tokens' => $maxTokens,
+                        ],
+                    ]);
+
+                    if ($interResp->successful() && is_array($interResp->json()) && trim($this->extractResponseText($interResp->json())) !== '') {
+                        $response = $interResp;
+                    } elseif (!in_array($interResp->status(), [200, 400, 404, 405], true)) {
+                        $response = $interResp;
+                    }
+                }
+
+                if ($response === null) {
+                    $genUrl = $this->resolveEndpointUrl($apiKey, $provider->base_url, $model);
+                    $response = $this->httpClient($timeout, $apiKey)->post($genUrl, [
+                        'systemInstruction' => ['parts' => [['text' => $systemPrompt]]],
+                        'contents' => [['role' => 'user', 'parts' => [['text' => $userPrompt]]]],
+                        'generationConfig' => [
+                            'temperature' => $temperature,
+                            'maxOutputTokens' => $maxTokens,
+                        ],
+                    ]);
+                }
+
+                if (
+                    !$response->successful()
+                    && in_array($response->status(), [400, 401, 403], true)
+                    && empty($provider->base_url)
+                    && $this->isAqKey($apiKey)
+                ) {
+                    $vertexUrl = $this->resolveEndpointUrl($apiKey, $this->defaultVertexExpressBaseUrl(), $model, true);
+                    $vertexResp = $this->httpClient($timeout, $apiKey)->post($vertexUrl, [
+                        'systemInstruction' => ['parts' => [['text' => $systemPrompt]]],
+                        'contents' => [['role' => 'user', 'parts' => [['text' => $userPrompt]]]],
+                        'generationConfig' => [
+                            'temperature' => $temperature,
+                            'maxOutputTokens' => $maxTokens,
+                        ],
+                    ]);
+                    if ($vertexResp->successful()) {
+                        $response = $vertexResp;
+                    }
+                }
+
+                if ($response->successful()) {
+                    $json = $response->json();
+                    $text = trim($this->extractResponseText($json));
+                    $tokens = $this->extractTokenUsage($json);
+
+                    if ($text !== '') {
+                        return [
+                            'success' => true,
+                            'text' => $text,
+                            'model_used' => $model,
+                            'prompt_tokens' => $tokens['prompt_tokens'],
+                            'completion_tokens' => $tokens['completion_tokens'],
+                            'total_tokens' => $tokens['total_tokens'],
+                            'error' => null,
+                            'error_code' => null,
+                        ];
+                    }
+                }
+
+                $lastStatusCode = $response->status();
+                $lastJson = $response->json();
+
+                if (!in_array($lastStatusCode, [404, 429, 503], true)) {
+                    break;
+                }
+
+                if (!$discoveryAttempted) {
+                    $discoveryAttempted = true;
+                    $preferLite = in_array($lastStatusCode, [429, 503], true);
+                    $fallbacks = $this->selectDiverseFallbackModels($this->discoverModels($apiKey, $provider->base_url), $preferLite);
+                    foreach ($fallbacks as $fbId) {
+                        if (!in_array($fbId, $modelsToTry, true)) {
+                            $modelsToTry[] = $fbId;
+                        }
+                    }
+                }
+            }
+
+            $classified = $this->classifyError($lastStatusCode, $lastJson, $requestedModel ?: 'gemini');
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => $modelsToTry[0] ?? null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => $classified['message'],
+                'error_code' => $classified['code'],
+            ];
+        } catch (Throwable $e) {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => $modelsToTry[0] ?? null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => $e->getMessage(),
+                'error_code' => 'RUNTIME_ERROR',
+            ];
+        }
+    }
+
+    /**
+     * Generate dense embedding vectors via Google Gemini `batchEmbedContents` API.
+     *
+     * @param  array<int, string>  $texts
+     * @return array<int, array<int, float>>|null
+     */
+    public function embedTexts(AiProvider $provider, array $texts): ?array
+    {
+        if (empty($texts) || !$provider->canDecryptApiKey() || $this->isExplicitVertexUrl($provider->base_url)) {
+            return null;
+        }
+
+        $apiKey = trim($provider->getDecryptedApiKey());
+        if ($apiKey === '') {
+            return null;
+        }
+
+        $embedModel = $this->discoverEmbeddingModel($apiKey, $provider->base_url);
+        if ($embedModel === '') {
+            return null;
+        }
+
+        $cleanBase = rtrim(trim((string) $provider->base_url), '/');
+        $base = $cleanBase !== '' ? $cleanBase : $this->defaultBaseUrl();
+        if (str_ends_with(strtolower($base), '/interactions')) {
+            $base = substr($base, 0, -strlen('/interactions'));
+        }
+
+        $requests = [];
+        foreach (array_values($texts) as $text) {
+            $requests[] = [
+                'model' => 'models/' . $embedModel,
+                'content' => [
+                    'parts' => [['text' => $text]],
+                ],
+            ];
+        }
+
+        try {
+            $resp = $this->httpClient(10, $apiKey)->post("{$base}/models/{$embedModel}:batchEmbedContents", [
+                'requests' => $requests,
+            ]);
+
+            if (!$resp->successful()) {
+                return null;
+            }
+
+            $embeddings = $resp->json('embeddings');
+            if (!is_array($embeddings) || count($embeddings) !== count($texts)) {
+                return null;
+            }
+
+            $vectors = [];
+            foreach ($embeddings as $item) {
+                $values = $item['values'] ?? null;
+                if (!is_array($values) || empty($values)) {
+                    return null;
+                }
+                $vectors[] = array_map('floatval', $values);
+            }
+
+            return $vectors;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Discover an active Gemini embedding model (cached) without hardcoding obsolete versions.
+     */
+    protected function discoverEmbeddingModel(string $apiKey, ?string $configuredBaseUrl = null): string
+    {
+        $modelsUrl = $this->resolveModelsListUrl($configuredBaseUrl);
+        $cacheKey = 'gemini_embed_model_' . substr(hash('sha256', $apiKey . '|' . $modelsUrl), 0, 20);
+
+        $cached = Cache::get($cacheKey);
+        if (is_string($cached) && $cached !== '') {
+            return $cached;
+        }
+
+        try {
+            $resp = $this->httpClient(8, $apiKey)->get($modelsUrl, ['pageSize' => 100]);
+            if ($resp->successful()) {
+                $rawModels = $resp->json('models');
+                if (is_array($rawModels)) {
+                    foreach ($rawModels as $item) {
+                        $methods = $item['supportedGenerationMethods'] ?? [];
+                        $name = $this->normalizeModel((string) ($item['name'] ?? ''));
+                        if ($name !== '' && is_array($methods) && in_array('embedContent', $methods, true)) {
+                            Cache::put($cacheKey, $name, now()->addMinutes(30));
+                            return $name;
+                        }
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            // Fall through cleanly
+        }
+
+        return 'gemini-embedding-001';
+    }
+
+    /**
      * Ask Gemini's active LLM to art-direct a bespoke visual composition & safe SVG vector scene for an article
      * (used when native raster image models are restricted on Free Tier or unavailable).
      */

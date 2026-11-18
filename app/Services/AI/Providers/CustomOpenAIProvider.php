@@ -88,6 +88,35 @@ class CustomOpenAIProvider extends OpenAIProvider
         return parent::generateVisualDesignSpec($provider, $articleContext, $modelOverride);
     }
 
+    public function generateChatReply(
+        AiProvider $provider,
+        string $systemPrompt,
+        string $userPrompt,
+        ?string $modelOverride = null,
+        int $maxTokens = 800,
+        float $temperature = 0.35
+    ): array {
+        if (empty($provider->base_url) || !$this->isSafeUrl($provider->base_url)) {
+            return [
+                'success' => false,
+                'text' => null,
+                'model_used' => null,
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+                'error' => 'Base URL không an toàn hoặc chưa được cấu hình.',
+                'error_code' => 'UNSAFE_BASE_URL',
+            ];
+        }
+
+        return parent::generateChatReply($provider, $systemPrompt, $userPrompt, $modelOverride, $maxTokens, $temperature);
+    }
+
+    public function embedTexts(AiProvider $provider, array $texts): ?array
+    {
+        return null;
+    }
+
     /**
      * Validate against basic SSRF vulnerabilities
      */

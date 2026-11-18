@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\SkillController;
 use App\Http\Controllers\Api\V1\ExperienceController;
 use App\Http\Controllers\Api\V1\TechnologyController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\CopilotController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,4 +81,7 @@ Route::prefix('v1')->group(function () {
 
     // === Contact Submission ===
     Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:contact-form');
+
+    // === Live Portfolio RAG AI Copilot ===
+    Route::post('/copilot/ask', [CopilotController::class, 'ask'])->middleware('throttle:copilot-rag');
 });

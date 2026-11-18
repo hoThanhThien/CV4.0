@@ -66,4 +66,25 @@ class DeepSeekProvider extends OpenAIProvider
 
         return parent::generateVisualDesignSpec($providerCopy, $articleContext, $modelOverride);
     }
+
+    public function generateChatReply(
+        AiProvider $provider,
+        string $systemPrompt,
+        string $userPrompt,
+        ?string $modelOverride = null,
+        int $maxTokens = 800,
+        float $temperature = 0.35
+    ): array {
+        $providerCopy = clone $provider;
+        if (empty($providerCopy->base_url)) {
+            $providerCopy->base_url = $this->defaultBaseUrl();
+        }
+
+        return parent::generateChatReply($providerCopy, $systemPrompt, $userPrompt, $modelOverride, $maxTokens, $temperature);
+    }
+
+    public function embedTexts(AiProvider $provider, array $texts): ?array
+    {
+        return null;
+    }
 }

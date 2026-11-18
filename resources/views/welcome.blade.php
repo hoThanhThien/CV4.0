@@ -743,32 +743,36 @@
               @endif
             </div>
 
-            <!-- Embedded Live RAG AI Chat Simulation -->
+            <!-- Interactive RAG Architecture Preview & Live Copilot Trigger -->
             <div class="md:col-span-6 min-w-0 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 p-4 space-y-3 font-mono text-xs">
-              <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-2">
+              <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-2 gap-2">
                 <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
                   <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  RAG Pipeline Simulator
+                  Live RAG Architecture
                 </span>
                 <div class="flex items-center gap-1.5">
-                  <span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">Match 98.4%</span>
-                  <span class="px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 text-[10px] font-bold">180ms</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">Vector + BM25</span>
+                  <span class="px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 text-[10px] font-bold">LLM Grounded</span>
                 </div>
               </div>
 
               <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 text-slate-700 dark:text-slate-200">
-                <span class="text-sky-600 dark:text-sky-400 font-bold">User:</span>
-                <span data-i18n="rag_sim_q">Suggest a 1-day heritage route in Da Nang with vector citations.</span>
+                <span class="text-sky-600 dark:text-sky-400 font-bold">Pipeline:</span>
+                <span data-i18n="rag_sim_q">DB Corpus Chunking &rarr; Cosine Vector + BM25 Top-K &rarr; Real LLM Citation</span>
               </div>
 
-              <div class="p-3 rounded-xl bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200/70 dark:border-sky-800/50 text-slate-700 dark:text-slate-300 space-y-1.5">
+              <div class="p-3 rounded-xl bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200/70 dark:border-sky-800/50 text-slate-700 dark:text-slate-300 space-y-2">
                 <div class="text-[10px] text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1">
                   <i data-lucide="database" class="w-3 h-3"></i>
-                  <span data-i18n="rag_sim_trace">Retrieved 4 Chunks • ChromaDB Cosine Top-K</span>
+                  <span data-i18n="rag_sim_trace">Connected to Live Portfolio Corpus &amp; AI Provider</span>
                 </div>
                 <p class="font-sans text-xs leading-relaxed" data-i18n="rag_sim_a">
-                  Morning: Marble Mountains -> Noon: Han Market local cuisine -> Evening: Dragon Bridge. All locations verified via indexed PDF tourism corpus.
+                  Click below to run a real Retrieval-Augmented Generation query through the backend LLM endpoint with source citations and live latency metrics.
                 </p>
+                <button type="button" onclick="triggerSampleRagQuery()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-600 text-white text-[11px] font-semibold transition-colors shadow-sm">
+                  <i data-lucide="sparkles" class="w-3 h-3"></i>
+                  <span data-i18n="rag_try_live">{{ $isVi ? 'Chạy thử RAG AI thật trên TourRist' : 'Test Live RAG Query on TourRist' }}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -1244,7 +1248,7 @@
       <!-- Input Box -->
       <form onsubmit="handleCopilotSubmit(event)" class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-2">
         <input id="copilotInput" type="text" placeholder="Ask about GPA, RAG AI, Enmasys..." class="flex-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500">
-        <button type="submit" class="p-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 transition-colors">
+        <button id="copilotSendBtn" type="submit" class="p-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
         </button>
       </form>
@@ -1357,9 +1361,10 @@
         proj1_title: 'TourRist — Smart Travel Platform & RAG AI Concierge',
         proj1_desc: 'Engineered a document-based RAG chatbot pairing semantic ChromaDB vector search with LLM grounding to generate zero-hallucination travel itineraries from curated local knowledge bases.',
         btn_case_study: 'Read Case Study',
-        rag_sim_q: 'Suggest a 1-day heritage route in Da Nang with vector citations.',
-        rag_sim_trace: 'Retrieved 4 Chunks • ChromaDB Cosine Top-K',
-        rag_sim_a: 'Morning: Marble Mountains -> Noon: Han Market local cuisine -> Evening: Dragon Bridge. All locations verified via indexed PDF tourism corpus.',
+        rag_sim_q: 'DB Corpus Chunking -> Cosine Vector + BM25 Top-K -> Real LLM Citation',
+        rag_sim_trace: 'Connected to Live Portfolio Corpus & AI Provider',
+        rag_sim_a: 'Click below to run a real Retrieval-Augmented Generation query through the backend LLM endpoint with source citations and live latency metrics.',
+        rag_try_live: 'Test Live RAG Query on TourRist',
         award_badge: 'DESIGN RECOGNITION',
         award_title: '2nd Prize — IT Faculty Logo & Visual Identity (UTH)',
         award_desc: 'Awarded by University of Transport HCMC, proving strong visual craft, typography precision, and clean UI/UX thinking alongside backend engineering.',
@@ -1440,9 +1445,10 @@
         proj1_title: 'TourRist — Nền tảng Du lịch Thông minh & Trợ lý AI RAG',
         proj1_desc: 'Phát triển chatbot AI dựa trên tài liệu kết hợp tìm kiếm vector ChromaDB và sinh câu trả lời LLM không bịa đặt (zero-hallucination), cung cấp gợi ý lịch trình chính xác từ kho tri thức nội bộ.',
         btn_case_study: 'Xem Case Study',
-        rag_sim_q: 'Gợi ý lịch trình tham quan Đà Nẵng 1 ngày kèm trích dẫn vector.',
-        rag_sim_trace: 'Truy xuất 4 đoạn văn bản • ChromaDB Cosine Top-K',
-        rag_sim_a: 'Sáng: Ngũ Hành Sơn -> Trưa: Ẩm thực Chợ Hàn -> Tối: Cầu Rồng. Toàn bộ địa điểm được xác thực từ tài liệu du lịch chuẩn hóa.',
+        rag_sim_q: 'Tách chunk DB -> Vector Cosine + BM25 Top-K -> LLM Sinh câu trả lời có nguồn',
+        rag_sim_trace: 'Kết nối trực tiếp Kho dữ liệu DB & AI Provider thật',
+        rag_sim_a: 'Bấm nút dưới để chạy một truy vấn RAG AI thực tế qua API backend & LLM với trích dẫn nguồn và độ trễ đo thật.',
+        rag_try_live: 'Chạy thử RAG AI thật trên TourRist',
         award_badge: 'GIẢI THƯỞNG THIẾT KẾ',
         award_title: 'Giải Nhì — Sáng tác Logo & Nhận diện Khoa CNTT (UTH)',
         award_desc: 'Chứng nhận từ ĐH GTVT TP.HCM, khẳng định tư duy thẩm mỹ UI/UX, typography và nghệ thuật thiết kế giao diện chuẩn mực bên cạnh nền tảng lập trình hệ thống.',
@@ -1905,100 +1911,197 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       try { fetch(`/lang/${lang}`, { method: 'GET', credentials: 'same-origin' }); } catch (e) {}
     }
 
-    // 9. FLOATING RAG AI COPILOT ENGINE
-    const COPILOT_QA = [
+    // 9. REAL LIVE RAG AI COPILOT ENGINE (CONNECTED TO /api/v1/copilot/ask + ACTIVE LLM)
+    const COPILOT_QUICK_PROMPTS = [
       {
         label: { en: 'UTH GPA & Honors?', vi: 'GPA & Bằng cấp UTH?' },
-        answer: {
-          en: 'Ho Thanh Thien graduated with Distinction (Excellent Classification) in Information Technology at University of Transport HCMC (UTH), achieving a 3.6/4.0 cumulative GPA, a perfect 4.0/4.0 latest semester GPA, and 2nd Prize in the UTH IT Faculty Logo Design competition.',
-          vi: 'Hồ Thành Thiện tốt nghiệp Kỹ sư CNTT Loại Xuất sắc tại ĐH Giao thông Vận tải TP.HCM (UTH) với GPA tích lũy 3.6/4.0, đạt 4.0/4.0 kỳ gần nhất và Giải Nhì Sáng tác Logo Nhận diện Khoa CNTT UTH.'
+        query: {
+          en: 'Summarize Ho Thanh Thien’s UTH GPA, academic honors, and logo award.',
+          vi: 'Tóm tắt điểm GPA UTH, bằng cấp và giải thưởng của Hồ Thành Thiện.'
         }
       },
       {
         label: { en: 'TourRist RAG AI?', vi: 'Kiến trúc RAG TourRist?' },
-        answer: {
-          en: 'TourRist is a document-grounded RAG AI chatbot engineered with Python, FastAPI, ChromaDB vector search, and chunking pipelines. It pairs semantic cosine similarity lookup (98.4% vector match, ~180ms retrieval) with strict LLM prompt grounding to eliminate hallucinations.',
-          vi: 'TourRist là chatbot RAG AI dựa trên tài liệu nội bộ, xây dựng bằng Python, FastAPI và ChromaDB vector search. Hệ thống đạt tỷ lệ khớp vector 98.4% (~180ms độ trễ), ràng buộc LLM chỉ trả lời theo ngữ cảnh tài liệu nhằm loại bỏ ảo giác (hallucination).'
+        query: {
+          en: 'How did Thien architect the TourRist RAG AI chatbot and tech stack?',
+          vi: 'Thiện đã thiết kế kiến trúc chatbot RAG AI TourRist và dùng những công nghệ gì?'
         }
       },
       {
         label: { en: 'Enmasys & AIPower?', vi: 'Kinh nghiệm Enmasys & AIPower?' },
-        answer: {
-          en: 'At Enmasys Enterprise Internship (03/2026–07/2026), Thien analyzed business workflows and configured Odoo ERP modules for Retail, Attendance, Accounting, and B2B Sales. At AIPower (06/2026–10/2026), he shipped full-stack corporate & education web applications using PHP, WordPress, JavaScript, and PostgreSQL.',
-          vi: 'Tại Enmasys (03/2026–07/2026), Thiện cấu hình các phân hệ Odoo ERP (Bán lẻ, Chấm công, Kế toán, B2B Sales). Tại AIPower (06/2026–10/2026), anh phát triển hệ thống web giáo dục & doanh nghiệp bằng PHP, WordPress, JS và PostgreSQL.'
+        query: {
+          en: 'What did Thien build during his Enmasys Odoo ERP internship and AIPower role?',
+          vi: 'Thiện đã làm gì trong kỳ thực tập Odoo ERP tại Enmasys và công việc tại AIPower?'
         }
       },
       {
-        label: { en: 'Tech Stack & Contact?', vi: 'Stack & Thông tin liên hệ?' },
-        answer: {
-          en: 'Core stack: Java Spring Boot, PHP Laravel 11, Python/FastAPI, Odoo ERP, ReactJS/Next.js, MySQL/PostgreSQL & Docker/Nginx. Currently available in Ho Chi Minh City! Reach out at hothanhthien119@gmail.com or +84 375 227 764.',
-          vi: 'Công nghệ cốt lõi: Java Spring Boot, PHP Laravel 11, Python/FastAPI, Odoo ERP, ReactJS/Next.js, MySQL/PostgreSQL & Docker/Nginx. Hiện sẵn sàng nhận việc tại TP.HCM! Email: hothanhthien119@gmail.com | SĐT: +84 375 227 764.'
+        label: { en: 'Latest Blog & Contact?', vi: 'Bài blog mới & Liên hệ?' },
+        query: {
+          en: 'What technical blog posts has Thien published recently and how can a recruiter contact him?',
+          vi: 'Thiện có những bài viết kỹ thuật nào gần đây và nhà tuyển dụng liên hệ bằng cách nào?'
         }
       }
     ];
 
-    function toggleCopilot() {
+    let copilotHistory = [];
+    let isCopilotBusy = false;
+
+    function toggleCopilot(forceOpen = null) {
       const panel = document.getElementById('ragCopilotPanel');
-      panel.classList.toggle('hidden');
+      if (forceOpen === true) {
+        panel.classList.remove('hidden');
+      } else if (forceOpen === false) {
+        panel.classList.add('hidden');
+      } else {
+        panel.classList.toggle('hidden');
+      }
       if (window.lucide) lucide.createIcons();
+    }
+
+    function triggerSampleRagQuery() {
+      const q = currentLang === 'vi'
+        ? 'Giải thích kiến trúc RAG AI và công nghệ trong dự án TourRist dựa trên hồ sơ?'
+        : 'Explain the TourRist RAG AI architecture and technologies used based on portfolio records.';
+      toggleCopilot(true);
+      askCopilotQuestion(q);
     }
 
     function renderCopilotPrompts() {
       const wrap = document.getElementById('copilotQuickPrompts');
       wrap.innerHTML = '';
-      COPILOT_QA.forEach((item, idx) => {
+      COPILOT_QUICK_PROMPTS.forEach((item) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-500/15 border border-sky-200/80 dark:border-sky-500/30 text-[11px] font-mono font-semibold text-sky-700 dark:text-sky-300 hover:bg-sky-500 hover:text-white transition-colors';
-        btn.textContent = item.label[currentLang];
-        btn.addEventListener('click', () => appendCopilotTurn(item.label[currentLang], item.answer[currentLang]));
+        btn.textContent = item.label[currentLang] || item.label.en;
+        btn.addEventListener('click', () => askCopilotQuestion(item.query[currentLang] || item.query.en));
         wrap.appendChild(btn);
       });
     }
 
-    function handleCopilotSubmit(e) {
-      e.preventDefault();
-      const input = document.getElementById('copilotInput');
-      const query = input.value.trim();
-      if (!query) return;
-      input.value = '';
-
-      const qLower = query.toLowerCase();
-      let matched = COPILOT_QA[3].answer[currentLang];
-      if (qLower.includes('gpa') || qLower.includes('uth') || qLower.includes('điểm') || qLower.includes('bằng') || qLower.includes('logo')) {
-        matched = COPILOT_QA[0].answer[currentLang];
-      } else if (qLower.includes('rag') || qLower.includes('ai') || qLower.includes('tourrist') || qLower.includes('vector')) {
-        matched = COPILOT_QA[1].answer[currentLang];
-      } else if (qLower.includes('enmasys') || qLower.includes('odoo') || qLower.includes('aipower') || qLower.includes('kinh nghiệm') || qLower.includes('work')) {
-        matched = COPILOT_QA[2].answer[currentLang];
-      }
-      appendCopilotTurn(query, matched);
+    function formatCopilotAnswerHtml(text) {
+      let safe = escapeHtml(String(text || '').trim());
+      safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-slate-900 dark:text-white">$1</strong>');
+      safe = safe.replace(/\[(S\d+)\]/g, '<span class="inline-block px-1 py-0.5 mx-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 font-mono text-[10px] font-bold">[$1]</span>');
+      return safe.replace(/\n/g, '<br>');
     }
 
-    function appendCopilotTurn(userMsg, aiMsg) {
+    function setCopilotBusyState(busy) {
+      isCopilotBusy = busy;
+      const sendBtn = document.getElementById('copilotSendBtn');
+      const input = document.getElementById('copilotInput');
+      if (sendBtn) sendBtn.disabled = busy;
+      if (input) input.disabled = busy;
+    }
+
+    function handleCopilotSubmit(e) {
+      e.preventDefault();
+      if (isCopilotBusy) return;
+      const input = document.getElementById('copilotInput');
+      const query = input.value.trim();
+      if (query.length < 2) return;
+      input.value = '';
+      askCopilotQuestion(query);
+    }
+
+    async function askCopilotQuestion(query) {
+      if (isCopilotBusy) return;
       const box = document.getElementById('copilotMessages');
 
+      // 1. User message bubble
       const uBubble = document.createElement('div');
       uBubble.className = 'ml-auto max-w-[85%] p-2.5 rounded-2xl rounded-tr-sm bg-sky-500 text-white font-medium shadow-sm';
-      uBubble.textContent = userMsg;
+      uBubble.textContent = query;
       box.appendChild(uBubble);
 
+      // 2. Pending AI bubble with telemetry spinner
       const aBubble = document.createElement('div');
-      aBubble.className = 'mr-auto max-w-[92%] p-3 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 leading-relaxed shadow-sm space-y-1.5';
+      aBubble.className = 'mr-auto max-w-[94%] p-3 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 leading-relaxed shadow-sm space-y-2';
 
       const meta = document.createElement('div');
-      meta.className = 'font-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400';
-      meta.textContent = currentLang === 'vi'
-        ? 'Cosine Match 98.4% • Nguồn CV Xác thực'
-        : 'Cosine Match 98.4% • Verified CV Source';
+      meta.className = 'font-mono text-[10px] font-bold text-sky-600 dark:text-sky-400 flex items-center gap-1.5';
+      meta.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-ping"></span><span>${currentLang === 'vi' ? 'Đang truy xuất DB & gọi LLM...' : 'Retrieving DB corpus & querying LLM...'}</span>`;
 
       const body = document.createElement('div');
-      body.textContent = aiMsg;
+      body.className = 'text-xs leading-relaxed text-slate-400 italic';
+      body.textContent = currentLang === 'vi' ? 'Đang tổng hợp ngữ cảnh có trích dẫn...' : 'Generating grounded answer...';
 
       aBubble.appendChild(meta);
       aBubble.appendChild(body);
       box.appendChild(aBubble);
       box.scrollTop = box.scrollHeight;
+
+      setCopilotBusyState(true);
+
+      try {
+        const resp = await fetch('/api/v1/copilot/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            query,
+            locale: currentLang,
+            history: copilotHistory.slice(-4)
+          })
+        });
+
+        if (resp.status === 429) {
+          meta.className = 'font-mono text-[10px] font-bold text-amber-600 dark:text-amber-400';
+          meta.textContent = 'Rate Limited (429)';
+          body.className = 'text-xs leading-relaxed text-slate-700 dark:text-slate-200';
+          body.textContent = currentLang === 'vi'
+            ? 'Bạn gửi hơi nhanh — vui lòng đợi khoảng 1 phút rồi hỏi tiếp nhé.'
+            : 'Too many requests in a short window — please wait a minute and try again.';
+          return;
+        }
+
+        const data = await resp.json();
+        if (!resp.ok || !data || !data.success) {
+          throw new Error((data && data.message) ? data.message : 'RAG request failed');
+        }
+
+        const isLiveLlm = data.mode === 'llm-rag';
+        const methodBadge = data.retrieval_method === 'hybrid-vector' ? 'Hybrid Vector' : 'BM25 RAG';
+        meta.className = isLiveLlm
+          ? 'font-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex flex-wrap items-center gap-1.5'
+          : 'font-mono text-[10px] font-bold text-amber-600 dark:text-amber-400 flex flex-wrap items-center gap-1.5';
+
+        const modelLabel = isLiveLlm ? `LLM: ${data.model || data.provider || 'Active AI'}` : 'Retrieval Fallback';
+        const matchPart = typeof data.match_score === 'number' ? ` • Match ${data.match_score}%` : '';
+        meta.textContent = `${modelLabel} • ${methodBadge}${matchPart} • ${data.latency_ms || 0}ms`;
+
+        body.className = 'text-xs leading-relaxed text-slate-700 dark:text-slate-200';
+        body.innerHTML = formatCopilotAnswerHtml(data.answer);
+
+        if (Array.isArray(data.sources) && data.sources.length > 0) {
+          const sourcesWrap = document.createElement('div');
+          sourcesWrap.className = 'pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-1.5';
+          data.sources.slice(0, 3).forEach((src) => {
+            const link = document.createElement('a');
+            link.href = src.url || '#';
+            link.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-900/40 text-[10px] font-mono text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-300 transition-colors';
+            link.textContent = `[${src.ref}] ${src.title}`;
+            sourcesWrap.appendChild(link);
+          });
+          aBubble.appendChild(sourcesWrap);
+        }
+
+        copilotHistory.push({ role: 'user', text: query });
+        copilotHistory.push({ role: 'assistant', text: String(data.answer || '').slice(0, 450) });
+      } catch (err) {
+        meta.className = 'font-mono text-[10px] font-bold text-rose-600 dark:text-rose-400';
+        meta.textContent = 'Connection Alert';
+        body.className = 'text-xs leading-relaxed text-slate-700 dark:text-slate-200';
+        body.textContent = currentLang === 'vi'
+          ? 'Không kết nối được tới endpoint RAG lúc này. Vui lòng thử lại sau giây lát.'
+          : 'Could not reach the RAG endpoint right now. Please try again shortly.';
+      } finally {
+        setCopilotBusyState(false);
+        box.scrollTop = box.scrollHeight;
+        if (window.lucide) lucide.createIcons();
+      }
     }
 
     // 10. INITIAL BOOTSTRAP

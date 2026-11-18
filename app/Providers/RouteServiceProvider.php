@@ -75,5 +75,13 @@ class RouteServiceProvider extends ServiceProvider
 
             return Limit::perMinute(5)->by($request->ip());
         });
+
+        RateLimiter::for('copilot-rag', function (Request $request) {
+            if (app()->environment('testing')) {
+                return Limit::none();
+            }
+
+            return Limit::perMinute(15)->by($request->ip());
+        });
     }
 }

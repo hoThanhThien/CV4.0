@@ -67,4 +67,35 @@ interface AIProviderInterface
         ?string $modelOverride = null,
         string $aspectRatio = '16:9'
     ): array;
+
+    /**
+     * Generate a grounded natural-language chat completion for RAG/Copilot responses.
+     *
+     * @return array{
+     *     success: bool,
+     *     text: string|null,
+     *     model_used: string|null,
+     *     prompt_tokens: int,
+     *     completion_tokens: int,
+     *     total_tokens: int,
+     *     error: string|null,
+     *     error_code: string|null
+     * }
+     */
+    public function generateChatReply(
+        AiProvider $provider,
+        string $systemPrompt,
+        string $userPrompt,
+        ?string $modelOverride = null,
+        int $maxTokens = 800,
+        float $temperature = 0.35
+    ): array;
+
+    /**
+     * Generate dense embedding vectors for an array of strings, or null when unsupported/unavailable.
+     *
+     * @param  array<int, string>  $texts
+     * @return array<int, array<int, float>>|null
+     */
+    public function embedTexts(AiProvider $provider, array $texts): ?array;
 }
