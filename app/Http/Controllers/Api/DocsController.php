@@ -848,6 +848,65 @@ HTML, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
                         ],
                     ],
                 ],
+
+                // Live RAG Copilot
+                '/api/v1/copilot/ask' => [
+                    'post' => [
+                        'tags' => ['RAG Copilot'],
+                        'summary' => 'Ask the Portfolio RAG AI Copilot (Hybrid Vector + BM25 + Live LLM)',
+                        'requestBody' => [
+                            'required' => true,
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'required' => ['query'],
+                                        'properties' => [
+                                            'query' => ['type' => 'string', 'minLength' => 2, 'maxLength' => 500, 'example' => 'Explain the TourRist RAG AI architecture and tech stack'],
+                                            'locale' => ['type' => 'string', 'enum' => ['en', 'vi'], 'example' => 'en'],
+                                            'history' => [
+                                                'type' => 'array',
+                                                'maxItems' => 6,
+                                                'items' => [
+                                                    'type' => 'object',
+                                                    'properties' => [
+                                                        'role' => ['type' => 'string', 'enum' => ['user', 'assistant']],
+                                                        'text' => ['type' => 'string'],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Grounded answer with retrieval telemetry and source citations',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'success' => ['type' => 'boolean', 'example' => true],
+                                                'answer' => ['type' => 'string'],
+                                                'mode' => ['type' => 'string', 'enum' => ['llm-rag', 'retrieval-fallback']],
+                                                'retrieval_method' => ['type' => 'string', 'enum' => ['hybrid-vector', 'bm25-lexical']],
+                                                'model' => ['type' => 'string', 'nullable' => true],
+                                                'match_score' => ['type' => 'number'],
+                                                'latency_ms' => ['type' => 'integer'],
+                                                'tokens' => ['type' => 'object'],
+                                                'sources' => ['type' => 'array', 'items' => ['type' => 'object']],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            '422' => ['description' => 'Validation error'],
+                            '429' => ['description' => 'Rate limit exceeded (15 requests/minute/IP)'],
+                        ],
+                    ],
+                ],
             ],
         ];
 

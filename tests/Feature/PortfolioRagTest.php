@@ -203,4 +203,79 @@ class PortfolioRagTest extends TestCase
             $this->app['env'] = $previousEnv;
         }
     }
+
+    public function test_gemini_model_fallback_cache_skips_dead_model_on_subsequent_turns()
+    {
+        $provider = AiProvider::create([
+            'name' => 'Google Gemini Cached',
+            'provider_type' => 'gemini',
+            'api_key' => 'AIzaSyTestFakeKeyForCacheTest123456',
+            'model' => 'gemini-deprecated-model',
+            'is_active' => true,
+            'is_default' => true,
+        ]);
+
+        Project::create([
+            'title' => 'TourRist',
+            'description' => 'RAG AI concierge platform.',
+            'featured' => true,
+        ]);
+
+        $calledModels = [];
+
+        Http::fake([
+            'generativelanguage.googleapis.com/v1beta/interactions' => function ($request) use (&$calledModels) {
+                $model = (string) ($request['model'] ?? '');
+                $calledModels[] = $model;
+
+                if ($model === 'gemini-deprecated-model') {
+                    return Http::response(['error' => ['message' => 'Model not found', 'status' => 'NOT_FOUND']], 404);
+                }
+
+                return Http::response([
+                    'outputs' => [[
+                        'type' => 'message',
+                        'content' => [['type' => 'text', 'text' => 'TourRist uses RAG [S1].']],
+                    ]],
+                ], 200);
+            },
+
+            'generativelanguage.googleapis.com/v1beta/models/gemini-deprecated-model:generateContent' => Http::response([
+                'error' => ['message' => 'Model not found', 'status' => 'NOT_FOUND'],
+            ], 404),
+
+            'generativelanguage.googleapis.com/v1beta/models?*' => Http::response([
+                'models' => [
+                    [
+                        'name' => 'models/gemini-fast-live',
+                        'supportedGenerationMethods' => ['generateContent'],
+                        'outputTokenLimit' => 8192,
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $first = $this->postJson('/api/v1/copilot/ask', ['query' => 'TourRist RAG']);
+        $first->assertStatus(200)
+            ->assertJsonPath('mode', 'llm-rag')
+            ->assertJsonPath('model', 'gemini-fast-live');
+
+        $calledModels = [];
+
+        $second = $this->postJson('/api/v1/copilot/ask', ['query' => 'Tell me more about TourRist']);
+        $second->assertStatus(200)
+            ->assertJsonPath('mode', 'llm-rag')
+            ->assertJsonPath('model', 'gemini-fast-live');
+
+        $this->assertSame(['gemini-fast-live'], $calledModels);
+        $this->assertSame('gemini-fast-live', \Illuminate\Support\Facades\Cache::get('gemini_chat_working_model_' . $provider->id));
+    }
+
+    public function test_openapi_spec_documents_copilot_rag_endpoint()
+    {
+        $response = $this->get('/api/docs/openapi.json');
+        $response->assertStatus(200);
+        $paths = $response->json('paths') ?? [];
+        $this->assertArrayHasKey('/api/v1/copilot/ask', $paths);
+    }
 }

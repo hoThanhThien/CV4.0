@@ -1236,7 +1236,7 @@
       <!-- Messages Container -->
       <div id="copilotMessages" class="p-4 flex-1 min-h-[160px] max-h-[260px] overflow-y-auto space-y-3 bg-slate-50/70 dark:bg-slate-950/60 text-xs">
         <div class="p-3 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 leading-relaxed shadow-sm" data-i18n="copilot_welcome">
-          Hi recruiter! I am indexed with Ho Thanh Thien's UTH academic records (4.0/4.0 latest GPA, Distinction), TourRist RAG AI architecture, and Enmasys/AIPower engineering logs. Click any quick prompt below!
+          Hi recruiter! Ask any question or click a prompt below — I retrieve live Portfolio DB records via Hybrid Vector/BM25 and answer via real LLM with citations.
         </div>
       </div>
 
@@ -1400,8 +1400,8 @@
         post3_desc: 'Learn how to utilize React Hooks effectively for scalable state management and functional components.',
         footer_subtitle: 'Full-Stack Web Systems & Applied RAG AI Engineer • Ho Chi Minh City, Vietnam',
         copilot_title: "Thien's RAG AI Copilot",
-        copilot_sub: 'Grounded in verified UTH & CV corpus',
-        copilot_welcome: "Hi recruiter! I am indexed with Ho Thanh Thien's UTH academic records (4.0/4.0 latest GPA, Distinction), TourRist RAG AI architecture, and Enmasys/AIPower engineering logs. Click any quick prompt below!",
+        copilot_sub: 'Live Hybrid Vector + LLM Assistant',
+        copilot_welcome: "Hi recruiter! Ask any question or click a prompt below — I retrieve live Portfolio DB records via Hybrid Vector/BM25 and answer via real LLM with citations.",
         copilot_btn: "Ask Thien's RAG AI"
       },
       vi: {
@@ -1484,8 +1484,8 @@
         post3_desc: 'Áp dụng Custom Hooks, Context và mô hình component hàm tối ưu hiệu năng cho ứng dụng React/Next.js.',
         footer_subtitle: 'Kỹ sư Hệ thống Web Full-Stack & Ứng dụng RAG AI • TP. Hồ Chí Minh, Việt Nam',
         copilot_title: 'Trợ lý RAG AI của Thiện',
-        copilot_sub: 'Truy xuất dữ liệu thật từ hồ sơ UTH & CV',
-        copilot_welcome: 'Chào nhà tuyển dụng! Tôi được nạp dữ liệu xác thực từ bảng điểm ĐH GTVT TP.HCM (GPA kỳ gần nhất 4.0/4.0, Tốt nghiệp Xuất sắc), kiến trúc dự án TourRist RAG AI và kinh nghiệm Enmasys / AIPower. Hãy bấm thử gợi ý bên dưới!',
+        copilot_sub: 'Truy xuất Hybrid Vector + LLM thật từ DB',
+        copilot_welcome: 'Chào nhà tuyển dụng! Hãy hỏi bất kỳ câu nào hoặc bấm gợi ý bên dưới — tôi truy xuất trực tiếp từ cơ sở dữ liệu Portfolio (Hybrid Vector/BM25) và trả lời qua LLM thật kèm trích dẫn nguồn.',
         copilot_btn: 'Hỏi Trợ lý RAG AI'
       }
     };
