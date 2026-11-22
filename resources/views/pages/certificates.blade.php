@@ -159,7 +159,7 @@
      SECTION 3: CREDENTIAL BENTO GRID
 ========================================================================= -->
 @if($certificates->count())
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <section class="cv-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach($certificates as $cert)
       @php
           $isBrochure = $cert->category === 'brochure';

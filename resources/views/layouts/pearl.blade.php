@@ -215,14 +215,20 @@
   <script>
     let currentLang = "{{ $isVi ? 'vi' : 'en' }}";
 
-    // 1. Mouse-Tracking Spotlight Glow
+    // 1. Mouse-Tracking Spotlight Glow (rAF + hovered card only, zero forced reflow)
+    let spotlightRaf = 0;
     document.addEventListener('mousemove', (e) => {
-      document.querySelectorAll('.spotlight-card').forEach(card => {
+      const card = e.target && e.target.closest ? e.target.closest('.spotlight-card') : null;
+      if (!card) return;
+      const cx = e.clientX;
+      const cy = e.clientY;
+      if (spotlightRaf) cancelAnimationFrame(spotlightRaf);
+      spotlightRaf = requestAnimationFrame(() => {
         const rect = card.getBoundingClientRect();
-        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        card.style.setProperty('--mouse-x', `${cx - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${cy - rect.top}px`);
       });
-    });
+    }, { passive: true });
 
     // 2. White BG / Dark BG Toggle
     function toggleTheme() {

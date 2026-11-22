@@ -246,7 +246,7 @@ function renderPearlIcons(options = {}) {
   const nodes = Array.from(root.querySelectorAll('[data-lucide]:not(svg)'));
   if (!nodes.length) return;
 
-  if ((options && options.root) || nodes.length <= 8) {
+  if ((options && options.root) || nodes.length <= 6) {
     for (let i = 0; i < nodes.length; i++) {
       replacePearlIcon(nodes[i], extraAttrs);
     }
@@ -257,7 +257,7 @@ function renderPearlIcons(options = {}) {
   const deferred = [];
   for (let i = 0; i < nodes.length; i++) {
     const el = nodes[i];
-    if (el.closest('header') || immediate.length < 6) {
+    if (el.closest('header') || immediate.length < 4) {
       immediate.push(el);
     } else {
       deferred.push(el);
@@ -271,7 +271,7 @@ function renderPearlIcons(options = {}) {
 
   let idx = 0;
   function processNextChunk() {
-    const end = Math.min(idx + 5, deferred.length);
+    const end = Math.min(idx + 3, deferred.length);
     for (; idx < end; idx++) {
       if (deferred[idx].isConnected) {
         replacePearlIcon(deferred[idx], extraAttrs);

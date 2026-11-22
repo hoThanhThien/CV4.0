@@ -72,10 +72,10 @@ i[data-lucide] {
 
 .cv-auto {
   content-visibility: auto;
-  contain-intrinsic-size: auto 1100px;
+  contain-intrinsic-size: auto 1200px;
 }
 
 .cv-auto-tall {
   content-visibility: auto;
-  contain-intrinsic-size: auto 2100px;
+  contain-intrinsic-size: auto 2600px;
 }

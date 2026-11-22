@@ -11,6 +11,7 @@ module.exports = {
     './app/Support/**/*.php',
     './resources/js/lucide-pearl.js',
     './resources/js/welcome-pearl.js',
+    './resources/js/radial-orbit-wheel.js',
     './resources/js/brand-svgs.js',
   ],
   theme: {

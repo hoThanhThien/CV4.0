@@ -1,5 +1,3 @@
-import { BRAND_SVGS } from './brand-svgs';
-
 let currentSkillCategory = 0;
 let currentSkillMode = 'grid';
 let activeOrbitSkillIndex = 0;
@@ -174,7 +172,22 @@ window.PAGE_I18N = {
 
 const HOME_DATA = window.__PEARL_HOME__ || {};
 const SKILL_CATEGORIES = Array.isArray(HOME_DATA.skills) ? HOME_DATA.skills : [];
-const CUSTOM_BRAND_SVGS = Object.assign({}, BRAND_SVGS, HOME_DATA.brandSvgs || {});
+const CUSTOM_BRAND_SVGS = Object.assign({}, HOME_DATA.brandSvgs || {});
+let brandSvgsPromise = null;
+let copilotPromptsRendered = false;
+
+function ensureBrandSvgs(cb) {
+  if (Object.keys(CUSTOM_BRAND_SVGS).length > 0) {
+    if (cb) cb();
+    return;
+  }
+  if (!brandSvgsPromise) {
+    brandSvgsPromise = import(/* webpackChunkName: "brand-svgs" */ './brand-svgs').then((m) => {
+      Object.assign(CUSTOM_BRAND_SVGS, m.BRAND_SVGS || {});
+    });
+  }
+  if (cb) brandSvgsPromise.then(cb);
+}
 
 const CLI_RESPONSES = {
   whoami: {
@@ -306,22 +319,30 @@ function renderSkillTabs(skipLucide = false) {
 }
 
 function switchCategoryAnimated(nextIndex) {
-  if (currentSkillMode === 'grid') {
-    const oldCards = document.querySelectorAll('#skillGridModeWrap .skill-grid-item');
-    oldCards.forEach((c) => c.classList.add('is-exiting'));
-    setTimeout(() => {
+  ensureBrandSvgs(() => {
+    if (currentSkillMode === 'grid') {
+      const oldCards = document.querySelectorAll('#skillGridModeWrap .skill-grid-item');
+      oldCards.forEach((c) => c.classList.add('is-exiting'));
+      setTimeout(() => {
+        currentSkillCategory = nextIndex;
+        activeOrbitSkillIndex = 0;
+        renderSkillTabs();
+        renderActiveSkillView();
+      }, 210);
+    } else {
       currentSkillCategory = nextIndex;
       activeOrbitSkillIndex = 0;
       renderSkillTabs();
       renderActiveSkillView();
-    }, 210);
-  } else {
-    currentSkillCategory = nextIndex;
-    activeOrbitSkillIndex = 0;
-    renderSkillTabs();
-    renderActiveSkillView();
-  }
+    }
+  });
 }
+
+window.selectSkillTab = function (nextIndex) {
+  if (currentSkillCategory !== nextIndex) {
+    switchCategoryAnimated(nextIndex);
+  }
+};
 
 function switchSkillMode(mode, shouldRender = true) {
   currentSkillMode = mode;
@@ -343,14 +364,14 @@ function switchSkillMode(mode, shouldRender = true) {
     orbitWrap.classList.remove('hidden');
   }
   if (shouldRender) {
-    renderActiveSkillView();
+    ensureBrandSvgs(() => renderActiveSkillView());
   }
 }
 
 function replaySkillsAnimation() {
   const btn = document.getElementById('btnSkillReplay');
   if (btn) btn.classList.add('replay-spinning');
-  renderActiveSkillView();
+  ensureBrandSvgs(() => renderActiveSkillView());
   if (btn) setTimeout(() => btn.classList.remove('replay-spinning'), 620);
 }
 
@@ -435,11 +456,14 @@ function render3DSpinFlipGrid(items, skipLucide = false) {
     wrap.appendChild(card);
   }
 
-  if (skipLucide && items.length > 5) {
-    for (let i = 0; i < 5; i++) appendCard(items[i], i);
-    setTimeout(() => {
-      for (let i = 5; i < items.length; i++) appendCard(items[i], i);
-    }, 0);
+  if (skipLucide && items.length > 2) {
+    let idx = 0;
+    function nextCardSlice() {
+      const end = Math.min(idx + 2, items.length);
+      for (; idx < end; idx++) appendCard(items[idx], idx);
+      if (idx < items.length) setTimeout(nextCardSlice, 0);
+    }
+    nextCardSlice();
     return;
   }
 
@@ -573,26 +597,21 @@ function updateOrbitInspector(item) {
 
 window.onPearlLangChange = function (lang, dict, isManual = true) {
   updateOrbitSpinLabel();
-  if (!isManual) {
-    if (lang !== (document.documentElement.lang || 'en')) {
-      runTerminalCmd(activeCliKey, false);
-    }
+  ensureBrandSvgs(() => {
+    renderSkillTabs(!isManual);
     setTimeout(() => {
-      renderSkillTabs(true);
-      setTimeout(() => {
-        renderActiveSkillView(true);
+      renderActiveSkillView(!isManual);
+      if (copilotPromptsRendered || isManual) {
         setTimeout(() => {
           renderCopilotPrompts();
-          if (window.lucide) lucide.createIcons();
+          copilotPromptsRendered = true;
         }, 0);
-      }, 0);
+      }
+      if (isManual || lang !== (document.documentElement.lang || 'en')) {
+        runTerminalCmd(activeCliKey, isManual);
+      }
     }, 0);
-    return;
-  }
-  renderSkillTabs(false);
-  renderActiveSkillView(false);
-  renderCopilotPrompts();
-  runTerminalCmd(activeCliKey, true);
+  });
 };
 
 const COPILOT_QUICK_PROMPTS = [
@@ -635,6 +654,10 @@ function toggleCopilot(forceOpen = null) {
     panel.classList.add('hidden');
   } else {
     panel.classList.toggle('hidden');
+  }
+  if (!panel.classList.contains('hidden') && !copilotPromptsRendered) {
+    renderCopilotPrompts();
+    copilotPromptsRendered = true;
   }
   if (window.lucide) lucide.createIcons({ root: panel });
 }

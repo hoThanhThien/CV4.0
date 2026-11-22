@@ -311,7 +311,7 @@
     <!-- =========================================================================
          SECTION 2: TECHNICAL SKILLS — 3D VORTEX FLIP GRID & 3D ORBIT WHEEL
     ========================================================================= -->
-    <section id="skills" class="cv-auto space-y-6">
+    <section id="skills" class="cv-auto-tall space-y-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div class="space-y-2">
           <div class="font-mono text-xs font-bold tracking-widest uppercase text-sky-700 dark:text-sky-400 flex items-center gap-2">
@@ -343,23 +343,17 @@
         </div>
       </div>
 
-      <!-- Outer Card Wrapper -->
       <div class="bg-white dark:bg-slate-900/90 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-4 sm:p-8 space-y-5 sm:space-y-6">
         
-        <!-- Category Filter Tabs (5 Category Pills) -->
         <div id="skillCategoryTabs" class="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
-          <!-- Injected by Vanilla JS -->
         </div>
 
-        <!-- Hint Line -->
         <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-sky-700 dark:text-sky-400 font-medium">
-          <span data-i18n="skill_hint">✨ Hover or tap any skill card to 3D-flip &amp; inspect real project usage</span>
+          <span data-i18n="skill_hint">{{ $isVi ? '✨ Rê chuột hoặc chạm vào thẻ kỹ năng để lật 3D 180° & xem dự án áp dụng thực tế' : '✨ Hover or tap any skill card to 3D-flip & inspect real project usage' }}</span>
           <span id="activeSkillCountMeta" class="text-slate-600 dark:text-slate-400 text-xs">10 SKILLS</span>
         </div>
 
-        <!-- CHẾ ĐỘ 1: 3D SPIN & FLIP GRID -->
-        <div id="skillGridModeWrap" class="grid grid-cols-1 min-[440px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
-          <!-- Dynamically populated by JS -->
+        <div id="skillGridModeWrap" class="grid grid-cols-1 min-[440px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 min-h-[320px]">
         </div>
 
         <!-- CHẾ ĐỘ 2: 3D ORBIT WHEEL + RIGHT INSPECTOR -->
@@ -812,19 +806,19 @@
               </div>
 
               <div class="flex items-center justify-between pt-2.5 border-t border-slate-100 dark:border-slate-800 relative z-10">
-                <a href="{{ route('projects.show', $proj->id) }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
+                <a href="{{ route('projects.show', $proj->id) }}" class="inline-flex items-center gap-1 py-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
                   <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
                   <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </a>
                 <div class="flex items-center gap-3">
                   @if($proj->github_url)
-                    <a href="{{ $proj->github_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-1">
+                    <a href="{{ $proj->github_url }}" target="_blank" rel="noopener" class="py-1.5 text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-1">
                       <i data-lucide="github" class="w-3.5 h-3.5"></i>
                       <span>Code</span>
                     </a>
                   @endif
                   @if($proj->demo_url)
-                    <a href="{{ $proj->demo_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                    <a href="{{ $proj->demo_url }}" target="_blank" rel="noopener" class="py-1.5 text-xs font-mono text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
                       <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                       <span>Demo</span>
                     </a>
@@ -840,7 +834,7 @@
     <!-- =========================================================================
          SECTION 4: CREDENTIALS & ENGINEERING BLOG (100% SYNCHRONIZED EN/VI)
     ========================================================================= -->
-    <section id="credentials" class="cv-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <section id="credentials" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
       <!-- Credentials & Brochure PDF (5 cols) -->
       <div class="lg:col-span-5 min-w-0 space-y-5">

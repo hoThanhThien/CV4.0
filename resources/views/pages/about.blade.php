@@ -7,9 +7,9 @@
     : 'Learn about Ho Thanh Thien — Software Engineer graduating with Distinction from UTH (4.0/4.0 latest GPA), specializing in Spring Boot, Laravel, Odoo ERP, and Applied RAG AI.')
 
 @section('styles')
-  main > section.space-y-6 ~ section.space-y-6 {
+  main > section.space-y-6 {
     content-visibility: auto;
-    contain-intrinsic-size: auto 700px;
+    contain-intrinsic-size: auto 750px;
   }
 @endsection
 
@@ -27,8 +27,6 @@
     <!-- Monogram & Academic Identity Plate -->
     <div class="lg:col-span-4 flex flex-col items-center lg:items-stretch">
       <div class="w-full max-w-xs mx-auto rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 border border-slate-800 p-7 text-center text-white shadow-xl relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-sky-500/20 blur-2xl pointer-events-none"></div>
-        <div class="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-emerald-500/15 blur-2xl pointer-events-none"></div>
 
         <div class="relative z-10 space-y-4 flex flex-col items-center">
           <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 p-0.5 shadow-lg shadow-sky-500/25">
