@@ -47,22 +47,18 @@ html.dark .frosted-glass {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(
-    520px circle at var(--mouse-x) var(--mouse-y),
-    rgba(14, 165, 233, 0.09),
-    transparent 45%
-  );
+  background: radial-gradient(520px circle at var(--mouse-x) var(--mouse-y),
+      rgba(14, 165, 233, 0.09),
+      transparent 45%);
   opacity: 0;
   transition: opacity 0.25s ease;
   z-index: 1;
 }
 
 html.dark .spotlight-card::before {
-  background: radial-gradient(
-    520px circle at var(--mouse-x) var(--mouse-y),
-    rgba(56, 189, 248, 0.14),
-    transparent 45%
-  );
+  background: radial-gradient(520px circle at var(--mouse-x) var(--mouse-y),
+      rgba(56, 189, 248, 0.14),
+      transparent 45%);
 }
 
 .spotlight-card:hover::before {

@@ -64,8 +64,8 @@
     @endif
   @endif
 
-  <!-- Self-Hosted Bundled Lucide Icons (Deferred) -->
-  <script src="{{ asset('js/lucide-pearl.js') }}?v={{ @filemtime(public_path('js/lucide-pearl.js')) ?: 1 }}" defer></script>
+  <!-- Self-Hosted Bundled Lucide Icons (Async post-paint) -->
+  <script src="{{ asset('js/lucide-pearl.js') }}?v={{ @filemtime(public_path('js/lucide-pearl.js')) ?: 1 }}" async></script>
 </head>
 <body class="bg-tech-grid text-slate-900 dark:text-slate-100 antialiased selection:bg-sky-500/20 selection:text-sky-700 dark:selection:text-sky-300 relative overflow-x-clip min-h-screen flex flex-col">
 
