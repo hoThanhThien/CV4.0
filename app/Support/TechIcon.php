@@ -9,36 +9,7 @@ namespace App\Support;
  */
 class TechIcon
 {
-    private const DEVICON_MAP = [
-        'laravel' => 'devicon-laravel-original colored',
-        'blade' => 'devicon-laravel-original colored',
-        'spring boot' => 'devicon-spring-original colored',
-        'spring' => 'devicon-spring-original colored',
-        'django' => 'devicon-django-plain text-emerald-600 dark:text-emerald-400',
-        'fastapi' => 'devicon-fastapi-plain colored',
-        'react' => 'devicon-react-original colored',
-        'reactjs' => 'devicon-react-original colored',
-        'tailwind css' => 'devicon-tailwindcss-original colored',
-        'tailwindcss' => 'devicon-tailwindcss-original colored',
-        'bootstrap' => 'devicon-bootstrap-plain colored',
-        'sql server' => 'devicon-microsoftsqlserver-plain colored',
-        'docker' => 'devicon-docker-plain colored',
-        'docker & docker compose' => 'devicon-docker-plain colored',
-        'typescript' => 'devicon-typescript-plain colored',
-        'html' => 'devicon-html5-plain colored',
-        'html5' => 'devicon-html5-plain colored',
-        'css' => 'devicon-css3-plain colored',
-        'css3' => 'devicon-css3-plain colored',
-        'html5 / css3' => 'devicon-html5-plain colored',
-        'wordpress' => 'devicon-wordpress-plain colored dark:text-sky-400',
-        'git' => 'devicon-git-plain colored',
-        'git & github' => 'devicon-git-plain colored',
-        'nginx' => 'devicon-nginx-original colored',
-        'firebase' => 'devicon-firebase-plain colored',
-        'firebase authentication' => 'devicon-firebase-plain colored',
-        'graphql' => 'devicon-graphql-plain colored',
-        'postman' => 'devicon-postman-plain colored',
-    ];
+    private const DEVICON_MAP = [];
 
     private const CUSTOM_MAP = [
         'java' => 'java',
@@ -50,26 +21,63 @@ class TechIcon
         'figma' => 'figma',
         'odoo' => 'odoo',
         'odoo erp' => 'odoo',
+        'odoo orm' => 'odoo',
         'rag' => 'rag',
         'rag ai' => 'rag',
         'ai' => 'rag',
         'llm' => 'llm',
+        'llm grounding' => 'llm',
         'vector search' => 'vector',
         'chroma' => 'vector',
         'chromadb' => 'vector',
         'jwt' => 'jwt',
         'jwt authentication' => 'jwt',
         'jwt & otp' => 'jwt',
+        'jwt & rbac' => 'jwt',
         'mysql' => 'mysql',
+        'mysql 8.0' => 'mysql',
         'sqlite' => 'sqlite',
         'javascript' => 'js',
         'javascript (es6+)' => 'js',
+        'javascript es6+' => 'js',
         'nextjs' => 'nextjs',
         'next.js' => 'nextjs',
         'linux' => 'linux',
+        'linux / cron' => 'linux',
         'cpanel' => 'cpanel',
         'aws (ec2 / s3)' => 'aws',
         'aws' => 'aws',
+        'laravel' => 'laravel',
+        'laravel 11' => 'laravel',
+        'blade' => 'laravel',
+        'blade engine' => 'laravel',
+        'spring boot' => 'spring',
+        'spring' => 'spring',
+        'django' => 'django',
+        'fastapi' => 'fastapi',
+        'react' => 'react',
+        'reactjs' => 'react',
+        'tailwind css' => 'tailwindcss',
+        'tailwindcss' => 'tailwindcss',
+        'bootstrap' => 'bootstrap',
+        'sql server' => 'sqlserver',
+        'docker' => 'docker',
+        'docker compose' => 'docker',
+        'docker & docker compose' => 'docker',
+        'typescript' => 'typescript',
+        'html' => 'html5',
+        'html5' => 'html5',
+        'html5 / css3' => 'html5',
+        'css' => 'css3',
+        'css3' => 'css3',
+        'wordpress' => 'wordpress',
+        'git' => 'git',
+        'git & github' => 'git',
+        'nginx' => 'nginx',
+        'firebase' => 'firebase',
+        'firebase authentication' => 'firebase',
+        'graphql' => 'graphql',
+        'postman' => 'postman',
     ];
 
     private const LUCIDE_MAP = [
@@ -148,6 +156,9 @@ class TechIcon
             'java', 'php', 'python', 'postgresql', 'figma', 'odoo',
             'rag', 'vector', 'llm', 'jwt', 'mysql',
             'sqlite', 'js', 'nextjs', 'linux', 'cpanel', 'aws',
+            'laravel', 'spring', 'django', 'fastapi', 'react', 'tailwindcss',
+            'bootstrap', 'sqlserver', 'docker', 'typescript', 'html5', 'css3',
+            'wordpress', 'git', 'nginx', 'firebase', 'graphql', 'postman',
         ];
 
         $map = [];
@@ -224,14 +235,11 @@ class TechIcon
                 . '<rect x="12" y="6.5" width="9" height="11" rx="4.5" fill="#0EA5E9" fill-opacity="0.9"/>'
                 . '</svg>',
 
-            // LLM Grounding tri-node network
+            // LLM Grounding tri-node network (compact path count)
             'llm' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" fill="none" role="img" aria-label="LLM Grounding Logo">'
-                . '<circle cx="12" cy="12" r="8.5" stroke="#6366F1" stroke-width="1.8" stroke-dasharray="3 2.5"/>'
-                . '<circle cx="12" cy="5.5" r="2" fill="#0EA5E9"/>'
-                . '<circle cx="6.5" cy="16" r="2" fill="#6366F1"/>'
-                . '<circle cx="17.5" cy="16" r="2" fill="#10B981"/>'
                 . '<path d="M12 7.5v3.2m-3.6 3.7l2.5-1.8m4.7 1.8l-2.5-1.8" stroke="#64748B" stroke-width="1.5" stroke-linecap="round"/>'
-                . '<circle cx="12" cy="12" r="2.3" fill="#10B981"/>'
+                . '<circle cx="12" cy="12" r="8.5" stroke="#6366F1" stroke-width="1.8" stroke-dasharray="3 2.5"/>'
+                . '<path d="M10 5.5a2 2 0 104 0 2 2 0 10-4 0zm-5.5 10.5a2 2 0 104 0 2 2 0 10-4 0zm11 0a2 2 0 104 0 2 2 0 10-4 0zm-5.8-4a2.3 2.3 0 104.6 0 2.3 2.3 0 10-4.6 0z" fill="#10B981"/>'
                 . '</svg>',
 
             // Official JWT starburst colors (#FFFFFF, #FB015B, #D63AFF, #00B9F1, #00F2E6) on distinct badge
@@ -292,6 +300,117 @@ class TechIcon
                 . '<text x="12" y="12.5" text-anchor="middle" fill="#232F3E" class="dark:fill-white" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="8.2" letter-spacing="-0.2">aws</text>'
                 . '<path d="M5.5 16.3c3.9 2.4 8.9 2.5 12.8.3" stroke="#FF9900" stroke-width="1.9" stroke-linecap="round"/>'
                 . '<path d="M16.5 15.2l2.4 1.1-.7 2.5" stroke="#FF9900" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>'
+                . '</svg>',
+
+            // Laravel Crimson isometric emblem (#FF2D20)
+            'laravel' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" fill="none" role="img" aria-label="Laravel Logo">'
+                . '<path d="M4 5.5l3.8-2.2 3.8 2.2v6.2l3.8-2.2 4.6 2.6v4.4l-8.4 4.8L4 16.9V5.5z" stroke="#FF2D20" class="dark:stroke-[#FB7185]" stroke-width="1.8" stroke-linejoin="round"/>'
+                . '<path d="M4 5.5l3.8 2.2 3.8-2.2M7.8 7.7v11.4M11.6 11.7l3.8 2.2 4.6-2.6M15.4 13.9v5.2" stroke="#FF2D20" class="dark:stroke-[#FB7185]" stroke-width="1.5" stroke-linejoin="round"/>'
+                . '</svg>',
+
+            // Spring Boot leaf emblem (#6DB33F)
+            'spring' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" fill="none" role="img" aria-label="Spring Boot Logo">'
+                . '<path d="M12 2.2l8.5 4.9v9.8L12 21.8l-8.5-4.9V7.1L12 2.2z" fill="#6DB33F" fill-opacity="0.16" stroke="#4D8B28" class="dark:stroke-[#86EFAC]" stroke-width="1.7" stroke-linejoin="round"/>'
+                . '<path d="M7.6 14.8c2.6.8 6.4-.3 8.2-2.7 1.3-1.8 1.5-4 1.2-5.4-2.1.4-4.9 1.6-6.9 3.9-1.1 1.3-1.7 2.8-2.5 4.2z" fill="#6DB33F" class="dark:fill-[#4ADE80]"/>'
+                . '</svg>',
+
+            // Django dark emerald badge (#092E20 / #16A34A dark)
+            'django' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Django Logo">'
+                . '<rect width="24" height="24" rx="5" fill="#092E20" class="dark:fill-[#15803D]"/>'
+                . '<text x="12" y="16" text-anchor="middle" fill="#FFFFFF" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="11.5">dj</text>'
+                . '</svg>',
+
+            // FastAPI signature teal bolt (#009688)
+            'fastapi' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="FastAPI Logo">'
+                . '<circle cx="12" cy="12" r="10.5" fill="#009688" class="dark:fill-[#14B8A6]"/>'
+                . '<path d="M13 4.8L6.8 13.3h4.5l-.9 5.9 6.8-8.7h-4.6L13 4.8z" fill="#FFFFFF"/>'
+                . '</svg>',
+
+            // React orbital atom (#0284C7 light / #61DAFB dark for WCAG contrast)
+            'react' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" fill="none" role="img" aria-label="React Logo">'
+                . '<circle cx="12" cy="12" r="2.1" fill="#0284C7" class="dark:fill-[#61DAFB]"/>'
+                . '<ellipse cx="12" cy="12" rx="10" ry="3.9" stroke="#0284C7" class="dark:stroke-[#61DAFB]" stroke-width="1.5"/>'
+                . '<ellipse cx="12" cy="12" rx="10" ry="3.9" transform="rotate(60 12 12)" stroke="#0284C7" class="dark:stroke-[#61DAFB]" stroke-width="1.5"/>'
+                . '<ellipse cx="12" cy="12" rx="10" ry="3.9" transform="rotate(120 12 12)" stroke="#0284C7" class="dark:stroke-[#61DAFB]" stroke-width="1.5"/>'
+                . '</svg>',
+
+            // Tailwind CSS twin waves (#0284C7 / #38BDF8 dark)
+            'tailwindcss' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Tailwind CSS Logo">'
+                . '<path fill="#0284C7" class="dark:fill-[#38BDF8]" d="M12 6.2c-3.1 0-5 1.5-5.7 4.6 1.1-1.5 2.4-2.1 3.9-1.7.8.2 1.4.8 2.1 1.5 1.1 1.1 2.4 2.4 5.1 2.4 3.1 0 5-1.5 5.7-4.6-1.1 1.5-2.4 2.1-3.9 1.7-.8-.2-1.4-.8-2.1-1.5-1.1-1.1-2.4-2.4-5.1-2.4zm-5.7 6.8c-3.1 0-5 1.5-5.7 4.6 1.1-1.5 2.4-2.1 3.9-1.7.8.2 1.4.8 2.1 1.5 1.1 1.1 2.4 2.4 5.1 2.4 3.1 0 5-1.5 5.7-4.6-1.1 1.5-2.4 2.1-3.9 1.7-.8-.2-1.4-.8-2.1-1.5-1.1-1.1-2.4-2.4-5.1-2.4z"/>'
+                . '</svg>',
+
+            // Bootstrap violet badge (#7952B3)
+            'bootstrap' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Bootstrap Logo">'
+                . '<rect x="1.5" y="2.5" width="21" height="19" rx="4.5" fill="#7952B3" class="dark:fill-[#8B5CF6]"/>'
+                . '<text x="12" y="16.3" text-anchor="middle" fill="#FFFFFF" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="13">B</text>'
+                . '</svg>',
+
+            // Microsoft SQL Server drum emblem (#CC2927)
+            'sqlserver' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="SQL Server Logo">'
+                . '<ellipse cx="12" cy="6" rx="8.5" ry="3.2" fill="#CC2927" class="dark:fill-[#EF4444]"/>'
+                . '<path d="M3.5 6v12c0 1.8 3.8 3.2 8.5 3.2s8.5-1.4 8.5-3.2V6c0 1.8-3.8 3.2-8.5 3.2S3.5 7.8 3.5 6z" fill="#B91C1C" class="dark:fill-[#DC2626]"/>'
+                . '<text x="12" y="16.2" text-anchor="middle" fill="#FFFFFF" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="6.4">SQL</text>'
+                . '</svg>',
+
+            // Docker blue whale & container blocks (#2496ED)
+            'docker' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Docker Logo">'
+                . '<path fill="#0284C7" class="dark:fill-[#38BDF8]" d="M13.2 5.2h2.6v2.4h-2.6V5.2zm-3.1 0h2.6v2.4h-2.6V5.2zm0 2.9h2.6v2.4h-2.6V8.1zm-3.1 0h2.6v2.4H7V8.1zm6.2 0h2.6v2.4h-2.6V8.1zM3.9 8.1h2.6v2.4H3.9V8.1z"/>'
+                . '<path fill="#0284C7" class="dark:fill-[#38BDF8]" d="M22.4 12.1c-.6-.5-1.8-.6-2.8-.4-.2-1.1-.8-2-1.7-2.6l-.4-.3-.2.4c-.5.9-.6 2.1-.2 3-.5.3-1.3.5-2.1.5H1.9l-.1.6c-.2 1.9.4 3.8 1.5 5.2 1.4 1.6 3.5 2.4 6.2 2.4 5.7 0 9.9-2.6 11.9-7.4.8 0 1.7-.1 2.2-.8l.2-.4-.4-.2z"/>'
+                . '</svg>',
+
+            // TypeScript blue badge (#3178C6)
+            'typescript' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="TypeScript Logo">'
+                . '<rect x="1.5" y="1.5" width="21" height="21" rx="3.5" fill="#3178C6" class="dark:fill-[#3B82F6]"/>'
+                . '<text x="14" y="18.2" text-anchor="middle" fill="#FFFFFF" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="11">TS</text>'
+                . '</svg>',
+
+            // HTML5 orange shield (#E34F26)
+            'html5' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="HTML5 Logo">'
+                . '<path fill="#E34F26" d="M3.2 2l1.6 17.8L12 22l7.2-2.2L20.8 2H3.2z"/>'
+                . '<text x="12" y="15.8" text-anchor="middle" fill="#FFFFFF" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="11">5</text>'
+                . '</svg>',
+
+            // CSS3 blue shield (#1572B6)
+            'css3' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="CSS3 Logo">'
+                . '<path fill="#1572B6" class="dark:fill-[#2563EB]" d="M3.2 2l1.6 17.8L12 22l7.2-2.2L20.8 2H3.2z"/>'
+                . '<text x="12" y="15.8" text-anchor="middle" fill="#FFFFFF" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="11">3</text>'
+                . '</svg>',
+
+            // WordPress slate-blue circle emblem (#21759B)
+            'wordpress' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="WordPress Logo">'
+                . '<circle cx="12" cy="12" r="10.2" fill="#21759B" class="dark:fill-[#0284C7]"/>'
+                . '<text x="12" y="16" text-anchor="middle" fill="#FFFFFF" font-family="Georgia,serif" font-weight="700" font-size="12.5">W</text>'
+                . '</svg>',
+
+            // Git orange diamond & branch path (#F05032)
+            'git' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Git Logo">'
+                . '<rect x="4" y="4" width="16" height="16" rx="2.5" transform="rotate(45 12 12)" fill="#F05032"/>'
+                . '<path d="M9 7.8l3 3m0 0v5.4m0-5.4l3 2.7" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>'
+                . '<circle cx="12" cy="10.8" r="1.4" fill="#FFFFFF"/><circle cx="12" cy="16.2" r="1.4" fill="#FFFFFF"/><circle cx="15" cy="13.5" r="1.4" fill="#FFFFFF"/>'
+                . '</svg>',
+
+            // Nginx emerald hexagon (#009639)
+            'nginx' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Nginx Logo">'
+                . '<polygon points="12,1.8 21,6.9 21,17.1 12,22.2 3,17.1 3,6.9" fill="#009639" class="dark:fill-[#16A34A]"/>'
+                . '<text x="12" y="16" text-anchor="middle" fill="#FFFFFF" font-family="ui-sans-serif,system-ui,sans-serif" font-weight="800" font-size="12">N</text>'
+                . '</svg>',
+
+            // Firebase amber/gold flame (#FFA000 + #FFCA28)
+            'firebase' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Firebase Logo">'
+                . '<path fill="#F59E0B" d="M5.2 17.7L7.5 3.1c.1-.7 1-.9 1.4-.3l2.6 4.9 3.6-3.4c.5-.5 1.4-.2 1.5.5l2.2 12.9-6.8 3.9-6.8-3.9z"/>'
+                . '<path fill="#FDE047" d="M5.2 17.7L12 11.4l6.8 6.3-6.8 3.9-6.8-3.9z" fill-opacity="0.85"/>'
+                . '</svg>',
+
+            // GraphQL magenta lattice (#E10098)
+            'graphql' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" fill="none" role="img" aria-label="GraphQL Logo">'
+                . '<polygon points="12,2.6 20.1,7.3 20.1,16.7 12,21.4 3.9,16.7 3.9,7.3" stroke="#E10098" class="dark:stroke-[#F472B6]" stroke-width="1.6"/>'
+                . '<polygon points="12,2.6 20.1,16.7 3.9,16.7" stroke="#E10098" class="dark:stroke-[#F472B6]" stroke-width="1.35"/>'
+                . '</svg>',
+
+            // Postman burnt-orange emblem (#FF6C37)
+            'postman' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" role="img" aria-label="Postman Logo">'
+                . '<circle cx="12" cy="12" r="10.2" fill="#FF6C37"/>'
+                . '<path d="M8.5 14.5l7-7m0 0l-4.2.8m4.2-.8l-.8 4.2" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>'
                 . '</svg>',
 
             default => '',

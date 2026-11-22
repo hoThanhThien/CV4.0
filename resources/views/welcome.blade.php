@@ -50,17 +50,19 @@
   .skill-grid-item {
     perspective: 1100px;
     height: 152px;
+    transition: transform 0.25s ease, opacity 0.22s ease;
+  }
+  .skill-grid-item.is-animating {
     opacity: 0;
     animation: skillVortexSpinIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     animation-delay: calc(var(--index, 0) * 55ms);
-    transition: transform 0.25s ease, opacity 0.22s ease;
   }
   .skill-grid-item.is-exiting {
     opacity: 0 !important;
     transform: rotateY(90deg) scale(0.65) !important;
     animation: none !important;
   }
-  .skill-grid-item .spin-icon-target {
+  .skill-grid-item.is-animating .spin-icon-target {
     animation: iconSpin360 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     animation-delay: calc(var(--index, 0) * 55ms);
   }
@@ -215,15 +217,15 @@
         <!-- 3 Verified Experience & Award Chips -->
         <div class="flex flex-wrap items-center gap-2.5 pt-1">
           <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
-            <i data-lucide="briefcase" class="w-3.5 h-3.5 text-sky-500"></i>
+            <i data-lucide="briefcase" class="w-3.5 h-3.5 text-sky-700 dark:text-sky-400"></i>
             <span data-i18n="chip_aipower">Full-Stack Dev @ AIPower</span>
           </span>
           <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-indigo-500"></i>
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"></i>
             <span data-i18n="chip_enmasys">Odoo ERP @ Enmasys</span>
           </span>
           <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
-            <i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i>
+            <i data-lucide="award" class="w-3.5 h-3.5 text-amber-700 dark:text-amber-400"></i>
             <span data-i18n="chip_award">2nd Prize UTH IT Logo Design</span>
           </span>
         </div>
@@ -235,7 +237,7 @@
             <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
           </a>
           <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-sm hover:border-sky-400 hover:bg-sky-50/40 dark:hover:bg-slate-800 shadow-sm hover:-translate-y-0.5 transition-all">
-            <i data-lucide="file-down" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
+            <i data-lucide="file-down" class="w-4 h-4 text-sky-700 dark:text-sky-400"></i>
             <span data-i18n="cta_brochure">Download Brochure PDF</span>
           </a>
         </div>
@@ -254,50 +256,50 @@
               <span class="w-3 h-3 rounded-full bg-amber-400"></span>
               <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
             </div>
-            <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 truncate">thien@hothanhthien.io.vn — zsh</span>
+            <span class="font-mono text-xs text-slate-300 truncate">thien@hothanhthien.io.vn — zsh</span>
             <span class="hidden sm:inline-block w-10"></span>
           </div>
 
           <!-- 4 Interactive Command Triggers -->
           <div class="px-4 py-2.5 bg-slate-900/50 border-b border-slate-800/80 flex flex-wrap gap-1.5">
-            <button type="button" data-cli-key="whoami" onclick="runTerminalCmd('whoami')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-sky-500/15 text-sky-400 border border-sky-500/30 font-mono text-[11px] font-semibold hover:bg-sky-500 hover:text-white transition-colors">
+            <button type="button" data-cli-key="whoami" onclick="runTerminalCmd('whoami')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-400/40 font-mono text-xs font-semibold hover:bg-sky-700 hover:text-white transition-colors">
               whoami
             </button>
-            <button type="button" data-cli-key="skills" onclick="runTerminalCmd('skills')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 font-mono text-[11px] font-semibold hover:border-sky-400 hover:text-white transition-colors">
+            <button type="button" data-cli-key="skills" onclick="runTerminalCmd('skills')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 font-mono text-xs font-semibold hover:border-sky-400 hover:text-white transition-colors">
               skills --top
             </button>
-            <button type="button" data-cli-key="awards" onclick="runTerminalCmd('awards')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 font-mono text-[11px] font-semibold hover:border-sky-400 hover:text-white transition-colors">
+            <button type="button" data-cli-key="awards" onclick="runTerminalCmd('awards')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 font-mono text-xs font-semibold hover:border-sky-400 hover:text-white transition-colors">
               awards --verify
             </button>
-            <button type="button" data-cli-key="rag" onclick="runTerminalCmd('rag')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 font-mono text-[11px] font-semibold hover:border-sky-400 hover:text-white transition-colors">
+            <button type="button" data-cli-key="rag" onclick="runTerminalCmd('rag')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 font-mono text-xs font-semibold hover:border-sky-400 hover:text-white transition-colors">
               rag --status
             </button>
           </div>
 
           <!-- Terminal Output Window with Typewriter -->
           <div class="p-4 font-mono text-xs leading-relaxed min-h-[185px] text-slate-200 space-y-2 overflow-x-auto">
-            <div class="text-slate-400">
+            <div class="text-slate-300">
               <span class="text-emerald-400 font-bold">$</span> <span id="cliTypedCommand" class="text-sky-300 font-semibold">whoami</span>
             </div>
-            <pre id="cliOutputBody" class="whitespace-pre-wrap break-words text-slate-300 font-mono text-[11px] sm:text-[11.5px] leading-relaxed"></pre>
+            <pre id="cliOutputBody" class="whitespace-pre-wrap break-words text-slate-200 font-mono text-xs leading-relaxed"></pre>
           </div>
         </div>
 
         <!-- 2. Hàng 3 thẻ Mini Bento khoe 3 con số đắt giá -->
         <div class="grid grid-cols-1 min-[420px]:grid-cols-3 gap-2.5 sm:gap-3">
           <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-sm">
-            <div class="font-display text-lg sm:text-2xl font-extrabold text-sky-600 dark:text-sky-400">4.0/4.0</div>
-            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_gpa">Latest Term GPA</div>
+            <div class="font-display text-lg sm:text-2xl font-extrabold text-sky-700 dark:text-sky-400">4.0/4.0</div>
+            <div class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_gpa">Latest Term GPA</div>
           </div>
 
           <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-sm">
             <div class="font-display text-base sm:text-xl font-extrabold text-indigo-600 dark:text-indigo-400 leading-tight" data-i18n="kpi_degree_val">Distinction</div>
-            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_degree">B.Eng IT @ UTH</div>
+            <div class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_degree">B.Eng IT @ UTH</div>
           </div>
 
           <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-sm">
-            <div class="font-display text-base sm:text-xl font-extrabold text-emerald-600 dark:text-emerald-400 leading-tight" data-i18n="kpi_award_val">2nd Prize</div>
-            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_award">UTH IT Logo Design</div>
+            <div class="font-display text-base sm:text-xl font-extrabold text-emerald-700 dark:text-emerald-400 leading-tight" data-i18n="kpi_award_val">2nd Prize</div>
+            <div class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5 leading-tight" data-i18n="kpi_award">UTH IT Logo Design</div>
           </div>
         </div>
 
@@ -307,11 +309,11 @@
     <!-- =========================================================================
          SECTION 2: TECHNICAL SKILLS — 3D VORTEX FLIP GRID & 3D ORBIT WHEEL
     ========================================================================= -->
-    <section id="skills" class="space-y-6">
+    <section id="skills" class="cv-auto space-y-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div class="space-y-2">
-          <div class="font-mono text-xs font-bold tracking-widest uppercase text-sky-600 dark:text-sky-400 flex items-center gap-2">
-            <span class="w-5 h-[1px] bg-sky-500"></span>
+          <div class="font-mono text-xs font-bold tracking-widest uppercase text-sky-700 dark:text-sky-400 flex items-center gap-2">
+            <span class="w-5 h-[1px] bg-sky-700 dark:bg-sky-400"></span>
             <span data-i18n="skills_kicker">01 // TECHNICAL ARCHITECTURE</span>
           </div>
           <h2 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white" data-i18n="skills_title">
@@ -321,7 +323,7 @@
 
         <!-- Mode Switcher Toggle + Spin Again -->
         <div class="flex flex-wrap items-center gap-2">
-          <div class="inline-flex flex-wrap p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm font-mono text-[11px] sm:text-xs">
+          <div class="inline-flex flex-wrap p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm font-mono text-xs">
             <button type="button" id="btnModeGrid" onclick="switchSkillMode('grid')" class="px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition-all">
               <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
               <span data-i18n="mode_grid">3D Spin &amp; Flip Grid</span>
@@ -332,7 +334,7 @@
             </button>
           </div>
 
-          <button type="button" id="btnSkillReplay" onclick="replaySkillsAnimation()" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sky-600 dark:text-sky-400 font-mono text-[11px] sm:text-xs font-bold hover:bg-sky-50 dark:hover:bg-slate-800 shadow-sm active:scale-95 transition-all">
+          <button type="button" id="btnSkillReplay" onclick="replaySkillsAnimation()" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sky-700 dark:text-sky-400 font-mono text-xs font-bold hover:bg-sky-50 dark:hover:bg-slate-800 shadow-sm active:scale-95 transition-all">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
             <span data-i18n="btn_spin_again">Spin Again</span>
           </button>
@@ -348,9 +350,9 @@
         </div>
 
         <!-- Hint Line -->
-        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-sky-600 dark:text-sky-400 font-medium">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-sky-700 dark:text-sky-400 font-medium">
           <span data-i18n="skill_hint">✨ Hover or tap any skill card to 3D-flip &amp; inspect real project usage</span>
-          <span id="activeSkillCountMeta" class="text-slate-400 text-[11px]">10 SKILLS</span>
+          <span id="activeSkillCountMeta" class="text-slate-600 dark:text-slate-400 text-xs">10 SKILLS</span>
         </div>
 
         <!-- CHẾ ĐỘ 1: 3D SPIN & FLIP GRID -->
@@ -364,13 +366,13 @@
           <!-- Left Stage: Ice-Blue Radial Orbit Visualizer -->
           <div id="orbitStageBox" class="lg:col-span-7 min-w-0 w-full rounded-2xl pt-10 pb-12 px-3 sm:px-4 bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
             
-            <div class="absolute top-3 left-3 sm:top-3.5 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 z-30">ORBIT // TRIG_ROTATION</div>
-            <div class="absolute top-3 right-3 sm:top-3.5 sm:right-4 font-mono text-[10px] sm:text-[11px] text-sky-600/70 font-semibold z-30 hidden sm:block">3D PRESERVE</div>
-            <div class="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1.5 sm:gap-2 z-30">
+            <div class="absolute top-3 left-3 sm:top-3.5 sm:left-4 font-mono text-xs text-slate-600 dark:text-slate-400 z-30">ORBIT // TRIG_ROTATION</div>
+            <div class="absolute top-3 right-3 sm:top-3.5 sm:right-4 font-mono text-xs text-sky-700 dark:text-sky-400 font-semibold z-30 hidden sm:block">3D PRESERVE</div>
+            <div class="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-4 font-mono text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1.5 sm:gap-2 z-30">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <span id="orbitRadiusReadout">R=184px</span>
             </div>
-            <button type="button" id="btnOrbitSpinToggle" onclick="toggleOrbitSpin()" class="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3.5 z-30 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-700 text-[10px] sm:text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 hover:border-sky-400 shadow-sm transition-all">
+            <button type="button" id="btnOrbitSpinToggle" onclick="toggleOrbitSpin()" class="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3.5 z-30 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-700 text-xs font-mono font-semibold text-sky-700 dark:text-sky-400 hover:border-sky-400 shadow-sm transition-all">
               <i data-lucide="pause" id="orbitSpinPauseIcon" class="w-3 h-3"></i>
               <i data-lucide="play" id="orbitSpinPlayIcon" class="w-3 h-3 hidden"></i>
               <span id="orbitSpinToggleLabel">Auto Orbit</span>
@@ -385,9 +387,9 @@
 
                 <!-- Central Circular Core Hub -->
                 <div class="relative z-10 w-32 h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-2">
-                  <div class="text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">ACTIVE CORE</div>
+                  <div class="text-xs font-mono tracking-widest text-sky-700 dark:text-sky-400 font-bold uppercase">ACTIVE CORE</div>
                   <div id="orbitHubCategory" class="text-sm font-extrabold text-slate-900 dark:text-white leading-tight mt-0.5 px-1">Core Stack</div>
-                  <div id="orbitHubCount" class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">10 Skills</div>
+                  <div id="orbitHubCount" class="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold mt-0.5">10 Skills</div>
                 </div>
 
                 <!-- Dynamic Orbit Nodes Container -->
@@ -402,28 +404,28 @@
           <div class="lg:col-span-5 min-w-0 w-full spotlight-card bg-slate-50/70 dark:bg-slate-950/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 flex flex-col justify-between space-y-6">
             <div class="space-y-5 relative z-10">
               <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-3.5">
-                <span class="font-mono text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400" data-i18n="inspector_title">3D Orbit Inspector</span>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-emerald-100/80 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" data-i18n="inspector_verified">Verified Proof</span>
+                <span class="font-mono text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-400" data-i18n="inspector_title">3D Orbit Inspector</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-emerald-100/80 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300" data-i18n="inspector_verified">Verified Proof</span>
               </div>
 
               <!-- Icon & Name -->
               <div class="flex items-center gap-4">
                 <div id="inspectorIconBox" class="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-3xl">
-                  <i class="devicon-laravel-original colored"></i>
+                  {!! \App\Support\TechIcon::render('Laravel', 'w-7 h-7') !!}
                 </div>
                 <div>
                   <h3 id="inspectorSkillName" class="font-display text-2xl font-extrabold text-slate-900 dark:text-white">Laravel 11</h3>
-                  <span id="inspectorDomain" class="text-xs font-mono text-slate-500 dark:text-slate-400">Backend &amp; CMS</span>
+                  <span id="inspectorDomain" class="text-xs font-mono text-slate-600 dark:text-slate-400">Backend &amp; CMS</span>
                 </div>
               </div>
 
               <!-- Stack Specialization & Production Validation -->
               <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-3">
                 <div class="space-y-0.5 min-w-0">
-                  <div class="text-[10px] font-mono uppercase tracking-wider text-slate-400" data-i18n="inspector_mastery">Engineering Scope</div>
+                  <div class="text-xs font-mono uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="inspector_mastery">Engineering Scope</div>
                   <div id="inspectorScopeVal" class="text-xs font-mono font-bold text-slate-800 dark:text-slate-100 truncate">Web Architecture</div>
                 </div>
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-[10px] font-bold text-emerald-700 dark:text-emerald-300 flex-shrink-0">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-xs font-bold text-emerald-800 dark:text-emerald-300 flex-shrink-0">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                   <span data-i18n="inspector_status_val">Production Ready</span>
                 </span>
@@ -431,7 +433,7 @@
 
               <!-- Production Project Proof -->
               <div class="space-y-2">
-                <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400" data-i18n="inspector_proof_label">Real-World Production Proof</div>
+                <div class="text-xs font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="inspector_proof_label">Real-World Production Proof</div>
                 <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1.5">
                   <div id="inspectorProjectTitle" class="font-mono text-xs font-bold text-slate-900 dark:text-white">Personal Portfolio &amp; CMS</div>
                   <p id="inspectorProjectDesc" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -441,9 +443,9 @@
               </div>
             </div>
 
-            <div class="pt-3 border-t border-slate-200/70 dark:border-slate-800 flex items-center justify-between font-mono text-[11px] text-slate-400 relative z-10">
+            <div class="pt-3 border-t border-slate-200/70 dark:border-slate-800 flex items-center justify-between font-mono text-xs text-slate-600 dark:text-slate-400 relative z-10">
               <span data-i18n="inspector_footer_hint">Hover / Tap wheel nodes to inspect</span>
-              <span class="text-sky-500 font-bold">ACTIVE</span>
+              <span class="text-sky-700 dark:text-sky-400 font-bold">ACTIVE</span>
             </div>
           </div>
 
@@ -455,7 +457,7 @@
     <!-- =========================================================================
          SECTION 3: ASYMMETRIC BENTO GRID (FEATURED PROJECTS & HONORS)
     ========================================================================= -->
-    <section id="projects" class="space-y-6">
+    <section id="projects" class="cv-auto-tall space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div class="space-y-2">
           <div class="font-mono text-xs font-bold tracking-widest uppercase text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
@@ -467,7 +469,7 @@
           </h2>
         </div>
 
-        <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1.5 text-sm font-mono font-semibold text-sky-600 dark:text-sky-400 hover:underline">
+        <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1.5 text-sm font-mono font-semibold text-sky-700 dark:text-sky-400 hover:underline">
           <span data-i18n="bento_view_all">View all projects</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </a>
@@ -491,10 +493,10 @@
           <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
             <div class="md:col-span-6 min-w-0 space-y-4">
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-500/30">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-500/30">
                   {{ $tourRist && $tourRist->role ? strtoupper($tourRist->role) . ' // APPLIED AI' : 'FLAGSHIP // APPLIED AI' }}
                 </span>
-                <span class="font-mono text-[11px] text-slate-400">{{ $tourRist && $tourRist->period ? $tourRist->period : '01/2026 — 06/2026' }}</span>
+                <span class="font-mono text-xs text-slate-600 dark:text-slate-400">{{ $tourRist && $tourRist->period ? $tourRist->period : '01/2026 — 06/2026' }}</span>
               </div>
 
               @if($tourRist)
@@ -506,29 +508,29 @@
                 </p>
                 <div class="flex flex-wrap gap-1.5">
                   @forelse($tourRist->technologies->take(5) as $tech)
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                       {!! \App\Support\TechIcon::render($tech->name, 'w-3 h-3') !!}
                       <span>{{ $tech->name }}</span>
                     </span>
                   @empty
-                    <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
-                    <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
-                    <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
+                    <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
+                    <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
+                    <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
                   @endforelse
                 </div>
                 <div class="flex items-center gap-3 pt-1 flex-wrap">
-                  <a href="{{ route('projects.show', $tourRist->id) }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+                  <a href="{{ route('projects.show', $tourRist->id) }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
                     <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
                     <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
                   </a>
                   @if($tourRist->github_url)
-                    <a href="{{ $tourRist->github_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                    <a href="{{ $tourRist->github_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                       <i data-lucide="github" class="w-3.5 h-3.5"></i>
                       <span>GitHub</span>
                     </a>
                   @endif
                   @if($tourRist->demo_url)
-                    <a href="{{ $tourRist->demo_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-emerald-600 dark:text-emerald-400 hover:underline">
+                    <a href="{{ $tourRist->demo_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-emerald-700 dark:text-emerald-400 hover:underline">
                       <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                       <span>Live</span>
                     </a>
@@ -542,17 +544,17 @@
                   Engineered a document-based RAG chatbot pairing semantic ChromaDB vector search with LLM grounding to generate zero-hallucination travel itineraries from curated local knowledge bases.
                 </p>
                 <div class="flex flex-wrap gap-1.5">
-                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
-                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
-                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
-                  <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Vector Search</span>
+                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
+                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
+                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
+                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Vector Search</span>
                 </div>
                 <div class="flex items-center gap-3 pt-1">
-                  <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+                  <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
                     <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
                     <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
                   </a>
-                  <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                  <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                     <i data-lucide="github" class="w-3.5 h-3.5"></i>
                     <span>GitHub</span>
                   </a>
@@ -563,30 +565,30 @@
             <!-- Interactive RAG Architecture Preview & Live Copilot Trigger -->
             <div class="md:col-span-6 min-w-0 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 p-4 space-y-3 font-mono text-xs">
               <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-2 gap-2">
-                <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
                   <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                   Live RAG Architecture
                 </span>
                 <div class="flex items-center gap-1.5">
-                  <span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">Vector + BM25</span>
-                  <span class="px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 text-[10px] font-bold">LLM Grounded</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-bold">Vector + BM25</span>
+                  <span class="px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-300 text-xs font-bold">LLM Grounded</span>
                 </div>
               </div>
 
               <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 text-slate-700 dark:text-slate-200">
-                <span class="text-sky-600 dark:text-sky-400 font-bold">Pipeline:</span>
+                <span class="text-sky-700 dark:text-sky-400 font-bold">Pipeline:</span>
                 <span data-i18n="rag_sim_q">DB Corpus Chunking &rarr; Cosine Vector + BM25 Top-K &rarr; Real LLM Citation</span>
               </div>
 
               <div class="p-3 rounded-xl bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200/70 dark:border-sky-800/50 text-slate-700 dark:text-slate-300 space-y-2">
-                <div class="text-[10px] text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1">
+                <div class="text-xs text-sky-700 dark:text-sky-400 font-bold flex items-center gap-1">
                   <i data-lucide="database" class="w-3 h-3"></i>
                   <span data-i18n="rag_sim_trace">Connected to Live Portfolio Corpus &amp; AI Provider</span>
                 </div>
                 <p class="font-sans text-xs leading-relaxed" data-i18n="rag_sim_a">
                   Click below to run a real Retrieval-Augmented Generation query through the backend LLM endpoint with source citations and live latency metrics.
                 </p>
-                <button type="button" onclick="triggerSampleRagQuery()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-600 text-white text-[11px] font-semibold transition-colors shadow-sm">
+                <button type="button" onclick="triggerSampleRagQuery()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold transition-colors shadow-sm">
                   <i data-lucide="sparkles" class="w-3 h-3"></i>
                   <span data-i18n="rag_try_live">{{ $isVi ? 'Chạy thử RAG AI thật trên TourRist' : 'Test Live RAG Query on TourRist' }}</span>
                 </button>
@@ -598,7 +600,7 @@
         <!-- THẺ 2 (Chiếm 1 cột): Giải Nhì Thiết kế Logo Khoa CNTT UTH -->
         <article class="spotlight-card hover:-translate-y-1 bg-gradient-to-br from-white via-amber-50/30 to-sky-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/30 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between">
           <div class="space-y-3 relative z-10">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-amber-100/80 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-500/30">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-100/80 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-500/30">
               <i data-lucide="trophy" class="w-3.5 h-3.5"></i>
               <span data-i18n="award_badge">DESIGN RECOGNITION</span>
             </span>
@@ -607,10 +609,10 @@
             <div class="py-5 flex items-center justify-center">
               <div class="animate-float relative w-28 h-28 rounded-3xl bg-gradient-to-br from-sky-500 via-indigo-600 to-slate-900 p-0.5 shadow-xl shadow-indigo-500/20 flex items-center justify-center">
                 <div class="w-full h-full rounded-[22px] bg-white dark:bg-slate-950 flex flex-col items-center justify-center">
-                  <span class="font-display text-2xl font-extrabold tracking-tight bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
+                  <span class="font-display text-2xl font-extrabold tracking-tight bg-gradient-to-r from-sky-700 to-indigo-700 dark:from-sky-400 dark:to-indigo-400 bg-clip-text text-transparent">
                     IT&bull;UTH
                   </span>
-                  <span class="font-mono text-[9px] tracking-widest text-slate-400 uppercase mt-0.5">IDENTITY</span>
+                  <span class="font-mono text-xs tracking-wider text-slate-600 dark:text-slate-400 uppercase mt-0.5">IDENTITY</span>
                 </div>
               </div>
             </div>
@@ -623,7 +625,7 @@
             </p>
           </div>
 
-          <a href="{{ route('certificates', $awardCert ? ['category' => 'award'] : []) }}" class="mt-4 inline-flex items-center gap-1.5 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 hover:underline relative z-10">
+          <a href="{{ route('certificates', $awardCert ? ['category' => 'award'] : []) }}" class="mt-4 inline-flex items-center gap-1.5 text-xs font-mono font-bold text-indigo-700 dark:text-indigo-400 hover:underline relative z-10">
             <span data-i18n="award_verify">{{ $isVi ? 'Xác thực Giấy khen & Bằng cấp' : 'Verify Official Certificate' }}</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </a>
@@ -633,10 +635,10 @@
         <article class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between space-y-5">
           <div class="space-y-3 relative z-10">
             <div class="flex items-center justify-between gap-2">
-              <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-500/30">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-500/30">
                 ENTERPRISE JAVA
               </span>
-              <span class="font-mono text-[11px] text-slate-400">{{ $laundry && $laundry->period ? $laundry->period : '01/2025 — 05/2025' }}</span>
+              <span class="font-mono text-xs text-slate-600 dark:text-slate-400">{{ $laundry && $laundry->period ? $laundry->period : '01/2025 — 05/2025' }}</span>
             </div>
 
             @if($laundry)
@@ -656,21 +658,21 @@
             @endif
 
             <!-- Microservices Architecture Flow Diagram -->
-            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono text-[10px] space-y-2">
-              <div class="text-slate-400 font-bold">MICROSERVICES FLOW</div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono text-xs space-y-2">
+              <div class="text-slate-600 dark:text-slate-400 font-bold">MICROSERVICES FLOW</div>
               <div class="flex flex-wrap items-center gap-1.5 text-slate-700 dark:text-slate-200">
                 @if($laundry && $laundry->technologies->isNotEmpty())
                   @foreach($laundry->technologies->take(4) as $tIdx => $tech)
-                    @if($tIdx > 0)<span class="text-sky-500">&rarr;</span>@endif
-                    <span class="px-2 py-1 rounded {{ $tIdx === 1 ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-400/40 font-bold' : ($tIdx === 2 ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-400/40 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700') }}">{{ $tech->name }}</span>
+                    @if($tIdx > 0)<span class="text-sky-700 dark:text-sky-400">&rarr;</span>@endif
+                    <span class="px-2 py-1 rounded {{ $tIdx === 1 ? 'bg-sky-500/15 text-sky-800 dark:text-sky-300 border border-sky-400/40 font-bold' : ($tIdx === 2 ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-400/40 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700') }}">{{ $tech->name }}</span>
                   @endforeach
                 @else
                   <span class="px-2 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">NextJS</span>
-                  <span class="text-sky-500">&rarr;</span>
-                  <span class="px-2 py-1 rounded bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-400/40 font-bold">JWT Guard</span>
-                  <span class="text-sky-500">&rarr;</span>
-                  <span class="px-2 py-1 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-400/40 font-bold">Spring Boot</span>
-                  <span class="text-sky-500">&rarr;</span>
+                  <span class="text-sky-700 dark:text-sky-400">&rarr;</span>
+                  <span class="px-2 py-1 rounded bg-sky-500/15 text-sky-800 dark:text-sky-300 border border-sky-400/40 font-bold">JWT Guard</span>
+                  <span class="text-sky-700 dark:text-sky-400">&rarr;</span>
+                  <span class="px-2 py-1 rounded bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-400/40 font-bold">Spring Boot</span>
+                  <span class="text-sky-700 dark:text-sky-400">&rarr;</span>
                   <span class="px-2 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">MySQL</span>
                 @endif
               </div>
@@ -678,11 +680,11 @@
           </div>
 
           <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 relative z-10">
-            <a href="{{ $laundry ? route('projects.show', $laundry->id) : route('projects.index') }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+            <a href="{{ $laundry ? route('projects.show', $laundry->id) : route('projects.index') }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
               <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
-            <a href="{{ $laundry && $laundry->github_url ? $laundry->github_url : 'https://github.com/hoThanhThien/LT_JAVA_010412213603' }}" target="_blank" rel="noopener" class="text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
+            <a href="{{ $laundry && $laundry->github_url ? $laundry->github_url : 'https://github.com/hoThanhThien/LT_JAVA_010412213603' }}" target="_blank" rel="noopener" class="text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
               <i data-lucide="github" class="w-3.5 h-3.5"></i>
               <span>Code</span>
             </a>
@@ -694,10 +696,10 @@
           @if($experiences->isNotEmpty())
             <div class="space-y-3 relative z-10">
               <div class="flex items-center justify-between flex-wrap gap-2">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
                   {{ $isVi ? 'KINH NGHIỆM THỰC TẾ' : 'INDUSTRY EXPERIENCE' }}
                 </span>
-                <span class="font-mono text-[11px] text-slate-400">{{ $experiences->first()->formatted_date }}</span>
+                <span class="font-mono text-xs text-slate-600 dark:text-slate-400">{{ $experiences->first()->formatted_date }}</span>
               </div>
 
               <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug">
@@ -708,26 +710,26 @@
             <div class="grid grid-cols-1 {{ $experiences->count() >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2' }} gap-4 relative z-10">
               @foreach($experiences->take(3) as $expIdx => $exp)
                 @php
-                    $expAccent = ['text-indigo-600 dark:text-indigo-400', 'text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400'][$expIdx % 3];
+                    $expAccent = ['text-indigo-700 dark:text-indigo-400', 'text-sky-700 dark:text-sky-400', 'text-emerald-700 dark:text-emerald-400'][$expIdx % 3];
                 @endphp
                 <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800 flex flex-col justify-between gap-2.5">
                   <div class="space-y-1.5">
                     <div class="flex items-center justify-between gap-2">
-                      <span class="font-mono text-[10px] font-semibold text-slate-400">{{ $exp->formatted_date }}</span>
+                      <span class="font-mono text-xs font-semibold text-slate-600 dark:text-slate-400">{{ $exp->formatted_date }}</span>
                       @if($exp->current)
-                        <span class="px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-mono text-[9px] font-bold">ACTIVE</span>
+                        <span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-mono text-xs font-bold">ACTIVE</span>
                       @endif
                     </div>
                     <div class="font-display text-base font-extrabold {{ $expAccent }} leading-snug">{{ $exp->localized_company }}</div>
                     <div class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $exp->localized_position }}</div>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
                       {{ \Illuminate\Support\Str::limit(strip_tags((string) $exp->localized_description), 125) }}
                     </p>
                   </div>
                   @if(!empty($exp->tech_tags))
                     <div class="flex flex-wrap gap-1 pt-1">
                       @foreach(array_slice($exp->tech_tags, 0, 3) as $tag)
-                        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300">{{ $tag }}</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-mono bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-300">{{ $tag }}</span>
                       @endforeach
                     </div>
                   @endif
@@ -737,10 +739,10 @@
           @else
             <div class="space-y-3 relative z-10">
               <div class="flex items-center justify-between flex-wrap gap-2">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-500/30" data-i18n="exp_badge">
                   INDUSTRY EXPERIENCE
                 </span>
-                <span class="font-mono text-[11px] text-slate-400" data-i18n="exp_period">03/2026 — PRESENT</span>
+                <span class="font-mono text-xs text-slate-600 dark:text-slate-400" data-i18n="exp_period">03/2026 — PRESENT</span>
               </div>
 
               <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="exp_bento_title">
@@ -756,17 +758,17 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
               <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
                 <div class="font-display text-xl font-extrabold text-indigo-600 dark:text-indigo-400" data-i18n="exp_stat1_val">4+ Modules</div>
-                <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat1_lbl">Odoo Retail, Sales, Accounting &amp; HR configured</div>
+                <div class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-1" data-i18n="exp_stat1_lbl">Odoo Retail, Sales, Accounting &amp; HR configured</div>
               </div>
 
               <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
-                <div class="font-display text-xl font-extrabold text-sky-600 dark:text-sky-400" data-i18n="exp_stat2_val">PHP &amp; PostgreSQL</div>
-                <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat2_lbl">Production corporate &amp; education portals shipped</div>
+                <div class="font-display text-xl font-extrabold text-sky-700 dark:text-sky-400" data-i18n="exp_stat2_val">PHP &amp; PostgreSQL</div>
+                <div class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-1" data-i18n="exp_stat2_lbl">Production corporate &amp; education portals shipped</div>
               </div>
 
               <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
-                <div class="font-display text-xl font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="exp_stat3_val">Laravel 11 SSR</div>
-                <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-1" data-i18n="exp_stat3_lbl">Live bilingual CMS running at hothanhthien.io.vn</div>
+                <div class="font-display text-xl font-extrabold text-emerald-700 dark:text-emerald-400" data-i18n="exp_stat3_val">Laravel 11 SSR</div>
+                <div class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-1" data-i18n="exp_stat3_lbl">Live bilingual CMS running at hothanhthien.io.vn</div>
               </div>
             </div>
           @endif
@@ -780,16 +782,16 @@
             <article class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 flex flex-col justify-between gap-4">
               <div class="space-y-3 relative z-10">
                 <div class="flex items-center justify-between gap-2 flex-wrap">
-                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700">
                     {{ strtoupper($proj->role ?: 'FEATURED SYSTEM') }}
                   </span>
                   @if($proj->period)
-                    <span class="font-mono text-[11px] text-slate-400">{{ $proj->period }}</span>
+                    <span class="font-mono text-xs text-slate-600 dark:text-slate-400">{{ $proj->period }}</span>
                   @endif
                 </div>
 
                 <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white leading-snug">
-                  <a href="{{ route('projects.show', $proj->id) }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="{{ route('projects.show', $proj->id) }}" class="hover:text-sky-700 dark:hover:text-sky-400 transition-colors">
                     {{ $proj->localized_title }}
                   </a>
                 </h3>
@@ -801,29 +803,26 @@
                 @if($proj->technologies->isNotEmpty())
                   <div class="flex flex-wrap gap-1.5">
                     @foreach($proj->technologies->take(5) as $tech)
-                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                        {!! \App\Support\TechIcon::render($tech->name, 'w-3 h-3') !!}
-                        <span>{{ $tech->name }}</span>
-                      </span>
+                      <span class="px-2 py-0.5 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">{{ $tech->name }}</span>
                     @endforeach
                   </div>
                 @endif
               </div>
 
               <div class="flex items-center justify-between pt-2.5 border-t border-slate-100 dark:border-slate-800 relative z-10">
-                <a href="{{ route('projects.show', $proj->id) }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline">
+                <a href="{{ route('projects.show', $proj->id) }}" class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
                   <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
                   <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </a>
                 <div class="flex items-center gap-3">
                   @if($proj->github_url)
-                    <a href="{{ $proj->github_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-slate-500 hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-1">
+                    <a href="{{ $proj->github_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-1">
                       <i data-lucide="github" class="w-3.5 h-3.5"></i>
                       <span>Code</span>
                     </a>
                   @endif
                   @if($proj->demo_url)
-                    <a href="{{ $proj->demo_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                    <a href="{{ $proj->demo_url }}" target="_blank" rel="noopener" class="text-xs font-mono text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
                       <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                       <span>Demo</span>
                     </a>
@@ -839,16 +838,16 @@
     <!-- =========================================================================
          SECTION 4: CREDENTIALS & ENGINEERING BLOG (100% SYNCHRONIZED EN/VI)
     ========================================================================= -->
-    <section id="credentials" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <section id="credentials" class="cv-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
 
       <!-- Credentials & Brochure PDF (5 cols) -->
       <div class="lg:col-span-5 min-w-0 space-y-5">
         <div class="flex items-end justify-between gap-3">
           <div class="space-y-1.5">
-            <div class="font-mono text-xs font-bold tracking-widest uppercase text-emerald-600 dark:text-emerald-400" data-i18n="cred_kicker">03 // OFFICIAL CREDENTIALS</div>
+            <div class="font-mono text-xs font-bold tracking-widest uppercase text-emerald-700 dark:text-emerald-400" data-i18n="cred_kicker">03 // OFFICIAL CREDENTIALS</div>
             <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="cred_title">Degrees &amp; Portfolio PDF</h2>
           </div>
-          <a href="{{ route('certificates') }}" class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline whitespace-nowrap">
+          <a href="{{ route('certificates') }}" class="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-400 hover:underline whitespace-nowrap">
             {{ $isVi ? 'Xem tất cả' : 'View Vault' }} &rarr;
           </a>
         </div>
@@ -857,10 +856,10 @@
           @forelse($certificates->take(4) as $cert)
             @php
                 $certMeta = match ($cert->category) {
-                    'brochure' => ['icon' => 'file-text', 'box' => 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400', 'action' => 'download'],
-                    'degree' => ['icon' => 'graduation-cap', 'box' => 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400', 'action' => 'external-link'],
-                    'award' => ['icon' => 'award', 'box' => 'bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400', 'action' => 'external-link'],
-                    default => ['icon' => 'badge-check', 'box' => 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400', 'action' => 'external-link'],
+                    'brochure' => ['icon' => 'file-text', 'box' => 'bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-400', 'action' => 'download'],
+                    'degree' => ['icon' => 'graduation-cap', 'box' => 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400', 'action' => 'external-link'],
+                    'award' => ['icon' => 'award', 'box' => 'bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-400', 'action' => 'external-link'],
+                    default => ['icon' => 'badge-check', 'box' => 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400', 'action' => 'external-link'],
                 };
                 $hasLocalFile = !empty($cert->file_path) && is_file(public_path('storage/' . ltrim($cert->file_path, '/')));
                 $certUrl = ($cert->category === 'brochure' && $hasLocalFile)
@@ -877,55 +876,55 @@
                   </span>
                   <div>
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white leading-snug">{{ $cert->localized_title }}</h3>
-                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">{{ $certSub ?: ($cert->localized_description ?: 'Verified Portfolio Credential') }}</p>
+                    <p class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5">{{ $certSub ?: ($cert->localized_description ?: 'Verified Portfolio Credential') }}</p>
                   </div>
                 </div>
-                <i data-lucide="{{ $certMeta['action'] }}" class="w-4 h-4 {{ $isDirectFile ? 'text-sky-500' : 'text-slate-400' }} flex-shrink-0"></i>
+                <i data-lucide="{{ $certMeta['action'] }}" class="w-4 h-4 {{ $isDirectFile ? 'text-sky-700 dark:text-sky-400' : 'text-slate-600 dark:text-slate-400' }} flex-shrink-0"></i>
               </div>
             </a>
           @empty
             <a href="{{ asset('assets/docs/HoThanhThien_CV_Brochure.pdf') }}" target="_blank" rel="noopener" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
               <div class="flex items-start justify-between gap-3 relative z-10">
                 <div class="flex items-start gap-3">
-                  <span class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center flex-shrink-0">
+                  <span class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-400 flex items-center justify-center flex-shrink-0">
                     <i data-lucide="file-text" class="w-5 h-5"></i>
                   </span>
                   <div>
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert1_title">Engineer Portfolio &amp; CV Brochure (PDF)</h3>
-                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert1_sub">Ho Thanh Thien &bull; Ready for Instant Download</p>
+                    <p class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="cert1_sub">Ho Thanh Thien &bull; Ready for Instant Download</p>
                   </div>
                 </div>
-                <i data-lucide="download" class="w-4 h-4 text-sky-500 flex-shrink-0"></i>
+                <i data-lucide="download" class="w-4 h-4 text-sky-700 dark:text-sky-400 flex-shrink-0"></i>
               </div>
             </a>
 
             <a href="{{ route('certificates') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
               <div class="flex items-start justify-between gap-3 relative z-10">
                 <div class="flex items-start gap-3">
-                  <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                  <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
                     <i data-lucide="graduation-cap" class="w-5 h-5"></i>
                   </span>
                   <div>
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert2_title">B.Eng in Information Technology — Distinction</h3>
-                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert2_sub">University of Transport HCMC (UTH) &bull; GPA 3.6 / 4.0</p>
+                    <p class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="cert2_sub">University of Transport HCMC (UTH) &bull; GPA 3.6 / 4.0</p>
                   </div>
                 </div>
-                <i data-lucide="external-link" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+                <i data-lucide="external-link" class="w-4 h-4 text-slate-600 dark:text-slate-400 flex-shrink-0"></i>
               </div>
             </a>
 
             <a href="{{ route('certificates') }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
               <div class="flex items-start justify-between gap-3 relative z-10">
                 <div class="flex items-start gap-3">
-                  <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+                  <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
                     <i data-lucide="award" class="w-5 h-5"></i>
                   </span>
                   <div>
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white" data-i18n="cert3_title">2nd Prize — IT Faculty Logo Design Contest</h3>
-                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="cert3_sub">Faculty of Information Technology &bull; UTH Official Award</p>
+                    <p class="text-xs font-mono text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="cert3_sub">Faculty of Information Technology &bull; UTH Official Award</p>
                   </div>
                 </div>
-                <i data-lucide="external-link" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+                <i data-lucide="external-link" class="w-4 h-4 text-slate-600 dark:text-slate-400 flex-shrink-0"></i>
               </div>
             </a>
           @endforelse
@@ -936,16 +935,16 @@
       <div id="blog" class="lg:col-span-7 min-w-0 space-y-5">
         <div class="flex items-end justify-between">
           <div class="space-y-1.5">
-            <div class="font-mono text-xs font-bold tracking-widest uppercase text-sky-600 dark:text-sky-400" data-i18n="blog_kicker">04 // ENGINEERING JOURNAL</div>
+            <div class="font-mono text-xs font-bold tracking-widest uppercase text-sky-700 dark:text-sky-400" data-i18n="blog_kicker">04 // ENGINEERING JOURNAL</div>
             <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="blog_title">Technical Articles &amp; Notes</h2>
           </div>
-          <a href="{{ route('blog.index') }}" class="text-xs font-mono font-bold text-sky-600 dark:text-sky-400 hover:underline" data-i18n="blog_all">All Posts &rarr;</a>
+          <a href="{{ route('blog.index') }}" class="text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline" data-i18n="blog_all">All Posts &rarr;</a>
         </div>
 
         <div class="space-y-3">
           @forelse($recentPosts as $idx => $post)
             @php
-                $postAccent = ['text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400', 'text-indigo-600 dark:text-indigo-400'][$idx % 3];
+                $postAccent = ['text-sky-700 dark:text-sky-400', 'text-emerald-700 dark:text-emerald-400', 'text-indigo-700 dark:text-indigo-400'][$idx % 3];
                 $postCategory = !empty($post->category)
                     ? strtoupper($post->category)
                     : ($post->ai_generated ? 'AI STUDIO // ENGINEERING' : 'ENGINEERING JOURNAL');
@@ -954,23 +953,23 @@
             <a href="{{ route('blog.show', $post->slug) }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
               <div class="flex items-center justify-between gap-4 relative z-10">
                 <div class="space-y-1 min-w-0">
-                  <div class="flex items-center gap-2 flex-wrap font-mono text-[11px]">
+                  <div class="flex items-center gap-2 flex-wrap font-mono text-xs">
                     <span class="{{ $postAccent }} font-bold">{{ $postCategory }}</span>
                     @if($post->published_at)
-                      <span class="text-slate-400">&bull; {{ $post->published_at->format('M d, Y') }}</span>
+                      <span class="text-slate-600 dark:text-slate-400">&bull; {{ $post->published_at->format('M d, Y') }}</span>
                     @endif
                   </div>
                   <h3 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">{{ $post->localized_title }}</h3>
                   <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">{{ $postSummary }}</p>
                 </div>
-                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-600 dark:text-slate-400 flex-shrink-0"></i>
               </div>
             </a>
           @empty
             <a href="{{ route('blog.index') }}" class="spotlight-card block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
               <div class="flex items-center justify-between gap-4 relative z-10">
                 <div class="space-y-1">
-                  <div class="font-mono text-[11px] text-sky-600 dark:text-sky-400 font-bold">ENGINEERING JOURNAL</div>
+                  <div class="font-mono text-xs text-sky-700 dark:text-sky-400 font-bold">ENGINEERING JOURNAL</div>
                   <h3 class="font-display font-bold text-base text-slate-900 dark:text-white">
                     {{ $isVi ? 'Các bài viết kỹ thuật đang được xuất bản' : 'Technical Articles Coming Soon' }}
                   </h3>
@@ -978,7 +977,7 @@
                     {{ $isVi ? 'Xem toàn bộ ghi chú kiến trúc tại trang Blog.' : 'Browse all engineering notes on the blog archive.' }}
                   </p>
                 </div>
-                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-600 dark:text-slate-400 flex-shrink-0"></i>
               </div>
             </a>
           @endforelse
@@ -1008,10 +1007,10 @@
               <span data-i18n="copilot_title">Thien's RAG AI Copilot</span>
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             </div>
-            <div class="text-[10px] font-mono text-sky-300" data-i18n="copilot_sub">Grounded in verified UTH &amp; CV corpus</div>
+            <div class="text-xs font-mono text-sky-300" data-i18n="copilot_sub">Grounded in verified UTH &amp; CV corpus</div>
           </div>
         </div>
-        <button type="button" onclick="toggleCopilot()" class="p-1 rounded-lg hover:bg-white/10 text-slate-300">
+        <button type="button" onclick="toggleCopilot()" aria-label="{{ $isVi ? 'Đóng trợ lý AI' : 'Close AI Copilot' }}" class="p-1.5 rounded-lg hover:bg-white/10 text-slate-200">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -1030,8 +1029,8 @@
 
       <!-- Input Box -->
       <form onsubmit="handleCopilotSubmit(event)" class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-2">
-        <input id="copilotInput" type="text" data-i18n-placeholder="copilot_placeholder" placeholder="Ask about GPA, RAG AI, Enmasys..." class="flex-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500">
-        <button id="copilotSendBtn" type="submit" class="p-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        <input id="copilotInput" type="text" aria-label="{{ $isVi ? 'Câu hỏi cho trợ lý RAG AI' : 'Ask RAG AI Copilot question' }}" data-i18n-placeholder="copilot_placeholder" placeholder="Ask about GPA, RAG AI, Enmasys..." class="flex-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-600 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-600">
+        <button id="copilotSendBtn" type="submit" aria-label="{{ $isVi ? 'Gửi câu hỏi' : 'Send message' }}" class="p-2 rounded-xl bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
         </button>
       </form>
@@ -1267,7 +1266,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
     let activeCliKey = 'whoami';
 
-    function runTerminalCmd(key) {
+    function runTerminalCmd(key, animate = true) {
       activeCliKey = key;
       const payload = CLI_RESPONSES[key];
       if (!payload) return;
@@ -1275,8 +1274,8 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       document.querySelectorAll('.cli-cmd-btn').forEach(btn => {
         const isActive = btn.getAttribute('data-cli-key') === key;
         btn.className = isActive
-          ? 'cli-cmd-btn px-2.5 py-1 rounded-lg bg-sky-500/15 text-sky-400 border border-sky-500/30 font-mono text-[11px] font-semibold hover:bg-sky-500 hover:text-white transition-colors'
-          : 'cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 font-mono text-[11px] font-semibold hover:border-sky-400 hover:text-white transition-colors';
+          ? 'cli-cmd-btn px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-400/40 font-mono text-xs font-semibold hover:bg-sky-700 hover:text-white transition-colors'
+          : 'cli-cmd-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 font-mono text-xs font-semibold hover:border-sky-400 hover:text-white transition-colors';
       });
 
       document.getElementById('cliTypedCommand').textContent = payload.cmd;
@@ -1284,8 +1283,16 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       const text = payload[currentLang];
 
       if (typewriterTimer) clearInterval(typewriterTimer);
-      outputEl.textContent = '';
 
+      if (!animate) {
+        outputEl.textContent = text;
+        const cursor = document.createElement('span');
+        cursor.className = 'cli-cursor';
+        outputEl.appendChild(cursor);
+        return;
+      }
+
+      outputEl.textContent = '';
       let i = 0;
       typewriterTimer = setInterval(() => {
         if (i < text.length) {
@@ -1311,7 +1318,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         .replace(/'/g, '&#39;');
     }
 
-    function renderSkillTabs() {
+    function renderSkillTabs(skipLucide = false) {
       const container = document.getElementById('skillCategoryTabs');
       container.innerHTML = '';
 
@@ -1321,7 +1328,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         btn.type = 'button';
 
         btn.className = isActive
-          ? 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all'
+          ? 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-700 text-white shadow-lg shadow-sky-700/20 flex items-center gap-2 transition-all'
           : 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-all';
 
         const iconColor = isActive ? 'text-white' : escapeHtml(cat.iconColor);
@@ -1336,7 +1343,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         container.appendChild(btn);
       });
 
-      if (window.lucide) lucide.createIcons();
+      if (!skipLucide && window.lucide) lucide.createIcons();
     }
 
     function switchCategoryAnimated(nextIndex) {
@@ -1365,13 +1372,13 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       const orbitWrap = document.getElementById('skillOrbitModeWrap');
 
       if (mode === 'grid') {
-        btnGrid.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-500 text-white shadow-sm transition-all';
-        btnOrbit.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
+        btnGrid.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-700 text-white shadow-sm transition-all';
+        btnOrbit.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
         gridWrap.classList.remove('hidden');
         orbitWrap.classList.add('hidden');
       } else {
-        btnOrbit.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-500 text-white shadow-sm transition-all';
-        btnGrid.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
+        btnOrbit.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-700 text-white shadow-sm transition-all';
+        btnGrid.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all';
         gridWrap.classList.add('hidden');
         orbitWrap.classList.remove('hidden');
       }
@@ -1387,13 +1394,13 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       setTimeout(() => btn.classList.remove('replay-spinning'), 620);
     }
 
-    function renderActiveSkillView() {
+    function renderActiveSkillView(skipLucide = false) {
       const cat = SKILL_CATEGORIES[currentSkillCategory];
       const items = cat.items;
       document.getElementById('activeSkillCountMeta').textContent = `${items.length} SKILLS`;
 
       if (currentSkillMode === 'grid') {
-        render3DSpinFlipGrid(items);
+        render3DSpinFlipGrid(items, skipLucide);
       } else {
         render3DOrbitWheel(cat, items);
       }
@@ -1417,22 +1424,24 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
       if (iconKey.startsWith('lucide:')) {
         const lucideName = iconKey.slice(7);
-        return `<i data-lucide="${escapeHtml(lucideName)}" class="${boxSizes.lucide} text-sky-600 dark:text-sky-400"></i>`;
+        return `<i data-lucide="${escapeHtml(lucideName)}" class="${boxSizes.lucide} text-sky-700 dark:text-sky-400"></i>`;
       }
 
       const cls = boxSizes.orbitText ? `${iconKey} ${boxSizes.orbitText}` : iconKey;
       return `<i class="${escapeHtml(cls)}"></i>`;
     }
 
-    function render3DSpinFlipGrid(items) {
+    function render3DSpinFlipGrid(items, skipLucide = false) {
       const wrap = document.getElementById('skillGridModeWrap');
       wrap.innerHTML = '';
 
       items.forEach((item, index) => {
         const card = document.createElement('div');
-        card.className = 'skill-grid-item';
+        card.className = skipLucide ? 'skill-grid-item' : 'skill-grid-item is-animating';
         card.style.setProperty('--index', index);
-        card.style.animationDelay = `${index * 55}ms`;
+        if (!skipLucide) {
+          card.style.animationDelay = `${index * 45}ms`;
+        }
 
         const domainTxt = (item.domain && (item.domain[currentLang] || item.domain.en)) || '';
         const projectTxt = (item.project && (item.project[currentLang] || item.project.en)) || '';
@@ -1440,35 +1449,24 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
         card.innerHTML = `
           <div class="grid-flip-inner">
-            <!-- Front Face -->
             <div class="grid-flip-front spotlight-card bg-slate-50/70 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 p-4 flex flex-col justify-between">
               <div class="flex items-start justify-between relative z-10">
                 <div class="w-10 h-10 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-center text-2xl shadow-sm spin-icon-target">
                   ${renderSkillIcon(item, 'grid')}
                 </div>
-                <span class="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-slate-400 dark:text-slate-500 bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/70 px-2 py-0.5 rounded-md">
-                  <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 0114.93-4M20 4v4h-4m4 4a8 8 0 01-14.93 4M4 20v-4h4"/></svg>
-                  <span>3D</span>
-                </span>
+                <span class="font-mono text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/70 px-2 py-0.5 rounded-md">↻ 3D</span>
               </div>
               <div class="relative z-10 text-left">
                 <div class="font-display font-bold text-sm text-slate-900 dark:text-white">${escapeHtml(item.name)}</div>
-                <div class="font-mono text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">${escapeHtml(domainTxt)}</div>
+                <div class="font-mono text-xs text-slate-600 dark:text-slate-400 truncate mt-0.5">${escapeHtml(domainTxt)}</div>
               </div>
             </div>
-
-            <!-- Back Face (180deg Flipped Project Proof) -->
             <div class="grid-flip-back bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 text-white p-4 flex flex-col justify-between border border-sky-400/40 shadow-lg">
-              <div class="space-y-1.5 text-left">
-                <div class="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold leading-snug line-clamp-1">${escapeHtml(projectTxt)}</div>
-                <p class="text-[11px] text-slate-200 leading-relaxed line-clamp-3">${escapeHtml(descTxt)}</p>
-              </div>
-              <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-700/70 font-mono text-[10px]">
-                <span class="inline-flex items-center gap-1.5 text-emerald-300 font-semibold whitespace-nowrap">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span>${currentLang === 'vi' ? 'Đã áp dụng' : 'Production Proof'}</span>
-                </span>
-                <span class="text-sky-300/90 font-bold truncate">${escapeHtml(item.name)}</span>
+              <div class="font-mono text-xs uppercase tracking-wider text-sky-300 font-bold leading-snug line-clamp-1 text-left">${escapeHtml(projectTxt)}</div>
+              <p class="text-xs text-slate-200 leading-relaxed line-clamp-3 text-left">${escapeHtml(descTxt)}</p>
+              <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-700/70 font-mono text-xs">
+                <span class="text-emerald-300 font-semibold whitespace-nowrap">● ${currentLang === 'vi' ? 'Đã áp dụng' : 'Production'}</span>
+                <span class="text-sky-300 font-bold truncate">${escapeHtml(item.name)}</span>
               </div>
             </div>
           </div>
@@ -1478,7 +1476,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         wrap.appendChild(card);
       });
 
-      if (window.lucide) lucide.createIcons();
+      if (!skipLucide && window.lucide) lucide.createIcons();
     }
 
     let isOrbitManualPaused = false;
@@ -1554,7 +1552,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
           <div class="orbit-node-upright">
             <div class="orbit-node-pill px-2 py-1 rounded-xl bg-white dark:bg-slate-800/95 border border-slate-200/90 dark:border-slate-600/80 shadow-md flex items-center gap-1">
               ${renderSkillIcon(item, 'orbit')}
-              <span class="text-[11px] font-bold tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">${escapeHtml(item.name)}</span>
+              <span class="text-xs font-bold tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">${escapeHtml(item.name)}</span>
             </div>
           </div>
         `;
@@ -1598,12 +1596,26 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     }
 
     // 8. PAGE LANGUAGE CHANGE HOOK (CALLED BY LAYOUT ENGINE)
-    window.onPearlLangChange = function () {
+    window.onPearlLangChange = function (lang, dict, isManual = true) {
       updateOrbitSpinLabel();
-      renderSkillTabs();
-      renderActiveSkillView();
+      if (!isManual) {
+        runTerminalCmd(activeCliKey, false);
+        setTimeout(() => {
+          renderSkillTabs(true);
+          setTimeout(() => {
+            renderActiveSkillView(true);
+            setTimeout(() => {
+              renderCopilotPrompts();
+              if (window.lucide) lucide.createIcons();
+            }, 0);
+          }, 0);
+        }, 0);
+        return;
+      }
+      renderSkillTabs(false);
+      renderActiveSkillView(false);
       renderCopilotPrompts();
-      runTerminalCmd(activeCliKey);
+      runTerminalCmd(activeCliKey, true);
     };
 
     // 9. REAL LIVE RAG AI COPILOT ENGINE (CONNECTED TO /api/v1/copilot/ask + ACTIVE LLM)
@@ -1667,7 +1679,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       COPILOT_QUICK_PROMPTS.forEach((item) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-500/15 border border-sky-200/80 dark:border-sky-500/30 text-[11px] font-mono font-semibold text-sky-700 dark:text-sky-300 hover:bg-sky-500 hover:text-white transition-colors';
+        btn.className = 'px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-500/15 border border-sky-200/80 dark:border-sky-500/30 text-xs font-mono font-semibold text-sky-700 dark:text-sky-300 hover:bg-sky-700 hover:text-white transition-colors';
         btn.textContent = item.label[currentLang] || item.label.en;
         btn.addEventListener('click', () => askCopilotQuestion(item.query[currentLang] || item.query.en));
         wrap.appendChild(btn);
@@ -1677,7 +1689,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     function formatCopilotAnswerHtml(text) {
       let safe = escapeHtml(String(text || '').trim());
       safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-slate-900 dark:text-white">$1</strong>');
-      safe = safe.replace(/\[(S\d+)\]/g, '<span class="inline-block px-1 py-0.5 mx-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 font-mono text-[10px] font-bold">[$1]</span>');
+      safe = safe.replace(/\[(S\d+)\]/g, '<span class="inline-block px-1 py-0.5 mx-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 font-mono text-xs font-bold">[$1]</span>');
       return safe.replace(/\n/g, '<br>');
     }
 
@@ -1705,7 +1717,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
 
       // 1. User message bubble
       const uBubble = document.createElement('div');
-      uBubble.className = 'ml-auto max-w-[85%] p-2.5 rounded-2xl rounded-tr-sm bg-sky-500 text-white font-medium shadow-sm';
+      uBubble.className = 'ml-auto max-w-[85%] p-2.5 rounded-2xl rounded-tr-sm bg-sky-700 text-white font-medium shadow-sm';
       uBubble.textContent = query;
       box.appendChild(uBubble);
 
@@ -1714,11 +1726,11 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       aBubble.className = 'mr-auto max-w-[94%] p-3 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 leading-relaxed shadow-sm space-y-2';
 
       const meta = document.createElement('div');
-      meta.className = 'font-mono text-[10px] font-bold text-sky-600 dark:text-sky-400 flex items-center gap-1.5';
-      meta.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-ping"></span><span>${currentLang === 'vi' ? 'Đang truy xuất DB & gọi LLM...' : 'Retrieving DB corpus & querying LLM...'}</span>`;
+      meta.className = 'font-mono text-xs font-bold text-sky-700 dark:text-sky-400 flex items-center gap-1.5';
+      meta.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-sky-600 animate-ping"></span><span>${currentLang === 'vi' ? 'Đang truy xuất DB & gọi LLM...' : 'Retrieving DB corpus & querying LLM...'}</span>`;
 
       const body = document.createElement('div');
-      body.className = 'text-xs leading-relaxed text-slate-400 italic';
+      body.className = 'text-xs leading-relaxed text-slate-600 dark:text-slate-400 italic';
       body.textContent = currentLang === 'vi' ? 'Đang tổng hợp ngữ cảnh có trích dẫn...' : 'Generating grounded answer...';
 
       aBubble.appendChild(meta);
@@ -1743,7 +1755,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         });
 
         if (resp.status === 429) {
-          meta.className = 'font-mono text-[10px] font-bold text-amber-600 dark:text-amber-400';
+          meta.className = 'font-mono text-xs font-bold text-amber-800 dark:text-amber-400';
           meta.textContent = 'Rate Limited (429)';
           body.className = 'text-xs leading-relaxed text-slate-700 dark:text-slate-200';
           body.textContent = currentLang === 'vi'
@@ -1760,8 +1772,8 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         const isLiveLlm = data.mode === 'llm-rag';
         const methodBadge = data.retrieval_method === 'hybrid-vector' ? 'Hybrid Vector' : 'BM25 RAG';
         meta.className = isLiveLlm
-          ? 'font-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex flex-wrap items-center gap-1.5'
-          : 'font-mono text-[10px] font-bold text-amber-600 dark:text-amber-400 flex flex-wrap items-center gap-1.5';
+          ? 'font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 flex flex-wrap items-center gap-1.5'
+          : 'font-mono text-xs font-bold text-amber-800 dark:text-amber-400 flex flex-wrap items-center gap-1.5';
 
         const modelLabel = isLiveLlm ? `LLM: ${data.model || data.provider || 'Active AI'}` : 'Retrieval Fallback';
         const matchPart = typeof data.match_score === 'number' ? ` • Match ${data.match_score}%` : '';
@@ -1776,7 +1788,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
           data.sources.slice(0, 3).forEach((src) => {
             const link = document.createElement('a');
             link.href = src.url || '#';
-            link.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-900/40 text-[10px] font-mono text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-300 transition-colors';
+            link.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-900/40 text-xs font-mono text-slate-700 dark:text-slate-300 hover:text-sky-700 dark:hover:text-sky-300 transition-colors';
             link.textContent = `[${src.ref}] ${src.title}`;
             sourcesWrap.appendChild(link);
           });
@@ -1786,7 +1798,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
         copilotHistory.push({ role: 'user', text: query });
         copilotHistory.push({ role: 'assistant', text: String(data.answer || '').slice(0, 450) });
       } catch (err) {
-        meta.className = 'font-mono text-[10px] font-bold text-rose-600 dark:text-rose-400';
+        meta.className = 'font-mono text-xs font-bold text-rose-700 dark:text-rose-400';
         meta.textContent = 'Connection Alert';
         body.className = 'text-xs leading-relaxed text-slate-700 dark:text-slate-200';
         body.textContent = currentLang === 'vi'

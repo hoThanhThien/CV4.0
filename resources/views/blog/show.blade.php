@@ -170,13 +170,13 @@
   <div class="relative z-10 space-y-5">
 
     <!-- Breadcrumb -->
-    <nav class="flex flex-wrap items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
-      <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+    <nav class="flex flex-wrap items-center gap-2 font-mono text-xs text-slate-600 dark:text-slate-400" aria-label="Breadcrumb">
+      <a href="{{ route('home') }}" class="hover:text-sky-700 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
         <i data-lucide="home" class="w-3.5 h-3.5"></i>
         <span data-i18n="breadcrumb_home">{{ $isVi ? 'Trang chủ' : 'Home' }}</span>
       </a>
       <span>/</span>
-      <a href="{{ route('blog.index') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors" data-i18n="nav_blog">
+      <a href="{{ route('blog.index') }}" class="hover:text-sky-700 dark:hover:text-sky-400 transition-colors" data-i18n="nav_blog">
         {{ $isVi ? 'Blog Kỹ thuật' : 'Engineering Blog' }}
       </a>
       <span>/</span>
@@ -195,7 +195,7 @@
         <span data-i18n="min_read">{{ $isVi ? 'phút đọc' : 'min read' }}</span>
       </span>
       @if($post->ai_generated)
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 font-bold">
           <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
           <span>AI Assisted</span>
         </span>
@@ -226,7 +226,7 @@
     @if($thumbUrl)
       <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-sm">
         <div class="relative z-10 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 aspect-[16/9]">
-          <img src="{{ $thumbUrl }}" alt="{{ $cleanTitle }}" loading="lazy" decoding="async" class="w-full h-full object-cover" onerror="this.closest('.spotlight-card').style.display='none'">
+          <img src="{{ $thumbUrl }}" width="1200" height="675" alt="{{ $cleanTitle }}" loading="lazy" decoding="async" class="w-full h-full object-cover" onerror="this.closest('.spotlight-card').style.display='none'">
         </div>
       </div>
     @endif
@@ -239,7 +239,7 @@
       @if($post->faq && is_array($post->faq) && count($post->faq) > 0)
         <div class="relative z-10 mt-10 pt-8 border-t border-slate-200/80 dark:border-slate-800 space-y-4">
           <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-            <i data-lucide="help-circle" class="w-5 h-5 text-sky-500"></i>
+            <i data-lucide="help-circle" class="w-5 h-5 text-sky-700 dark:text-sky-400"></i>
             <span data-i18n="faq_heading">{{ $isVi ? 'Câu hỏi thường gặp' : 'Frequently Asked Questions' }}</span>
           </h3>
           <div class="space-y-3">
@@ -257,16 +257,16 @@
 
       @if($post->sources && is_array($post->sources) && count($post->sources) > 0)
         <div class="relative z-10 mt-8 pt-6 border-t border-slate-200/80 dark:border-slate-800 space-y-3">
-          <h4 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 flex items-center gap-2">
-            <i data-lucide="book-open" class="w-4 h-4 text-indigo-500"></i>
+          <h4 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <i data-lucide="book-open" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
             <span data-i18n="sources_heading">{{ $isVi ? 'Tài liệu tham khảo' : 'References & Sources' }}</span>
           </h4>
           <ul class="space-y-2 text-sm">
             @foreach($post->sources as $src)
               @if(!empty($src['url']))
                 <li class="flex items-start gap-2">
-                  <i data-lucide="external-link" class="w-3.5 h-3.5 text-sky-500 mt-1 flex-shrink-0"></i>
-                  <a href="{{ $src['url'] }}" target="_blank" rel="noopener nofollow" class="text-sky-600 dark:text-sky-400 hover:underline break-words">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5 text-sky-700 dark:text-sky-400 mt-1 flex-shrink-0"></i>
+                  <a href="{{ $src['url'] }}" target="_blank" rel="noopener nofollow" class="text-sky-700 dark:text-sky-400 hover:underline break-words">
                     {{ $src['title'] ?? $src['url'] }}
                   </a>
                 </li>
@@ -283,8 +283,8 @@
     @if($post->localized_excerpt)
       <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
         <div class="relative z-10 space-y-3">
-          <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 flex items-center gap-2">
-            <i data-lucide="file-text" class="w-4 h-4 text-sky-500"></i>
+          <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-4 h-4 text-sky-700 dark:text-sky-400"></i>
             <span data-i18n="summary_heading">{{ $isVi ? 'Tóm tắt nội dung' : 'Article Summary' }}</span>
           </h3>
           <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{{ $post->localized_excerpt }}</p>
@@ -294,29 +294,29 @@
 
     <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
       <div class="relative z-10 space-y-4">
-        <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 flex items-center gap-2">
-          <i data-lucide="info" class="w-4 h-4 text-indigo-500"></i>
+        <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400 flex items-center gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
           <span data-i18n="details_heading">{{ $isVi ? 'Thông tin bài viết' : 'Article Metadata' }}</span>
         </h3>
         <div class="divide-y divide-slate-200/70 dark:divide-slate-800 text-xs font-mono">
-          <div class="py-2.5 flex items-center justify-between text-slate-600 dark:text-slate-300">
-            <span class="text-slate-500 dark:text-slate-400" data-i18n="meta_published">{{ $isVi ? 'Ngày đăng' : 'Published' }}</span>
+          <div class="py-2.5 flex items-center justify-between text-slate-700 dark:text-slate-300">
+            <span class="text-slate-600 dark:text-slate-400" data-i18n="meta_published">{{ $isVi ? 'Ngày đăng' : 'Published' }}</span>
             <span class="font-semibold">{{ $post->published_at ? $post->published_at->format('M d, Y') : '' }}</span>
           </div>
-          <div class="py-2.5 flex items-center justify-between text-slate-600 dark:text-slate-300">
-            <span class="text-slate-500 dark:text-slate-400" data-i18n="meta_read_time">{{ $isVi ? 'Thời lượng đọc' : 'Read Time' }}</span>
+          <div class="py-2.5 flex items-center justify-between text-slate-700 dark:text-slate-300">
+            <span class="text-slate-600 dark:text-slate-400" data-i18n="meta_read_time">{{ $isVi ? 'Thời lượng đọc' : 'Read Time' }}</span>
             <span class="font-semibold">{{ $readingMinutes }} <span data-i18n="min_read">{{ $isVi ? 'phút' : 'min read' }}</span></span>
           </div>
           @if($post->ai_generated)
-            <div class="py-2.5 flex items-center justify-between text-slate-600 dark:text-slate-300">
-              <span class="text-slate-500 dark:text-slate-400">Editorial</span>
-              <span class="text-emerald-600 dark:text-emerald-400 font-bold">AI Assisted</span>
+            <div class="py-2.5 flex items-center justify-between text-slate-700 dark:text-slate-300">
+              <span class="text-slate-600 dark:text-slate-400">Editorial</span>
+              <span class="text-emerald-700 dark:text-emerald-400 font-bold">AI Assisted</span>
             </div>
           @endif
         </div>
 
         <div class="pt-2 space-y-2">
-          <a href="{{ route('blog.index') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 dark:hover:bg-sky-400 transition-all">
+          <a href="{{ route('blog.index') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-700 dark:hover:bg-sky-400 transition-all">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
             <span data-i18n="btn_all_articles">{{ $isVi ? 'Xem tất cả bài viết' : 'All Articles' }}</span>
           </a>

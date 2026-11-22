@@ -21,8 +21,8 @@
   <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
     <div class="lg:col-span-8 space-y-4">
-      <nav class="flex items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
-        <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+      <nav class="flex items-center gap-2 font-mono text-xs text-slate-600 dark:text-slate-400" aria-label="Breadcrumb">
+        <a href="{{ route('home') }}" class="hover:text-sky-700 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
           <i data-lucide="home" class="w-3.5 h-3.5"></i>
           <span data-i18n="breadcrumb_home">{{ $isVi ? 'Trang chủ' : 'Home' }}</span>
         </a>
@@ -30,14 +30,14 @@
         <span class="text-slate-900 dark:text-white font-semibold" data-i18n="nav_blog">{{ $isVi ? 'Blog Kỹ thuật' : 'Engineering Blog' }}</span>
       </nav>
 
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200/80 dark:border-sky-500/30 font-mono text-[11px] font-bold tracking-widest uppercase text-sky-700 dark:text-sky-300">
-        <span class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200/80 dark:border-sky-500/30 font-mono text-xs font-bold tracking-widest uppercase text-sky-700 dark:text-sky-300">
+        <span class="w-2 h-2 rounded-full bg-sky-600 animate-pulse"></span>
         <span data-i18n="blog_kicker">PUBLICATIONS // ENGINEERING JOURNAL</span>
       </div>
 
       <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.8rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
         <span data-i18n="blog_title_1">{{ $isVi ? 'Ghi chú Kỹ thuật &' : 'Engineering Notes &' }}</span>
-        <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="blog_title_highlight">
+        <span class="bg-gradient-to-r from-sky-700 via-indigo-700 to-emerald-700 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="blog_title_highlight">
           {{ $isVi ? 'Kiến trúc Hệ thống' : 'Technical Deep Dives' }}
         </span>
       </h1>
@@ -53,14 +53,14 @@
     <div class="lg:col-span-4 space-y-3">
       <div class="grid grid-cols-2 gap-2.5">
         <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-          <div class="font-display text-2xl font-extrabold text-sky-600 dark:text-sky-400">{{ $posts->total() }}</div>
-          <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_articles">
+          <div class="font-display text-2xl font-extrabold text-sky-700 dark:text-sky-400">{{ $posts->total() }}</div>
+          <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="stat_articles">
             {{ $isVi ? 'Bài viết' : 'Articles' }}
           </div>
         </div>
         <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-          <div class="font-display text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">{{ $posts->lastPage() }}</div>
-          <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_pages">
+          <div class="font-display text-2xl font-extrabold text-indigo-700 dark:text-indigo-400">{{ $posts->lastPage() }}</div>
+          <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="stat_pages">
             {{ $isVi ? 'Trang' : 'Pages' }}
           </div>
         </div>
@@ -97,19 +97,19 @@
         <!-- Cover Visual / Typographic Fallback -->
         <a href="{{ route('blog.show', $lead->slug) }}" class="lg:col-span-6 relative min-h-[260px] lg:min-h-[340px] bg-slate-100 dark:bg-slate-950 overflow-hidden block border-b lg:border-b-0 lg:border-r border-slate-200/80 dark:border-slate-800">
           @if($leadThumb)
-            <img src="{{ $leadThumb }}" alt="{{ $lead->localized_title }}" loading="lazy" decoding="async"
+            <img src="{{ $leadThumb }}" width="1200" height="680" alt="{{ $lead->localized_title }}" loading="lazy" decoding="async"
                  class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
             <div style="display:none;" class="w-full h-full flex-col justify-between p-7 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
-              <div class="font-mono text-xs uppercase tracking-widest text-sky-400">FEATURED // JOURNAL</div>
+              <div class="font-mono text-xs uppercase tracking-widest text-sky-300">FEATURED // JOURNAL</div>
               <div class="font-display text-xl sm:text-2xl font-extrabold leading-tight line-clamp-3">{{ $lead->localized_title }}</div>
-              <div class="font-mono text-xs text-slate-400">hothanhthien.io.vn</div>
+              <div class="font-mono text-xs text-slate-300">hothanhthien.io.vn</div>
             </div>
           @else
             <div class="w-full h-full flex flex-col justify-between p-7 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
-              <div class="font-mono text-xs uppercase tracking-widest text-sky-400">FEATURED // JOURNAL</div>
+              <div class="font-mono text-xs uppercase tracking-widest text-sky-300">FEATURED // JOURNAL</div>
               <div class="font-display text-xl sm:text-2xl font-extrabold leading-tight line-clamp-3">{{ $lead->title }}</div>
-              <div class="font-mono text-xs text-slate-400">hothanhthien.io.vn</div>
+              <div class="font-mono text-xs text-slate-300">hothanhthien.io.vn</div>
             </div>
           @endif
         </a>
@@ -118,21 +118,21 @@
         <div class="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
           <div class="space-y-4">
             <div class="flex flex-wrap items-center gap-3 font-mono text-xs">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold uppercase tracking-wider text-[11px]">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300 font-bold uppercase tracking-wider text-xs">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span data-i18n="featured_badge">{{ $isVi ? 'Nổi bật' : 'Featured' }}</span>
               </span>
-              <span class="text-slate-500 dark:text-slate-400 inline-flex items-center gap-1">
+              <span class="text-slate-600 dark:text-slate-400 inline-flex items-center gap-1">
                 <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
                 {{ $lead->published_at ? $lead->published_at->format('M d, Y') : '' }}
               </span>
-              <span class="text-slate-500 dark:text-slate-400 inline-flex items-center gap-1">
+              <span class="text-slate-600 dark:text-slate-400 inline-flex items-center gap-1">
                 <i data-lucide="clock" class="w-3.5 h-3.5"></i>
                 {{ $leadMinutes }} <span data-i18n="min_read">{{ $isVi ? 'phút đọc' : 'min read' }}</span>
               </span>
             </div>
 
-            <a href="{{ route('blog.show', $lead->slug) }}" class="block group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+            <a href="{{ route('blog.show', $lead->slug) }}" class="block group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
               <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-snug">
                 {{ $lead->title }}
               </h2>
@@ -146,7 +146,7 @@
           </div>
 
           <div>
-            <a href="{{ route('blog.show', $lead->slug) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 dark:hover:bg-sky-400 transition-all shadow-sm">
+            <a href="{{ route('blog.show', $lead->slug) }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-700 dark:hover:bg-sky-400 transition-all shadow-sm">
               <span data-i18n="read_article">{{ $isVi ? 'Đọc bài viết' : 'Read Article' }}</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
@@ -170,37 +170,37 @@
       <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 transition-all flex flex-col group">
         <a href="{{ route('blog.show', $post->slug) }}" class="relative z-10 aspect-[16/9] bg-slate-100 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 overflow-hidden block">
           @if($thumbUrl)
-            <img src="{{ $thumbUrl }}" alt="{{ $post->localized_title }}" loading="lazy" decoding="async"
+            <img src="{{ $thumbUrl }}" width="1200" height="675" alt="{{ $post->localized_title }}" loading="lazy" decoding="async"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
             <div style="display:none;" class="w-full h-full flex-col justify-between p-5 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-              <span class="font-mono text-[10px] uppercase tracking-widest text-sky-400">ARTICLE // NOTE</span>
+              <span class="font-mono text-xs uppercase tracking-widest text-sky-300">ARTICLE // NOTE</span>
               <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->localized_title }}</span>
-              <span class="font-mono text-[10px] text-slate-400">hothanhthien.io.vn</span>
+              <span class="font-mono text-xs text-slate-300">hothanhthien.io.vn</span>
             </div>
           @else
             <div class="w-full h-full flex flex-col justify-between p-5 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
-              <span class="font-mono text-[10px] uppercase tracking-widest text-sky-400">ARTICLE // NOTE</span>
+              <span class="font-mono text-xs uppercase tracking-widest text-sky-300">ARTICLE // NOTE</span>
               <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->localized_title }}</span>
-              <span class="font-mono text-[10px] text-slate-400">hothanhthien.io.vn</span>
+              <span class="font-mono text-xs text-slate-300">hothanhthien.io.vn</span>
             </div>
           @endif
         </a>
 
         <div class="relative z-10 p-6 flex-1 flex flex-col justify-between gap-4">
           <div class="space-y-3">
-            <div class="flex items-center justify-between gap-2 font-mono text-[11px] text-slate-500 dark:text-slate-400">
+            <div class="flex items-center justify-between gap-2 font-mono text-xs text-slate-600 dark:text-slate-400">
               <span class="inline-flex items-center gap-1">
-                <i data-lucide="calendar" class="w-3 h-3 text-sky-500"></i>
+                <i data-lucide="calendar" class="w-3 h-3 text-sky-700 dark:text-sky-400"></i>
                 {{ $post->published_at ? $post->published_at->format('M d, Y') : '' }}
               </span>
               <span class="inline-flex items-center gap-1">
-                <i data-lucide="clock" class="w-3 h-3 text-indigo-500"></i>
+                <i data-lucide="clock" class="w-3 h-3 text-indigo-600 dark:text-indigo-400"></i>
                 {{ $minutes }} <span data-i18n="min_read">{{ $isVi ? 'phút đọc' : 'min read' }}</span>
               </span>
             </div>
 
-            <a href="{{ route('blog.show', $post->slug) }}" class="block group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+            <a href="{{ route('blog.show', $post->slug) }}" class="block group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
               <h3 class="font-display text-lg font-extrabold text-slate-900 dark:text-white leading-snug line-clamp-2">
                 {{ $post->localized_title }}
               </h3>
@@ -214,7 +214,7 @@
           </div>
 
           <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
-            <a href="{{ route('blog.show', $post->slug) }}" class="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-sky-600 dark:text-sky-400 group-hover:gap-2.5 transition-all">
+            <a href="{{ route('blog.show', $post->slug) }}" class="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-sky-700 dark:text-sky-400 group-hover:gap-2.5 transition-all">
               <span data-i18n="read_more">{{ $isVi ? 'Đọc tiếp' : 'Read More' }}</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
@@ -228,14 +228,14 @@
   @if($posts->hasPages())
     <div class="flex flex-wrap items-center justify-center gap-2 pt-4">
       @if($posts->onFirstPage())
-        <span class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-400 cursor-not-allowed">&laquo;</span>
+        <span class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-600 dark:text-slate-400 cursor-not-allowed">&laquo;</span>
       @else
         <a href="{{ $posts->previousPageUrl() }}" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">&laquo;</a>
       @endif
 
       @foreach($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
         @if($page == $posts->currentPage())
-          <span class="px-3.5 py-2 rounded-xl bg-sky-500 border border-sky-500 text-xs font-mono font-bold text-white shadow-sm">{{ $page }}</span>
+          <span class="px-3.5 py-2 rounded-xl bg-sky-700 border border-sky-700 text-xs font-mono font-bold text-white shadow-sm">{{ $page }}</span>
         @else
           <a href="{{ $url }}" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">{{ $page }}</a>
         @endif
@@ -244,7 +244,7 @@
       @if($posts->hasMorePages())
         <a href="{{ $posts->nextPageUrl() }}" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">&raquo;</a>
       @else
-        <span class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-400 cursor-not-allowed">&raquo;</span>
+        <span class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-600 dark:text-slate-400 cursor-not-allowed">&raquo;</span>
       @endif
     </div>
   @endif
@@ -252,7 +252,7 @@
 @else
   <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-14 text-center space-y-4">
     <div class="relative z-10 flex flex-col items-center space-y-3">
-      <div class="w-14 h-14 rounded-2xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400">
+      <div class="w-14 h-14 rounded-2xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 flex items-center justify-center text-sky-700 dark:text-sky-400">
         <i data-lucide="newspaper" class="w-7 h-7"></i>
       </div>
       <h2 class="font-display text-xl font-extrabold text-slate-900 dark:text-white" data-i18n="empty_title">

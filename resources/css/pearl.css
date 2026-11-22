@@ -1,0 +1,85 @@
+@import './fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mouse-x: -999px;
+  --mouse-y: -999px;
+  --font-display: 'Space Grotesk', 'Space Grotesk Fallback', 'Inter', system-ui, sans-serif;
+}
+
+.bg-tech-grid {
+  background-color: #f8fafc;
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+  background-size: 38px 38px;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+html.dark .bg-tech-grid {
+  background-color: #06090F;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+}
+
+.frosted-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html.dark .frosted-glass {
+  background: rgba(11, 17, 30, 0.85);
+}
+
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    520px circle at var(--mouse-x) var(--mouse-y),
+    rgba(14, 165, 233, 0.09),
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 1;
+}
+
+html.dark .spotlight-card::before {
+  background: radial-gradient(
+    520px circle at var(--mouse-x) var(--mouse-y),
+    rgba(56, 189, 248, 0.14),
+    transparent 45%
+  );
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+i[data-lucide] {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1100px;
+}
+
+.cv-auto-tall {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2100px;
+}

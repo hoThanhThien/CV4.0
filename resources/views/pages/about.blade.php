@@ -25,19 +25,19 @@
 
         <div class="relative z-10 space-y-4 flex flex-col items-center">
           <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 p-0.5 shadow-lg shadow-sky-500/25">
-            <img src="{{ asset('android-chrome-192x192.png') }}" alt="Ho Thanh Thien Logo" class="w-full h-full object-cover rounded-[14px] scale-[1.12]">
+            <img src="{{ asset('android-chrome-192x192.png') }}" width="80" height="80" alt="Ho Thanh Thien Logo" class="w-full h-full object-cover rounded-[14px]">
           </div>
 
           <div class="font-display text-3xl font-extrabold tracking-tight text-white">HT</div>
 
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 font-mono text-[11px] font-bold tracking-widest uppercase text-sky-300">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 font-mono text-xs font-bold tracking-widest uppercase text-sky-300">
             FULL-STACK // AI
           </span>
 
           <div class="pt-3 border-t border-slate-800 w-full font-mono text-xs text-slate-300 leading-relaxed space-y-0.5">
             <div class="font-bold text-white">B.Eng Information Technology</div>
-            <div class="text-slate-400">UTH &bull; 2023 &ndash; 2026</div>
-            <div class="text-emerald-400 font-semibold pt-1">GPA 3.6/4.0 &bull; Latest 4.0</div>
+            <div class="text-slate-300">UTH &bull; 2023 &ndash; 2026</div>
+            <div class="text-emerald-300 font-semibold pt-1">GPA 3.6/4.0 &bull; Latest 4.0</div>
           </div>
         </div>
       </div>
@@ -45,8 +45,8 @@
 
     <!-- Right Narrative & Meta -->
     <div class="lg:col-span-8 space-y-5">
-      <nav class="flex items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
-        <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+      <nav class="flex items-center gap-2 font-mono text-xs text-slate-600 dark:text-slate-400" aria-label="Breadcrumb">
+        <a href="{{ route('home') }}" class="hover:text-sky-700 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
           <i data-lucide="home" class="w-3.5 h-3.5"></i>
           <span data-i18n="breadcrumb_home">{{ $isVi ? 'Trang chủ' : 'Home' }}</span>
         </a>
@@ -54,19 +54,19 @@
         <span class="text-slate-900 dark:text-white font-semibold" data-i18n="nav_about">{{ $isVi ? 'Giới thiệu' : 'About' }}</span>
       </nav>
 
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-[11px] font-bold tracking-widest uppercase text-emerald-700 dark:text-emerald-300">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-xs font-bold tracking-widest uppercase text-emerald-800 dark:text-emerald-300">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span data-i18n="about_kicker">{{ $isVi ? 'VỀ BẢN THÂN // HỒ SƠ KỸ SƯ' : 'ABOUT ME // ENGINEERING PROFILE' }}</span>
       </div>
 
       <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
         <span data-i18n="about_greeting">{{ $isVi ? 'Xin chào, tôi là' : "Hi, I'm" }}</span>
-        <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="brand_name">
+        <span class="bg-gradient-to-r from-sky-700 via-indigo-700 to-emerald-700 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="brand_name">
           {{ $isVi ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}
         </span>
       </h1>
 
-      <div class="font-mono text-xs sm:text-sm font-semibold text-sky-600 dark:text-sky-400">
+      <div class="font-mono text-xs sm:text-sm font-semibold text-sky-700 dark:text-sky-400">
         Full-Stack Web Developer &bull; Laravel &bull; Java Spring Boot &bull; Odoo ERP &bull; RAG AI
       </div>
 
@@ -77,42 +77,42 @@
       <!-- Clickable Contact Strip -->
       <div class="flex flex-wrap gap-2.5 text-xs font-mono">
         <a href="tel:+84375227764" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-sky-400 transition-colors">
-          <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-500"></i>
+          <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400"></i>
           <span>0375227764</span>
         </a>
         <a href="mailto:hothanhthien119@gmail.com" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-sky-400 transition-colors">
-          <i data-lucide="mail" class="w-3.5 h-3.5 text-sky-500"></i>
+          <i data-lucide="mail" class="w-3.5 h-3.5 text-sky-700 dark:text-sky-400"></i>
           <span>hothanhthien119@gmail.com</span>
         </a>
         <a href="https://hothanhthien.io.vn" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-sky-400 transition-colors">
-          <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-500"></i>
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"></i>
           <span>hothanhthien.io.vn</span>
         </a>
         <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300">
-          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-500"></i>
+          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-600 dark:text-rose-400"></i>
           <span>Ho Chi Minh City</span>
         </span>
       </div>
 
       <!-- Action Buttons -->
       <div class="flex flex-wrap items-center gap-2.5 pt-1">
-        <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 text-white text-xs font-mono font-bold hover:bg-sky-600 transition-all shadow-lg shadow-sky-500/20">
+        <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-700 text-white text-xs font-mono font-bold hover:bg-sky-800 transition-all shadow-lg shadow-sky-700/20">
           <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>
           <span data-i18n="cta_projects">{{ $isVi ? 'Xem Dự án' : 'View Projects' }}</span>
         </a>
         <a href="{{ route('certificates') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all">
-          <i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i>
+          <i data-lucide="award" class="w-3.5 h-3.5 text-amber-700 dark:text-amber-400"></i>
           <span data-i18n="cta_certificates">{{ $isVi ? 'Brochure & Bằng cấp' : 'Brochure & Certificates' }}</span>
         </a>
         <a href="{{ route('contact') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-950 border border-slate-900 dark:border-slate-700 text-white text-xs font-mono font-semibold hover:bg-slate-800 dark:hover:border-sky-400 transition-all">
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
           <span data-i18n="nav_hire">{{ $isVi ? 'Liên hệ' : 'Contact Me' }}</span>
         </a>
-        <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:text-sky-600 transition-all">
+        <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:text-sky-700 dark:hover:text-sky-300 transition-all">
           <i data-lucide="github" class="w-3.5 h-3.5"></i>
           <span>GitHub</span>
         </a>
-        <a href="https://www.linkedin.com/in/h%E1%BB%93-th%C3%A0nh-thi%E1%BB%87n-1a8559394" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:text-sky-600 transition-all">
+        <a href="https://www.linkedin.com/in/h%E1%BB%93-th%C3%A0nh-thi%E1%BB%87n-1a8559394" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:text-sky-700 dark:hover:text-sky-300 transition-all">
           <i data-lucide="linkedin" class="w-3.5 h-3.5"></i>
           <span>LinkedIn</span>
         </a>
@@ -127,7 +127,7 @@
 ========================================================================= -->
 <section class="space-y-6">
   <div class="space-y-1.5">
-    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400" data-i18n="sec1_kicker">
+    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-700 dark:text-sky-400" data-i18n="sec1_kicker">
       01 // {{ $isVi ? 'HÀNH TRÌNH & TRIẾT LÝ KỸ THUẬT' : 'PERSONAL STORY & PHILOSOPHY' }}
     </div>
     <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="sec1_title">
@@ -151,7 +151,7 @@
     <!-- 3 Pillars -->
     <div class="lg:col-span-7 grid grid-cols-1 gap-4">
       <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 flex items-start gap-4 shadow-sm">
-        <span class="relative z-10 w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 font-mono text-sm font-extrabold text-sky-600 dark:text-sky-400 flex items-center justify-center flex-shrink-0">01</span>
+        <span class="relative z-10 w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 font-mono text-sm font-extrabold text-sky-700 dark:text-sky-400 flex items-center justify-center flex-shrink-0">01</span>
         <div class="relative z-10 space-y-1">
           <h3 class="font-display font-bold text-base text-slate-900 dark:text-white" data-i18n="pillar1_title">{{ $isVi ? 'Kiến trúc Sạch & Bền vững' : 'Engineering Craft' }}</h3>
           <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-en="Prioritizing normalized schema design, predictable APIs, and maintainable architecture." data-vi="Ưu tiên thiết kế CSDL chuẩn hóa, API rõ ràng và mã nguồn dễ bảo trì lâu dài.">
@@ -161,7 +161,7 @@
       </div>
 
       <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 flex items-start gap-4 shadow-sm">
-        <span class="relative z-10 w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30 font-mono text-sm font-extrabold text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">02</span>
+        <span class="relative z-10 w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30 font-mono text-sm font-extrabold text-indigo-700 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">02</span>
         <div class="relative z-10 space-y-1">
           <h3 class="font-display font-bold text-base text-slate-900 dark:text-white" data-i18n="pillar2_title">{{ $isVi ? 'Hệ thống Fullstack & AI' : 'Fullstack & AI Systems' }}</h3>
           <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-en="Bridging expressive interfaces with resilient backends and practical RAG / LLM pipelines." data-vi="Kết hợp frontend trực quan với backend vững chắc (Laravel, Spring Boot) và ứng dụng RAG / LLM thực tiễn.">
@@ -171,7 +171,7 @@
       </div>
 
       <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 flex items-start gap-4 shadow-sm">
-        <span class="relative z-10 w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 font-mono text-sm font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">03</span>
+        <span class="relative z-10 w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 font-mono text-sm font-extrabold text-emerald-700 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">03</span>
         <div class="relative z-10 space-y-1">
           <h3 class="font-display font-bold text-base text-slate-900 dark:text-white" data-i18n="pillar3_title">{{ $isVi ? 'Kỷ luật Học thuật' : 'Academic Discipline' }}</h3>
           <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-en="Sustaining high rigor (4.0 semester GPA & Excellent graduation standing at UTH)." data-vi="Duy trì kỷ luật học thuật cao (GPA 4.0/4.0 học kỳ gần nhất, tốt nghiệp Xuất sắc ĐH GTVT TP.HCM).">
@@ -188,7 +188,7 @@
 ========================================================================= -->
 <section class="space-y-6">
   <div class="space-y-1.5">
-    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400">02 // MILESTONES</div>
+    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-700 dark:text-sky-400">02 // MILESTONES</div>
     <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="sec2_title">
       {{ $isVi ? 'Thành tích & Giải thưởng Nổi bật' : 'Key Achievements & Honors' }}
     </h2>
@@ -198,8 +198,8 @@
     <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between gap-4 hover:-translate-y-1 transition-all">
       <div class="relative z-10 space-y-3">
         <div class="flex items-center justify-between">
-          <span class="font-display text-3xl font-extrabold text-sky-600 dark:text-sky-400">4.0</span>
-          <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-xs font-semibold text-slate-500 dark:text-slate-400">2026</span>
+          <span class="font-display text-3xl font-extrabold text-sky-700 dark:text-sky-400">4.0</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-xs font-semibold text-slate-600 dark:text-slate-400">2026</span>
         </div>
         <h3 class="font-display text-lg font-extrabold text-slate-900 dark:text-white" data-i18n="ach1_title">
           {{ $isVi ? 'GPA Học kỳ Gần nhất — 4.0/4.0' : 'GPA in Most Recent Semester — 4.0/4.0' }}
@@ -208,7 +208,7 @@
           {{ $isVi ? 'Đạt kết quả học tập xuất sắc với điểm GPA 4.0/4.0 trong học kỳ gần nhất, thể hiện tính kỷ luật cao và tư duy logic chuyên sâu.' : 'Achieved a perfect 4.0/4.0 GPA in the most recent semester, demonstrating high dedication, discipline, and strong software engineering competence.' }}
         </p>
       </div>
-      <div class="relative z-10 flex flex-wrap gap-2 font-mono text-[11px]">
+      <div class="relative z-10 flex flex-wrap gap-2 font-mono text-xs">
         <span class="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 font-semibold" data-i18n="ach1_tag1">{{ $isVi ? 'GPA tuyệt đối 4.0' : 'Perfect 4.0 GPA' }}</span>
         <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300" data-i18n="ach1_tag2">{{ $isVi ? 'Kỷ luật cao' : 'High Discipline' }}</span>
       </div>
@@ -217,8 +217,8 @@
     <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between gap-4 hover:-translate-y-1 transition-all">
       <div class="relative z-10 space-y-3">
         <div class="flex items-center justify-between">
-          <span class="font-display text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">3.6</span>
-          <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-xs font-semibold text-slate-500 dark:text-slate-400">2026</span>
+          <span class="font-display text-3xl font-extrabold text-emerald-700 dark:text-emerald-400">3.6</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-xs font-semibold text-slate-600 dark:text-slate-400">2026</span>
         </div>
         <h3 class="font-display text-lg font-extrabold text-slate-900 dark:text-white" data-i18n="ach2_title">
           {{ $isVi ? 'Tốt nghiệp Xuất sắc — Cử nhân CNTT' : "Bachelor's Degree – Excellent Standing" }}
@@ -227,8 +227,8 @@
           {{ $isVi ? 'Bằng Cử nhân Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc.' : "Bachelor's Degree in Information Technology from University of Transport Ho Chi Minh City with Excellent Graduation Classification." }}
         </p>
       </div>
-      <div class="relative z-10 flex flex-wrap gap-2 font-mono text-[11px]">
-        <span class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-semibold" data-i18n="ach2_tag1">{{ $isVi ? 'Loại Xuất sắc' : 'Excellent' }}</span>
+      <div class="relative z-10 flex flex-wrap gap-2 font-mono text-xs">
+        <span class="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 font-semibold" data-i18n="ach2_tag1">{{ $isVi ? 'Loại Xuất sắc' : 'Excellent' }}</span>
         <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300" data-i18n="ach2_tag2">{{ $isVi ? 'ĐH GTVT TP.HCM' : 'UTH' }}</span>
       </div>
     </article>
@@ -236,8 +236,8 @@
     <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between gap-4 hover:-translate-y-1 transition-all">
       <div class="relative z-10 space-y-3">
         <div class="flex items-center justify-between">
-          <span class="font-display text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">2nd</span>
-          <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-xs font-semibold text-slate-500 dark:text-slate-400">2025</span>
+          <span class="font-display text-3xl font-extrabold text-indigo-700 dark:text-indigo-400">2nd</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-mono text-xs font-semibold text-slate-600 dark:text-slate-400">2025</span>
         </div>
         <h3 class="font-display text-lg font-extrabold text-slate-900 dark:text-white" data-i18n="ach3_title">
           {{ $isVi ? 'Giải Nhì Thiết kế Logo Khoa/Viện CNTT' : '2nd Prize IT Faculty Logo Design' }}
@@ -246,7 +246,7 @@
           {{ __('Designed a competition-winning logo concept, demonstrating strong creativity, visual communication, and design thinking.') }}
         </p>
       </div>
-      <div class="relative z-10 flex flex-wrap gap-2 font-mono text-[11px]">
+      <div class="relative z-10 flex flex-wrap gap-2 font-mono text-xs">
         <span class="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-semibold">Design Thinking</span>
         <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300" data-i18n="ach3_tag2">{{ $isVi ? 'Truyền thông thị giác' : 'Visual Identity' }}</span>
       </div>
@@ -259,7 +259,7 @@
 ========================================================================= -->
 <section class="space-y-6">
   <div class="space-y-1.5">
-    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400">03 // ACADEMIC RECORD</div>
+    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-700 dark:text-sky-400">03 // ACADEMIC RECORD</div>
     <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="sec3_title">
       {{ $isVi ? 'Học vấn & Nền tảng Chuyên môn' : 'Education & Academic Record' }}
     </h2>
@@ -271,7 +271,7 @@
         <h3 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="edu_school">
           {{ __('University of Transport Ho Chi Minh City') }}
         </h3>
-        <div class="text-sm font-semibold text-sky-600 dark:text-sky-400" data-i18n="edu_degree">
+        <div class="text-sm font-semibold text-sky-700 dark:text-sky-400" data-i18n="edu_degree">
           {{ __("Bachelor's Degree Information Technology") }}
         </div>
       </div>
@@ -282,15 +282,15 @@
 
     <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
-        <div class="font-mono text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400" data-i18n="edu_gpa_lbl">{{ __('Cumulative GPA') }}</div>
-        <div class="font-display text-2xl font-extrabold text-sky-600 dark:text-sky-400">3.6 / 4.0</div>
+        <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="edu_gpa_lbl">{{ __('Cumulative GPA') }}</div>
+        <div class="font-display text-2xl font-extrabold text-sky-700 dark:text-sky-400">3.6 / 4.0</div>
       </div>
       <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
-        <div class="font-mono text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400" data-i18n="edu_rank_lbl">{{ __('Classification') }}</div>
-        <div class="font-display text-2xl font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="edu_rank_val">{{ __('Excellent') }}</div>
+        <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="edu_rank_lbl">{{ __('Classification') }}</div>
+        <div class="font-display text-2xl font-extrabold text-emerald-700 dark:text-emerald-400" data-i18n="edu_rank_val">{{ __('Excellent') }}</div>
       </div>
       <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-1">
-        <div class="font-mono text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400" data-i18n="edu_club_lbl">{{ __('Community & Clubs') }}</div>
+        <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="edu_club_lbl">{{ __('Community & Clubs') }}</div>
         <div class="text-sm font-bold text-slate-800 dark:text-slate-200" data-i18n="edu_club_val">{{ __('Member Google Developer Chapter University of Transport Ho Chi Minh City') }}</div>
       </div>
     </div>
@@ -337,7 +337,7 @@
 @endphp
 <section class="space-y-6">
   <div class="space-y-1.5">
-    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400">04 // CAPABILITIES</div>
+    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-700 dark:text-sky-400">04 // CAPABILITIES</div>
     <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="sec4_title">
       {{ $isVi ? 'Kỹ năng Kỹ thuật & Năng lực Công nghệ' : 'Technical Skills & Stack Matrix' }}
     </h2>
@@ -355,7 +355,7 @@
       <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
         <div class="relative z-10 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
           <div class="flex items-center gap-2.5">
-            <span class="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+            <span class="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-400 flex items-center justify-center">
               <i data-lucide="{{ $bucket['icon'] }}" class="w-4 h-4"></i>
             </span>
             <h3 class="font-display font-bold text-base text-slate-900 dark:text-white" data-en="{{ $bucket['label_en'] }}" data-vi="{{ $bucket['label_vi'] }}">
@@ -387,7 +387,7 @@
 @if($experiences->count())
 <section class="space-y-6">
   <div class="space-y-1.5">
-    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400">05 // WORK HISTORY</div>
+    <div class="font-mono text-xs font-bold uppercase tracking-widest text-sky-700 dark:text-sky-400">05 // WORK HISTORY</div>
     <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white" data-i18n="sec5_title">
       {{ $isVi ? 'Kinh nghiệm Làm việc & Dự án Thực chiến' : 'Work Experience & Career Timeline' }}
     </h2>
@@ -427,7 +427,7 @@
               <ul data-lang-block="en" class="{{ $isVi ? 'hidden ' : '' }}space-y-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                 @foreach($sentencesEn as $s)
                   <li class="flex items-start gap-2.5">
-                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-700 dark:text-emerald-400 flex-shrink-0 mt-0.5"></i>
                     <span>{{ $s }}.</span>
                   </li>
                 @endforeach
@@ -435,7 +435,7 @@
               <ul data-lang-block="vi" class="{{ $isVi ? '' : 'hidden ' }}space-y-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                 @foreach($sentencesVi as $s)
                   <li class="flex items-start gap-2.5">
-                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-700 dark:text-emerald-400 flex-shrink-0 mt-0.5"></i>
                     <span>{{ $s }}.</span>
                   </li>
                 @endforeach
@@ -449,7 +449,7 @@
             @if(count($exp->tech_tags))
               <div class="flex flex-wrap gap-2 pt-1">
                 @foreach($exp->tech_tags as $tag)
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono text-[11px] font-semibold text-slate-700 dark:text-slate-200">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono text-xs font-semibold text-slate-700 dark:text-slate-200">
                     {!! \App\Support\TechIcon::render($tag) !!}
                     <span>{{ $tag }}</span>
                   </span>

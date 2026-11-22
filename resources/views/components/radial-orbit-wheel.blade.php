@@ -194,13 +194,13 @@
 
         <!-- Hàng 2: Dòng chữ hướng dẫn & Nút Spin Again -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1 border-t border-slate-100 dark:border-slate-800">
-          <div class="flex items-center gap-1.5 font-mono text-xs text-sky-600 dark:text-sky-400 font-semibold tracking-wide">
+          <div class="flex items-center gap-1.5 font-mono text-xs text-sky-700 dark:text-sky-400 font-semibold tracking-wide">
             <span>✨</span>
             <span>{{ $isVi ? 'Rê chuột hoặc chạm vào thẻ kỹ năng để lật 3D & xem minh chứng dự án' : 'Hover or tap any skill card to 3D-flip & inspect real project usage' }}</span>
           </div>
 
-          <button id="radialBtnSpinAgain" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-sky-600 dark:text-sky-400 font-mono text-xs font-bold hover:bg-sky-50/70 dark:hover:bg-slate-800 hover:border-sky-300 transition-all active:scale-95 shadow-sm self-start sm:self-auto">
-            <svg class="w-3.5 h-3.5 text-sky-500" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <button id="radialBtnSpinAgain" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-sky-700 dark:text-sky-400 font-mono text-xs font-bold hover:bg-sky-50/70 dark:hover:bg-slate-800 hover:border-sky-300 transition-all active:scale-95 shadow-sm self-start sm:self-auto">
+            <svg class="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
             </svg>
             <span>{{ $isVi ? 'Quay lại' : 'Spin Again' }}</span>
@@ -213,14 +213,14 @@
       <div id="radialOrbitStage" class="rounded-2xl pt-10 pb-11 px-3 sm:px-4 bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/50 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden select-none">
 
         <!-- Thông số tọa độ & Technical HUD ở các góc -->
-        <div class="absolute top-3 left-3 sm:top-4 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 tracking-wider z-30">
+        <div class="absolute top-3 left-3 sm:top-4 sm:left-4 font-mono text-xs text-slate-600 dark:text-slate-400 tracking-wider z-30">
           RADIAL_STAGE // ORBIT_3D
         </div>
-        <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 font-mono text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1.5 sm:gap-2 z-30">
+        <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 font-mono text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1.5 sm:gap-2 z-30">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span id="radialCoordReadout">R=184px • TOP 10</span>
         </div>
-        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 font-mono text-[10px] sm:text-[11px] text-sky-600/70 font-semibold z-30">
+        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 font-mono text-xs text-sky-700 dark:text-sky-400 font-semibold z-30">
           3D PRESERVE
         </div>
 
@@ -237,13 +237,13 @@
               <div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-sky-400/20 via-indigo-400/15 to-emerald-400/20 blur-sm pointer-events-none"></div>
               
               <div class="relative z-10 space-y-1">
-                <div class="text-[10px] font-mono tracking-widest text-sky-600 dark:text-sky-400 font-bold uppercase">
+                <div class="text-xs font-mono tracking-widest text-sky-700 dark:text-sky-400 font-bold uppercase">
                   ACTIVE CORE
                 </div>
                 <div id="radialHubTitle" class="text-sm font-extrabold text-slate-900 dark:text-white leading-tight px-1" style="font-family: var(--font-display);">
                   Core Stack
                 </div>
-                <div id="radialHubCount" class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                <div id="radialHubCount" class="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
                   10 Skills
                 </div>
               </div>
@@ -261,11 +261,11 @@
       <!-- Thanh hiển thị chi tiết dự án thực tế khi hover / tap -->
       <div id="radialFooterProofBar" class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200/70 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
         <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-          <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+          <span class="w-2 h-2 rounded-full bg-sky-600"></span>
           <span class="font-bold text-slate-800 dark:text-white" id="radialProofSkillName">Laravel 11:</span>
           <span id="radialProofDetail" class="text-slate-600 dark:text-slate-300">Personal Portfolio &amp; CMS (hothanhthien.io.vn) — Fullstack SSR &amp; REST APIs</span>
         </div>
-        <span class="text-sky-600 dark:text-sky-400 font-bold self-end sm:self-auto">{{ $isVi ? 'Minh chứng Kiểm nghiệm Thực tế' : 'Verified Production Proof' }}</span>
+        <span class="text-sky-700 dark:text-sky-400 font-bold self-end sm:self-auto">{{ $isVi ? 'Minh chứng Kiểm nghiệm Thực tế' : 'Verified Production Proof' }}</span>
       </div>
 
     </div>
@@ -411,7 +411,7 @@
           const isActive = index === currentCatIndex;
 
           btn.className = isActive
-            ? 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all duration-200'
+            ? 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-700 text-white shadow-lg shadow-sky-700/20 flex items-center gap-2 transition-all duration-200'
             : 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 flex items-center gap-2 transition-all duration-200';
 
           btn.innerHTML = `${cat.icon} <span>${cat.title}</span>`;
@@ -472,11 +472,11 @@
               <div class="flip-card-inner">
                 <div class="flip-card-front">
                   <span class="flex-shrink-0">${item.icon}</span>
-                  <span class="text-[11px] font-bold text-slate-800 dark:text-slate-100 tracking-tight whitespace-nowrap">${item.name}</span>
+                  <span class="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight whitespace-nowrap">${item.name}</span>
                 </div>
                 <div class="flip-card-back">
-                  <span class="text-[9px] font-mono font-bold tracking-tight uppercase leading-tight line-clamp-1">${item.proof}</span>
-                  <span class="text-[8px] text-sky-100 font-mono line-clamp-1">${item.name}</span>
+                  <span class="text-xs font-mono font-bold tracking-tight uppercase leading-tight line-clamp-1">${item.proof}</span>
+                  <span class="text-xs text-sky-100 font-mono line-clamp-1">${item.name}</span>
                 </div>
               </div>
             </div>

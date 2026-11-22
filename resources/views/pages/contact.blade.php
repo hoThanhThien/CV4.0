@@ -19,8 +19,8 @@
 
         <div class="lg:col-span-8 space-y-4">
           <!-- Breadcrumb -->
-          <nav class="flex items-center gap-2 font-mono text-xs text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
+          <nav class="flex items-center gap-2 font-mono text-xs text-slate-600 dark:text-slate-400" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}" class="hover:text-sky-700 dark:hover:text-sky-400 transition-colors inline-flex items-center gap-1">
               <i data-lucide="home" class="w-3.5 h-3.5"></i>
               <span data-i18n="breadcrumb_home">{{ __('Home') }}</span>
             </a>
@@ -29,7 +29,7 @@
           </nav>
 
           <!-- Kicker Badge -->
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-[11px] font-bold tracking-widest uppercase text-emerald-700 dark:text-emerald-300">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 font-mono text-xs font-bold tracking-widest uppercase text-emerald-800 dark:text-emerald-300">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -39,7 +39,7 @@
 
           <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
             <span data-i18n="contact_title_1">{{ $isVi ? 'Liên hệ & Hợp tác' : 'Get in Touch &' }}</span>
-            <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="contact_title_highlight">
+            <span class="bg-gradient-to-r from-sky-700 via-indigo-700 to-emerald-700 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="contact_title_highlight">
               {{ $isVi ? 'Cùng xây dựng' : 'Build Together' }}
             </span>
           </h1>
@@ -55,16 +55,16 @@
         <div class="lg:col-span-4 space-y-3">
           <div class="grid grid-cols-3 gap-2.5">
             <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-              <div class="font-display text-xl sm:text-2xl font-extrabold text-sky-600 dark:text-sky-400">&lt; 24h</div>
-              <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_reply">Response</div>
+              <div class="font-display text-xl sm:text-2xl font-extrabold text-sky-700 dark:text-sky-400">&lt; 24h</div>
+              <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="stat_reply">Response</div>
             </div>
             <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-              <div class="font-display text-xl sm:text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">UTC+7</div>
-              <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_tz">Ho Chi Minh</div>
+              <div class="font-display text-xl sm:text-2xl font-extrabold text-indigo-700 dark:text-indigo-400">UTC+7</div>
+              <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="stat_tz">Ho Chi Minh</div>
             </div>
             <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center">
-              <div class="font-display text-xl sm:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400" data-i18n="stat_status_val">Open</div>
-              <div class="font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="stat_status_lbl">Hire / Work</div>
+              <div class="font-display text-xl sm:text-2xl font-extrabold text-emerald-700 dark:text-emerald-400" data-i18n="stat_status_val">Open</div>
+              <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="stat_status_lbl">Hire / Work</div>
             </div>
           </div>
 
@@ -95,8 +95,8 @@
           <!-- Availability Summary Box -->
           <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-50/90 via-white to-emerald-50/70 dark:from-sky-950/50 dark:via-slate-900 dark:to-emerald-950/30 border border-sky-200/70 dark:border-sky-500/25 space-y-2.5">
             <div class="flex items-center justify-between gap-2 flex-wrap">
-              <span class="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400" data-i18n="availability_label">{{ __('Availability') }}</span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-mono text-[11px] font-semibold">
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400" data-i18n="availability_label">{{ __('Availability') }}</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 font-mono text-xs font-semibold">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span data-i18n="availability_badge">{{ __('Available for opportunities') }}</span>
               </span>
@@ -114,18 +114,18 @@
             <!-- Email Row with One-Click Copy -->
             <div class="py-4 first:pt-0 flex items-start justify-between gap-3">
               <div class="flex items-start gap-3.5 min-w-0">
-                <span class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200/70 dark:border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400 flex-shrink-0">
+                <span class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200/70 dark:border-sky-500/30 flex items-center justify-center text-sky-700 dark:text-sky-400 flex-shrink-0">
                   <i data-lucide="mail" class="w-4 h-4"></i>
                 </span>
                 <div class="min-w-0">
-                  <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500">Email</div>
-                  <a href="mailto:hothanhthien119@gmail.com" class="block font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-sky-600 dark:hover:text-sky-400 transition-colors break-all mt-0.5">
+                  <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Email</div>
+                  <a href="mailto:hothanhthien119@gmail.com" class="block font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-sky-700 dark:hover:text-sky-400 transition-colors break-all mt-0.5">
                     hothanhthien119@gmail.com
                   </a>
-                  <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="email_sub">Usually replies within 24 hours</div>
+                  <div class="font-mono text-xs text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="email_sub">Usually replies within 24 hours</div>
                 </div>
               </div>
-              <button type="button" onclick="copyContactValue('hothanhthien119@gmail.com', this)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-500/20 border border-slate-200/80 dark:border-slate-700 text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-300 transition-all inline-flex items-center gap-1 flex-shrink-0" title="Copy Email">
+              <button type="button" onclick="copyContactValue('hothanhthien119@gmail.com', this)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-500/20 border border-slate-200/80 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 hover:text-sky-700 dark:hover:text-sky-300 transition-all inline-flex items-center gap-1 flex-shrink-0" title="Copy Email">
                 <i data-lucide="copy" class="w-3 h-3"></i>
                 <span class="copy-label" data-i18n="btn_copy">Copy</span>
               </button>
@@ -134,18 +134,18 @@
             <!-- Phone / Zalo Row with One-Click Copy -->
             <div class="py-4 flex items-start justify-between gap-3">
               <div class="flex items-start gap-3.5 min-w-0">
-                <span class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/70 dark:border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0">
+                <span class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/70 dark:border-emerald-500/30 flex items-center justify-center text-emerald-700 dark:text-emerald-400 flex-shrink-0">
                   <i data-lucide="phone" class="w-4 h-4"></i>
                 </span>
                 <div class="min-w-0">
-                  <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="phone_label">Phone / Zalo</div>
-                  <a href="tel:+84375227764" class="block font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors mt-0.5">
+                  <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="phone_label">Phone / Zalo</div>
+                  <a href="tel:+84375227764" class="block font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors mt-0.5">
                     0375 227 764
                   </a>
-                  <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5" data-i18n="phone_sub">Call or message via Zalo / SMS</div>
+                  <div class="font-mono text-xs text-slate-600 dark:text-slate-400 mt-0.5" data-i18n="phone_sub">Call or message via Zalo / SMS</div>
                 </div>
               </div>
-              <button type="button" onclick="copyContactValue('0375227764', this)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-500/20 border border-slate-200/80 dark:border-slate-700 text-[11px] font-mono font-semibold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-300 transition-all inline-flex items-center gap-1 flex-shrink-0" title="Copy Phone">
+              <button type="button" onclick="copyContactValue('0375227764', this)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-500/20 border border-slate-200/80 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all inline-flex items-center gap-1 flex-shrink-0" title="Copy Phone">
                 <i data-lucide="copy" class="w-3 h-3"></i>
                 <span class="copy-label" data-i18n="btn_copy">Copy</span>
               </button>
@@ -153,30 +153,30 @@
 
             <!-- Website Row -->
             <div class="py-4 flex items-start gap-3.5">
-              <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200/70 dark:border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 flex-shrink-0">
+              <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200/70 dark:border-indigo-500/30 flex items-center justify-center text-indigo-700 dark:text-indigo-400 flex-shrink-0">
                 <i data-lucide="globe" class="w-4 h-4"></i>
               </span>
               <div class="min-w-0">
-                <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="website_label">Portfolio &amp; Blog</div>
-                <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mt-0.5">
+                <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="website_label">Portfolio &amp; Blog</div>
+                <a href="https://hothanhthien.io.vn/" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors mt-0.5">
                   <span>hothanhthien.io.vn</span>
                   <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-60"></i>
                 </a>
-                <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">https://hothanhthien.io.vn/</div>
+                <div class="font-mono text-xs text-slate-600 dark:text-slate-400 mt-0.5">https://hothanhthien.io.vn/</div>
               </div>
             </div>
 
             <!-- Location Row -->
             <div class="py-4 last:pb-0 flex items-start gap-3.5">
-              <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/15 border border-amber-200/70 dark:border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0">
+              <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/15 border border-amber-200/70 dark:border-amber-500/30 flex items-center justify-center text-amber-800 dark:text-amber-400 flex-shrink-0">
                 <i data-lucide="map-pin" class="w-4 h-4"></i>
               </span>
               <div class="min-w-0">
-                <div class="font-mono text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="location_label">Location</div>
+                <div class="font-mono text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="location_label">Location</div>
                 <div class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white mt-0.5" data-i18n="location_val">
                   {{ $isVi ? 'Hồ Chí Minh, Việt Nam' : 'Ho Chi Minh City, Vietnam' }}
                 </div>
-                <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">HCM • UTC+7</div>
+                <div class="font-mono text-xs text-slate-600 dark:text-slate-400 mt-0.5">HCM • UTC+7</div>
               </div>
             </div>
 
@@ -184,21 +184,21 @@
 
           <!-- Quick Subject Presets -->
           <div class="pt-4 border-t border-slate-200/80 dark:border-slate-800 space-y-2.5">
-            <div class="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
-              <i data-lucide="zap" class="w-3.5 h-3.5 text-sky-500"></i>
+            <div class="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-sky-700 dark:text-sky-400"></i>
               <span data-i18n="presets_label">Quick Inquiry Topics (Click to prefill)</span>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Interview / Full-Stack & AI Engineer Role" data-topic-vi="Mời phỏng vấn vị trí Kỹ sư Full-Stack & AI" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_1">
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Interview / Full-Stack & AI Engineer Role" data-topic-vi="Mời phỏng vấn vị trí Kỹ sư Full-Stack & AI" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-700 dark:hover:text-sky-400 transition-all" data-i18n="topic_1">
                 Full-Stack / AI Role
               </button>
-              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Applied RAG AI & LLM Chatbot Project" data-topic-vi="Tư vấn & Xây dựng Hệ thống RAG AI / LLM" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_2">
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Applied RAG AI & LLM Chatbot Project" data-topic-vi="Tư vấn & Xây dựng Hệ thống RAG AI / LLM" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-700 dark:hover:text-sky-400 transition-all" data-i18n="topic_2">
                 RAG AI / LLM System
               </button>
-              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Odoo ERP & Business Workflow Customization" data-topic-vi="Triển khai & Tùy chỉnh phân hệ Odoo ERP" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_3">
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Odoo ERP & Business Workflow Customization" data-topic-vi="Triển khai & Tùy chỉnh phân hệ Odoo ERP" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-700 dark:hover:text-sky-400 transition-all" data-i18n="topic_3">
                 Odoo ERP Consulting
               </button>
-              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Laravel / Spring Boot Web Application" data-topic-vi="Hợp tác phát triển Web App Laravel / Spring Boot" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all" data-i18n="topic_4">
+              <button type="button" onclick="selectInquiryTopic(this)" data-topic-en="Laravel / Spring Boot Web Application" data-topic-vi="Hợp tác phát triển Web App Laravel / Spring Boot" class="topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-700 dark:hover:text-sky-400 transition-all" data-i18n="topic_4">
                 Freelance Web App
               </button>
             </div>
@@ -206,14 +206,14 @@
 
           <!-- Social Profiles -->
           <div class="pt-4 border-t border-slate-200/80 dark:border-slate-800 space-y-2.5">
-            <div class="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500" data-i18n="social_label">Follow &amp; Connect</div>
+            <div class="font-mono text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="social_label">Follow &amp; Connect</div>
             <div class="grid grid-cols-2 gap-3">
-              <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-950 border border-slate-800 dark:border-slate-700 text-white text-xs font-semibold hover:bg-sky-600 dark:hover:bg-sky-500 hover:border-sky-500 transition-all shadow-sm">
+              <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-950 border border-slate-800 dark:border-slate-700 text-white text-xs font-semibold hover:bg-sky-700 dark:hover:bg-sky-600 hover:border-sky-600 transition-all shadow-sm">
                 <i data-lucide="github" class="w-4 h-4"></i>
                 <span>GitHub</span>
                 <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-70"></i>
               </a>
-              <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200/90 dark:border-sky-500/30 text-sky-700 dark:text-sky-300 text-xs font-semibold hover:bg-sky-500 hover:text-white dark:hover:bg-sky-500 dark:hover:text-white transition-all shadow-sm">
+              <a href="https://www.linkedin.com/in/httblackhat" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200/90 dark:border-sky-500/30 text-sky-700 dark:text-sky-300 text-xs font-semibold hover:bg-sky-700 hover:text-white dark:hover:bg-sky-600 dark:hover:text-white transition-all shadow-sm">
                 <i data-lucide="linkedin" class="w-4 h-4"></i>
                 <span>LinkedIn</span>
                 <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 opacity-70"></i>
@@ -238,7 +238,7 @@
                 <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="form_title">
                   {{ __('Send Me a Message') }}
                 </h2>
-                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400" data-i18n="form_subtitle">
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400" data-i18n="form_subtitle">
                   {{ __('Fill out the form below and I will get back to you as soon as possible.') }}
                 </p>
               </div>
@@ -354,7 +354,7 @@
                   <span data-i18n="label_message">{{ __('Message') }}</span>
                   <span class="text-rose-500">*</span>
                 </label>
-                <span id="messageCharCount" class="font-mono text-[11px] text-slate-400 dark:text-slate-500">0 / 4000</span>
+                <span id="messageCharCount" class="font-mono text-xs text-slate-600 dark:text-slate-400">0 / 4000</span>
               </div>
               <textarea
                 name="message"
@@ -364,7 +364,7 @@
                 data-i18n-placeholder="placeholder_message"
                 placeholder="{{ __('Describe your project or message in detail...') }}"
                 required
-                class="w-full px-4 py-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/80 border {{ $errors->has('message') ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-sky-500 focus:ring-sky-500/20' }} text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 transition-all resize-y min-h-[140px]"
+                class="w-full px-4 py-3 rounded-xl bg-slate-50/90 dark:bg-slate-950/80 border {{ $errors->has('message') ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 dark:border-slate-700 focus:border-sky-500 focus:ring-sky-500/20' }} text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-4 transition-all resize-y min-h-[140px]"
               >{{ old('message') }}</textarea>
               @error('message')
               <p class="text-xs font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1 mt-1">
@@ -382,18 +382,18 @@
             <button
               type="submit"
               id="btnSubmit"
-              class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-900 dark:bg-sky-500 text-white font-semibold text-sm hover:bg-sky-600 dark:hover:bg-sky-400 active:scale-[0.99] transition-all shadow-lg shadow-slate-900/15 dark:shadow-sky-500/25 disabled:opacity-65 disabled:cursor-not-allowed"
+              class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-900 dark:bg-sky-500 text-white font-semibold text-sm hover:bg-sky-700 dark:hover:bg-sky-400 active:scale-[0.99] transition-all shadow-lg shadow-slate-900/15 dark:shadow-sky-500/25 disabled:opacity-65 disabled:cursor-not-allowed"
             >
               <i data-lucide="send" class="w-4 h-4"></i>
               <span data-i18n="btn_submit">{{ __('Send Message') }}</span>
             </button>
 
             <!-- reCAPTCHA Notice -->
-            <p class="text-center text-[11px] font-mono text-slate-400 dark:text-slate-500 leading-relaxed">
+            <p class="text-center text-xs font-mono text-slate-600 dark:text-slate-400 leading-relaxed">
               <span data-i18n="recaptcha_prefix">{{ __('This site is protected by reCAPTCHA and the Google') }}</span>
-              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="underline hover:text-sky-600 dark:hover:text-sky-400" data-i18n="recaptcha_privacy">{{ __('Privacy Policy') }}</a>
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="underline hover:text-sky-700 dark:hover:text-sky-400" data-i18n="recaptcha_privacy">{{ __('Privacy Policy') }}</a>
               <span data-i18n="recaptcha_and">{{ __('and') }}</span>
-              <a href="https://policies.google.com/terms" target="_blank" rel="noopener" class="underline hover:text-sky-600 dark:hover:text-sky-400" data-i18n="recaptcha_terms">{{ __('Terms of Service') }}</a>
+              <a href="https://policies.google.com/terms" target="_blank" rel="noopener" class="underline hover:text-sky-700 dark:hover:text-sky-400" data-i18n="recaptcha_terms">{{ __('Terms of Service') }}</a>
               <span data-i18n="recaptcha_suffix">{{ __('apply.') }}</span>
             </p>
           </form>
@@ -540,8 +540,8 @@
       document.querySelectorAll('.topic-preset-btn').forEach(chip => {
         const isActive = chip === btn;
         chip.className = isActive
-          ? 'topic-preset-btn px-3 py-1.5 rounded-xl bg-sky-500 border border-sky-500 text-xs font-medium text-white shadow-sm transition-all'
-          : 'topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 dark:hover:text-sky-400 transition-all';
+          ? 'topic-preset-btn px-3 py-1.5 rounded-xl bg-sky-700 border border-sky-700 text-xs font-medium text-white shadow-sm transition-all'
+          : 'topic-preset-btn px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/90 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-700 dark:hover:text-sky-400 transition-all';
       });
 
       if (messageInput && !messageInput.value.trim()) {
