@@ -102,7 +102,7 @@
 
         <!-- Tech Stack Filter Pills -->
         @if(count($allTechNames))
-        <div class="projects-filter-bar flex items-center gap-2 overflow-x-auto pb-1.5" role="tablist" aria-label="{{ __('Filter by stack') }}">
+        <div class="projects-filter-bar flex items-center gap-2 overflow-x-auto pb-1.5" role="group" aria-label="{{ __('Filter by stack') }}">
           <button type="button" class="proj-filter-btn px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-sky-700 text-white shadow-lg shadow-sky-700/20 whitespace-nowrap flex items-center gap-1.5 transition-all" data-proj-filter="all">
             <i data-lucide="layers" class="w-3.5 h-3.5"></i>
             <span data-i18n="filter_all">{{ __('All Stacks') }}</span>
@@ -137,7 +137,7 @@
     <!-- =========================================================================
          SECTION 3: PROJECTS SHOWCASE BENTO GRID (2 COLUMNS)
     ========================================================================= -->
-    <section>
+    <section class="cv-auto-tall">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         @foreach($projects as $idx => $project)
           @php
@@ -156,7 +156,7 @@
 
             <!-- Top Visual Stage -->
             <div class="p-4 pb-0 relative z-10">
-              <a href="{{ route('projects.show', $project->id) }}" class="group block relative aspect-[16/10] rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 bg-slate-950" aria-label="{{ $project->localized_title }}">
+              <a href="{{ route('projects.show', $project->id) }}" class="group block relative aspect-[16/10] rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 bg-slate-950">
 
                 @if($project->featured)
                   <span class="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-emerald-200 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 font-mono text-xs font-bold uppercase tracking-wider shadow-sm">

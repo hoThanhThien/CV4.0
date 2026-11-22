@@ -578,26 +578,53 @@
   </script>
 
   @if(config('services.recaptcha.site_key'))
-  <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const contactForm = document.getElementById('contactForm');
       const tokenInput = document.getElementById('gRecaptchaResponse');
+      const siteKey = @json(config('services.recaptcha.site_key'));
+      let recaptchaPromise = null;
+
+      function ensureRecaptchaLoaded() {
+        if (window.grecaptcha && typeof window.grecaptcha.execute === 'function') {
+          return Promise.resolve();
+        }
+        if (recaptchaPromise) return recaptchaPromise;
+        recaptchaPromise = new Promise(function(resolve) {
+          const script = document.createElement('script');
+          script.src = 'https://www.google.com/recaptcha/api.js?render=' + encodeURIComponent(siteKey);
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = resolve;
+          document.head.appendChild(script);
+        });
+        return recaptchaPromise;
+      }
 
       if (contactForm) {
+        ['pointerdown', 'input', 'keydown'].forEach(function(evt) {
+          contactForm.addEventListener(evt, ensureRecaptchaLoaded, { once: true, passive: true });
+        });
+
         contactForm.addEventListener('submit', function(e) {
           setContactSubmitLoading();
           if (!tokenInput.value) {
             e.preventDefault();
-            grecaptcha.ready(function() {
-              grecaptcha.execute("{{ config('services.recaptcha.site_key') }}", { action: 'contact_submit' })
-                .then(function(token) {
-                  tokenInput.value = token;
-                  contactForm.submit();
-                })
-                .catch(function() {
-                  contactForm.submit();
+            ensureRecaptchaLoaded().then(function() {
+              if (window.grecaptcha && typeof window.grecaptcha.ready === 'function') {
+                grecaptcha.ready(function() {
+                  grecaptcha.execute(siteKey, { action: 'contact_submit' })
+                    .then(function(token) {
+                      tokenInput.value = token;
+                      contactForm.submit();
+                    })
+                    .catch(function() {
+                      contactForm.submit();
+                    });
                 });
+              } else {
+                contactForm.submit();
+              }
             });
           }
         });

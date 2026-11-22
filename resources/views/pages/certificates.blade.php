@@ -389,7 +389,7 @@
       </div>
 
       <div class="flex items-center gap-2 flex-shrink-0">
-        <a id="certModalExternalBtn" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">
+        <a id="certModalExternalBtn" href="#" target="_blank" rel="noopener" aria-label="{{ $isVi ? 'Mở chứng nhận ở tab mới' : 'Open certificate in new tab' }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-colors">
           <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           <span class="hidden sm:inline" data-i18n="modal_new_tab">{{ $isVi ? 'Mở tab mới' : 'New Tab' }}</span>
         </a>

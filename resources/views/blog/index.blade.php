@@ -215,7 +215,7 @@
 
           <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
             <a href="{{ route('blog.show', $post->slug) }}" class="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-sky-700 dark:text-sky-400 group-hover:gap-2.5 transition-all">
-              <span data-i18n="read_more">{{ $isVi ? 'Đọc tiếp' : 'Read More' }}</span>
+              <span data-i18n="read_article">{{ $isVi ? 'Đọc bài viết' : 'Read Article' }}</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
           </div>

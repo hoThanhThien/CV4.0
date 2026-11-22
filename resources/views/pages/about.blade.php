@@ -6,6 +6,13 @@
     ? 'Tìm hiểu về Hồ Thành Thiện — Kỹ sư Công nghệ Thông tin tốt nghiệp loại Xuất sắc ĐH GTVT TP.HCM (GPA kỳ gần nhất 4.0/4.0), chuyên sâu Spring Boot, Laravel, Odoo ERP & RAG AI.'
     : 'Learn about Ho Thanh Thien — Software Engineer graduating with Distinction from UTH (4.0/4.0 latest GPA), specializing in Spring Boot, Laravel, Odoo ERP, and Applied RAG AI.')
 
+@section('styles')
+  main > section.space-y-6 ~ section.space-y-6 {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 700px;
+  }
+@endsection
+
 @section('content')
 @php
     $isVi = app()->getLocale() === 'vi';
@@ -25,7 +32,7 @@
 
         <div class="relative z-10 space-y-4 flex flex-col items-center">
           <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 p-0.5 shadow-lg shadow-sky-500/25">
-            <img src="{{ asset('android-chrome-192x192.png') }}" width="80" height="80" alt="Ho Thanh Thien Logo" class="w-full h-full object-cover rounded-[14px]">
+            <img src="{{ asset('images/avatar-sm.webp') }}" width="80" height="80" alt="Ho Thanh Thien Logo" class="w-full h-full object-cover rounded-[14px]">
           </div>
 
           <div class="font-display text-3xl font-extrabold tracking-tight text-white">HT</div>

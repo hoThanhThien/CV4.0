@@ -10,6 +10,8 @@ module.exports = {
     './resources/views/components/radial-orbit-wheel.blade.php',
     './app/Support/**/*.php',
     './resources/js/lucide-pearl.js',
+    './resources/js/welcome-pearl.js',
+    './resources/js/brand-svgs.js',
   ],
   theme: {
     extend: {

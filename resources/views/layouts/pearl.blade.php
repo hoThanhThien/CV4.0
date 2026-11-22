@@ -300,6 +300,7 @@
 
     function setLanguage(lang, syncSession = false) {
       currentLang = lang;
+      window.currentLang = lang;
       localStorage.setItem('thien_lang', lang);
 
       const btnEn = document.getElementById('btnLangEn');
@@ -364,9 +365,11 @@
   @yield('scripts')
 
   <script>
+    window.setLanguage = setLanguage;
     document.addEventListener('DOMContentLoaded', () => {
       const hydratePearl = () => {
         setTimeout(() => {
+          window.__pearlHydrated = true;
           setLanguage(currentLang, false);
           if (window.lucide) lucide.createIcons();
         }, 0);
