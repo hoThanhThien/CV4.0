@@ -288,3 +288,9 @@ function renderPearlIcons(options = {}) {
 window.lucide = {
   createIcons: renderPearlIcons,
 };
+
+if (document.readyState !== 'loading') {
+  setTimeout(function () {
+    renderPearlIcons();
+  }, 0);
+}
