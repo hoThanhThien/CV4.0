@@ -327,8 +327,8 @@
       <div class="flex items-center gap-2">
         <!-- 100% Language Sync Switcher -->
         <div class="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 font-mono text-xs">
-          <button type="button" id="btnLangEn" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg font-bold transition-all">EN</button>
-          <button type="button" id="btnLangVi" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-lg font-bold transition-all">VI</button>
+          <button type="button" id="btnLangEn" onclick="setLanguage('en', true)" class="px-2.5 py-1 rounded-lg font-bold transition-all">EN</button>
+          <button type="button" id="btnLangVi" onclick="setLanguage('vi', true)" class="px-2.5 py-1 rounded-lg font-bold transition-all">VI</button>
         </div>
 
         <!-- White BG / Dark BG Toggle -->
@@ -682,7 +682,7 @@
 
               @if($tourRist)
                 <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug">
-                  {{ $tourRist->title }}
+                  {{ $tourRist->localized_title }}
                 </h3>
                 <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   {{ \Illuminate\Support\Str::limit($tourRist->summary ?: $tourRist->clean_description, 220) }}
@@ -824,7 +824,7 @@
 
             @if($laundry)
               <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white leading-snug">
-                {{ $laundry->title }}
+                {{ $laundry->localized_title }}
               </h3>
               <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                 {{ \Illuminate\Support\Str::limit($laundry->summary ?: $laundry->clean_description, 185) }}
@@ -973,7 +973,7 @@
 
                 <h3 class="font-display text-xl font-extrabold text-slate-900 dark:text-white leading-snug">
                   <a href="{{ route('projects.show', $proj->id) }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
-                    {{ $proj->title }}
+                    {{ $proj->localized_title }}
                   </a>
                 </h3>
 
@@ -1050,7 +1050,7 @@
                     ? $cert->file_url
                     : route('certificates', ['category' => $cert->category ?: 'all']);
                 $isDirectFile = ($cert->category === 'brochure' && $hasLocalFile);
-                $certSub = collect([$cert->issuer, $cert->issue_date])->filter()->implode(' • ');
+                $certSub = collect([$cert->localized_issuer, $cert->issue_date])->filter()->implode(' • ');
             @endphp
             <a href="{{ $certUrl }}" @if($isDirectFile) target="_blank" rel="noopener" @endif class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
               <div class="flex items-start justify-between gap-3 relative z-10">
@@ -1059,8 +1059,8 @@
                     <i data-lucide="{{ $certMeta['icon'] }}" class="w-5 h-5"></i>
                   </span>
                   <div>
-                    <h3 class="font-bold text-sm text-slate-900 dark:text-white leading-snug">{{ $cert->title }}</h3>
-                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">{{ $certSub ?: ($cert->description ?: 'Verified Portfolio Credential') }}</p>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white leading-snug">{{ $cert->localized_title }}</h3>
+                    <p class="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">{{ $certSub ?: ($cert->localized_description ?: 'Verified Portfolio Credential') }}</p>
                   </div>
                 </div>
                 <i data-lucide="{{ $certMeta['action'] }}" class="w-4 h-4 {{ $isDirectFile ? 'text-sky-500' : 'text-slate-400' }} flex-shrink-0"></i>
@@ -1132,7 +1132,7 @@
                 $postCategory = !empty($post->category)
                     ? strtoupper($post->category)
                     : ($post->ai_generated ? 'AI STUDIO // ENGINEERING' : 'ENGINEERING JOURNAL');
-                $postSummary = $post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags((string) $post->content), 145);
+                $postSummary = $post->localized_excerpt ?: \Illuminate\Support\Str::limit(strip_tags((string) $post->localized_content), 145);
             @endphp
             <a href="{{ route('blog.show', $post->slug) }}" class="spotlight-card hover:-translate-y-1 block bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm">
               <div class="flex items-center justify-between gap-4 relative z-10">
@@ -1143,7 +1143,7 @@
                       <span class="text-slate-400">&bull; {{ $post->published_at->format('M d, Y') }}</span>
                     @endif
                   </div>
-                  <h3 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">{{ $post->title }}</h3>
+                  <h3 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">{{ $post->localized_title }}</h3>
                   <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">{{ $postSummary }}</p>
                 </div>
                 <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
@@ -1872,9 +1872,16 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     }
 
     // 8. COMPLETE 100% LANGUAGE SWITCHER (EN | VI)
-    function setLanguage(lang) {
+    function setLanguage(lang, fromUserClick = false) {
       currentLang = lang;
       localStorage.setItem('thien_lang', lang);
+
+      if (fromUserClick && (document.documentElement.lang || 'en') !== lang) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.assign(url.toString());
+        return;
+      }
 
       // Update active button state
       const btnEn = document.getElementById('btnLangEn');
@@ -2107,7 +2114,7 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     // 10. INITIAL BOOTSTRAP
     document.addEventListener('DOMContentLoaded', () => {
       switchSkillMode('grid', false);
-      setLanguage(currentLang);
+      setLanguage(currentLang, false);
       if (window.lucide) lucide.createIcons();
 
       const orbitBox = document.getElementById('orbitStageBox');

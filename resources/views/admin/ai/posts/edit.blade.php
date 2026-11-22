@@ -45,6 +45,16 @@
             <textarea id="content" name="content" rows="18" class="form-control" required style="width:100%; padding:0.75rem; border:1px solid var(--border); border-radius:8px; font-family:monospace; font-size:0.9rem; line-height:1.5">{{ old('content', $post->content) }}</textarea>
         </div>
 
+        @include('admin.partials.bilingual_fields', [
+            'model' => $post,
+            'uid' => 'ai_post_i18n',
+            'fields' => [
+                'title' => ['label' => 'Tiêu đề bản dịch / Translated Title', 'type' => 'text', 'placeholder_vi' => 'Tiêu đề tiếng Việt...', 'placeholder_en' => 'English Post Title...'],
+                'excerpt' => ['label' => 'Tóm tắt bản dịch / Translated Excerpt', 'type' => 'textarea', 'rows' => 3, 'placeholder_vi' => 'Tóm tắt tiếng Việt...', 'placeholder_en' => 'English summary...'],
+                'content' => ['label' => 'Nội dung HTML bản dịch / Translated Body', 'type' => 'textarea', 'rows' => 12, 'monospace' => true, 'placeholder_vi' => '<p>Nội dung tiếng Việt...</p>', 'placeholder_en' => '<p>English article body...</p>'],
+            ],
+        ])
+
         <!-- Thumbnail & OpenGraph Visual Assets -->
         <div style="margin-bottom:1.5rem; padding:1.25rem; background:linear-gradient(135deg, #f8fafc, #eff6ff); border:1px solid #bfdbfe; border-radius:10px">
             <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem">

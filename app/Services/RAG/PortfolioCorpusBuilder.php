@@ -69,10 +69,11 @@ class PortfolioCorpusBuilder
             ];
         }
 
-        // 3. Projects from DB (with technologies relation)
+        // 3. Projects from DB (with technologies & bilingual translations)
         foreach (Project::with('technologies')->orderBy('order')->get() as $proj) {
             $techNames = $proj->technologies->pluck('name')->implode(', ');
-            $desc = trim((string) ($proj->clean_description ?: strip_tags((string) $proj->description)));
+            $descEn = Str::limit(trim((string) ($proj->cleanDescriptionFor('en') ?: strip_tags((string) $proj->description))), 900);
+            $descVi = Str::limit(trim((string) ($proj->cleanDescriptionFor('vi') ?: strip_tags((string) $proj->description))), 900);
 
             $chunks[] = [
                 'id' => 'project:' . $proj->id,
@@ -80,8 +81,13 @@ class PortfolioCorpusBuilder
                 'title' => $proj->title,
                 'url' => '/projects/' . $proj->id,
                 'content' => trim(implode("\n", array_filter([
-                    'Project: ' . $proj->title . ($proj->role ? ' (' . $proj->role . ')' : '') . ($proj->period ? ' [' . $proj->period . ']' : ''),
-                    'Summary: ' . Str::limit($desc, 900),
+                    self::formatBilingualLine(
+                        'Project',
+                        $proj->title . ($proj->role ? ' (' . $proj->role . ')' : '') . ($proj->period ? ' [' . $proj->period . ']' : ''),
+                        $proj->translationValue('title', 'en'),
+                        $proj->translationValue('title', 'vi')
+                    ),
+                    self::formatBilingualLine('Summary', $descEn !== '' ? $descEn : $descVi, $descEn, $descVi),
                     $techNames !== '' ? 'Tech Stack: ' . $techNames : null,
                     $proj->github_url ? 'GitHub: ' . $proj->github_url : null,
                     $proj->demo_url ? 'Live Demo: ' . $proj->demo_url : null,
@@ -89,7 +95,7 @@ class PortfolioCorpusBuilder
             ];
         }
 
-        // 4. Certificates & Official Documents from DB
+        // 4. Certificates & Official Documents from DB (with bilingual translations)
         foreach (Certificate::orderBy('order')->get() as $cert) {
             $chunks[] = [
                 'id' => 'cert:' . $cert->id,
@@ -97,10 +103,25 @@ class PortfolioCorpusBuilder
                 'title' => $cert->title,
                 'url' => '/certificates?category=' . urlencode((string) ($cert->category ?: 'all')),
                 'content' => trim(implode("\n", array_filter([
-                    'Credential (' . ($cert->category ?: 'certificate') . '): ' . $cert->title,
-                    $cert->issuer ? 'Issuer: ' . $cert->issuer : null,
+                    self::formatBilingualLine(
+                        'Credential (' . ($cert->category ?: 'certificate') . ')',
+                        $cert->title,
+                        $cert->translationValue('title', 'en'),
+                        $cert->translationValue('title', 'vi')
+                    ),
+                    self::formatBilingualLine(
+                        'Issuer',
+                        $cert->issuer,
+                        $cert->translationValue('issuer', 'en'),
+                        $cert->translationValue('issuer', 'vi')
+                    ),
                     $cert->issue_date ? 'Issued: ' . $cert->issue_date : null,
-                    $cert->description ? 'Description: ' . trim(strip_tags((string) $cert->description)) : null,
+                    self::formatBilingualLine(
+                        'Description',
+                        $cert->description ? trim(strip_tags((string) $cert->description)) : null,
+                        self::cleanPlainText($cert->translationValue('description', 'en'), 500),
+                        self::cleanPlainText($cert->translationValue('description', 'vi'), 500)
+                    ),
                 ]))),
             ];
         }
@@ -125,7 +146,9 @@ class PortfolioCorpusBuilder
 
         // 6. Published Blog Posts ONLY (strictly excludes drafts, pending_review, and future scheduled posts)
         foreach (BlogPost::published()->take(15)->get() as $post) {
-            $bodyExcerpt = Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags((string) $post->content))), 900);
+            $bodyExcerpt = self::cleanPlainText($post->content, 900);
+            $bodyEn = self::cleanPlainText($post->translationValue('content', 'en'), 700);
+            $bodyVi = self::cleanPlainText($post->translationValue('content', 'vi'), 700);
 
             $chunks[] = [
                 'id' => 'blog:' . $post->id,
@@ -133,13 +156,53 @@ class PortfolioCorpusBuilder
                 'title' => $post->title,
                 'url' => '/blog/' . $post->slug,
                 'content' => trim(implode("\n", array_filter([
-                    'Published Technical Article: ' . $post->title . ($post->category ? ' [' . $post->category . ']' : ''),
-                    $post->excerpt ? 'Excerpt: ' . trim(strip_tags((string) $post->excerpt)) : null,
-                    $bodyExcerpt !== '' ? 'Article Highlights: ' . $bodyExcerpt : null,
+                    self::formatBilingualLine(
+                        'Published Technical Article' . ($post->category ? ' [' . $post->category . ']' : ''),
+                        $post->title,
+                        $post->translationValue('title', 'en'),
+                        $post->translationValue('title', 'vi')
+                    ),
+                    self::formatBilingualLine(
+                        'Excerpt',
+                        self::cleanPlainText($post->excerpt, 500),
+                        self::cleanPlainText($post->translationValue('excerpt', 'en'), 500),
+                        self::cleanPlainText($post->translationValue('excerpt', 'vi'), 500)
+                    ),
+                    self::formatBilingualLine('Article Highlights', $bodyExcerpt, $bodyEn, $bodyVi),
                 ]))),
             ];
         }
 
         return $chunks;
+    }
+
+    /**
+     * Format a canonical field along with any distinct EN/VI translations for hybrid RAG retrieval.
+     */
+    protected static function formatBilingualLine(string $label, ?string $canonical, ?string $en = null, ?string $vi = null): ?string
+    {
+        $parts = [];
+        $seen = [];
+
+        foreach (['' => $canonical, 'EN' => $en, 'VI' => $vi] as $tag => $value) {
+            $clean = trim((string) $value);
+            if ($clean === '') {
+                continue;
+            }
+            $fingerprint = mb_strtolower($clean);
+            if (isset($seen[$fingerprint])) {
+                continue;
+            }
+            $seen[$fingerprint] = true;
+            $parts[] = ($tag !== '' && !empty($parts)) ? "{$tag}: {$clean}" : $clean;
+        }
+
+        return empty($parts) ? null : $label . ': ' . implode(' | ', $parts);
+    }
+
+    protected static function cleanPlainText(?string $html, int $limit): ?string
+    {
+        $text = trim((string) preg_replace('/\s+/', ' ', strip_tags((string) $html)));
+        return $text !== '' ? Str::limit($text, $limit) : null;
     }
 }

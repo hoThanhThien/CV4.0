@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasBilingualTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Certificate extends Model
 {
     use HasFactory;
+    use HasBilingualTranslations;
 
     protected $fillable = [
         'title',
@@ -22,7 +24,13 @@ class Certificate extends Model
         'thumbnail',
         'featured',
         'order',
+        'translations',
     ];
+
+    public function getLocalizedIssuerAttribute(): string
+    {
+        return (string) $this->localized('issuer');
+    }
 
     protected $casts = [
         'featured' => 'boolean',

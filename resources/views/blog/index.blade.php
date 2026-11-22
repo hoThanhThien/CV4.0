@@ -87,7 +87,7 @@
   ========================================================================= -->
   @if($lead)
     @php
-        $leadWords = str_word_count(strip_tags((string) $lead->content));
+        $leadWords = str_word_count(strip_tags((string) $lead->localized_content));
         $leadMinutes = max(1, (int) ceil($leadWords / 200));
         $leadThumb = $lead->thumbnail_url;
     @endphp
@@ -97,12 +97,12 @@
         <!-- Cover Visual / Typographic Fallback -->
         <a href="{{ route('blog.show', $lead->slug) }}" class="lg:col-span-6 relative min-h-[260px] lg:min-h-[340px] bg-slate-100 dark:bg-slate-950 overflow-hidden block border-b lg:border-b-0 lg:border-r border-slate-200/80 dark:border-slate-800">
           @if($leadThumb)
-            <img src="{{ $leadThumb }}" alt="{{ $lead->title }}" loading="lazy" decoding="async"
+            <img src="{{ $leadThumb }}" alt="{{ $lead->localized_title }}" loading="lazy" decoding="async"
                  class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
             <div style="display:none;" class="w-full h-full flex-col justify-between p-7 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
               <div class="font-mono text-xs uppercase tracking-widest text-sky-400">FEATURED // JOURNAL</div>
-              <div class="font-display text-xl sm:text-2xl font-extrabold leading-tight line-clamp-3">{{ $lead->title }}</div>
+              <div class="font-display text-xl sm:text-2xl font-extrabold leading-tight line-clamp-3">{{ $lead->localized_title }}</div>
               <div class="font-mono text-xs text-slate-400">hothanhthien.io.vn</div>
             </div>
           @else
@@ -163,25 +163,25 @@
   <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach($gridPosts as $idx => $post)
       @php
-          $words = str_word_count(strip_tags((string) $post->content));
+          $words = str_word_count(strip_tags((string) $post->localized_content));
           $minutes = max(1, (int) ceil($words / 200));
           $thumbUrl = $post->thumbnail_url;
       @endphp
       <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 transition-all flex flex-col group">
         <a href="{{ route('blog.show', $post->slug) }}" class="relative z-10 aspect-[16/9] bg-slate-100 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 overflow-hidden block">
           @if($thumbUrl)
-            <img src="{{ $thumbUrl }}" alt="{{ $post->title }}" loading="lazy" decoding="async"
+            <img src="{{ $thumbUrl }}" alt="{{ $post->localized_title }}" loading="lazy" decoding="async"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
             <div style="display:none;" class="w-full h-full flex-col justify-between p-5 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
               <span class="font-mono text-[10px] uppercase tracking-widest text-sky-400">ARTICLE // NOTE</span>
-              <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->title }}</span>
+              <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->localized_title }}</span>
               <span class="font-mono text-[10px] text-slate-400">hothanhthien.io.vn</span>
             </div>
           @else
             <div class="w-full h-full flex flex-col justify-between p-5 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
               <span class="font-mono text-[10px] uppercase tracking-widest text-sky-400">ARTICLE // NOTE</span>
-              <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->title }}</span>
+              <span class="font-display text-base font-bold leading-snug line-clamp-2">{{ $post->localized_title }}</span>
               <span class="font-mono text-[10px] text-slate-400">hothanhthien.io.vn</span>
             </div>
           @endif
@@ -202,13 +202,13 @@
 
             <a href="{{ route('blog.show', $post->slug) }}" class="block group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
               <h3 class="font-display text-lg font-extrabold text-slate-900 dark:text-white leading-snug line-clamp-2">
-                {{ $post->title }}
+                {{ $post->localized_title }}
               </h3>
             </a>
 
-            @if($post->excerpt)
+            @if($post->localized_excerpt)
               <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                {{ $post->excerpt }}
+                {{ $post->localized_excerpt }}
               </p>
             @endif
           </div>

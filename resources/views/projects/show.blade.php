@@ -1,7 +1,7 @@
 @extends('layouts.pearl')
 
 @section('active_nav', 'projects')
-@section('title', $project->title . ' | ' . (app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien'))
+@section('title', $project->localized_title . ' | ' . (app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien'))
 @section('description', \Illuminate\Support\Str::limit($project->clean_description, 160))
 @section('og_type', 'article')
 @if($project->image && !str_ends_with(strtolower($project->image), '.svg'))
@@ -13,7 +13,7 @@
 {!! json_encode([
     '@context' => 'https://schema.org',
     '@type' => 'SoftwareApplication',
-    'name' => $project->title,
+    'name' => $project->localized_title,
     'description' => \Illuminate\Support\Str::limit($project->clean_description, 300),
     'applicationCategory' => 'WebApplication',
     'operatingSystem' => 'Web',
@@ -57,7 +57,7 @@
         {{ $isVi ? 'Kho Dự án' : 'Projects' }}
       </a>
       <span>/</span>
-      <span class="text-slate-900 dark:text-white font-semibold truncate max-w-xs sm:max-w-md">{{ $project->title }}</span>
+      <span class="text-slate-900 dark:text-white font-semibold truncate max-w-xs sm:max-w-md">{{ $project->localized_title }}</span>
     </nav>
 
     <!-- Meta Pills -->
@@ -86,7 +86,7 @@
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
       <div class="space-y-3 max-w-3xl">
         <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-tight leading-[1.12] text-slate-900 dark:text-white">
-          {{ $project->title }}
+          {{ $project->localized_title }}
         </h1>
         <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
           {{ $project->summary }}
@@ -129,7 +129,7 @@
       <div class="relative z-10">
         @if($hasCustomImage)
           <div class="rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 aspect-[16/9]">
-            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
+            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->localized_title }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
           </div>
         @else
           <!-- Terminal / Architecture Specimen Plate (Crisp Dark Slate Window contrasting clean Pearl White card) -->

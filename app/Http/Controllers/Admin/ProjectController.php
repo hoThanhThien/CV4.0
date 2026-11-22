@@ -34,6 +34,11 @@ class ProjectController extends Controller
             'order' => 'nullable|integer',
             'skills' => 'nullable|array',
             'technologies' => 'nullable|array',
+            'translations' => 'nullable|array',
+            'translations.en.title' => 'nullable|string|max:255',
+            'translations.en.description' => 'nullable|string',
+            'translations.vi.title' => 'nullable|string|max:255',
+            'translations.vi.description' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -42,6 +47,7 @@ class ProjectController extends Controller
 
         $validated['featured'] = $request->boolean('featured');
         $validated['order'] = $validated['order'] ?? 0;
+        $validated['translations'] = Project::sanitizeTranslations($request->input('translations'), ['title', 'description']);
 
         $project = Project::create($validated);
 
@@ -89,6 +95,11 @@ class ProjectController extends Controller
             'order' => 'nullable|integer',
             'skills' => 'nullable|array',
             'technologies' => 'nullable|array',
+            'translations' => 'nullable|array',
+            'translations.en.title' => 'nullable|string|max:255',
+            'translations.en.description' => 'nullable|string',
+            'translations.vi.title' => 'nullable|string|max:255',
+            'translations.vi.description' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -100,6 +111,9 @@ class ProjectController extends Controller
 
         $validated['featured'] = $request->boolean('featured');
         $validated['order'] = $validated['order'] ?? $project->order ?? 0;
+        if ($request->has('translations')) {
+            $validated['translations'] = Project::sanitizeTranslations($request->input('translations'), ['title', 'description']);
+        }
 
         $project->update($validated);
 

@@ -65,6 +65,16 @@
                 </div>
             </div>
 
+            @include('admin.partials.bilingual_fields', [
+                'model' => null,
+                'uid' => 'cert_i18n',
+                'fields' => [
+                    'title' => ['label' => 'Tiêu đề / Credential Title', 'type' => 'text', 'placeholder_vi' => 'Tiêu đề tiếng Việt...', 'placeholder_en' => 'English Credential Title...'],
+                    'issuer' => ['label' => 'Đơn vị cấp / Issuer', 'type' => 'text', 'placeholder_vi' => 'Tên tổ chức cấp tiếng Việt...', 'placeholder_en' => 'Issuing Organization (English)...'],
+                    'description' => ['label' => 'Mô tả / Description', 'type' => 'textarea', 'rows' => 4, 'placeholder_vi' => 'Mô tả bằng tiếng Việt...', 'placeholder_en' => 'Description in English...'],
+                ],
+            ])
+
             <!-- Additional Attached Files (Multi-PDF Support) -->
             <div class="form-card" style="margin-bottom:1.5rem">
                 <h3 style="font-size:1.1rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem; color:var(--text)">

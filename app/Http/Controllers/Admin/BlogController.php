@@ -32,6 +32,13 @@ class BlogController extends Controller
             'og_image' => 'nullable|image|max:4096',
             'cover_image_prompt' => 'nullable|string|max:1500',
             'published' => 'boolean',
+            'translations' => 'nullable|array',
+            'translations.en.title' => 'nullable|string|max:255',
+            'translations.en.excerpt' => 'nullable|string|max:500',
+            'translations.en.content' => 'nullable|string',
+            'translations.vi.title' => 'nullable|string|max:255',
+            'translations.vi.excerpt' => 'nullable|string|max:500',
+            'translations.vi.content' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -45,6 +52,7 @@ class BlogController extends Controller
         $validated['status'] = $validated['published'] ? BlogPost::STATUS_PUBLISHED : BlogPost::STATUS_DRAFT;
         $validated['slug'] = BlogPost::generateSlug($validated['title']);
         $validated['published_at'] = $validated['published'] ? now() : null;
+        $validated['translations'] = BlogPost::sanitizeTranslations($request->input('translations'), ['title', 'excerpt', 'content']);
 
         $post = BlogPost::create($validated);
 
@@ -80,6 +88,13 @@ class BlogController extends Controller
             'og_image' => 'nullable|image|max:4096',
             'cover_image_prompt' => 'nullable|string|max:1500',
             'published' => 'boolean',
+            'translations' => 'nullable|array',
+            'translations.en.title' => 'nullable|string|max:255',
+            'translations.en.excerpt' => 'nullable|string|max:500',
+            'translations.en.content' => 'nullable|string',
+            'translations.vi.title' => 'nullable|string|max:255',
+            'translations.vi.excerpt' => 'nullable|string|max:500',
+            'translations.vi.content' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -108,6 +123,10 @@ class BlogController extends Controller
             $validated['published_at'] = now();
         } elseif (!$validated['published']) {
             $validated['published_at'] = null;
+        }
+
+        if ($request->has('translations')) {
+            $validated['translations'] = BlogPost::sanitizeTranslations($request->input('translations'), ['title', 'excerpt', 'content']);
         }
 
         $post->update($validated);

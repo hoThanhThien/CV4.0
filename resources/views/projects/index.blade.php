@@ -167,8 +167,8 @@
       <!-- Right Controls: Language Switcher + Dark Mode Toggle + CTA -->
       <div class="flex items-center gap-2">
         <div class="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 font-mono text-xs">
-          <button type="button" id="btnLangEn" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg font-bold transition-all">EN</button>
-          <button type="button" id="btnLangVi" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-lg font-bold transition-all">VI</button>
+          <button type="button" id="btnLangEn" onclick="setLanguage('en', true)" class="px-2.5 py-1 rounded-lg font-bold transition-all">EN</button>
+          <button type="button" id="btnLangVi" onclick="setLanguage('vi', true)" class="px-2.5 py-1 rounded-lg font-bold transition-all">VI</button>
         </div>
 
         <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all shadow-sm">
@@ -320,7 +320,7 @@
                   ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
                   : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'architecture.spec');
               $techSlugList = $project->technologies->pluck('name')->map(fn($n) => strtolower($n))->implode('|');
-              $searchBlob = strtolower($project->title . ' ' . $project->summary . ' ' . $project->technologies->pluck('name')->implode(' ') . ' ' . ($project->role ?? ''));
+              $searchBlob = strtolower($project->title . ' ' . $project->localized_title . ' ' . $project->summary . ' ' . $project->technologies->pluck('name')->implode(' ') . ' ' . ($project->role ?? ''));
               $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
               $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
               $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
@@ -331,7 +331,7 @@
 
             <!-- Top Visual Stage -->
             <div class="p-4 pb-0 relative z-10">
-              <a href="{{ route('projects.show', $project->id) }}" class="group block relative aspect-[16/10] rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 bg-slate-950" aria-label="{{ $project->title }}">
+              <a href="{{ route('projects.show', $project->id) }}" class="group block relative aspect-[16/10] rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 bg-slate-950" aria-label="{{ $project->localized_title }}">
 
                 @if($project->featured)
                   <span class="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-emerald-200 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-300 font-mono text-[10px] font-bold uppercase tracking-wider shadow-sm">
@@ -341,13 +341,13 @@
                 @endif
 
                 @if($hasCustomImage)
-                  <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                  <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->localized_title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                   <div class="hidden w-full h-full bg-slate-950 text-slate-100 p-5 flex-col justify-between">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 font-mono text-[11px] text-slate-400">
                       <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="w-2 h-2 rounded-full bg-amber-400"></span><span class="w-2 h-2 rounded-full bg-emerald-500"></span></span>
                       <span class="truncate">{{ $hostLabel }}</span>
                     </div>
-                    <div class="font-display font-bold text-lg text-white">{{ $project->title }}</div>
+                    <div class="font-display font-bold text-lg text-white">{{ $project->localized_title }}</div>
                     <div class="font-mono text-[11px] text-sky-400">ARCHITECTURE // PRODUCTION CASE STUDY</div>
                   </div>
                 @elseif($isPortfolio)
@@ -486,7 +486,7 @@
                 <!-- Title -->
                 <h2 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white leading-snug">
                   <a href="{{ route('projects.show', $project->id) }}" class="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
-                    {{ $project->title }}
+                    {{ $project->localized_title }}
                   </a>
                 </h2>
 
@@ -742,9 +742,16 @@
       }
     };
 
-    function setLanguage(lang) {
+    function setLanguage(lang, fromUserClick = false) {
       currentLang = lang;
       localStorage.setItem('thien_lang', lang);
+
+      if (fromUserClick && (document.documentElement.lang || 'en') !== lang) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.assign(url.toString());
+        return;
+      }
 
       const btnEn = document.getElementById('btnLangEn');
       const btnVi = document.getElementById('btnLangVi');
@@ -834,7 +841,7 @@
         searchInput.addEventListener('input', applyProjectFilters);
       }
 
-      setLanguage(currentLang);
+      setLanguage(currentLang, false);
       if (window.lucide) lucide.createIcons();
     });
   </script>

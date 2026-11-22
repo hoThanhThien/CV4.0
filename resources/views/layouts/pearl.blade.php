@@ -385,6 +385,12 @@
       }
 
       if (syncSession) {
+        if ((document.documentElement.lang || 'en') !== lang) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('lang', lang);
+          window.location.assign(url.toString());
+          return;
+        }
         try { fetch(`/lang/${lang}`, { method: 'GET', credentials: 'same-origin' }); } catch (e) {}
       }
     }

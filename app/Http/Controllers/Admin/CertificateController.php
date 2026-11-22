@@ -50,6 +50,13 @@ class CertificateController extends Controller
             'extra_files.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:25600',
             'featured' => 'nullable|boolean',
             'order' => 'nullable|integer',
+            'translations' => 'nullable|array',
+            'translations.en.title' => 'nullable|string|max:255',
+            'translations.en.issuer' => 'nullable|string|max:255',
+            'translations.en.description' => 'nullable|string',
+            'translations.vi.title' => 'nullable|string|max:255',
+            'translations.vi.issuer' => 'nullable|string|max:255',
+            'translations.vi.description' => 'nullable|string',
         ]);
 
         if ($request->hasFile('file')) {
@@ -86,6 +93,7 @@ class CertificateController extends Controller
 
         $validated['featured'] = $request->boolean('featured');
         $validated['order'] = (int) ($validated['order'] ?? 0);
+        $validated['translations'] = Certificate::sanitizeTranslations($request->input('translations'), ['title', 'issuer', 'description']);
 
         Certificate::create($validated);
 
@@ -115,6 +123,13 @@ class CertificateController extends Controller
             'remove_extra_files' => 'nullable|array',
             'featured' => 'nullable|boolean',
             'order' => 'nullable|integer',
+            'translations' => 'nullable|array',
+            'translations.en.title' => 'nullable|string|max:255',
+            'translations.en.issuer' => 'nullable|string|max:255',
+            'translations.en.description' => 'nullable|string',
+            'translations.vi.title' => 'nullable|string|max:255',
+            'translations.vi.issuer' => 'nullable|string|max:255',
+            'translations.vi.description' => 'nullable|string',
         ]);
 
         if ($request->hasFile('file')) {
@@ -176,6 +191,9 @@ class CertificateController extends Controller
 
         $validated['featured'] = $request->boolean('featured');
         $validated['order'] = (int) ($validated['order'] ?? 0);
+        if ($request->has('translations')) {
+            $validated['translations'] = Certificate::sanitizeTranslations($request->input('translations'), ['title', 'issuer', 'description']);
+        }
 
         $certificate->update($validated);
 

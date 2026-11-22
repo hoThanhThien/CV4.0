@@ -1,8 +1,8 @@
 @extends('layouts.pearl')
 
 @section('active_nav', 'blog')
-@section('title', explode(' | ', $post->title)[0] . ' | ' . (app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien'))
-@section('description', $post->excerpt ? \Illuminate\Support\Str::limit($post->excerpt, 160) : \Illuminate\Support\Str::limit(strip_tags((string) $post->content), 160))
+@section('title', explode(' | ', $post->clean_title)[0] . ' | ' . (app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien'))
+@section('description', $post->localized_excerpt ? \Illuminate\Support\Str::limit($post->localized_excerpt, 160) : \Illuminate\Support\Str::limit(strip_tags((string) $post->localized_content), 160))
 @section('og_type', 'article')
 @section('og_image', $post->og_image_url)
 
@@ -16,8 +16,8 @@
 {!! json_encode([
     '@context' => 'https://schema.org',
     '@type' => 'BlogPosting',
-    'headline' => explode(' | ', $post->title)[0],
-    'description' => $post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags((string) $post->content), 200),
+    'headline' => explode(' | ', $post->clean_title)[0],
+    'description' => $post->localized_excerpt ?: \Illuminate\Support\Str::limit(strip_tags((string) $post->localized_content), 200),
     'image' => $post->og_image_url,
     'datePublished' => $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String(),
     'dateModified' => $post->updated_at->toIso8601String(),
@@ -157,9 +157,9 @@
 @section('content')
 @php
     $isVi = app()->getLocale() === 'vi';
-    $wordCount = str_word_count(strip_tags((string) $post->content));
+    $wordCount = str_word_count(strip_tags((string) $post->localized_content));
     $readingMinutes = max(1, (int) ceil($wordCount / 200));
-    $cleanTitle = explode(' | ', $post->title)[0];
+    $cleanTitle = explode(' | ', $post->clean_title)[0];
     $thumbUrl = $post->thumbnail_url;
 @endphp
 
@@ -233,7 +233,7 @@
 
     <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm">
       <div class="relative z-10 pearl-prose">
-        {!! $post->content !!}
+        {!! $post->localized_content !!}
       </div>
 
       @if($post->faq && is_array($post->faq) && count($post->faq) > 0)
@@ -280,14 +280,14 @@
 
   <!-- Sticky Editorial Sidebar -->
   <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
-    @if($post->excerpt)
+    @if($post->localized_excerpt)
       <div class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
         <div class="relative z-10 space-y-3">
           <h3 class="font-mono text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 flex items-center gap-2">
             <i data-lucide="file-text" class="w-4 h-4 text-sky-500"></i>
             <span data-i18n="summary_heading">{{ $isVi ? 'Tóm tắt nội dung' : 'Article Summary' }}</span>
           </h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{{ $post->excerpt }}</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{{ $post->localized_excerpt }}</p>
         </div>
       </div>
     @endif

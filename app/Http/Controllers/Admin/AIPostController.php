@@ -71,6 +71,13 @@ class AIPostController extends Controller
             'tags' => 'nullable|string',
             'status' => 'required|in:draft,pending_review,scheduled,published',
             'scheduled_at' => 'nullable|date',
+            'translations' => 'nullable|array',
+            'translations.en.title' => 'nullable|string|max:255',
+            'translations.en.excerpt' => 'nullable|string|max:1000',
+            'translations.en.content' => 'nullable|string',
+            'translations.vi.title' => 'nullable|string|max:255',
+            'translations.vi.excerpt' => 'nullable|string|max:1000',
+            'translations.vi.content' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
@@ -98,6 +105,10 @@ class AIPostController extends Controller
         }
 
         $validated['last_edited_by_admin'] = true;
+
+        if ($request->has('translations')) {
+            $validated['translations'] = BlogPost::sanitizeTranslations($request->input('translations'), ['title', 'excerpt', 'content']);
+        }
 
         if ($validated['status'] === 'published') {
             $validated['published'] = true;

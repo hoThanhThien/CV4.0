@@ -170,9 +170,9 @@
               'mode' => $isBrochure ? 'file' : 'detail',
               'url' => $cert->file_url,
               'type' => strtolower((string) $cert->file_type) === 'pdf' || $cert->is_pdf ? 'pdf' : 'image',
-              'title' => $cert->title,
-              'issuer' => $cert->issuer ?: 'University of Transport Ho Chi Minh City (UTH)',
-              'description' => $cert->description ?: '',
+              'title' => $cert->localized_title,
+              'issuer' => $cert->localized_issuer ?: 'University of Transport Ho Chi Minh City (UTH)',
+              'description' => $cert->localized_description ?: '',
           ];
       @endphp
       <article class="spotlight-card bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:-translate-y-1 transition-all flex flex-col">
@@ -183,7 +183,7 @@
                 data-cert-json="{{ json_encode($viewPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}"
                 class="relative z-10 aspect-[16/10] w-full text-left bg-slate-100 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 overflow-hidden group cursor-pointer focus:outline-none">
           @if($cert->thumbnail && !$cert->thumbnail_is_pdf)
-            <img src="{{ $cert->thumbnail_url }}" alt="{{ $cert->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="{{ $cert->thumbnail_url }}" alt="{{ $cert->localized_title }}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
               <span class="px-3 py-1 rounded-full bg-white/90 text-slate-900 font-mono text-[11px] font-bold inline-flex items-center gap-1.5">
                 <i data-lucide="eye" class="w-3.5 h-3.5 text-sky-600"></i>
@@ -249,14 +249,14 @@
             </div>
 
             <h2 class="font-display text-lg font-extrabold text-slate-900 dark:text-white leading-snug">
-              {{ $cert->title }}
+              {{ $cert->localized_title }}
             </h2>
 
             <div class="space-y-1 text-xs font-mono text-slate-500 dark:text-slate-400">
-              @if($cert->issuer)
+              @if($cert->localized_issuer)
                 <div class="flex items-center gap-1.5">
                   <i data-lucide="building-2" class="w-3.5 h-3.5 text-indigo-500 flex-shrink-0"></i>
-                  <span class="truncate">{{ $cert->issuer }}</span>
+                  <span class="truncate">{{ $cert->localized_issuer }}</span>
                 </div>
               @endif
               @if($cert->issue_date)
@@ -267,9 +267,9 @@
               @endif
             </div>
 
-            @if($cert->description)
+            @if($cert->localized_description)
               <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                {{ $cert->description }}
+                {{ $cert->localized_description }}
               </p>
             @endif
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasBilingualTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 class BlogPost extends Model
 {
     use HasFactory;
+    use HasBilingualTranslations;
 
     // Status Constants
     public const STATUS_GENERATING = 'generating';
@@ -42,7 +44,23 @@ class BlogPost extends Model
         'cover_image_prompt',
         'scheduled_at',
         'last_edited_by_admin',
+        'translations',
     ];
+
+    public function getLocalizedExcerptAttribute(): string
+    {
+        return (string) $this->localized('excerpt');
+    }
+
+    public function getLocalizedContentAttribute(): string
+    {
+        return (string) $this->localized('content');
+    }
+
+    public function getCleanTitleAttribute(): string
+    {
+        return explode(' | ', (string) $this->localized('title'))[0];
+    }
 
     protected $casts = [
         'published' => 'boolean',

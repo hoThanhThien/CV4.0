@@ -45,6 +45,15 @@
                     </div>
                 </div>
             </div>
+
+            @include('admin.partials.bilingual_fields', [
+                'model' => $project,
+                'uid' => 'project_i18n',
+                'fields' => [
+                    'title' => ['label' => 'Project Title', 'type' => 'text', 'placeholder_vi' => 'Tên dự án tiếng Việt...', 'placeholder_en' => 'English Project Title...'],
+                    'description' => ['label' => 'Description', 'type' => 'textarea', 'rows' => 6, 'placeholder_vi' => 'Mô tả chi tiết và thành tựu kỹ thuật bằng tiếng Việt...', 'placeholder_en' => 'Detailed technical overview in English...'],
+                ],
+            ])
         </div>
 
         <!-- Sidebar -->

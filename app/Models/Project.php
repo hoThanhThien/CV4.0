@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasBilingualTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
     use HasFactory;
+    use HasBilingualTranslations;
 
     protected $fillable = [
-        'title', 'description', 'image', 'github_url', 'demo_url', 'featured', 'order'
+        'title', 'description', 'image', 'github_url', 'demo_url', 'featured', 'order', 'translations'
     ];
 
     protected $casts = [
@@ -28,11 +30,11 @@ class Project extends Model
     }
 
     /**
-     * Clean readable description excerpt without raw seed metadata prefixes.
+     * Parse clean readable description excerpt in the requested or active locale.
      */
-    public function getCleanDescriptionAttribute(): string
+    public function cleanDescriptionFor(?string $locale = null): string
     {
-        $desc = (string) $this->description;
+        $desc = (string) $this->localized('description', $locale);
         $lines = preg_split('/\r\n|\r|\n/', $desc);
         $cleanLines = [];
         $foundBody = false;
@@ -75,13 +77,22 @@ class Project extends Model
     }
 
     /**
+     * Clean readable description excerpt without raw seed metadata prefixes.
+     */
+    public function getCleanDescriptionAttribute(): string
+    {
+        return $this->cleanDescriptionFor();
+    }
+
+    /**
      * Clean parsed period (e.g. 08/2026 — 10/2026).
      */
     public function getPeriodAttribute(): ?string
     {
-        $desc = (string) $this->description;
-        if (preg_match('/(?:\|\s*)?(\d{2}\/\d{4}\s*-\s*(?:\d{2}\/\d{4}|Present))/i', $desc, $m)) {
-            return str_replace('-', '—', trim($m[1]));
+        foreach ([$this->localized('description'), (string) $this->description] as $desc) {
+            if (preg_match('/(?:\|\s*)?(\d{2}\/\d{4}\s*-\s*(?:\d{2}\/\d{4}|Present))/i', (string) $desc, $m)) {
+                return str_replace('-', '—', trim($m[1]));
+            }
         }
         return null;
     }
@@ -91,15 +102,16 @@ class Project extends Model
      */
     public function getRoleAttribute(): ?string
     {
-        $desc = (string) $this->description;
-        $lines = preg_split('/\r\n|\r|\n/', $desc);
-        foreach ($lines as $line) {
-            $trimmed = trim($line);
-            if (preg_match('/^(Fullstack\s*Developer|Backend|Back\s*End|Frontend|Front\s*End|Software\s*Engineer|Developer)/i', $trimmed, $m)) {
-                $role = trim($m[1]);
-                if (strtolower($role) === 'back end') return 'Backend Engineer';
-                if (strtolower($role) === 'front end') return 'Frontend Engineer';
-                return $role;
+        foreach ([$this->localized('description'), (string) $this->description] as $desc) {
+            $lines = preg_split('/\r\n|\r|\n/', (string) $desc);
+            foreach ($lines as $line) {
+                $trimmed = trim($line);
+                if (preg_match('/^(Fullstack\s*Developer|Backend|Back\s*End|Frontend|Front\s*End|Software\s*Engineer|Developer|(?:Kỹ\s*sư|Kiến\s*trúc\s*sư|Lập\s*trình\s*viên)[^|\r\n]*)/iu', $trimmed, $m)) {
+                    $role = trim($m[1]);
+                    if (strtolower($role) === 'back end') return 'Backend Engineer';
+                    if (strtolower($role) === 'front end') return 'Frontend Engineer';
+                    return $role;
+                }
             }
         }
         return null;

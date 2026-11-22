@@ -41,6 +41,16 @@
                     @error('content')<span style="font-size:0.8rem; color:#ef4444">{{ $message }}</span>@enderror
                 </div>
             </div>
+
+            @include('admin.partials.bilingual_fields', [
+                'model' => $post,
+                'uid' => 'blog_i18n',
+                'fields' => [
+                    'title' => ['label' => 'Post Title', 'type' => 'text', 'placeholder_vi' => 'Tiêu đề bài viết tiếng Việt...', 'placeholder_en' => 'English Post Title...'],
+                    'excerpt' => ['label' => 'Excerpt / Summary', 'type' => 'textarea', 'rows' => 3, 'placeholder_vi' => 'Tóm tắt ngắn tiếng Việt...', 'placeholder_en' => 'Short summary in English...'],
+                    'content' => ['label' => 'Content (HTML)', 'type' => 'textarea', 'rows' => 10, 'monospace' => true, 'placeholder_vi' => '<p>Nội dung bài viết tiếng Việt...</p>', 'placeholder_en' => '<p>English article body...</p>'],
+                ],
+            ])
         </div>
 
         <!-- Sidebar -->
