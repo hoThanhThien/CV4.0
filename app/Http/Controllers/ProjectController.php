@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Support\PortfolioCache;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -10,7 +11,8 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::with('technologies')->orderBy('order')->paginate(9);
-        return view('projects.index', compact('projects'));
+        $archiveMeta = PortfolioCache::projectArchiveMeta();
+        return view('projects.index', compact('projects', 'archiveMeta'));
     }
 
     public function show($id)

@@ -124,6 +124,7 @@ class ProjectController extends Controller
 
         if (!empty($validated['technology_ids'])) {
             $project->technologies()->sync($validated['technology_ids']);
+            \App\Support\PortfolioCache::forgetAll();
         }
 
         $project->load('technologies');
@@ -164,6 +165,7 @@ class ProjectController extends Controller
 
         if (isset($validated['technology_ids'])) {
             $project->technologies()->sync($validated['technology_ids']);
+            \App\Support\PortfolioCache::forgetAll();
         }
 
         $project->load('technologies');

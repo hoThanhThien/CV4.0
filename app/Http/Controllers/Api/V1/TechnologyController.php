@@ -125,6 +125,7 @@ class TechnologyController extends Controller
 
         $tech->projects()->detach();
         $tech->delete();
+        \App\Support\PortfolioCache::forgetAll();
 
         return response()->json([
             'success' => true,

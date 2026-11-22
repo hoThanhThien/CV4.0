@@ -70,6 +70,10 @@ class PublishScheduledBlogPosts extends Command
                 }
             }
 
+            if ($count > 0) {
+                \App\Support\PortfolioCache::forgetAll();
+            }
+
             $this->info("Hoàn tất! Tổng cộng đã xuất bản {$count} bài viết.");
             return 0;
         } finally {

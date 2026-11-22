@@ -88,6 +88,7 @@ class TechnologyController extends Controller
         $tech = Technology::findOrFail($id);
         $tech->projects()->detach();
         $tech->delete();
+        \App\Support\PortfolioCache::forgetAll();
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([

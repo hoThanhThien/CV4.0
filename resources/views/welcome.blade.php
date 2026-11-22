@@ -1,368 +1,185 @@
-<!DOCTYPE html>
-<html lang="{{ app()->getLocale() === 'vi' ? 'vi' : 'en' }}" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ app()->getLocale() === 'vi' ? 'Hồ Thành Thiện — Kỹ sư Phần mềm Full-Stack & RAG AI' : 'Ho Thanh Thien — Full-Stack & RAG AI Engineer' }}</title>
-  <meta name="description" content="{{ app()->getLocale() === 'vi' ? 'Portfolio chính thức của Kỹ sư Phần mềm Hồ Thành Thiện (UTH - Loại Xuất sắc, GPA 4.0/4.0). Chuyên sâu Java Spring Boot, Laravel, Odoo ERP và RAG AI.' : 'Official portfolio of Software Engineer Ho Thanh Thien (B.Eng IT Distinction @ UTH, 4.0/4.0 GPA). Specialized in Java Spring Boot, Laravel, Odoo ERP & Applied RAG AI.' }}">
-  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
-  <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
-  <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
+@php
+    $isVi = app()->getLocale() === 'vi';
+@endphp
+@extends('layouts.pearl')
 
-  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+@section('nav_mode', 'home')
+@section('main_class', 'flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-16 sm:space-y-24')
+@section('title', $isVi ? 'Hồ Thành Thiện — Kỹ sư Phần mềm Full-Stack & RAG AI' : 'Ho Thanh Thien — Full-Stack & RAG AI Engineer')
+@section('description', $isVi ? 'Portfolio chính thức của Kỹ sư Phần mềm Hồ Thành Thiện (UTH - Loại Xuất sắc, GPA 4.0/4.0). Chuyên sâu Java Spring Boot, Laravel, Odoo ERP và RAG AI.' : 'Official portfolio of Software Engineer Ho Thanh Thien (B.Eng IT Distinction @ UTH, 4.0/4.0 GPA). Specialized in Java Spring Boot, Laravel, Odoo ERP & Applied RAG AI.')
 
-  <!-- Devicon CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+@section('styles')
+  :root {
+    --radius: 184px;
+    --orbit-scale: 1;
+  }
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          animation: {
-            'blob': 'blob 10s infinite alternate',
-            'float': 'floatSlow 4.5s ease-in-out infinite',
-            'spin-slow': 'spin 75s linear infinite',
-          },
-          keyframes: {
-            blob: {
-              '0%': { transform: 'translate(0px, 0px) scale(1)' },
-              '33%': { transform: 'translate(35px, -45px) scale(1.08)' },
-              '66%': { transform: 'translate(-25px, 25px) scale(0.94)' },
-              '100%': { transform: 'translate(0px, 0px) scale(1)' },
-            },
-            floatSlow: {
-              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-              '50%': { transform: 'translateY(-10px) rotate(2deg)' },
-            }
-          }
-        }
-      }
-    };
-  </script>
+  .orbit-canvas-viewport {
+    position: relative;
+    width: 100%;
+    height: calc(468px * var(--orbit-scale, 1));
+  }
+  .orbit-canvas {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 486px;
+    height: 468px;
+    --radius: 184px;
+    transform: translate(-50%, -50%) scale(var(--orbit-scale, 1));
+    transform-origin: center center;
+  }
 
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    :root {
-      --radius: 184px;
-      --orbit-scale: 1;
-      --mouse-x: -999px;
-      --mouse-y: -999px;
-    }
-
-    .orbit-canvas-viewport {
-      position: relative;
-      width: 100%;
-      height: calc(468px * var(--orbit-scale, 1));
-    }
-    .orbit-canvas {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 486px;
-      height: 468px;
-      --radius: 184px;
-      transform: translate(-50%, -50%) scale(var(--orbit-scale, 1));
-      transform-origin: center center;
-    }
-
-    /* 1. CLEAN PEARL WHITE TECHNICAL GRID & DARK MODE */
-    .bg-tech-grid {
-      background-color: #f8fafc;
-      background-image:
-        linear-gradient(to right, rgba(15, 23, 42, 0.045) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
-      background-size: 38px 38px;
-      transition: background-color 0.35s ease, color 0.35s ease;
-    }
-    html.dark .bg-tech-grid {
-      background-color: #06090F;
-      background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
-    }
-
-    /* Frosted Glass Surface */
-    .frosted-glass {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-    html.dark .frosted-glass {
-      background: rgba(11, 17, 30, 0.85);
-    }
-
-    /* Mouse-Tracking Spotlight Glow Card */
-    .spotlight-card {
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-    .spotlight-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(
-        520px circle at var(--mouse-x) var(--mouse-y),
-        rgba(14, 165, 233, 0.09),
-        transparent 45%
-      );
+  /* SKILL ANIMATION MODE 1: 3D VORTEX SPIN GRID & 180 FLIP CARD */
+  @keyframes skillVortexSpinIn {
+    0% {
       opacity: 0;
-      transition: opacity 0.25s ease;
-      z-index: 1;
+      transform: rotateY(-180deg) rotateX(40deg) scale(0.28);
     }
-    html.dark .spotlight-card::before {
-      background: radial-gradient(
-        520px circle at var(--mouse-x) var(--mouse-y),
-        rgba(56, 189, 248, 0.14),
-        transparent 45%
-      );
-    }
-    .spotlight-card:hover::before {
+    100% {
       opacity: 1;
+      transform: rotateY(0deg) rotateX(0deg) scale(1);
     }
+  }
 
-    /* =========================================================================
-       SKILL ANIMATION MODE 1: 3D VORTEX SPIN GRID & 180° FLIP CARD
-    ========================================================================= */
-    @keyframes skillVortexSpinIn {
-      0% {
-        opacity: 0;
-        transform: rotateY(-180deg) rotateX(40deg) scale(0.28);
-      }
-      100% {
-        opacity: 1;
-        transform: rotateY(0deg) rotateX(0deg) scale(1);
-      }
-    }
+  @keyframes iconSpin360 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
-    @keyframes iconSpin360 {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+  .skill-grid-item {
+    perspective: 1100px;
+    height: 152px;
+    opacity: 0;
+    animation: skillVortexSpinIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: calc(var(--index, 0) * 55ms);
+    transition: transform 0.25s ease, opacity 0.22s ease;
+  }
+  .skill-grid-item.is-exiting {
+    opacity: 0 !important;
+    transform: rotateY(90deg) scale(0.65) !important;
+    animation: none !important;
+  }
+  .skill-grid-item .spin-icon-target {
+    animation: iconSpin360 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: calc(var(--index, 0) * 55ms);
+  }
 
-    .skill-grid-item {
-      perspective: 1100px;
-      height: 152px;
+  .grid-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+  .skill-grid-item:hover .grid-flip-inner,
+  .skill-grid-item.is-flipped .grid-flip-inner {
+    transform: rotateY(180deg);
+  }
+  .grid-flip-front, .grid-flip-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 1rem;
+  }
+  .grid-flip-back {
+    transform: rotateY(180deg);
+  }
+
+  /* SKILL ANIMATION MODE 2: 3D ORBIT WHEEL */
+  @keyframes orbitNodeEmerge {
+    0% {
       opacity: 0;
-      animation: skillVortexSpinIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      animation-delay: calc(var(--index, 0) * 55ms);
-      transition: transform 0.25s ease, opacity 0.22s ease;
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) - 160deg)) translateY(0px) scale(0.2);
     }
-    .skill-grid-item.is-exiting {
-      opacity: 0 !important;
-      transform: rotateY(90deg) scale(0.65) !important;
-      animation: none !important;
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--radius))) rotate(calc(-1 * var(--angle))) scale(1);
     }
-    .skill-grid-item .spin-icon-target {
-      animation: iconSpin360 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      animation-delay: calc(var(--index, 0) * 55ms);
-    }
+  }
+  @keyframes orbitStageRevolve {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes orbitNodeCounterRevolve {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
 
-    .grid-flip-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer;
-    }
-    .skill-grid-item:hover .grid-flip-inner,
-    .skill-grid-item.is-flipped .grid-flip-inner {
-      transform: rotateY(180deg);
-    }
-    .grid-flip-front, .grid-flip-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      border-radius: 1rem;
-    }
-    .grid-flip-back {
-      transform: rotateY(180deg);
-    }
+  .orbit-spinning-ring {
+    transform-origin: 50% 50%;
+    animation: orbitStageRevolve 32s linear infinite;
+  }
+  .orbit-node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    animation: orbitNodeEmerge 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    user-select: none;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 20;
+  }
+  .orbit-node-upright {
+    transform-origin: center center;
+    animation: orbitNodeCounterRevolve 32s linear infinite;
+  }
+  .orbit-ring-counter {
+    transform-origin: center center;
+    animation: orbitNodeCounterRevolve 48s linear infinite;
+  }
+  #orbitStageBox.is-hover-paused .orbit-spinning-ring,
+  #orbitStageBox.is-hover-paused .orbit-node-upright,
+  #orbitStageBox.is-hover-paused .animate-spin-slow,
+  #orbitStageBox.is-hover-paused .orbit-ring-counter,
+  #orbitStageBox.is-manual-paused .orbit-spinning-ring,
+  #orbitStageBox.is-manual-paused .orbit-node-upright,
+  #orbitStageBox.is-manual-paused .animate-spin-slow,
+  #orbitStageBox.is-manual-paused .orbit-ring-counter,
+  #orbitStageBox:has(.orbit-node:hover) .orbit-spinning-ring,
+  #orbitStageBox:has(.orbit-node:hover) .orbit-node-upright,
+  #orbitStageBox:has(.orbit-node:hover) .animate-spin-slow,
+  #orbitStageBox:has(.orbit-node:hover) .orbit-ring-counter {
+    animation-play-state: paused;
+  }
+  .orbit-node-pill {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .orbit-node:hover .orbit-node-pill,
+  .orbit-node.is-active .orbit-node-pill {
+    border-color: #0ea5e9;
+    box-shadow: 0 10px 25px -4px rgba(14, 165, 233, 0.28), 0 0 0 2px rgba(14, 165, 233, 0.22);
+    transform: scale(1.08);
+  }
+  .orbit-node:hover,
+  .orbit-node.is-active {
+    z-index: 40;
+  }
 
-    /* =========================================================================
-       SKILL ANIMATION MODE 2: 3D ORBIT WHEEL (EXACT VORTEX + CONTINUOUS ORBIT)
-    ========================================================================= */
-    @keyframes orbitNodeEmerge {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) rotate(calc(var(--angle) - 160deg)) translateY(0px) scale(0.2);
-      }
-      100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--radius))) rotate(calc(-1 * var(--angle))) scale(1);
-      }
-    }
-    @keyframes orbitStageRevolve {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes orbitNodeCounterRevolve {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(-360deg); }
-    }
+  /* Terminal Typewriter Cursor */
+  .cli-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: #38bdf8;
+    vertical-align: middle;
+    margin-left: 3px;
+    animation: blinkCursor 1s step-end infinite;
+  }
+  @keyframes blinkCursor {
+    50% { opacity: 0; }
+  }
 
-    .orbit-spinning-ring {
-      transform-origin: 50% 50%;
-      animation: orbitStageRevolve 32s linear infinite;
-    }
-    .orbit-node {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      opacity: 0;
-      animation: orbitNodeEmerge 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      user-select: none;
-      cursor: pointer;
-      pointer-events: auto;
-      z-index: 20;
-    }
-    .orbit-node-upright {
-      transform-origin: center center;
-      animation: orbitNodeCounterRevolve 32s linear infinite;
-    }
-    .orbit-ring-counter {
-      transform-origin: center center;
-      animation: orbitNodeCounterRevolve 48s linear infinite;
-    }
-    #orbitStageBox.is-hover-paused .orbit-spinning-ring,
-    #orbitStageBox.is-hover-paused .orbit-node-upright,
-    #orbitStageBox.is-hover-paused .animate-spin-slow,
-    #orbitStageBox.is-hover-paused .orbit-ring-counter,
-    #orbitStageBox.is-manual-paused .orbit-spinning-ring,
-    #orbitStageBox.is-manual-paused .orbit-node-upright,
-    #orbitStageBox.is-manual-paused .animate-spin-slow,
-    #orbitStageBox.is-manual-paused .orbit-ring-counter,
-    #orbitStageBox:has(.orbit-node:hover) .orbit-spinning-ring,
-    #orbitStageBox:has(.orbit-node:hover) .orbit-node-upright,
-    #orbitStageBox:has(.orbit-node:hover) .animate-spin-slow,
-    #orbitStageBox:has(.orbit-node:hover) .orbit-ring-counter {
-      animation-play-state: paused;
-    }
-    .orbit-node-pill {
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .orbit-node:hover .orbit-node-pill,
-    .orbit-node.is-active .orbit-node-pill {
-      border-color: #0ea5e9;
-      box-shadow: 0 10px 25px -4px rgba(14, 165, 233, 0.28), 0 0 0 2px rgba(14, 165, 233, 0.22);
-      transform: scale(1.08);
-    }
-    .orbit-node:hover,
-    .orbit-node.is-active {
-      z-index: 40;
-    }
+  /* Spin replay icon spin */
+  .replay-spinning svg {
+    animation: spin 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+@endsection
 
-    /* Terminal Typewriter Cursor */
-    .cli-cursor {
-      display: inline-block;
-      width: 8px;
-      height: 14px;
-      background: #38bdf8;
-      vertical-align: middle;
-      margin-left: 3px;
-      animation: blinkCursor 1s step-end infinite;
-    }
-    @keyframes blinkCursor {
-      50% { opacity: 0; }
-    }
-
-    /* Spin replay icon spin */
-    .replay-spinning svg {
-      animation: spin 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-  </style>
-</head>
-<body class="bg-tech-grid text-slate-900 dark:text-slate-100 antialiased selection:bg-sky-500/20 selection:text-sky-700 dark:selection:text-sky-300 relative overflow-x-clip">
-
-  <!-- 3 Khối Ánh Sáng Pastel Chuyển Động Chậm (Ambient Blobs) -->
-  <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-    <div class="absolute -top-24 -left-20 w-96 h-96 bg-sky-300/30 dark:bg-sky-600/15 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-blob"></div>
-    <div class="absolute top-1/3 -right-24 w-[420px] h-[420px] bg-indigo-300/25 dark:bg-indigo-600/15 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-blob" style="animation-delay: 2.5s;"></div>
-    <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-emerald-200/30 dark:bg-emerald-600/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl animate-blob" style="animation-delay: 5s;"></div>
-  </div>
-
-  <!-- =========================================================================
-       NAVIGATION HEADER (CLEAN PEARL WHITE + DARK TOGGLE + EN/VI SYNC)
-  ========================================================================= -->
-  <header class="sticky top-0 z-50 frosted-glass border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Brand Identity -->
-      <a href="{{ route('home') }}" class="flex items-center gap-2.5 font-display font-extrabold text-lg tracking-tight text-slate-900 dark:text-white group">
-        <span class="w-9 h-9 rounded-xl overflow-hidden bg-gradient-to-br from-sky-500 to-indigo-600 shadow-md shadow-indigo-500/20 ring-1 ring-slate-900/5 dark:ring-white/15 flex-shrink-0 inline-flex items-center justify-center group-hover:scale-105 transition-transform">
-          <img src="{{ asset('android-chrome-192x192.png') }}" alt="Ho Thanh Thien Logo" class="w-full h-full object-cover scale-[1.12]">
-        </span>
-        <span class="hidden sm:inline" data-i18n="brand_name">{{ app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}</span>
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Available for Hire"></span>
-      </a>
-
-      <!-- Center Nav Links -->
-      <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-        <a href="#projects" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_projects">Selected Work</a>
-        <a href="#skills" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_skills">Tech Stack</a>
-        <a href="#credentials" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_credentials">Credentials</a>
-        <a href="#blog" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_blog">Engineering Blog</a>
-        <a href="{{ route('projects.index') }}" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_all_projects">Archive</a>
-      </nav>
-
-      <!-- Right Controls: Language Switcher + Dark Mode Toggle -->
-      <div class="flex items-center gap-2">
-        <!-- 100% Language Sync Switcher -->
-        <div class="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 font-mono text-xs">
-          <button type="button" id="btnLangEn" onclick="setLanguage('en', true)" class="px-2.5 py-1 rounded-lg font-bold transition-all">EN</button>
-          <button type="button" id="btnLangVi" onclick="setLanguage('vi', true)" class="px-2.5 py-1 rounded-lg font-bold transition-all">VI</button>
-        </div>
-
-        <!-- White BG / Dark BG Toggle -->
-        <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 transition-all shadow-sm">
-          <i data-lucide="moon" id="themeIconDark" class="w-3.5 h-3.5 text-indigo-500"></i>
-          <i data-lucide="sun" id="themeIconLight" class="w-3.5 h-3.5 text-amber-400 hidden"></i>
-          <span id="themeToggleLabel" class="hidden sm:inline">Dark BG</span>
-        </button>
-
-        <!-- Primary Contact CTA -->
-        <a href="{{ route('contact') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-sky-600 transition-all shadow-sm" data-i18n="nav_hire">
-          Hire Me
-        </a>
-
-        <!-- Mobile Menu Toggle -->
-        <button type="button" id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200" aria-label="Menu">
-          <i data-lucide="menu" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- Mobile Dropdown Navigation -->
-    <div id="mobileMenuPanel" class="hidden md:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-3 space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
-      <a href="#projects" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_projects">Selected Work</a>
-      <a href="#skills" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_skills">Tech Stack</a>
-      <a href="#credentials" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_credentials">Credentials</a>
-      <a href="#blog" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_blog">Engineering Blog</a>
-      <a href="{{ route('projects.index') }}" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_all_projects">Archive</a>
-      <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-center font-semibold mt-2" data-i18n="nav_hire">Hire Me</a>
-    </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-16 sm:space-y-24">
+@section('content')
 
     <!-- =========================================================================
          SECTION 1: HERO SECTION (SPLIT LAYOUT 7:5 — IMPRESSIVE IN 3 SECONDS)
@@ -1170,43 +987,9 @@
 
     </section>
 
-  </main>
+@endsection
 
-  <!-- =========================================================================
-       FOOTER (WITH PHONE NUMBER, EMAIL & VERIFIED LINKS MOVED CLEANLY HERE)
-  ========================================================================= -->
-  <footer class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-      <div class="space-y-2">
-        <div class="flex items-center gap-2.5 font-display font-extrabold text-lg text-slate-900 dark:text-white">
-          <span class="w-8 h-8 rounded-[10px] overflow-hidden bg-gradient-to-br from-sky-500 to-indigo-600 shadow-sm shadow-indigo-500/20 ring-1 ring-slate-900/5 dark:ring-white/15 flex-shrink-0 inline-flex items-center justify-center">
-            <img src="{{ asset('android-chrome-192x192.png') }}" alt="Hồ Thành Thiện Logo" class="w-full h-full object-cover scale-[1.12]">
-          </span>
-          <span data-i18n="brand_name">{{ app()->getLocale() === 'vi' ? 'Hồ Thành Thiện' : 'Ho Thanh Thien' }}</span>
-        </div>
-        <p class="text-xs font-mono text-slate-500 dark:text-slate-400" data-i18n="footer_subtitle">
-          Full-Stack Web Systems &amp; Applied RAG AI Engineer • Ho Chi Minh City, Vietnam
-        </p>
-      </div>
-
-      <!-- Contact Details Safely Placed in Footer -->
-      <div class="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-600 dark:text-slate-300">
-        <a href="mailto:hothanhthien119@gmail.com" class="inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
-          <i data-lucide="mail" class="w-3.5 h-3.5 text-sky-500"></i>
-          <span>hothanhthien119@gmail.com</span>
-        </a>
-        <a href="tel:+84375227764" class="inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
-          <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-500"></i>
-          <span>+84 375 227 764</span>
-        </a>
-        <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
-          <i data-lucide="github" class="w-3.5 h-3.5"></i>
-          <span>GitHub</span>
-        </a>
-      </div>
-    </div>
-  </footer>
-
+@section('floating_widgets')
   <!-- =========================================================================
        SECTION 6: FLOATING RAG AI COPILOT ("ASK THIEN'S RAG AI")
   ========================================================================= -->
@@ -1247,7 +1030,7 @@
 
       <!-- Input Box -->
       <form onsubmit="handleCopilotSubmit(event)" class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-2">
-        <input id="copilotInput" type="text" placeholder="Ask about GPA, RAG AI, Enmasys..." class="flex-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500">
+        <input id="copilotInput" type="text" data-i18n-placeholder="copilot_placeholder" placeholder="Ask about GPA, RAG AI, Enmasys..." class="flex-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500">
         <button id="copilotSendBtn" type="submit" class="p-2 rounded-xl bg-sky-500 text-white hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
         </button>
@@ -1265,69 +1048,18 @@
     </button>
 
   </div>
+@endsection
 
-  <!-- =========================================================================
-       COMPLETE VANILLA JAVASCRIPT ENGINE
-  ========================================================================= -->
+@section('scripts')
   <script>
-    // 1. STATE MANAGEMENT
-    let currentLang = "{{ app()->getLocale() === 'vi' ? 'vi' : 'en' }}";
     let currentSkillCategory = 0;
     let currentSkillMode = 'grid'; // 'grid' | 'orbit'
     let activeOrbitSkillIndex = 0;
     let typewriterTimer = null;
 
-    // 2. MOUSE-TRACKING SPOTLIGHT GLOW ON ALL .spotlight-card ELEMENTS
-    document.addEventListener('mousemove', (e) => {
-      document.querySelectorAll('.spotlight-card').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-      });
-    });
-
-    // 3. WHITE BG / DARK BG THEME TOGGLE
-    function toggleTheme() {
-      const htmlEl = document.documentElement;
-      const isDark = htmlEl.classList.toggle('dark');
-      localStorage.setItem('thien_theme', isDark ? 'dark' : 'light');
-      updateThemeUI(isDark);
-    }
-
-    function updateThemeUI(isDark) {
-      document.getElementById('themeIconDark').classList.toggle('hidden', isDark);
-      document.getElementById('themeIconLight').classList.toggle('hidden', !isDark);
-      document.getElementById('themeToggleLabel').textContent = isDark
-        ? (currentLang === 'vi' ? 'Nền Trắng' : 'White BG')
-        : (currentLang === 'vi' ? 'Nền Tối' : 'Dark BG');
-    }
-
-    if (localStorage.getItem('thien_theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
-
-    function toggleMobileMenu() {
-      const panel = document.getElementById('mobileMenuPanel');
-      if (panel) panel.classList.toggle('hidden');
-    }
-
-    function closeMobileMenu() {
-      const panel = document.getElementById('mobileMenuPanel');
-      if (panel) panel.classList.add('hidden');
-    }
-
-    // 4. COMPLETE EN / VI TRANSLATION DICTIONARY (100% SYNCHRONIZED)
-    const I18N = {
+    window.PAGE_I18N = {
       en: {
-        brand_name: 'Ho Thanh Thien',
-        nav_projects: 'Selected Work',
-        nav_skills: 'Tech Stack',
-        nav_credentials: 'Credentials',
-        nav_blog: 'Engineering Blog',
         nav_all_projects: 'Archive',
-        nav_hire: 'Hire Me',
         hero_badge: 'Available for Full-Stack & AI Engineer Roles • Ho Chi Minh City',
         hero_title_1: 'Building scalable',
         hero_title_highlight: 'Web Systems & RAG AI',
@@ -1398,20 +1130,14 @@
         post2_desc: 'A comprehensive guide to creating scalable, production-ready REST APIs using Java Spring Boot and JWT security.',
         post3_title: 'Mastering React Hooks & State Management',
         post3_desc: 'Learn how to utilize React Hooks effectively for scalable state management and functional components.',
-        footer_subtitle: 'Full-Stack Web Systems & Applied RAG AI Engineer • Ho Chi Minh City, Vietnam',
         copilot_title: "Thien's RAG AI Copilot",
         copilot_sub: 'Live Hybrid Vector + LLM Assistant',
         copilot_welcome: "Hi recruiter! Ask any question or click a prompt below — I retrieve live Portfolio DB records via Hybrid Vector/BM25 and answer via real LLM with citations.",
+        copilot_placeholder: 'Ask about GPA, RAG AI, Enmasys...',
         copilot_btn: "Ask Thien's RAG AI"
       },
       vi: {
-        brand_name: 'Hồ Thành Thiện',
-        nav_projects: 'Dự án Nổi bật',
-        nav_skills: 'Kỹ năng',
-        nav_credentials: 'Bằng cấp & PDF',
-        nav_blog: 'Blog Kỹ thuật',
         nav_all_projects: 'Kho Dự án',
-        nav_hire: 'Liên hệ ngay',
         hero_badge: 'Sẵn sàng cho vị trí Kỹ sư Full-Stack & AI • TP. Hồ Chí Minh',
         hero_title_1: 'Xây dựng Hệ thống Web',
         hero_title_highlight: '& RAG AI thực chiến',
@@ -1482,10 +1208,10 @@
         post2_desc: 'Cẩm nang xây dựng REST API chuẩn production, phân quyền RBAC và xác thực Stateless JWT với Spring Boot.',
         post3_title: 'Làm chủ React Hooks & Quản lý Trạng thái Hệ thống',
         post3_desc: 'Áp dụng Custom Hooks, Context và mô hình component hàm tối ưu hiệu năng cho ứng dụng React/Next.js.',
-        footer_subtitle: 'Kỹ sư Hệ thống Web Full-Stack & Ứng dụng RAG AI • TP. Hồ Chí Minh, Việt Nam',
         copilot_title: 'Trợ lý RAG AI của Thiện',
         copilot_sub: 'Truy xuất Hybrid Vector + LLM thật từ DB',
         copilot_welcome: 'Chào nhà tuyển dụng! Hãy hỏi bất kỳ câu nào hoặc bấm gợi ý bên dưới — tôi truy xuất trực tiếp từ cơ sở dữ liệu Portfolio (Hybrid Vector/BM25) và trả lời qua LLM thật kèm trích dẫn nguồn.',
+        copilot_placeholder: 'Hỏi về GPA UTH, RAG AI, Enmasys...',
         copilot_btn: 'Hỏi Trợ lý RAG AI'
       }
     };
@@ -1871,52 +1597,14 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       if (window.lucide) lucide.createIcons();
     }
 
-    // 8. COMPLETE 100% LANGUAGE SWITCHER (EN | VI)
-    function setLanguage(lang, fromUserClick = false) {
-      currentLang = lang;
-      localStorage.setItem('thien_lang', lang);
-
-      if (fromUserClick && (document.documentElement.lang || 'en') !== lang) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('lang', lang);
-        window.location.assign(url.toString());
-        return;
-      }
-
-      // Update active button state
-      const btnEn = document.getElementById('btnLangEn');
-      const btnVi = document.getElementById('btnLangVi');
-      btnEn.className = lang === 'en'
-        ? 'px-2.5 py-1 rounded-lg font-bold bg-white dark:bg-slate-700 text-sky-600 dark:text-sky-300 shadow-sm'
-        : 'px-2.5 py-1 rounded-lg font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white';
-      btnVi.className = lang === 'vi'
-        ? 'px-2.5 py-1 rounded-lg font-bold bg-white dark:bg-slate-700 text-sky-600 dark:text-sky-300 shadow-sm'
-        : 'px-2.5 py-1 rounded-lg font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white';
-
-      // Translate every [data-i18n] element synchronously
-      const dict = I18N[lang];
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dict[key]) {
-          el.textContent = dict[key];
-        }
-      });
-
-      // Update input placeholders & dynamic UI states
-      document.getElementById('copilotInput').placeholder = lang === 'vi'
-        ? 'Hỏi về GPA UTH, RAG AI, Enmasys...'
-        : 'Ask about GPA, RAG AI, Enmasys...';
-
-      updateThemeUI(document.documentElement.classList.contains('dark'));
+    // 8. PAGE LANGUAGE CHANGE HOOK (CALLED BY LAYOUT ENGINE)
+    window.onPearlLangChange = function () {
       updateOrbitSpinLabel();
       renderSkillTabs();
       renderActiveSkillView();
       renderCopilotPrompts();
       runTerminalCmd(activeCliKey);
-
-      // Sync Laravel backend locale quietly without full page flicker if running on Laravel
-      try { fetch(`/lang/${lang}`, { method: 'GET', credentials: 'same-origin' }); } catch (e) {}
-    }
+    };
 
     // 9. REAL LIVE RAG AI COPILOT ENGINE (CONNECTED TO /api/v1/copilot/ask + ACTIVE LLM)
     const COPILOT_QUICK_PROMPTS = [
@@ -2114,8 +1802,6 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
     // 10. INITIAL BOOTSTRAP
     document.addEventListener('DOMContentLoaded', () => {
       switchSkillMode('grid', false);
-      setLanguage(currentLang, false);
-      if (window.lucide) lucide.createIcons();
 
       const orbitBox = document.getElementById('orbitStageBox');
       if (orbitBox && typeof ResizeObserver !== 'undefined') {
@@ -2136,5 +1822,4 @@ THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
       }
     });
   </script>
-</body>
-</html>
+@endsection

@@ -54,6 +54,7 @@ class ProjectController extends Controller
         $skillIds = $request->input('skills', $request->input('technologies', []));
         if (!empty($skillIds)) {
             $project->skills()->sync($skillIds);
+            \App\Support\PortfolioCache::forgetAll();
         }
 
         if ($request->wantsJson() || $request->ajax()) {
@@ -119,6 +120,7 @@ class ProjectController extends Controller
 
         $skillIds = $request->input('skills', $request->input('technologies', []));
         $project->skills()->sync($skillIds);
+        \App\Support\PortfolioCache::forgetAll();
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([

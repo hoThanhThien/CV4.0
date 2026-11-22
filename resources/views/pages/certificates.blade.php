@@ -23,11 +23,12 @@
     $isVi = app()->getLocale() === 'vi';
     $activeCategory = request('category', 'all');
 
-    $totalCount = \App\Models\Certificate::count();
-    $brochureCount = \App\Models\Certificate::where('category', 'brochure')->count();
-    $degreeCount = \App\Models\Certificate::where('category', 'degree')->count();
-    $awardCount = \App\Models\Certificate::where('category', 'award')->count();
-    $certCount = \App\Models\Certificate::where('category', 'certificate')->count();
+    $counts = $categoryCounts ?? \App\Support\PortfolioCache::certificateCategoryCounts();
+    $totalCount = $counts['all'] ?? 0;
+    $brochureCount = $counts['brochure'] ?? 0;
+    $degreeCount = $counts['degree'] ?? 0;
+    $awardCount = $counts['award'] ?? 0;
+    $certCount = $counts['certificate'] ?? 0;
 
     $catFilters = [
         ['key' => 'all', 'icon' => 'layers', 'count' => $totalCount, 'en' => 'All Documents', 'vi' => 'Tất cả Tài liệu', 'url' => route('certificates')],

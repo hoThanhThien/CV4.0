@@ -277,8 +277,9 @@ class BilingualContentTest extends TestCase
         $this->get('/projects/' . $translatedProject->id . '?lang=vi')
             ->assertStatus(200)
             ->assertSee('Nen tang Cong ket noi Mesh VI')
-            ->assertSee('Kien truc su Truong VI')
+            ->assertSee('Kiến trúc sư Hệ thống VI')
             ->assertSee('Tom tat kien truc bang tieng Viet chi tiet.')
+            ->assertSee('Toi uu hoa tim kiem vector hybrid.')
             ->assertDontSee('Mesh Gateway Platform EN');
 
         $this->get('/projects/' . $fallbackProject->id . '?lang=vi')

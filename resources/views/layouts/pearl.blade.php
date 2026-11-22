@@ -1,6 +1,8 @@
 @php
     $isVi = app()->getLocale() === 'vi';
     $activeNav = trim($__env->yieldContent('active_nav', ''));
+    $navMode = trim($__env->yieldContent('nav_mode', 'subpage'));
+    $isHomeNav = $navMode === 'home';
     $defaultDesc = $isVi
         ? 'Portfolio Kỹ sư Phần mềm Hồ Thành Thiện — Chuyên sâu Web Systems (Laravel, Spring Boot, Odoo ERP) và Applied RAG AI.'
         : 'Software Engineer Portfolio of Ho Thanh Thien — Full-Stack Web Systems (Laravel, Spring Boot, Odoo ERP) & Applied RAG AI.';
@@ -58,6 +60,8 @@
           },
           animation: {
             'blob': 'blob 10s infinite alternate',
+            'float': 'floatSlow 4.5s ease-in-out infinite',
+            'spin-slow': 'spin 75s linear infinite',
           },
           keyframes: {
             blob: {
@@ -65,6 +69,10 @@
               '33%': { transform: 'translate(35px, -45px) scale(1.08)' },
               '66%': { transform: 'translate(-25px, 25px) scale(0.94)' },
               '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            },
+            floatSlow: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-10px) rotate(2deg)' },
             }
           }
         }
@@ -167,23 +175,43 @@
       </a>
 
       <!-- Center Nav Links -->
-      <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-        <a href="{{ route('about') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'about' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_about">
-          {{ $isVi ? 'Giới thiệu' : 'About' }}
-        </a>
-        <a href="{{ route('projects.index') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'projects' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_all_projects">
-          {{ $isVi ? 'Kho Dự án' : 'Projects' }}
-        </a>
-        <a href="{{ route('certificates') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'credentials' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_credentials">
-          {{ $isVi ? 'Bằng cấp & PDF' : 'Credentials' }}
-        </a>
-        <a href="{{ route('blog.index') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'blog' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_blog">
-          {{ $isVi ? 'Blog Kỹ thuật' : 'Engineering Blog' }}
-        </a>
-        <a href="{{ route('home') }}#skills" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_skills">
-          {{ $isVi ? 'Kỹ năng' : 'Tech Stack' }}
-        </a>
-      </nav>
+      @if($isHomeNav)
+        <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="#projects" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_projects">
+            {{ $isVi ? 'Dự án Nổi bật' : 'Selected Work' }}
+          </a>
+          <a href="#skills" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_skills">
+            {{ $isVi ? 'Kỹ năng' : 'Tech Stack' }}
+          </a>
+          <a href="#credentials" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_credentials">
+            {{ $isVi ? 'Bằng cấp & PDF' : 'Credentials' }}
+          </a>
+          <a href="#blog" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_blog">
+            {{ $isVi ? 'Blog Kỹ thuật' : 'Engineering Blog' }}
+          </a>
+          <a href="{{ route('projects.index') }}" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_all_projects">
+            {{ $isVi ? 'Kho Dự án' : 'Archive' }}
+          </a>
+        </nav>
+      @else
+        <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="{{ route('about') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'about' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_about">
+            {{ $isVi ? 'Giới thiệu' : 'About' }}
+          </a>
+          <a href="{{ route('projects.index') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'projects' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_all_projects">
+            {{ $isVi ? 'Kho Dự án' : 'Projects' }}
+          </a>
+          <a href="{{ route('certificates') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'credentials' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_credentials">
+            {{ $isVi ? 'Bằng cấp & PDF' : 'Credentials' }}
+          </a>
+          <a href="{{ route('blog.index') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'blog' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_blog">
+            {{ $isVi ? 'Blog Kỹ thuật' : 'Engineering Blog' }}
+          </a>
+          <a href="{{ route('home') }}#skills" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_skills">
+            {{ $isVi ? 'Kỹ năng' : 'Tech Stack' }}
+          </a>
+        </nav>
+      @endif
 
       <!-- Right Controls: Language Switcher + Dark Mode Toggle + Contact CTA -->
       <div class="flex items-center gap-2">
@@ -198,7 +226,7 @@
           <span id="themeToggleLabel" class="hidden sm:inline">Dark BG</span>
         </button>
 
-        <a href="{{ route('contact') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-sky-600 transition-all shadow-sm" data-i18n="nav_hire">
+        <a href="{{ route('contact') }}" @if($activeNav === 'contact') aria-current="page" @endif class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl {{ $activeNav === 'contact' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20 hover:bg-sky-600' : 'bg-slate-900 dark:bg-sky-500 text-white hover:bg-slate-800 dark:hover:bg-sky-600 shadow-sm' }} text-xs font-semibold transition-all" data-i18n="nav_hire">
           {{ $isVi ? 'Liên hệ ngay' : 'Hire Me' }}
         </a>
 
@@ -211,16 +239,24 @@
 
     <!-- Mobile Dropdown Navigation -->
     <div id="mobileMenuPanel" class="hidden md:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-3 space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
-      <a href="{{ route('about') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'about' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_about">About</a>
-      <a href="{{ route('projects.index') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'projects' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_all_projects">Projects</a>
-      <a href="{{ route('certificates') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'credentials' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_credentials">Credentials</a>
-      <a href="{{ route('blog.index') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'blog' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_blog">Engineering Blog</a>
-      <a href="{{ route('home') }}#skills" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_skills">Tech Stack</a>
-      <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-xl bg-slate-900 dark:bg-sky-500 text-white text-center font-semibold mt-2" data-i18n="nav_hire">Hire Me</a>
+      @if($isHomeNav)
+        <a href="#projects" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_projects">Selected Work</a>
+        <a href="#skills" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_skills">Tech Stack</a>
+        <a href="#credentials" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_credentials">Credentials</a>
+        <a href="#blog" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_blog">Engineering Blog</a>
+        <a href="{{ route('projects.index') }}" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_all_projects">Archive</a>
+      @else
+        <a href="{{ route('about') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'about' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_about">About</a>
+        <a href="{{ route('projects.index') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'projects' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_all_projects">Projects</a>
+        <a href="{{ route('certificates') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'credentials' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_credentials">Credentials</a>
+        <a href="{{ route('blog.index') }}" class="block px-3 py-2 rounded-xl {{ $activeNav === 'blog' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800' }}" data-i18n="nav_blog">Engineering Blog</a>
+        <a href="{{ route('home') }}#skills" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_skills">Tech Stack</a>
+      @endif
+      <a href="{{ route('contact') }}" @if($activeNav === 'contact') aria-current="page" @endif class="block px-3 py-2 rounded-xl {{ $activeNav === 'contact' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400' : 'bg-slate-900 dark:bg-sky-500 text-white' }} text-center font-semibold mt-2" data-i18n="nav_hire">Hire Me</a>
     </div>
   </header>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">
+  <main class="@yield('main_class', 'flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10')">
     @yield('content')
   </main>
 
@@ -257,6 +293,8 @@
       </div>
     </div>
   </footer>
+
+  @yield('floating_widgets')
 
   <!-- =========================================================================
        SHARED VANILLA JS ENGINE (SPOTLIGHT GLOW, THEME TOGGLE, EN/VI I18N)
@@ -297,6 +335,11 @@
     function toggleMobileMenu() {
       const panel = document.getElementById('mobileMenuPanel');
       if (panel) panel.classList.toggle('hidden');
+    }
+
+    function closeMobileMenu() {
+      const panel = document.getElementById('mobileMenuPanel');
+      if (panel) panel.classList.add('hidden');
     }
 
     // 4. Synchronized Base EN / VI Dictionary (Merged with page-specific PAGE_I18N)
@@ -394,13 +437,15 @@
         try { fetch(`/lang/${lang}`, { method: 'GET', credentials: 'same-origin' }); } catch (e) {}
       }
     }
+  </script>
 
+  @yield('scripts')
+
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
       setLanguage(currentLang, false);
       if (window.lucide) lucide.createIcons();
     });
   </script>
-
-  @yield('scripts')
 </body>
 </html>
