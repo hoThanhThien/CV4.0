@@ -9,7 +9,46 @@ use Illuminate\Database\Eloquent\Model;
 class Certificate extends Model
 {
     use HasFactory;
-    use HasBilingualTranslations;
+    use HasBilingualTranslations {
+        localized as protected traitLocalized;
+    }
+
+    /**
+     * Legacy seeded Vietnamese defaults mapped to English when explicit EN translations are not yet persisted.
+     */
+    private const DEFAULT_EN_FALLBACKS = [
+        'title' => [
+            'Brochure & Hồ sơ Năng lực Cá nhân (Portfolio Brochure)' => 'Portfolio & Competency Brochure (CV PDF)',
+            'Bằng Cử nhân Công nghệ Thông tin' => 'B.Eng in Information Technology',
+            'Giải Nhì Cuộc thi Sáng tác Logo & Nhận diện Khoa/Viện CNTT' => '2nd Prize — IT Faculty Logo & Visual Identity Contest',
+        ],
+        'issuer' => [
+            'Hồ Thành Thiện' => 'Ho Thanh Thien',
+            'Trường ĐH Giao thông Vận tải TP.HCM (UTH)' => 'University of Transport Ho Chi Minh City (UTH)',
+            'Khoa/Viện Công nghệ Thông tin - UTH' => 'Faculty of Information Technology — UTH',
+        ],
+        'description' => [
+            'Bản Brochure tổng hợp toàn diện hồ sơ năng lực cá nhân, kinh nghiệm làm việc thực chiến, các dự án tiêu biểu và kỹ năng chuyên sâu của Kỹ sư Hồ Thành Thiện.' => 'Comprehensive portfolio brochure summarizing engineering competencies, practical work experience, flagship projects, and technical stack of Software Engineer Ho Thanh Thien.',
+            'Tốt nghiệp Cử nhân chuyên ngành Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải TP.HCM (UTH) với xếp loại Tốt nghiệp Xuất sắc (GPA kỳ gần nhất 4.0/4.0).' => 'Bachelor of Engineering in Information Technology graduate at University of Transport Ho Chi Minh City (UTH) with Distinction honors (latest semester GPA 4.0/4.0).',
+            'Đạt Giải Nhì trong cuộc thi thiết kế sáng tạo biểu trưng chính thức cho Khoa/Viện Công nghệ Thông tin - Trường ĐH Giao thông Vận tải TP.HCM (UTH).' => 'Awarded 2nd Prize in the official logo and visual identity design contest for the Faculty of Information Technology, University of Transport Ho Chi Minh City (UTH).',
+        ],
+    ];
+
+    public function localized(string $field, ?string $locale = null): mixed
+    {
+        $targetLocale = $locale ?: app()->getLocale();
+        $translated = $this->translationValue($field, $targetLocale);
+        if ($translated !== null) {
+            return $translated;
+        }
+
+        $base = $this->traitLocalized($field, $locale);
+        if ($targetLocale === 'en' && is_string($base) && isset(self::DEFAULT_EN_FALLBACKS[$field][$base])) {
+            return self::DEFAULT_EN_FALLBACKS[$field][$base];
+        }
+
+        return $base;
+    }
 
     protected $fillable = [
         'title',

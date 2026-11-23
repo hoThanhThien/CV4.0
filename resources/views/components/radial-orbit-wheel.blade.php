@@ -85,23 +85,28 @@
       pointer-events: auto;
       cursor: pointer;
       z-index: 20;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
-    #radialOrbitSection .orbit-node:hover {
+    @media (hover: hover) and (pointer: fine) {
+      #radialOrbitSection:not(.is-touch-input) .orbit-node:hover {
+        z-index: 40;
+      }
+    }
+    #radialOrbitSection .orbit-node.is-flipped {
       z-index: 40;
     }
 
     #radialOrbitSection .radial-node-upright {
       transform-origin: center center;
       perspective: 1000px;
+      -webkit-perspective: 1000px;
       animation: radialNodeCounterRevolve 32s linear infinite;
     }
 
     #radialOrbitStage.is-hover-paused .radial-spinning-ring,
     #radialOrbitStage.is-hover-paused .radial-node-upright,
-    #radialOrbitStage.is-hover-paused .animate-orbit-ring,
-    #radialOrbitStage:has(.orbit-node:hover) .radial-spinning-ring,
-    #radialOrbitStage:has(.orbit-node:hover) .radial-node-upright,
-    #radialOrbitStage:has(.orbit-node:hover) .animate-orbit-ring {
+    #radialOrbitStage.is-hover-paused .animate-orbit-ring {
       animation-play-state: paused;
     }
 
@@ -113,10 +118,17 @@
       text-align: center;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
       transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
       border-radius: 12px;
+      will-change: transform;
     }
 
-    #radialOrbitSection .orbit-node:hover .flip-card-inner,
+    @media (hover: hover) and (pointer: fine) {
+      #radialOrbitSection:not(.is-touch-input) .orbit-node:hover .flip-card-inner {
+        transform: rotateY(180deg) scale(1.08);
+        box-shadow: 0 12px 24px -4px rgba(14, 165, 233, 0.28);
+      }
+    }
     #radialOrbitSection .orbit-node.is-flipped .flip-card-inner {
       transform: rotateY(180deg) scale(1.08);
       box-shadow: 0 12px 24px -4px rgba(14, 165, 233, 0.28);
@@ -141,6 +153,9 @@
       box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
       padding: 0 6px;
       gap: 5px;
+      transform: rotateY(0deg) translateZ(1px);
+      -webkit-transform: rotateY(0deg) translateZ(1px);
+      z-index: 2;
     }
     html.dark #radialOrbitSection .flip-card-front {
       background: #1e293b;
@@ -152,11 +167,13 @@
     #radialOrbitSection .flip-card-back {
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #ffffff;
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) translateZ(1px);
+      -webkit-transform: rotateY(180deg) translateZ(1px);
       padding: 0 6px;
       flex-direction: column;
       box-shadow: 0 8px 20px -2px rgba(2, 132, 199, 0.35);
       border: 1px solid rgba(125, 211, 252, 0.5);
+      z-index: 1;
     }
 
     /* Vòng tròn quỹ đạo đứt nét xoay chậm liên tục */

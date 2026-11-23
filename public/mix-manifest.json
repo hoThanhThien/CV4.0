@@ -3,5 +3,7 @@
     "/js/welcome-pearl.js": "/js/welcome-pearl.js",
     "/js/radial-orbit-wheel.js": "/js/radial-orbit-wheel.js",
     "/js/brand-svgs.js": "/js/brand-svgs.js",
+    "/js/welcome-i18n.js": "/js/welcome-i18n.js",
+    "/js/welcome-skills.js": "/js/welcome-skills.js",
     "/css/pearl.css": "/css/pearl.css"
 }

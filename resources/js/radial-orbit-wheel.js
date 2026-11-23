@@ -212,13 +212,19 @@ function initRadialOrbitWheel() {
           proofDetail.textContent = `${item.proof} — ${item.desc}`;
         };
 
-        node.addEventListener('mouseenter', () => {
+        node.addEventListener('pointerenter', (e) => {
+          if (e.pointerType === 'touch') return;
           if (radialOrbitStage) radialOrbitStage.classList.add('is-hover-paused');
           updateProof();
         });
-        node.addEventListener('mouseleave', () => {
+        node.addEventListener('pointerleave', (e) => {
+          if (e.pointerType === 'touch') return;
           if (radialOrbitStage) radialOrbitStage.classList.remove('is-hover-paused');
         });
+        node.addEventListener('pointerdown', (e) => {
+          const root = document.getElementById('radialOrbitSection');
+          if (root) root.classList.toggle('is-touch-input', e.pointerType === 'touch' || e.pointerType === 'pen');
+        }, { passive: true });
         node.addEventListener('click', () => {
           node.classList.toggle('is-flipped');
           updateProof();
@@ -258,11 +264,34 @@ function initRadialOrbitWheel() {
 }
 
 function scheduleRadialInit() {
-  const run = () => setTimeout(initRadialOrbitWheel, 0);
-  if (window.requestAnimationFrame) {
-    requestAnimationFrame(run);
+  let started = false;
+  const run = () => {
+    if (started) return;
+    started = true;
+    initRadialOrbitWheel();
+  };
+
+  const section = document.getElementById('radialOrbitSection');
+  if (!section) return;
+
+  if (typeof IntersectionObserver !== 'undefined') {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        io.disconnect();
+        run();
+      }
+    }, { rootMargin: '120px 0px' });
+    io.observe(section);
+  }
+
+  ['pointerdown', 'touchstart', 'focusin'].forEach((evt) => {
+    section.addEventListener(evt, run, { once: true, passive: true });
+  });
+
+  if (document.readyState === 'complete') {
+    setTimeout(run, 3800);
   } else {
-    run();
+    window.addEventListener('load', () => setTimeout(run, 3800), { once: true });
   }
 }
 

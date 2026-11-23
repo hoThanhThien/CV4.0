@@ -33,6 +33,13 @@ class CertificateSeeder extends Seeder
             'thumbnail' => null,
             'featured' => true,
             'order' => 0,
+            'translations' => [
+                'en' => [
+                    'title' => 'Portfolio & Competency Brochure (CV PDF)',
+                    'issuer' => 'Ho Thanh Thien',
+                    'description' => 'Comprehensive portfolio brochure summarizing engineering competencies, practical work experience, flagship projects, and technical stack of Software Engineer Ho Thanh Thien.',
+                ],
+            ],
         ]);
 
         Certificate::create([
@@ -47,6 +54,13 @@ class CertificateSeeder extends Seeder
             'thumbnail' => null,
             'featured' => true,
             'order' => 1,
+            'translations' => [
+                'en' => [
+                    'title' => 'B.Eng in Information Technology',
+                    'issuer' => 'University of Transport Ho Chi Minh City (UTH)',
+                    'description' => 'Bachelor of Engineering in Information Technology graduate at University of Transport Ho Chi Minh City (UTH) with Distinction honors (latest semester GPA 4.0/4.0).',
+                ],
+            ],
         ]);
 
         Certificate::create([
@@ -61,6 +75,13 @@ class CertificateSeeder extends Seeder
             'thumbnail' => null,
             'featured' => true,
             'order' => 2,
+            'translations' => [
+                'en' => [
+                    'title' => '2nd Prize — IT Faculty Logo & Visual Identity Contest',
+                    'issuer' => 'Faculty of Information Technology — UTH',
+                    'description' => 'Awarded 2nd Prize in the official logo and visual identity design contest for the Faculty of Information Technology, University of Transport Ho Chi Minh City (UTH).',
+                ],
+            ],
         ]);
     }
 }

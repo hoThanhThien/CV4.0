@@ -455,7 +455,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title' => 'TourRist',
                 'description' => "TourRist | 01/2026 - 06/2026\nFullstack Developer\n+Project Description: Developed a document-based RAG chatbot that combines semantic retrieval with LLM generation to provide context-aware answers from a private knowledge base.\n+Implemented the document ingestion pipeline, including document loading, text preprocessing, chunking, and converting documents into embeddings for knowledge indexing.\n+Built the retrieval pipeline to perform semantic search and identify relevant document chunks based on the user's query.\n+Designed the RAG generation workflow to combine retrieved context with user queries and construct prompts for the LLM, reducing reliance on the model's internal knowledge.\n+Developed REST API endpoints for document ingestion, knowledge retrieval, and chatbot interactions.\n+Handled conversation context and response processing to provide relevant answers based on retrieved information.\n+Tech: Python, RAG, LLM, Embedding, Vector Search, REST API",
-                'github_url' => 'https://github.com/hoThanhThien/TourRist',
+                'github_url' => 'https://github.com/hoThanhThien/RAG',
                 'demo_url' => null,
                 'featured' => true,
                 'order' => 2,

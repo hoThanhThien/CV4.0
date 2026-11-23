@@ -61,21 +61,21 @@
     </nav>
 
     <!-- Meta Pills -->
-    <div class="flex flex-wrap items-center gap-2.5 font-mono text-xs">
+    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2.5 font-mono text-xs">
       @if($project->period)
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold">
+        <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold">
           <i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-700 dark:text-sky-400"></i>
           <span>{{ $project->period }}</span>
         </span>
       @endif
       @if($project->role)
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200/80 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-semibold">
+        <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200/80 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-300 font-semibold">
           <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
           <span>{{ $project->role }}</span>
         </span>
       @endif
       @if($project->featured)
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold">
+        <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span data-i18n="badge_featured">{{ $isVi ? 'Dự án Nổi bật' : 'Featured System' }}</span>
         </span>

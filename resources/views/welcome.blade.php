@@ -9,159 +9,6 @@
 @section('description', $isVi ? 'Portfolio chính thức của Kỹ sư Phần mềm Hồ Thành Thiện (UTH - Loại Xuất sắc, GPA 4.0/4.0). Chuyên sâu Java Spring Boot, Laravel, Odoo ERP và RAG AI.' : 'Official portfolio of Software Engineer Ho Thanh Thien (B.Eng IT Distinction @ UTH, 4.0/4.0 GPA). Specialized in Java Spring Boot, Laravel, Odoo ERP & Applied RAG AI.')
 
 @section('styles')
-  :root {
-    --radius: 184px;
-    --orbit-scale: 1;
-  }
-
-  .orbit-canvas-viewport {
-    position: relative;
-    width: 100%;
-    height: calc(468px * var(--orbit-scale, 1));
-  }
-  .orbit-canvas {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 486px;
-    height: 468px;
-    --radius: 184px;
-    transform: translate(-50%, -50%) scale(var(--orbit-scale, 1));
-    transform-origin: center center;
-  }
-
-  /* SKILL ANIMATION MODE 1: 3D VORTEX SPIN GRID & 180 FLIP CARD */
-  @keyframes skillVortexSpinIn {
-    0% {
-      opacity: 0;
-      transform: rotateY(-180deg) rotateX(40deg) scale(0.28);
-    }
-    100% {
-      opacity: 1;
-      transform: rotateY(0deg) rotateX(0deg) scale(1);
-    }
-  }
-
-  @keyframes iconSpin360 {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  .skill-grid-item {
-    perspective: 1100px;
-    height: 152px;
-    transition: transform 0.25s ease, opacity 0.22s ease;
-  }
-  .skill-grid-item.is-animating {
-    opacity: 0;
-    animation: skillVortexSpinIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    animation-delay: calc(var(--index, 0) * 55ms);
-  }
-  .skill-grid-item.is-exiting {
-    opacity: 0 !important;
-    transform: rotateY(90deg) scale(0.65) !important;
-    animation: none !important;
-  }
-  .skill-grid-item.is-animating .spin-icon-target {
-    animation: iconSpin360 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    animation-delay: calc(var(--index, 0) * 55ms);
-  }
-
-  .grid-flip-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
-    cursor: pointer;
-  }
-  .skill-grid-item:hover .grid-flip-inner,
-  .skill-grid-item.is-flipped .grid-flip-inner {
-    transform: rotateY(180deg);
-  }
-  .grid-flip-front, .grid-flip-back {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    border-radius: 1rem;
-  }
-  .grid-flip-back {
-    transform: rotateY(180deg);
-  }
-
-  /* SKILL ANIMATION MODE 2: 3D ORBIT WHEEL */
-  @keyframes orbitNodeEmerge {
-    0% {
-      opacity: 0;
-      transform: translate(-50%, -50%) rotate(calc(var(--angle) - 160deg)) translateY(0px) scale(0.2);
-    }
-    100% {
-      opacity: 1;
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--radius))) rotate(calc(-1 * var(--angle))) scale(1);
-    }
-  }
-  @keyframes orbitStageRevolve {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  @keyframes orbitNodeCounterRevolve {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(-360deg); }
-  }
-
-  .orbit-spinning-ring {
-    transform-origin: 50% 50%;
-    animation: orbitStageRevolve 32s linear infinite;
-  }
-  .orbit-node {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    opacity: 0;
-    animation: orbitNodeEmerge 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    user-select: none;
-    cursor: pointer;
-    pointer-events: auto;
-    z-index: 20;
-  }
-  .orbit-node-upright {
-    transform-origin: center center;
-    animation: orbitNodeCounterRevolve 32s linear infinite;
-  }
-  .orbit-ring-counter {
-    transform-origin: center center;
-    animation: orbitNodeCounterRevolve 48s linear infinite;
-  }
-  #orbitStageBox.is-hover-paused .orbit-spinning-ring,
-  #orbitStageBox.is-hover-paused .orbit-node-upright,
-  #orbitStageBox.is-hover-paused .animate-spin-slow,
-  #orbitStageBox.is-hover-paused .orbit-ring-counter,
-  #orbitStageBox.is-manual-paused .orbit-spinning-ring,
-  #orbitStageBox.is-manual-paused .orbit-node-upright,
-  #orbitStageBox.is-manual-paused .animate-spin-slow,
-  #orbitStageBox.is-manual-paused .orbit-ring-counter,
-  #orbitStageBox:has(.orbit-node:hover) .orbit-spinning-ring,
-  #orbitStageBox:has(.orbit-node:hover) .orbit-node-upright,
-  #orbitStageBox:has(.orbit-node:hover) .animate-spin-slow,
-  #orbitStageBox:has(.orbit-node:hover) .orbit-ring-counter {
-    animation-play-state: paused;
-  }
-  .orbit-node-pill {
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .orbit-node:hover .orbit-node-pill,
-  .orbit-node.is-active .orbit-node-pill {
-    border-color: #0ea5e9;
-    box-shadow: 0 10px 25px -4px rgba(14, 165, 233, 0.28), 0 0 0 2px rgba(14, 165, 233, 0.22);
-    transform: scale(1.08);
-  }
-  .orbit-node:hover,
-  .orbit-node.is-active {
-    z-index: 40;
-  }
-
-  /* Terminal Typewriter Cursor */
   .cli-cursor {
     display: inline-block;
     width: 8px;
@@ -174,24 +21,19 @@
   @keyframes blinkCursor {
     50% { opacity: 0; }
   }
-
-  /* Spin replay icon spin */
-  .replay-spinning svg {
-    animation: spin 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
 @endsection
 
 @section('content')
 
-    <!-- =========================================================================
+    {{-- =========================================================================
          SECTION 1: HERO SECTION (SPLIT LAYOUT 7:5 — IMPRESSIVE IN 3 SECONDS)
-    ========================================================================= -->
+    ========================================================================= --}}
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
       
-      <!-- Cột Trái (7 cols) -->
+      {{-- Cột Trái (7 cols) --}}
       <div class="lg:col-span-7 min-w-0 space-y-6">
         
-        <!-- Status Availability Badge -->
+        {{-- Status Availability Badge --}}
         <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700/80 shadow-sm text-xs font-mono font-semibold text-slate-700 dark:text-slate-200">
           <span class="relative flex h-2.5 w-2.5">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -200,7 +42,7 @@
           <span data-i18n="hero_badge">Available for Full-Stack &amp; AI Engineer Roles • Ho Chi Minh City</span>
         </div>
 
-        <!-- Giant Gradient Headline -->
+        {{-- Giant Gradient Headline --}}
         <h1 class="font-display text-[1.95rem] sm:text-5xl lg:text-[3.45rem] font-extrabold tracking-tight leading-[1.1] text-slate-900 dark:text-white">
           <span data-i18n="hero_title_1">Building scalable</span>
           <span class="bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 dark:from-sky-400 dark:via-indigo-400 dark:to-emerald-400 bg-clip-text text-transparent" data-i18n="hero_title_highlight">
@@ -209,28 +51,28 @@
           <span data-i18n="hero_title_2">that solve real problems</span>
         </h1>
 
-        <!-- Concise Verified Bio -->
+        {{-- Concise Verified Bio --}}
         <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl" data-i18n="hero_desc">
           Honors B.Eng in Information Technology graduate at UTH with a 4.0/4.0 latest semester GPA. Hands-on experience architecting Java Spring Boot APIs, Laravel ecosystems, Odoo ERP workflows, and Python RAG/LLM chatbots.
         </p>
 
-        <!-- 3 Verified Experience & Award Chips -->
-        <div class="flex flex-wrap items-center gap-2.5 pt-1">
-          <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
+        {{-- 3 Verified Experience & Award Chips --}}
+        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1">
+          <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
             <i data-lucide="briefcase" class="w-3.5 h-3.5 text-sky-700 dark:text-sky-400"></i>
             <span data-i18n="chip_aipower">Full-Stack Dev @ AIPower</span>
           </span>
-          <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
+          <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
             <i data-lucide="layers" class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"></i>
             <span data-i18n="chip_enmasys">Odoo ERP @ Enmasys</span>
           </span>
-          <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
+          <span class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-200">
             <i data-lucide="award" class="w-3.5 h-3.5 text-amber-700 dark:text-amber-400"></i>
             <span data-i18n="chip_award">2nd Prize UTH IT Logo Design</span>
           </span>
         </div>
 
-        <!-- Đúng 2 nút CTA chính (Không chứa SĐT ở Hero) -->
+        {{-- Đúng 2 nút CTA chính (Không chứa SĐT ở Hero) --}}
         <div class="flex flex-wrap items-center gap-3.5 pt-2">
           <a href="#projects" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-900 dark:bg-sky-500 text-white font-semibold text-sm hover:bg-slate-800 dark:hover:bg-sky-600 shadow-lg shadow-slate-900/15 dark:shadow-sky-500/25 hover:-translate-y-0.5 transition-all">
             <span data-i18n="cta_explore">Explore Featured Work</span>
@@ -244,12 +86,12 @@
 
       </div>
 
-      <!-- Cột Phải (5 cols): Interactive CLI Terminal + 3 Mini Bento KPI Cards -->
+      {{-- Cột Phải (5 cols): Interactive CLI Terminal + 3 Mini Bento KPI Cards --}}
       <div class="lg:col-span-5 min-w-0 space-y-4">
         
-        <!-- 1. Interactive CLI Terminal (macOS Dark Slate #0f172a) -->
+        {{-- 1. Interactive CLI Terminal (macOS Dark Slate #0f172a) --}}
         <div class="rounded-2xl bg-[#0f172a] border border-slate-800 shadow-2xl shadow-slate-900/20 overflow-hidden">
-          <!-- macOS Titlebar -->
+          {{-- macOS Titlebar --}}
           <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between gap-2">
             <div class="flex items-center gap-1.5 flex-shrink-0">
               <span class="w-3 h-3 rounded-full bg-rose-500"></span>
@@ -260,7 +102,7 @@
             <span class="hidden sm:inline-block w-10"></span>
           </div>
 
-          <!-- 4 Interactive Command Triggers -->
+          {{-- 4 Interactive Command Triggers --}}
           <div class="px-4 py-2.5 bg-slate-900/50 border-b border-slate-800/80 flex flex-wrap gap-1.5">
             <button type="button" data-cli-key="whoami" onclick="runTerminalCmd('whoami')" class="cli-cmd-btn px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-400/40 font-mono text-xs font-semibold hover:bg-sky-700 hover:text-white transition-colors">
               whoami
@@ -276,7 +118,7 @@
             </button>
           </div>
 
-          <!-- Terminal Output Window with Typewriter -->
+          {{-- Terminal Output Window with Typewriter --}}
           <div class="p-4 font-mono text-xs leading-relaxed min-h-[185px] text-slate-200 space-y-2 overflow-x-auto">
             <div class="text-slate-300">
               <span class="text-emerald-400 font-bold">$</span> <span id="cliTypedCommand" class="text-sky-300 font-semibold">whoami</span>
@@ -287,7 +129,7 @@
           </div>
         </div>
 
-        <!-- 2. Hàng 3 thẻ Mini Bento khoe 3 con số đắt giá -->
+        {{-- 2. Hàng 3 thẻ Mini Bento khoe 3 con số đắt giá --}}
         <div class="grid grid-cols-1 min-[420px]:grid-cols-3 gap-2.5 sm:gap-3">
           <div class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:p-3.5 shadow-sm">
             <div class="font-display text-lg sm:text-2xl font-extrabold text-sky-700 dark:text-sky-400">4.0/4.0</div>
@@ -308,9 +150,9 @@
       </div>
     </section>
 
-    <!-- =========================================================================
+    {{-- =========================================================================
          SECTION 2: TECHNICAL SKILLS — 3D VORTEX FLIP GRID & 3D ORBIT WHEEL
-    ========================================================================= -->
+    ========================================================================= --}}
     <section id="skills" class="cv-auto-tall space-y-6">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div class="space-y-2">
@@ -323,7 +165,7 @@
           </h2>
         </div>
 
-        <!-- Mode Switcher Toggle + Spin Again -->
+        {{-- Mode Switcher Toggle + Spin Again --}}
         <div class="flex flex-wrap items-center gap-2">
           <div class="inline-flex flex-wrap p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm font-mono text-xs">
             <button type="button" id="btnModeGrid" onclick="switchSkillMode('grid')" class="px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 bg-sky-700 text-white shadow-sm transition-all">
@@ -345,7 +187,7 @@
 
       <div class="bg-white dark:bg-slate-900/90 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-4 sm:p-8 space-y-5 sm:space-y-6">
         
-        <div id="skillCategoryTabs" class="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+        <div id="skillCategoryTabs" class="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-100 dark:border-slate-800 min-h-[52px]">
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-sky-700 dark:text-sky-400 font-medium">
@@ -356,10 +198,10 @@
         <div id="skillGridModeWrap" class="grid grid-cols-1 min-[440px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 min-h-[320px]">
         </div>
 
-        <!-- CHẾ ĐỘ 2: 3D ORBIT WHEEL + RIGHT INSPECTOR -->
+        {{-- CHẾ ĐỘ 2: 3D ORBIT WHEEL + RIGHT INSPECTOR --}}
         <div id="skillOrbitModeWrap" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
           
-          <!-- Left Stage: Ice-Blue Radial Orbit Visualizer -->
+          {{-- Left Stage: Ice-Blue Radial Orbit Visualizer --}}
           <div id="orbitStageBox" class="lg:col-span-7 min-w-0 w-full rounded-2xl pt-10 pb-12 px-3 sm:px-4 bg-gradient-to-b from-sky-50/70 via-white to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 border border-slate-200/70 dark:border-slate-800 flex items-center justify-center relative overflow-hidden">
             
             <div class="absolute top-3 left-3 sm:top-3.5 sm:left-4 font-mono text-xs text-slate-600 dark:text-slate-400 z-30">ORBIT // TRIG_ROTATION</div>
@@ -374,29 +216,29 @@
               <span id="orbitSpinToggleLabel">Auto Orbit</span>
             </button>
 
-            <!-- Proportional Scaling Orbit Viewport (Prevents Overflow & Adjacent Pill Overlap at Every Screen Width) -->
+            {{-- Proportional Scaling Orbit Viewport (Prevents Overflow & Adjacent Pill Overlap at Every Screen Width) --}}
             <div id="orbitCanvasViewport" class="orbit-canvas-viewport">
               <div id="orbitCanvas" class="orbit-canvas flex items-center justify-center">
-                <!-- 2 Concentric Dashed Orbit Rings -->
+                {{-- 2 Concentric Dashed Orbit Rings --}}
                 <div id="orbitInnerRing" class="w-[228px] h-[228px] rounded-full border border-dashed border-indigo-500/25 dark:border-indigo-400/25 absolute pointer-events-none orbit-ring-counter"></div>
                 <div id="orbitOuterRing" class="w-[368px] h-[368px] rounded-full border border-dashed border-sky-500/35 dark:border-sky-400/35 absolute pointer-events-none animate-spin-slow"></div>
 
-                <!-- Central Circular Core Hub -->
+                {{-- Central Circular Core Hub --}}
                 <div class="relative z-10 w-32 h-32 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-400/60 shadow-xl shadow-sky-500/15 flex flex-col items-center justify-center text-center p-2">
                   <div class="text-xs font-mono tracking-widest text-sky-700 dark:text-sky-400 font-bold uppercase">ACTIVE CORE</div>
                   <div id="orbitHubCategory" class="text-sm font-extrabold text-slate-900 dark:text-white leading-tight mt-0.5 px-1">Core Stack</div>
                   <div id="orbitHubCount" class="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-semibold mt-0.5">10 Skills</div>
                 </div>
 
-                <!-- Dynamic Orbit Nodes Container -->
+                {{-- Dynamic Orbit Nodes Container --}}
                 <div id="orbitNodesStage" class="absolute inset-0 pointer-events-none orbit-spinning-ring">
-                  <!-- Populated via JS -->
+                  {{-- Populated via JS --}}
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Right Column: 3D Orbit Inspector Card -->
+          {{-- Right Column: 3D Orbit Inspector Card --}}
           <div class="lg:col-span-5 min-w-0 w-full spotlight-card bg-slate-50/70 dark:bg-slate-950/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 flex flex-col justify-between space-y-6">
             <div class="space-y-5 relative z-10">
               <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-3.5">
@@ -404,7 +246,7 @@
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-emerald-100/80 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300" data-i18n="inspector_verified">Verified Proof</span>
               </div>
 
-              <!-- Icon & Name -->
+              {{-- Icon & Name --}}
               <div class="flex items-center gap-4">
                 <div id="inspectorIconBox" class="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-3xl">
                   {!! \App\Support\TechIcon::render('Laravel', 'w-7 h-7') !!}
@@ -415,7 +257,7 @@
                 </div>
               </div>
 
-              <!-- Stack Specialization & Production Validation -->
+              {{-- Stack Specialization & Production Validation --}}
               <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-3">
                 <div class="space-y-0.5 min-w-0">
                   <div class="text-xs font-mono uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="inspector_mastery">Engineering Scope</div>
@@ -427,7 +269,7 @@
                 </span>
               </div>
 
-              <!-- Production Project Proof -->
+              {{-- Production Project Proof --}}
               <div class="space-y-2">
                 <div class="text-xs font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400" data-i18n="inspector_proof_label">Real-World Production Proof</div>
                 <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 space-y-1.5">
@@ -450,9 +292,9 @@
       </div>
     </section>
 
-    <!-- =========================================================================
+    {{-- =========================================================================
          SECTION 3: ASYMMETRIC BENTO GRID (FEATURED PROJECTS & HONORS)
-    ========================================================================= -->
+    ========================================================================= --}}
     <section id="projects" class="cv-auto-tall space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div class="space-y-2">
@@ -481,10 +323,10 @@
               ->take(3);
       @endphp
 
-      <!-- Bento Grid 3 Columns -->
+      {{-- Bento Grid 3 Columns --}}
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- THẺ 1 (Chiếm 2 cột - lg:col-span-2): TourRist RAG AI Concierge -->
+        {{-- THẺ 1 (Chiếm 2 cột - lg:col-span-2): TourRist RAG AI Concierge --}}
         <article class="lg:col-span-2 min-w-0 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between gap-6">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
             <div class="md:col-span-6 min-w-0 space-y-4">
@@ -550,7 +392,7 @@
                     <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
                     <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
                   </a>
-                  <a href="https://github.com/hoThanhThien" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                  <a href="https://github.com/hoThanhThien/RAG" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                     <i data-lucide="github" class="w-3.5 h-3.5"></i>
                     <span>GitHub</span>
                   </a>
@@ -558,7 +400,7 @@
               @endif
             </div>
 
-            <!-- Interactive RAG Architecture Preview & Live Copilot Trigger -->
+            {{-- Interactive RAG Architecture Preview & Live Copilot Trigger --}}
             <div class="md:col-span-6 min-w-0 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 p-4 space-y-3 font-mono text-xs">
               <div class="flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800 pb-2 gap-2">
                 <span class="text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
@@ -593,7 +435,7 @@
           </div>
         </article>
 
-        <!-- THẺ 2 (Chiếm 1 cột): Giải Nhì Thiết kế Logo Khoa CNTT UTH -->
+        {{-- THẺ 2 (Chiếm 1 cột): Giải Nhì Thiết kế Logo Khoa CNTT UTH --}}
         <article class="spotlight-card hover:-translate-y-1 bg-gradient-to-br from-white via-amber-50/30 to-sky-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/30 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between">
           <div class="space-y-3 relative z-10">
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-100/80 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-500/30">
@@ -601,7 +443,7 @@
               <span data-i18n="award_badge">DESIGN RECOGNITION</span>
             </span>
 
-            <!-- Floating Vector Emblem IT•UTH -->
+            {{-- Floating Vector Emblem IT•UTH --}}
             <div class="py-5 flex items-center justify-center">
               <div class="animate-float relative w-28 h-28 rounded-3xl bg-gradient-to-br from-sky-500 via-indigo-600 to-slate-900 p-0.5 shadow-xl shadow-indigo-500/20 flex items-center justify-center">
                 <div class="w-full h-full rounded-[22px] bg-white dark:bg-slate-950 flex flex-col items-center justify-center">
@@ -627,7 +469,7 @@
           </a>
         </article>
 
-        <!-- THẺ 3 (Chiếm 1 cột): Laundry & Multi-Service Platform (Spring Boot) -->
+        {{-- THẺ 3 (Chiếm 1 cột): Laundry & Multi-Service Platform (Spring Boot) --}}
         <article class="spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between space-y-5">
           <div class="space-y-3 relative z-10">
             <div class="flex items-center justify-between gap-2">
@@ -653,7 +495,7 @@
               </p>
             @endif
 
-            <!-- Microservices Architecture Flow Diagram -->
+            {{-- Microservices Architecture Flow Diagram --}}
             <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono text-xs space-y-2">
               <div class="text-slate-600 dark:text-slate-400 font-bold">MICROSERVICES FLOW</div>
               <div class="flex flex-wrap items-center gap-1.5 text-slate-700 dark:text-slate-200">
@@ -687,7 +529,7 @@
           </div>
         </article>
 
-        <!-- THẺ 4 (Chiếm 2 cột - lg:col-span-2): Kinh nghiệm Thực tế từ DB ($experiences) -->
+        {{-- THẺ 4 (Chiếm 2 cột - lg:col-span-2): Kinh nghiệm Thực tế từ DB ($experiences) --}}
         <article class="lg:col-span-2 min-w-0 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between space-y-6">
           @if($experiences->isNotEmpty())
             <div class="space-y-3 relative z-10">
@@ -750,7 +592,7 @@
               </p>
             </div>
 
-            <!-- 3 Hộp Chỉ Số Kết Quả Thực Tế -->
+            {{-- 3 Hộp Chỉ Số Kết Quả Thực Tế --}}
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
               <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800">
                 <div class="font-display text-xl font-extrabold text-indigo-600 dark:text-indigo-400" data-i18n="exp_stat1_val">4+ Modules</div>
@@ -831,12 +673,12 @@
       @endif
     </section>
 
-    <!-- =========================================================================
+    {{-- =========================================================================
          SECTION 4: CREDENTIALS & ENGINEERING BLOG (100% SYNCHRONIZED EN/VI)
-    ========================================================================= -->
-    <section id="credentials" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    ========================================================================= --}}
+    <section id="credentials" class="cv-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-      <!-- Credentials & Brochure PDF (5 cols) -->
+      {{-- Credentials & Brochure PDF (5 cols) --}}
       <div class="lg:col-span-5 min-w-0 space-y-5">
         <div class="flex items-end justify-between gap-3">
           <div class="space-y-1.5">
@@ -927,7 +769,7 @@
         </div>
       </div>
 
-      <!-- Engineering Blog (7 cols) -->
+      {{-- Engineering Blog (7 cols) --}}
       <div id="blog" class="lg:col-span-7 min-w-0 space-y-5">
         <div class="flex items-end justify-between">
           <div class="space-y-1.5">
@@ -985,14 +827,14 @@
 @endsection
 
 @section('floating_widgets')
-  <!-- =========================================================================
+  {{-- =========================================================================
        SECTION 6: FLOATING RAG AI COPILOT ("ASK THIEN'S RAG AI")
-  ========================================================================= -->
+  ========================================================================= --}}
   <div class="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-50 flex flex-col items-end gap-3 max-w-[calc(100vw-2rem)]">
     
-    <!-- Chat Copilot Drawer Window -->
+    {{-- Chat Copilot Drawer Window --}}
     <div id="ragCopilotPanel" class="hidden w-[calc(100vw-2rem)] max-w-[385px] max-h-[min(78vh,540px)] flex flex-col bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden transition-all">
-      <!-- Header -->
+      {{-- Header --}}
       <div class="px-4 sm:px-5 py-3.5 sm:py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex items-center justify-between flex-shrink-0">
         <div class="flex items-center gap-2.5">
           <span class="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-300">
@@ -1011,19 +853,19 @@
         </button>
       </div>
 
-      <!-- Messages Container -->
+      {{-- Messages Container --}}
       <div id="copilotMessages" class="p-4 flex-1 min-h-[160px] max-h-[260px] overflow-y-auto space-y-3 bg-slate-50/70 dark:bg-slate-950/60 text-xs">
         <div class="p-3 rounded-2xl rounded-tl-sm bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 leading-relaxed shadow-sm" data-i18n="copilot_welcome">
           Hi recruiter! Ask any question or click a prompt below — I retrieve live Portfolio DB records via Hybrid Vector/BM25 and answer via real LLM with citations.
         </div>
       </div>
 
-      <!-- 4 Quick Prompts for Recruiters -->
+      {{-- 4 Quick Prompts for Recruiters --}}
       <div id="copilotQuickPrompts" class="px-3.5 py-2.5 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-1.5">
-        <!-- Populated by JS in active EN/VI language -->
+        {{-- Populated by JS in active EN/VI language --}}
       </div>
 
-      <!-- Input Box -->
+      {{-- Input Box --}}
       <form onsubmit="handleCopilotSubmit(event)" class="p-3 bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-2">
         <input id="copilotInput" type="text" aria-label="{{ $isVi ? 'Câu hỏi cho trợ lý RAG AI' : 'Ask RAG AI Copilot question' }}" data-i18n-placeholder="copilot_placeholder" placeholder="Ask about GPA, RAG AI, Enmasys..." class="flex-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-600 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-600">
         <button id="copilotSendBtn" type="submit" aria-label="{{ $isVi ? 'Gửi câu hỏi' : 'Send message' }}" class="p-2 rounded-xl bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
@@ -1032,7 +874,7 @@
       </form>
     </div>
 
-    <!-- Floating Trigger Button -->
+    {{-- Floating Trigger Button --}}
     <button type="button" onclick="toggleCopilot()" class="inline-flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-slate-900 dark:bg-sky-500 text-white font-semibold text-xs shadow-xl shadow-slate-900/25 dark:shadow-sky-500/30 hover:scale-105 active:scale-95 transition-all border border-slate-700/80 dark:border-sky-400/50">
       <span class="relative flex h-2.5 w-2.5">
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 dark:bg-white opacity-75"></span>
@@ -1051,5 +893,5 @@
       skills: @json($skillCategories ?? \App\Support\SkillMatrixBuilder::build(collect()))
     };
   </script>
-  <script src="{{ asset('js/welcome-pearl.js') }}?v={{ @filemtime(public_path('js/welcome-pearl.js')) ?: 1 }}" async></script>
+  <script src="{{ asset('js/welcome-pearl.js') }}?v={{ @filemtime(public_path('js/welcome-pearl.js')) ?: 1 }}" async fetchpriority="low"></script>
 @endsection
