@@ -49,6 +49,12 @@ jobs:
       - name: Run Tests (php artisan test)
         run: php artisan test
 
+      - name: Check Inline Script Syntax & Blade Integrity
+        run: php scripts/ci/check-inline-scripts.php
+
+      - name: Check Responsive Layout Overflow (375px / 768px / 1280px)
+        run: node scripts/ci/check-responsive.cjs
+
   # ==========================================
   # BƯỚC 3 & 4: CD - DEPLOY NẾU CI THÀNH CÔNG
   # ==========================================

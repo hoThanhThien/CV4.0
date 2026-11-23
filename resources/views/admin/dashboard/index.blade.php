@@ -4,34 +4,34 @@
 
 @section('content')
 <div class="page-header">
-    <h1>Dashboard</h1>
+    <h1><i data-lucide="gauge"></i> Dashboard</h1>
     <span style="color: var(--text-muted); font-size: 0.9rem">Welcome back! Here's your portfolio overview.</span>
 </div>
 
 <!-- Stats -->
 <div class="stats-grid">
     <div class="stat-card stat-purple">
-        <div class="stat-icon"><i class="fas fa-code"></i></div>
+        <div class="stat-icon"><i data-lucide="folder-code"></i></div>
         <div class="stat-label">Total Projects</div>
         <div class="stat-value">{{ $stats['projects'] }}</div>
     </div>
     <div class="stat-card stat-cyan">
-        <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
+        <div class="stat-icon"><i data-lucide="newspaper"></i></div>
         <div class="stat-label">Blog Posts</div>
         <div class="stat-value">{{ $stats['blog_posts'] }}</div>
     </div>
     <div class="stat-card stat-green">
-        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-icon"><i data-lucide="check-circle-2"></i></div>
         <div class="stat-label">Published</div>
         <div class="stat-value">{{ $stats['published_posts'] }}</div>
     </div>
-    <div class="stat-card stat-pink">
-        <div class="stat-icon"><i class="fas fa-star"></i></div>
+    <div class="stat-card stat-purple">
+        <div class="stat-icon"><i data-lucide="sparkles"></i></div>
         <div class="stat-label">Skills</div>
         <div class="stat-value">{{ $stats['skills'] }}</div>
     </div>
-        <div class="stat-card {{ $stats['unread_messages'] > 0 ? 'stat-pink' : '' }}">
-        <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+    <div class="stat-card {{ $stats['unread_messages'] > 0 ? 'stat-pink' : 'stat-green' }}">
+        <div class="stat-icon"><i data-lucide="mail"></i></div>
         <div class="stat-label">Inbox Messages</div>
         <div class="stat-value">
             {{ $stats['unread_messages'] }}
@@ -45,19 +45,22 @@
 <!-- Quick Actions -->
 <div style="display:flex; gap:0.75rem; margin-bottom:2rem; flex-wrap:wrap">
     <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> New Project
+        <i data-lucide="plus"></i> New Project
+    </a>
+    <a href="{{ route('admin.ai.dashboard') }}" class="btn btn-secondary">
+        <i data-lucide="bot"></i> AI Studio Analytics
     </a>
     <a href="{{ route('admin.skills.index') }}" class="btn btn-secondary">
-        <i class="fas fa-star"></i> Manage Skills
+        <i data-lucide="sparkles"></i> Manage Skills
     </a>
     <a href="{{ route('admin.messages.index') }}" class="btn btn-secondary">
-        <i class="fas fa-envelope"></i> View Messages
+        <i data-lucide="mail"></i> View Messages
     </a>
     <a href="{{ route('admin.blog.create') }}" class="btn btn-secondary">
-        <i class="fas fa-pen"></i> New Blog Post
+        <i data-lucide="pen-square"></i> New Blog Post
     </a>
-    <a href="{{ route('home') }}" target="_blank" class="btn btn-secondary">
-        <i class="fas fa-external-link-alt"></i> View Portfolio
+    <a href="{{ route('home') }}" target="_blank" rel="noopener" class="btn btn-secondary">
+        <i data-lucide="external-link"></i> View Portfolio
     </a>
 </div>
 
@@ -67,7 +70,7 @@
     <div>
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem">
             <h3 style="font-size:1rem; font-weight:700">Recent Projects</h3>
-            <a href="{{ route('admin.projects.index') }}" style="color: var(--accent-light); font-size:0.85rem; text-decoration:none">View all →</a>
+            <a href="{{ route('admin.projects.index') }}" style="color: var(--accent); font-size:0.85rem; text-decoration:none; font-weight:600">View all →</a>
         </div>
         <div class="table-wrap">
             <table>
@@ -84,7 +87,7 @@
                         <td style="font-weight:600; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ $project->title }}</td>
                         <td>
                             @if($project->featured)
-                                <span class="badge badge-purple"><i class="fas fa-star"></i> Yes</span>
+                                <span class="badge badge-purple"><i data-lucide="star"></i> Yes</span>
                             @else
                                 <span class="badge badge-warning">No</span>
                             @endif
@@ -105,7 +108,7 @@
     <div>
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem">
             <h3 style="font-size:1rem; font-weight:700">Recent Blog Posts</h3>
-            <a href="{{ route('admin.blog.index') }}" style="color: var(--accent-light); font-size:0.85rem; text-decoration:none">View all →</a>
+            <a href="{{ route('admin.blog.index') }}" style="color: var(--accent); font-size:0.85rem; text-decoration:none; font-weight:600">View all →</a>
         </div>
         <div class="table-wrap">
             <table>
@@ -122,7 +125,7 @@
                         <td style="font-weight:600; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ $post->title }}</td>
                         <td>
                             @if($post->published)
-                                <span class="badge badge-success"><i class="fas fa-circle" style="font-size:0.5rem"></i> Published</span>
+                                <span class="badge badge-success"><i data-lucide="check-circle-2"></i> Published</span>
                             @else
                                 <span class="badge badge-warning">Draft</span>
                             @endif
@@ -143,10 +146,10 @@
 <!-- Recent Messages -->
 <div style="margin-top:2rem">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem">
-        <h3 style="font-size:1rem; font-weight:700">
-            <i class="fas fa-inbox" style="color:var(--accent)"></i> Recent Contact Messages
+        <h3 style="font-size:1rem; font-weight:700; display:inline-flex; align-items:center; gap:0.45rem">
+            <i data-lucide="inbox" style="width:18px; height:18px; color:var(--accent)"></i> Recent Contact Messages
         </h3>
-        <a href="{{ route('admin.messages.index') }}" style="color: var(--accent-light); font-size:0.85rem; text-decoration:none">View all messages →</a>
+        <a href="{{ route('admin.messages.index') }}" style="color: var(--accent); font-size:0.85rem; text-decoration:none; font-weight:600">View all messages →</a>
     </div>
     <div class="table-wrap">
         <table>
@@ -161,7 +164,7 @@
             </thead>
             <tbody>
                 @forelse($recentMessages as $msg)
-                                    <tr style="{{ !$msg->is_read ? 'background: rgba(30,64,175,0.04); font-weight:600' : '' }}">
+                <tr style="{{ !$msg->is_read ? 'background: var(--accent-tint); font-weight:600' : '' }}">
                     <td>
                         <div>{{ $msg->name }}</div>
                         <div style="font-size:0.8rem; color:var(--text-muted); font-weight:400">{{ $msg->email }}</div>

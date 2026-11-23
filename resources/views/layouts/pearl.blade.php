@@ -89,7 +89,7 @@
 
       {{-- Center Nav Links --}}
       @if($isHomeNav)
-        <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
           <a href="#projects" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="nav_projects">
             {{ $isVi ? 'Dự án Nổi bật' : 'Selected Work' }}
           </a>
@@ -107,7 +107,7 @@
           </a>
         </nav>
       @else
-        <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
           <a href="{{ route('about') }}" class="px-3 py-1.5 rounded-lg transition-colors {{ $activeNav === 'about' ? 'bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-400 font-semibold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}" data-i18n="nav_about">
             {{ $isVi ? 'Giới thiệu' : 'About' }}
           </a>
@@ -143,15 +143,15 @@
           {{ $isVi ? 'Liên hệ ngay' : 'Hire Me' }}
         </a>
 
-        <button type="button" id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200" aria-label="Menu">
+        <button type="button" id="mobileMenuBtn" onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200" aria-label="Menu">
           <i data-lucide="menu" class="w-4 h-4"></i>
         </button>
       </div>
 
     </div>
 
-    {{-- Mobile Dropdown Navigation --}}
-    <div id="mobileMenuPanel" class="hidden md:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-3 space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+    {{-- Mobile & Tablet Dropdown Navigation --}}
+    <div id="mobileMenuPanel" class="hidden lg:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 py-3 space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
       @if($isHomeNav)
         <a href="#projects" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_projects">Selected Work</a>
         <a href="#skills" onclick="closeMobileMenu()" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav_skills">Tech Stack</a>
