@@ -12,7 +12,7 @@
 @section('active_nav', 'projects')
 @section('title', __('Projects') . ' | ' . ($isVi ? 'Hồ Thành Thiện' : 'Ho Thanh Thien'))
 @section('description', $isVi ? 'Khám phá danh sách các dự án, sản phẩm phần mềm và kiến trúc hệ thống hiện đại được phát triển bởi Kỹ sư Hồ Thành Thiện.' : 'Explore a curated portfolio of modern web applications, AI/RAG architectures, and enterprise systems developed by Ho Thanh Thien.')
-@section('keywords', $isVi ? 'Dự án Hồ Thành Thiện, Portfolio Dự án, Web Apps, Laravel, Spring Boot, RAG AI, TourRist, Laundry' : 'Ho Thanh Thien Projects, Software Portfolio, Laravel Web Apps, Spring Boot, RAG AI Architecture')
+@section('keywords', $isVi ? 'Dự án Hồ Thành Thiện, Portfolio Dự án, Web Apps, Laravel, Spring Boot, RAG AI, Tourest, Laundry' : 'Ho Thanh Thien Projects, Software Portfolio, Laravel Web Apps, Spring Boot, Hybrid RAG AI')
 
 @section('styles')
   .projects-filter-bar::-webkit-scrollbar {
@@ -147,7 +147,7 @@
               $techSlugList = $project->technologies->pluck('name')->map(fn($n) => strtolower($n))->implode('|');
               $searchBlob = strtolower($project->title . ' ' . $project->localized_title . ' ' . $project->summary . ' ' . $project->technologies->pluck('name')->implode(' ') . ' ' . ($project->role ?? ''));
               $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
-              $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
+              $isTourest = $project->id === 2 || str_contains(strtolower($project->title), 'tourest') || str_contains(strtolower($project->title), 'tourrist');
               $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
               $hasCustomImage = $project->has_real_image;
           @endphp
@@ -199,8 +199,8 @@
                       <span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-200">EN / VI Sync</span>
                     </div>
                   </div>
-                @elseif($isTourrist)
-                  <!-- Specimen: RAG AI Pipeline -->
+                @elseif($isTourest)
+                  <!-- Specimen: Hybrid RAG AI Pipeline -->
                   <div class="w-full h-full bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 text-slate-100 p-5 flex flex-col justify-between relative">
                     <div class="relative z-10 flex items-center justify-between border-b border-slate-800 pb-2.5">
                       <div class="flex items-center gap-1.5">
@@ -208,24 +208,24 @@
                         <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                       </div>
-                      <span class="font-mono text-xs text-sky-300">Match 98.4% &bull; 180ms</span>
+                      <span class="font-mono text-xs text-sky-300">RRF + Reranker &bull; Redis</span>
                     </div>
                     <div class="relative z-10 space-y-2.5 my-auto font-mono">
-                      <div class="text-xs font-bold text-sky-300 tracking-wider uppercase">PIPELINE // APPLIED RAG AI</div>
+                      <div class="text-xs font-bold text-sky-300 tracking-wider uppercase">PIPELINE // HYBRID RAG AI</div>
                       <div class="flex flex-wrap items-center gap-1.5 text-xs">
-                        <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">PDF Docs</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">MySQL + KB</span>
                         <span class="text-slate-300">&rarr;</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">Chunks</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">FAISS + BM25</span>
                         <span class="text-slate-300">&rarr;</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 border border-sky-400/50 text-sky-300 font-bold">ChromaDB</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 border border-sky-400/50 text-sky-300 font-bold">Reranker</span>
                         <span class="text-slate-300">&rarr;</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-bold">Grounded LLM</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-bold">LLM + OOS</span>
                       </div>
                     </div>
                     <div class="relative z-10 flex flex-wrap gap-1.5 pt-2 border-t border-slate-800/80 font-mono text-xs">
-                      <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-slate-200">FastAPI</span>
-                      <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-slate-200">Python Embeddings</span>
-                      <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-slate-200">Cosine Top-K</span>
+                      <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-slate-200">FastAPI + React</span>
+                      <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-slate-200">K-Means ML</span>
+                      <span class="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700 text-slate-200">PayPal / MoMo</span>
                     </div>
                   </div>
                 @elseif($isLaundry)

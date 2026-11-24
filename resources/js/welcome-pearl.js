@@ -233,10 +233,10 @@ const COPILOT_QUICK_PROMPTS = [
     }
   },
   {
-    label: { en: 'TourRist RAG AI?', vi: 'Kiến trúc RAG TourRist?' },
+    label: { en: 'Tourest RAG AI?', vi: 'Kiến trúc RAG Tourest?' },
     query: {
-      en: 'How did Thien architect the TourRist RAG AI chatbot and tech stack?',
-      vi: 'Thiện đã thiết kế kiến trúc chatbot RAG AI TourRist và dùng những công nghệ gì?'
+      en: 'How did Thien architect the Tourest Hybrid RAG AI chatbot, K-Means clustering, and tech stack?',
+      vi: 'Thiện đã thiết kế kiến trúc chatbot Hybrid RAG AI Tourest, phân cụm K-Means và dùng những công nghệ gì?'
     }
   },
   {
@@ -275,8 +275,8 @@ function toggleCopilot(forceOpen = null) {
 function triggerSampleRagQuery() {
   const lang = getLang();
   const q = lang === 'vi'
-    ? 'Giải thích kiến trúc RAG AI và công nghệ trong dự án TourRist dựa trên hồ sơ?'
-    : 'Explain the TourRist RAG AI architecture and technologies used based on portfolio records.';
+    ? 'Giải thích kiến trúc Hybrid RAG AI và công nghệ trong dự án Tourest dựa trên hồ sơ?'
+    : 'Explain the Tourest Hybrid RAG AI architecture and technologies used based on portfolio records.';
   toggleCopilot(true);
   askCopilotQuestion(q);
 }

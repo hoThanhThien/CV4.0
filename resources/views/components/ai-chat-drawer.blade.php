@@ -42,8 +42,8 @@
                 <button type="button" class="ai-chip" onclick="askAiPreset('{{ $isVi ? 'Thiện có kinh nghiệm thực tế gì?' : 'What is Thien\'s work experience?' }}')">
                     <i class="fas fa-briefcase"></i> {{ $isVi ? 'Kinh nghiệm làm việc' : 'Work experience' }}
                 </button>
-                <button type="button" class="ai-chip" onclick="askAiPreset('{{ $isVi ? 'Dự án AI/RAG TourRist giải quyết bài toán gì?' : 'What does the RAG TourRist project do?' }}')">
-                    <i class="fas fa-robot"></i> {{ $isVi ? 'Dự án AI TourRist' : 'RAG TourRist Project' }}
+                <button type="button" class="ai-chip" onclick="askAiPreset('{{ $isVi ? 'Dự án AI/RAG Tourest giải quyết bài toán gì?' : 'What does the Hybrid RAG Tourest project do?' }}')">
+                    <i class="fas fa-robot"></i> {{ $isVi ? 'Dự án AI Tourest' : 'Tourest Hybrid RAG' }}
                 </button>
                 <button type="button" class="ai-chip" onclick="askAiPreset('{{ $isVi ? 'Trình độ học vấn và GPA của Thiện?' : 'What is Thien\'s education and GPA?' }}')">
                     <i class="fas fa-graduation-cap"></i> {{ $isVi ? 'Học vấn & GPA UTH' : 'Education & GPA' }}

@@ -61,9 +61,9 @@ class HomeCmsSyncTest extends TestCase
 
     public function test_featured_projects_experiences_and_certificates_render_dynamically_from_db()
     {
-        $tourRist = Project::create([
-            'title' => 'TourRist AI Platform',
-            'description' => "Fullstack Developer | 01/2026 - 06/2026\nDocument-grounded RAG travel concierge.",
+        $tourest = Project::create([
+            'title' => 'Tourest AI Platform',
+            'description' => "Fullstack Developer | 01/2026 - 06/2026\nHybrid FAISS + BM25 RAG travel booking platform.",
             'featured' => true,
             'order' => 1,
         ]);
@@ -103,8 +103,8 @@ class HomeCmsSyncTest extends TestCase
 
         $response = $this->get('/');
         $response->assertStatus(200)
-            ->assertSee('/projects/' . $tourRist->id)
-            ->assertSee('TourRist AI Platform')
+            ->assertSee('/projects/' . $tourest->id)
+            ->assertSee('Tourest AI Platform')
             ->assertSee('/projects/' . $laundry->id)
             ->assertSee('Laundry Service Hub')
             ->assertSee('/projects/' . $extraFeatured->id)

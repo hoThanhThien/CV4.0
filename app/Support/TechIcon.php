@@ -28,6 +28,8 @@ class TechIcon
         'llm' => 'llm',
         'llm grounding' => 'llm',
         'vector search' => 'vector',
+        'faiss' => 'vector',
+        'redis' => 'vector',
         'chroma' => 'vector',
         'chromadb' => 'vector',
         'jwt' => 'jwt',
@@ -228,8 +230,8 @@ class TechIcon
                 . '<circle cx="19.5" cy="11" r="1.1" fill="#10B981"/>'
                 . '</svg>',
 
-            // ChromaDB tri-color Venn mark (#F43F5E, #F59E0B, #0EA5E9)
-            'vector' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" fill="none" role="img" aria-label="ChromaDB Vector Logo">'
+            // Vector Search / FAISS tri-color Venn mark (#F43F5E, #F59E0B, #0EA5E9)
+            'vector' => '<svg viewBox="0 0 24 24" class="' . $classToken . ' flex-shrink-0" fill="none" role="img" aria-label="Vector Search Logo">'
                 . '<rect x="3" y="6.5" width="9" height="11" rx="4.5" fill="#F43F5E" fill-opacity="0.9"/>'
                 . '<rect x="7.5" y="6.5" width="9" height="11" rx="4.5" fill="#F59E0B" fill-opacity="0.9"/>'
                 . '<rect x="12" y="6.5" width="9" height="11" rx="4.5" fill="#0EA5E9" fill-opacity="0.9"/>'

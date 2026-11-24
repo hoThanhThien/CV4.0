@@ -2001,14 +2001,14 @@
 
             if (q.includes('kinh nghiệm') || q.includes('experience') || q.includes('enmasys') || q.includes('aipower') || q.includes('công việc')) {
                 return isViLang
-                    ? 'Hồ Thành Thiện đã có kinh nghiệm thực chiến tại:\n• AIPower Company (07/2026 - Nay): Kỹ sư Fullstack phụ trách xây dựng web công ty và nền tảng giáo dục bằng PHP, PostgreSQL, responsive UI.\n• Enmasys (12/2025 - 04/2026): Thực tập sinh Odoo, cấu hình và tùy biến các phân hệ ERP, tối ưu quy trình quản trị doanh nghiệp.\n• Ngoài ra, Thiện còn tự phát triển các hệ thống độc lập như Chatbot RAG (TourRist) và Quản lý Giặt ủi (NextJS + Spring Boot).'
-                    : 'Ho Thanh Thien has solid real-world experience at:\n• AIPower Company (07/2026 - Present): Fullstack Developer engineering company and education portals using PHP, PostgreSQL and modern responsive architecture.\n• Enmasys (12/2025 - 04/2026): Odoo ERP Intern, customizing business modules and system workflows.\n• Independent systems: RAG AI chatbot (TourRist) and Laundry Management System (NextJS + Spring Boot).';
+                    ? 'Hồ Thành Thiện đã có kinh nghiệm thực chiến tại:\n• AIPower Company (07/2026 - Nay): Kỹ sư Fullstack phụ trách xây dựng web công ty và nền tảng giáo dục bằng PHP, PostgreSQL, responsive UI.\n• Enmasys (12/2025 - 04/2026): Thực tập sinh Odoo, cấu hình và tùy biến các phân hệ ERP, tối ưu quy trình quản trị doanh nghiệp.\n• Ngoài ra, Thiện còn tự phát triển các hệ thống độc lập như Nền tảng Đặt tour & Chatbot Hybrid RAG (Tourest) và Quản lý Giặt ủi (NextJS + Spring Boot).'
+                    : 'Ho Thanh Thien has solid real-world experience at:\n• AIPower Company (07/2026 - Present): Fullstack Developer engineering company and education portals using PHP, PostgreSQL and modern responsive architecture.\n• Enmasys (12/2025 - 04/2026): Odoo ERP Intern, customizing business modules and system workflows.\n• Independent systems: Tour booking & Hybrid RAG AI platform (Tourest) and Laundry Management System (NextJS + Spring Boot).';
             }
 
-            if (q.includes('tourrist') || q.includes('rag') || q.includes('ai') || q.includes('llm') || q.includes('chatbot')) {
+            if (q.includes('tourest') || q.includes('rag') || q.includes('ai') || q.includes('llm') || q.includes('chatbot')) {
                 return isViLang
-                    ? 'Dự án "TourRist" là sản phẩm AI/RAG tiêu biểu do Thiện phát triển:\n• Kiến trúc RAG: Đọc tài liệu riêng tư → Chunking → Embeddings → Lưu trữ Vector trong ChromaDB → Semantic Retrieval → Tổng hợp prompt truyền cho LLM.\n• Tech stack: Python, FastAPI, ChromaDB, LangChain, RESTful APIs.\n• Ý nghĩa: Giúp chatbot trả lời chính xác dựa trên tri thức nội bộ, loại bỏ hiện tượng ảo giác (hallucination) của mô hình.'
-                    : 'The "TourRist" project is Thien\'s flagship Applied AI & RAG system:\n• RAG Pipeline: Ingests private documents → chunking & embedding → indexed into ChromaDB vector store → semantic search retrieval → context-augmented prompt generation for LLMs.\n• Stack: Python, FastAPI, ChromaDB, LangChain, RESTful APIs.\n• Key benefit: High-accuracy answers with zero hallucination from private knowledge bases.';
+                    ? 'Dự án "Tourest" là nền tảng Đặt tour & Hệ thống Hybrid RAG AI do Thiện phát triển:\n• Kiến trúc Hybrid RAG: Tìm kiếm vector FAISS kết hợp BM25 lexical + hợp nhất RRF + Cross-Encoder Reranker (ms-marco-MiniLM-L-6-v2) + Out-of-Scope LLM Routing.\n• Tech stack: React 18 (Vite 7), FastAPI, MySQL 8.0, Redis 7 (cache 2 tầng), scikit-learn K-Means Clustering, WebSocket CSKH & PayPal / MoMo / SePay.\n• Ý nghĩa: Tư vấn tour du lịch Việt Nam chính xác theo hội thoại nhiều lượt và dữ liệu thực tế.'
+                    : 'The "Tourest" project is Thien\'s flagship Tour Booking & Hybrid RAG AI platform:\n• Hybrid RAG Pipeline: FAISS dense vector search + BM25 lexical index + RRF merge + Cross-Encoder Reranker (ms-marco-MiniLM-L-6-v2) + Out-of-Scope LLM Routing.\n• Stack: React 18 (Vite 7), FastAPI, MySQL 8.0, Redis 7 (2-tier L1/Redis cache), scikit-learn K-Means Clustering, WebSocket chat & PayPal / MoMo / SePay.\n• Key benefit: Accurate multi-turn Vietnam tourism guidance grounded in verified tour and knowledge data.';
             }
 
             if (q.includes('học vấn') || q.includes('gpa') || q.includes('uth') || q.includes('bằng') || q.includes('education') || q.includes('degree')) {
@@ -2019,8 +2019,8 @@
 
             if (q.includes('stack') || q.includes('kỹ năng') || q.includes('skill') || q.includes('tech') || q.includes('ngôn ngữ')) {
                 return isViLang
-                    ? 'Bộ kỹ năng cốt lõi của Thiện gồm:\n• Backend: PHP, Laravel 11, Java Spring Boot, Python FastAPI, Odoo ERP.\n• Frontend: ReactJS, NextJS, JavaScript ES6+, Blade Engine, Tailwind CSS.\n• AI & Data: RAG Architecture, Vector Search (ChromaDB), MySQL, PostgreSQL.\n• DevOps & Triển khai: Docker, Docker Compose, Nginx, cPanel, Git, RESTful API & JWT Auth.'
-                    : 'Thien\'s core technology stack:\n• Backend: PHP, Laravel 11, Java Spring Boot, Python FastAPI, Odoo ERP.\n• Frontend: ReactJS, NextJS, Modern JavaScript, Blade Engine, Tailwind CSS.\n• AI & Data: RAG Architecture, Vector Search (ChromaDB), MySQL, PostgreSQL.\n• DevOps & Systems: Docker, Docker Compose, Nginx, cPanel, Git, RESTful APIs, JWT Auth.';
+                    ? 'Bộ kỹ năng cốt lõi của Thiện gồm:\n• Backend: PHP, Laravel 11, Java Spring Boot, Python FastAPI, Odoo ERP.\n• Frontend: ReactJS, NextJS, JavaScript ES6+, Blade Engine, Tailwind CSS.\n• AI & Data: Hybrid RAG (FAISS, BM25, Cross-Encoder), K-Means Clustering, MySQL, PostgreSQL, Redis.\n• DevOps & Triển khai: Docker, Docker Compose, Nginx, cPanel, Git, RESTful API & JWT Auth.'
+                    : 'Thien\'s core technology stack:\n• Backend: PHP, Laravel 11, Java Spring Boot, Python FastAPI, Odoo ERP.\n• Frontend: ReactJS, NextJS, Modern JavaScript, Blade Engine, Tailwind CSS.\n• AI & Data: Hybrid RAG (FAISS, BM25, Cross-Encoder), K-Means Clustering, MySQL, PostgreSQL, Redis.\n• DevOps & Systems: Docker, Docker Compose, Nginx, cPanel, Git, RESTful APIs, JWT Auth.';
             }
 
             if (q.includes('liên hệ') || q.includes('contact') || q.includes('tuyển dụng') || q.includes('hire') || q.includes('email') || q.includes('phone') || q.includes('phỏng vấn')) {
@@ -2031,8 +2031,8 @@
 
             if (q.includes('dự án') || q.includes('project') || q.includes('portfolio') || q.includes('laundry')) {
                 return isViLang
-                    ? 'Thiện đã hoàn thiện 3 dự án trọng điểm chạy production:\n1. Personal Portfolio & CMS (Laravel 11, MySQL, bilingual, sitemap động).\n2. TourRist (RAG Chatbot với FastAPI, ChromaDB, vector search).\n3. Laundry Management System (NextJS + Spring Boot, State Machine đơn hàng, RBAC & JWT).\nBạn có thể nhấp vào mục "Dự án" trên menu để xem case study chi tiết từng sản phẩm!'
-                    : 'Thien has built 3 flagship projects on production:\n1. Personal Portfolio & CMS (Laravel 11, MySQL, bilingual, dynamic sitemap).\n2. TourRist (RAG AI Chatbot with FastAPI, ChromaDB, Vector Search).\n3. Laundry Management System (NextJS + Spring Boot, Order State Machine, RBAC & JWT).\nVisit the "Projects" section to explore full case studies!';
+                    ? 'Thiện đã hoàn thiện 3 dự án trọng điểm chạy production:\n1. Personal Portfolio & CMS (Laravel 11, MySQL, bilingual, sitemap động).\n2. Tourest (Đặt tour & Hybrid RAG AI với React 18, FastAPI, FAISS + BM25 + Cross-Encoder, K-Means, MySQL & Redis).\n3. Laundry Management System (NextJS + Spring Boot, State Machine đơn hàng, RBAC & JWT).\nBạn có thể nhấp vào mục "Dự án" trên menu để xem case study chi tiết từng sản phẩm!'
+                    : 'Thien has built 3 flagship projects on production:\n1. Personal Portfolio & CMS (Laravel 11, MySQL, bilingual, dynamic sitemap).\n2. Tourest (Tour Booking & Hybrid RAG AI with React 18, FastAPI, FAISS + BM25 + Cross-Encoder, K-Means, MySQL & Redis).\n3. Laundry Management System (NextJS + Spring Boot, Order State Machine, RBAC & JWT).\nVisit the "Projects" section to explore full case studies!';
             }
 
             return isViLang

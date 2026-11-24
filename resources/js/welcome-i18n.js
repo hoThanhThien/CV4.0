@@ -31,13 +31,13 @@ export const WELCOME_I18N = {
     bento_kicker: '02 // ASYMMETRIC CASE STUDIES & HONORS',
     bento_title: 'Production Systems & Recognition',
     bento_view_all: 'View all projects',
-    proj1_title: 'TourRist — Smart Travel Platform & RAG AI Concierge',
-    proj1_desc: 'Engineered a document-based RAG chatbot pairing semantic ChromaDB vector search with LLM grounding to generate zero-hallucination travel itineraries from curated local knowledge bases.',
+    proj1_title: 'Tourest — Tour Booking & Hybrid RAG AI',
+    proj1_desc: 'Full-stack travel platform built with React 18, FastAPI, MySQL & Redis — featuring Hybrid RAG (FAISS + BM25 + Cross-Encoder Reranker), K-Means clustering & PayPal/MoMo/SePay payments.',
     btn_case_study: 'Read Case Study',
     rag_sim_q: 'DB Corpus Chunking -> Cosine Vector + BM25 Top-K -> Real LLM Citation',
     rag_sim_trace: 'Connected to Live Portfolio Corpus & AI Provider',
     rag_sim_a: 'Click below to run a real Retrieval-Augmented Generation query through the backend LLM endpoint with source citations and live latency metrics.',
-    rag_try_live: 'Test Live RAG Query on TourRist',
+    rag_try_live: 'Test Live RAG Query on Tourest',
     award_badge: 'DESIGN RECOGNITION',
     award_title: '2nd Prize — IT Faculty Logo & Visual Identity (UTH)',
     award_desc: 'Awarded by University of Transport HCMC, proving strong visual craft, typography precision, and clean UI/UX thinking alongside backend engineering.',
@@ -109,13 +109,13 @@ export const WELCOME_I18N = {
     bento_kicker: '02 // DỰ ÁN TRỌNG ĐIỂM & VINH DANH',
     bento_title: 'Hệ thống Thực tế & Thành tích Đạt được',
     bento_view_all: 'Xem tất cả dự án',
-    proj1_title: 'TourRist — Nền tảng Du lịch Thông minh & Trợ lý AI RAG',
-    proj1_desc: 'Phát triển chatbot AI dựa trên tài liệu kết hợp tìm kiếm vector ChromaDB và sinh câu trả lời LLM không bịa đặt (zero-hallucination), cung cấp gợi ý lịch trình chính xác từ kho tri thức nội bộ.',
+    proj1_title: 'Tourest — Đặt Tour Du lịch & Hybrid RAG AI',
+    proj1_desc: 'Nền tảng đặt tour toàn diện trên React 18, FastAPI, MySQL & Redis — tích hợp Chatbot Hybrid RAG (FAISS + BM25 + Cross-Encoder), phân cụm K-Means và thanh toán PayPal/MoMo/SePay.',
     btn_case_study: 'Xem Case Study',
     rag_sim_q: 'Tách chunk DB -> Vector Cosine + BM25 Top-K -> LLM Sinh câu trả lời có nguồn',
     rag_sim_trace: 'Kết nối trực tiếp Kho dữ liệu DB & AI Provider thật',
     rag_sim_a: 'Bấm nút dưới để chạy một truy vấn RAG AI thực tế qua API backend & LLM với trích dẫn nguồn và độ trễ đo thật.',
-    rag_try_live: 'Chạy thử RAG AI thật trên TourRist',
+    rag_try_live: 'Chạy thử RAG AI thật trên Tourest',
     award_badge: 'GIẢI THƯỞNG THIẾT KẾ',
     award_title: 'Giải Nhì — Sáng tác Logo & Nhận diện Khoa CNTT (UTH)',
     award_desc: 'Chứng nhận từ ĐH GTVT TP.HCM, khẳng định tư duy thẩm mỹ UI/UX, typography và nghệ thuật thiết kế giao diện chuẩn mực bên cạnh nền tảng lập trình hệ thống.',
@@ -144,7 +144,7 @@ export const WELCOME_I18N = {
     blog_title: 'Chia sẻ Kiến thức & Ghi chép Hệ thống',
     blog_all: 'Xem tất cả →',
     post1_title: 'Xây dựng Hệ thống RAG AI Dựa trên Tài liệu với LLM',
-    post1_desc: 'Hướng dẫn thiết kế pipeline Retrieval-Augmented Generation sử dụng tìm kiếm vector ChromaDB, chia đoạn dữ liệu và LLM hiện đại.',
+    post1_desc: 'Hướng dẫn thiết kế pipeline Retrieval-Augmented Generation kết hợp FAISS vector, BM25, chia đoạn dữ liệu và LLM hiện đại.',
     post2_title: 'Thiết kế RESTful API Bảo mật với Java Spring Boot & JWT',
     post2_desc: 'Cẩm nang xây dựng REST API chuẩn production, phân quyền RBAC và xác thực Stateless JWT với Spring Boot.',
     post3_title: 'Làm chủ React Hooks & Quản lý Trạng thái Hệ thống',
@@ -174,12 +174,12 @@ export const CLI_RESPONSES = {
   skills: {
     cmd: 'skills --top',
     en: `[✓] Backend:   Java Spring Boot, PHP Laravel 11, FastAPI, Odoo ERP
-[✓] AI / Data: Python RAG Pipelines, ChromaDB, Vector Search, MySQL/PostgreSQL
-[✓] Frontend:  ReactJS, Next.js, Tailwind CSS, Blade SSR, ES6+
+[✓] AI / Data: Python RAG (FAISS + BM25), K-Means ML, MySQL, PostgreSQL, Redis
+[✓] Frontend:  React 18, Next.js, Tailwind CSS, Blade SSR, Vite
 [✓] Infra:     Docker Compose, Nginx, Git, Linux & cPanel Deployment`,
     vi: `[✓] Backend:   Java Spring Boot, PHP Laravel 11, FastAPI, Odoo ERP
-[✓] AI / Data: Pipeline Python RAG, ChromaDB, Vector Search, MySQL/PostgreSQL
-[✓] Frontend:  ReactJS, Next.js, Tailwind CSS, Blade SSR, ES6+
+[✓] AI / Data: Python RAG (FAISS + BM25), K-Means ML, MySQL, PostgreSQL, Redis
+[✓] Frontend:  React 18, Next.js, Tailwind CSS, Blade SSR, Vite
 [✓] Hạ tầng:   Docker Compose, Nginx, Git, Linux & Triển khai cPanel`
   },
   awards: {
@@ -193,11 +193,11 @@ export const CLI_RESPONSES = {
   },
   rag: {
     cmd: 'rag --status',
-    en: `PIPELINE: TourRist Document RAG Engine
-STATUS:   ● ONLINE (ChromaDB Vector Index Active)
-METRICS:  Cosine Top-K Match 98.4% | Avg Retrieval Latency ~180ms`,
-    vi: `HỆ THỐNG: Động cơ RAG Tài liệu TourRist
-TRẠNG THÁI: ● ĐANG HOẠT ĐỘNG (Chỉ mục Vector ChromaDB Sẵn sàng)
-THÔNG SỐ:   Khớp Vector Top-K 98.4% | Độ trễ truy xuất ~180ms`
+    en: `PIPELINE: Tourest Hybrid RAG Engine
+STATUS:   ● ONLINE (FAISS + BM25 + Cross-Encoder + Redis Cache)
+METRICS:  Out-of-Scope Routing & Grounded Multi-turn LLM Replies`,
+    vi: `HỆ THỐNG: Động cơ Hybrid RAG Tourest
+TRẠNG THÁI: ● ĐANG HOẠT ĐỘNG (FAISS + BM25 + Cross-Encoder + Redis)
+THÔNG SỐ:   Định tuyến câu hỏi & Hội thoại nhiều lượt có ngữ cảnh`
   }
 };

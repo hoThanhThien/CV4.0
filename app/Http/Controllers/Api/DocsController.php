@@ -862,7 +862,7 @@ HTML, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
                                         'type' => 'object',
                                         'required' => ['query'],
                                         'properties' => [
-                                            'query' => ['type' => 'string', 'minLength' => 2, 'maxLength' => 500, 'example' => 'Explain the TourRist RAG AI architecture and tech stack'],
+                                            'query' => ['type' => 'string', 'minLength' => 2, 'maxLength' => 500, 'example' => 'Explain the Tourest Hybrid RAG AI architecture and tech stack'],
                                             'locale' => ['type' => 'string', 'enum' => ['en', 'vi'], 'example' => 'en'],
                                             'history' => [
                                                 'type' => 'array',

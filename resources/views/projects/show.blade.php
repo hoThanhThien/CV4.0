@@ -35,7 +35,7 @@
         ? preg_replace('#^https?://#', '', rtrim($project->demo_url, '/'))
         : ($project->github_url ? preg_replace('#^https?://#', '', rtrim($project->github_url, '/')) : 'architecture.spec');
     $isPortfolio = $project->id === 1 || str_contains(strtolower($project->title), 'portfolio');
-    $isTourrist = $project->id === 2 || str_contains(strtolower($project->title), 'tourrist');
+    $isTourest = $project->id === 2 || str_contains(strtolower($project->title), 'tourest') || str_contains(strtolower($project->title), 'tourrist');
     $isLaundry = $project->id === 3 || str_contains(strtolower($project->title), 'laundry');
     $hasCustomImage = $project->has_real_image;
 @endphp
@@ -160,40 +160,40 @@
                   <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-xs text-slate-200">Bilingual EN / VI</span>
                 </div>
               </div>
-            @elseif($isTourrist)
+            @elseif($isTourest)
               <div class="p-6 sm:p-8 font-mono space-y-6">
                 <div class="flex items-center justify-between gap-2 flex-wrap">
-                  <span class="text-xs font-bold tracking-widest uppercase text-sky-300">PIPELINE // RAG ARCHITECTURE</span>
-                  <span class="text-xs text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">Cosine Match 98.4% &bull; 180ms</span>
+                  <span class="text-xs font-bold tracking-widest uppercase text-sky-300">PIPELINE // HYBRID RAG ARCHITECTURE</span>
+                  <span class="text-xs text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">FAISS + BM25 + Cross-Encoder</span>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center text-center gap-2">
                     <i data-lucide="file-text" class="w-5 h-5 text-slate-300"></i>
-                    <span class="text-xs font-bold text-white">1. Docs</span>
-                    <span class="text-xs text-slate-300">PDF / Guides</span>
+                    <span class="text-xs font-bold text-white">1. Tour KB</span>
+                    <span class="text-xs text-slate-300">MySQL + SQuAD</span>
                   </div>
                   <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center text-center gap-2">
                     <i data-lucide="layers" class="w-5 h-5 text-indigo-400"></i>
-                    <span class="text-xs font-bold text-white">2. Chunks</span>
-                    <span class="text-xs text-slate-300">Token Overlap</span>
+                    <span class="text-xs font-bold text-white">2. Hybrid</span>
+                    <span class="text-xs text-slate-300">FAISS + BM25</span>
                   </div>
                   <div class="p-3.5 rounded-xl bg-sky-500/15 border border-sky-400/50 flex flex-col items-center text-center gap-2 shadow-lg shadow-sky-500/10">
                     <i data-lucide="database" class="w-5 h-5 text-sky-400"></i>
-                    <span class="text-xs font-bold text-sky-300">3. ChromaDB</span>
-                    <span class="text-xs text-sky-200">k-NN Vector</span>
+                    <span class="text-xs font-bold text-sky-300">3. Reranker</span>
+                    <span class="text-xs text-sky-200">MiniLM + OOS</span>
                   </div>
                   <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center text-center gap-2">
                     <i data-lucide="bot" class="w-5 h-5 text-emerald-400"></i>
                     <span class="text-xs font-bold text-white">4. LLM Reply</span>
-                    <span class="text-xs text-slate-300">Cited Output</span>
+                    <span class="text-xs text-slate-300">Redis Cached</span>
                   </div>
                 </div>
 
                 <div class="flex flex-wrap gap-2">
-                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-xs text-slate-200">FastAPI Async</span>
-                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-xs text-slate-200">Python Embeddings</span>
-                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-xs text-slate-200">Vector Search</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-xs text-slate-200">FastAPI + React 18</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-xs text-slate-200">K-Means Clustering</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-800/90 border border-slate-700 text-xs text-slate-200">PayPal / MoMo / SePay</span>
                 </div>
               </div>
             @elseif($isLaundry)

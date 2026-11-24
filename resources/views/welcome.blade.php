@@ -315,37 +315,37 @@
 
       @php
           $isVi = app()->getLocale() === 'vi';
-          $tourRist = $featuredProjects->first(fn ($p) => stripos($p->title, 'tourrist') !== false);
+          $tourest = $featuredProjects->first(fn ($p) => stripos($p->title, 'tourest') !== false || stripos($p->title, 'tourrist') !== false);
           $laundry = $featuredProjects->first(fn ($p) => stripos($p->title, 'laundry') !== false);
           $awardCert = $certificates->firstWhere('category', 'award');
           $extraProjects = $featuredProjects
-              ->reject(fn ($p) => ($tourRist && $p->id === $tourRist->id) || ($laundry && $p->id === $laundry->id))
+              ->reject(fn ($p) => ($tourest && $p->id === $tourest->id) || ($laundry && $p->id === $laundry->id))
               ->take(3);
       @endphp
 
       {{-- Bento Grid 3 Columns --}}
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {{-- THẺ 1 (Chiếm 2 cột - lg:col-span-2): TourRist RAG AI Concierge --}}
+        {{-- THẺ 1 (Chiếm 2 cột - lg:col-span-2): Tourest Hybrid RAG AI & Tour Booking --}}
         <article class="lg:col-span-2 min-w-0 spotlight-card hover:-translate-y-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-7 flex flex-col justify-between gap-6">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
             <div class="md:col-span-6 min-w-0 space-y-4">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200/80 dark:border-sky-500/30">
-                  {{ $tourRist && $tourRist->role ? strtoupper($tourRist->role) . ' // APPLIED AI' : 'FLAGSHIP // APPLIED AI' }}
+                  {{ $tourest && $tourest->role ? strtoupper($tourest->role) . ' // APPLIED AI' : 'FLAGSHIP // APPLIED AI' }}
                 </span>
-                <span class="font-mono text-xs text-slate-600 dark:text-slate-400">{{ $tourRist && $tourRist->period ? $tourRist->period : '01/2026 — 06/2026' }}</span>
+                <span class="font-mono text-xs text-slate-600 dark:text-slate-400">{{ $tourest && $tourest->period ? $tourest->period : '01/2026 — 06/2026' }}</span>
               </div>
 
-              @if($tourRist)
+              @if($tourest)
                 <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug">
-                  {{ $tourRist->localized_title }}
+                  {{ $tourest->localized_title }}
                 </h3>
                 <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  {{ \Illuminate\Support\Str::limit($tourRist->summary ?: $tourRist->clean_description, 220) }}
+                  {{ \Illuminate\Support\Str::limit($tourest->summary ?: $tourest->clean_description, 220) }}
                 </p>
                 <div class="flex flex-wrap gap-1.5">
-                  @forelse($tourRist->technologies->take(5) as $tech)
+                  @forelse($tourest->technologies->take(5) as $tech)
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                       {!! \App\Support\TechIcon::render($tech->name, 'w-3 h-3') !!}
                       <span>{{ $tech->name }}</span>
@@ -353,22 +353,22 @@
                   @empty
                     <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
                     <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
-                    <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
+                    <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FAISS + BM25</span>
                   @endforelse
                 </div>
                 <div class="flex items-center gap-3 pt-1 flex-wrap">
-                  <a href="{{ route('projects.show', $tourRist->id) }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
+                  <a href="{{ route('projects.show', $tourest->id) }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
                     <span data-i18n="btn_case_study">{{ $isVi ? 'Xem Case Study' : 'Read Case Study' }}</span>
                     <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
                   </a>
-                  @if($tourRist->github_url)
-                    <a href="{{ $tourRist->github_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                  @if($tourest->github_url)
+                    <a href="{{ $tourest->github_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                       <i data-lucide="github" class="w-3.5 h-3.5"></i>
                       <span>GitHub</span>
                     </a>
                   @endif
-                  @if($tourRist->demo_url)
-                    <a href="{{ $tourRist->demo_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-emerald-700 dark:text-emerald-400 hover:underline">
+                  @if($tourest->demo_url)
+                    <a href="{{ $tourest->demo_url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-mono text-emerald-700 dark:text-emerald-400 hover:underline">
                       <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                       <span>Live</span>
                     </a>
@@ -376,16 +376,16 @@
                 </div>
               @else
                 <h3 class="font-display text-2xl font-extrabold text-slate-900 dark:text-white leading-snug" data-i18n="proj1_title">
-                  TourRist — Smart Travel Platform &amp; RAG AI Concierge
+                  Tourest — Tour Booking &amp; Hybrid RAG AI
                 </h3>
                 <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="proj1_desc">
-                  Engineered a document-based RAG chatbot pairing semantic ChromaDB vector search with LLM grounding to generate zero-hallucination travel itineraries from curated local knowledge bases.
+                  Full-stack travel platform built with React 18, FastAPI, MySQL &amp; Redis — featuring Hybrid RAG (FAISS + BM25 + Cross-Encoder Reranker), K-Means clustering &amp; PayPal/MoMo/SePay payments.
                 </p>
                 <div class="flex flex-wrap gap-1.5">
-                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Python</span>
                   <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
-                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">RAG / LLM</span>
-                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Vector Search</span>
+                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">React 18</span>
+                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FAISS + BM25</span>
+                  <span class="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Redis &amp; K-Means</span>
                 </div>
                 <div class="flex items-center gap-3 pt-1">
                   <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline">
@@ -428,7 +428,7 @@
                 </p>
                 <button type="button" onclick="triggerSampleRagQuery()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold transition-colors shadow-sm">
                   <i data-lucide="sparkles" class="w-3 h-3"></i>
-                  <span data-i18n="rag_try_live">{{ $isVi ? 'Chạy thử RAG AI thật trên TourRist' : 'Test Live RAG Query on TourRist' }}</span>
+                  <span data-i18n="rag_try_live">{{ $isVi ? 'Chạy thử RAG AI thật trên Tourest' : 'Test Live RAG Query on Tourest' }}</span>
                 </button>
               </div>
             </div>

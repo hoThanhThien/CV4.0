@@ -419,6 +419,8 @@ class DatabaseSeeder extends Seeder
             ['name' => 'cPanel', 'color' => '#ff6c2c'],
             ['name' => 'Python', 'color' => '#3776ab'],
             ['name' => 'RAG', 'color' => '#8b5cf6'],
+            ['name' => 'FAISS', 'color' => '#0ea5e9'],
+            ['name' => 'Redis', 'color' => '#dc2626'],
             ['name' => 'LLM', 'color' => '#06b6d4'],
             ['name' => 'Vector Search', 'color' => '#ec4899'],
             ['name' => 'FastAPI', 'color' => '#009688'],
@@ -453,13 +455,23 @@ class DatabaseSeeder extends Seeder
                 'techs' => ['PHP', 'Laravel', 'Blade', 'MySQL', 'Docker', 'Nginx', 'cPanel'],
             ],
             [
-                'title' => 'TourRist',
-                'description' => "TourRist | 01/2026 - 06/2026\nFullstack Developer\n+Project Description: Developed a document-based RAG chatbot that combines semantic retrieval with LLM generation to provide context-aware answers from a private knowledge base.\n+Implemented the document ingestion pipeline, including document loading, text preprocessing, chunking, and converting documents into embeddings for knowledge indexing.\n+Built the retrieval pipeline to perform semantic search and identify relevant document chunks based on the user's query.\n+Designed the RAG generation workflow to combine retrieved context with user queries and construct prompts for the LLM, reducing reliance on the model's internal knowledge.\n+Developed REST API endpoints for document ingestion, knowledge retrieval, and chatbot interactions.\n+Handled conversation context and response processing to provide relevant answers based on retrieved information.\n+Tech: Python, RAG, LLM, Embedding, Vector Search, REST API",
+                'title' => 'Tourest',
+                'description' => "Tourest | 01/2026 - 06/2026\nFullstack Developer\n+Project Description: Tour Booking Management & Hybrid RAG AI platform built with React 18 (Vite), FastAPI, MySQL 8.0, and Redis 7.\n+Engineered Hybrid RAG chatbot (FAISS dense vector search + BM25 lexical search + RRF + Cross-Encoder reranking + Out-of-Scope LLM routing) with multi-turn context, Redis 2-tier caching & live Admin model tuning.\n+Implemented scikit-learn K-Means clustering (Customer, Tour & Destination segmentation with Elbow, Silhouette Score & PCA), 3-tier RBAC (Admin/Guide/User) and real-time WebSocket support chat.\n+Integrated multi-gateway online payments via PayPal SDK, MoMo (HMAC-SHA256 + IPN) and SePay bank webhook.\n+Tech: Python, FastAPI, ReactJS, RAG, FAISS, Vector Search, MySQL, Redis, scikit-learn, Docker",
                 'github_url' => 'https://github.com/hoThanhThien/RAG',
                 'demo_url' => null,
                 'featured' => true,
                 'order' => 2,
-                'techs' => ['Python', 'RAG', 'LLM', 'Vector Search', 'FastAPI', 'RESTful API'],
+                'translations' => json_encode([
+                    'en' => [
+                        'title' => 'Tourest — Tour Booking & Hybrid RAG AI',
+                        'description' => "Tourest | 01/2026 - 06/2026\nFullstack Developer\n+Project Description: Tour Booking Management & Hybrid RAG AI platform built with React 18 (Vite), FastAPI, MySQL 8.0, and Redis 7.\n+Engineered Hybrid RAG chatbot (FAISS dense vector search + BM25 lexical search + RRF + Cross-Encoder reranking + Out-of-Scope LLM routing) with multi-turn context, Redis 2-tier caching & live Admin model tuning.\n+Implemented scikit-learn K-Means clustering (Customer, Tour & Destination segmentation with Elbow, Silhouette Score & PCA), 3-tier RBAC (Admin/Guide/User) and real-time WebSocket support chat.\n+Integrated multi-gateway online payments via PayPal SDK, MoMo (HMAC-SHA256 + IPN) and SePay bank webhook.\n+Tech: Python, FastAPI, ReactJS, RAG, FAISS, Vector Search, MySQL, Redis, scikit-learn, Docker",
+                    ],
+                    'vi' => [
+                        'title' => 'Tourest — Đặt Tour Du lịch & Hybrid RAG AI',
+                        'description' => "Tourest | 01/2026 - 06/2026\nLập trình viên Fullstack\n+Mô tả dự án: Hệ thống đặt tour du lịch trực tuyến & Chatbot Hybrid RAG AI phát triển trên React 18 (Vite), FastAPI, MySQL 8.0 và Redis 7.\n+Xây dựng pipeline Hybrid RAG (FAISS Dense Vector + BM25 Lexical + RRF Merge + Cross-Encoder Reranker + định tuyến câu hỏi ngoài danh mục) kèm cache 2 tầng Redis và trang Admin tùy chỉnh model trực tiếp.\n+Áp dụng K-Means Clustering (scikit-learn, Elbow, Silhouette, PCA) phân cụm khách hàng/điểm đến, phân quyền 3 cấp RBAC (Admin/Guide/User) và CSKH real-time qua WebSocket.\n+Tích hợp thanh toán đa cổng PayPal, MoMo (HMAC-SHA256 + IPN) và SePay Bank Webhook.\n+Công nghệ: Python, FastAPI, ReactJS, RAG, FAISS, Vector Search, MySQL, Redis, scikit-learn, Docker",
+                    ],
+                ], JSON_UNESCAPED_UNICODE),
+                'techs' => ['Python', 'FastAPI', 'ReactJS', 'RAG', 'FAISS', 'Vector Search', 'MySQL', 'Redis', 'Docker'],
             ],
             [
                 'title' => 'Laundry Management System',

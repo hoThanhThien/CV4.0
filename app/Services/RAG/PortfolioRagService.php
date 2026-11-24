@@ -389,8 +389,8 @@ class PortfolioRagService
     {
         if (empty($topChunks) || (float) ($topChunks[0]['score'] ?? 0.0) <= 0.0) {
             return $lang === 'vi'
-                ? "Mình chưa hiểu truy vấn \"{$query}\" hoặc chưa tìm thấy từ khóa khớp trong hồ sơ (hiện đang chạy ở chế độ dự phòng). Bạn hãy thử hỏi về: dự án TourRist RAG AI, GPA UTH, kinh nghiệm Enmasys / AIPower, Spring Boot, Laravel hoặc liên hệ hothanhthien119@gmail.com."
-                : "I could not match \"{$query}\" to any portfolio record (currently in retrieval fallback mode). Try asking about TourRist RAG AI, UTH GPA, Enmasys / AIPower experience, Spring Boot, Laravel, or direct contact info.";
+                ? "Mình chưa hiểu truy vấn \"{$query}\" hoặc chưa tìm thấy từ khóa khớp trong hồ sơ (hiện đang chạy ở chế độ dự phòng). Bạn hãy thử hỏi về: dự án Tourest RAG AI, GPA UTH, kinh nghiệm Enmasys / AIPower, Spring Boot, Laravel hoặc liên hệ hothanhthien119@gmail.com."
+                : "I could not match \"{$query}\" to any portfolio record (currently in retrieval fallback mode). Try asking about Tourest RAG AI, UTH GPA, Enmasys / AIPower experience, Spring Boot, Laravel, or direct contact info.";
         }
 
         $snippets = [];

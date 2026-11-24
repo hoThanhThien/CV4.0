@@ -109,14 +109,14 @@ class PortfolioRagTest extends TestCase
     public function test_copilot_falls_back_honestly_when_no_provider_or_quota_exceeded()
     {
         Project::create([
-            'title' => 'TourRist',
-            'description' => "Fullstack Developer | 01/2026 - 06/2026\nChromaDB semantic RAG travel assistant in Python and FastAPI.",
+            'title' => 'Tourest',
+            'description' => "Fullstack Developer | 01/2026 - 06/2026\nFAISS + BM25 hybrid RAG travel assistant in Python and FastAPI.",
             'featured' => true,
         ]);
 
         // Case A: No active AI provider configured
         $noProviderResp = $this->postJson('/api/v1/copilot/ask', [
-            'query' => 'TourRist ChromaDB FastAPI',
+            'query' => 'Tourest FAISS FastAPI',
             'locale' => 'vi',
         ]);
 
@@ -127,7 +127,7 @@ class PortfolioRagTest extends TestCase
             ->assertJsonPath('fallback_reason', 'NO_ACTIVE_PROVIDER')
             ->assertJsonPath('model', null);
 
-        $this->assertStringContainsString('TourRist', $noProviderResp->json('answer'));
+        $this->assertStringContainsString('Tourest', $noProviderResp->json('answer'));
 
         // Case B: Active OpenAI provider returns 429 quota exceeded -> clean fallback without 500
         AiProvider::create([
@@ -147,7 +147,7 @@ class PortfolioRagTest extends TestCase
         ]);
 
         $quotaResp = $this->postJson('/api/v1/copilot/ask', [
-            'query' => 'TourRist FastAPI',
+            'query' => 'Tourest FastAPI',
             'locale' => 'en',
         ]);
 
@@ -216,8 +216,8 @@ class PortfolioRagTest extends TestCase
         ]);
 
         Project::create([
-            'title' => 'TourRist',
-            'description' => 'RAG AI concierge platform.',
+            'title' => 'Tourest',
+            'description' => 'Hybrid RAG AI tour booking platform.',
             'featured' => true,
         ]);
 
@@ -235,7 +235,7 @@ class PortfolioRagTest extends TestCase
                 return Http::response([
                     'outputs' => [[
                         'type' => 'message',
-                        'content' => [['type' => 'text', 'text' => 'TourRist uses RAG [S1].']],
+                        'content' => [['type' => 'text', 'text' => 'Tourest uses Hybrid RAG [S1].']],
                     ]],
                 ], 200);
             },
@@ -255,14 +255,14 @@ class PortfolioRagTest extends TestCase
             ], 200),
         ]);
 
-        $first = $this->postJson('/api/v1/copilot/ask', ['query' => 'TourRist RAG']);
+        $first = $this->postJson('/api/v1/copilot/ask', ['query' => 'Tourest RAG']);
         $first->assertStatus(200)
             ->assertJsonPath('mode', 'llm-rag')
             ->assertJsonPath('model', 'gemini-fast-live');
 
         $calledModels = [];
 
-        $second = $this->postJson('/api/v1/copilot/ask', ['query' => 'Tell me more about TourRist']);
+        $second = $this->postJson('/api/v1/copilot/ask', ['query' => 'Tell me more about Tourest']);
         $second->assertStatus(200)
             ->assertJsonPath('mode', 'llm-rag')
             ->assertJsonPath('model', 'gemini-fast-live');

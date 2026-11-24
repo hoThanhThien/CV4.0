@@ -59,9 +59,9 @@ function initRadialOrbitWheel() {
         items: [
           { name: 'Java', icon: ICONS.java, proof: 'Laundry System', desc: 'Spring Boot REST APIs & finite state order lifecycle' },
           { name: 'PHP', icon: ICONS.php, proof: 'Portfolio & CMS', desc: 'Laravel 11, Blade SSR, dynamic sitemaps & SQLite' },
-          { name: 'Python', icon: ICONS.python, proof: 'TourRist RAG', desc: 'FastAPI async gateway, document ingestion pipeline' },
+          { name: 'Python', icon: ICONS.python, proof: 'Tourest RAG', desc: 'FastAPI async API, FAISS index & K-Means clustering' },
           { name: 'Odoo ERP', icon: ICONS.odoo, proof: 'Enmasys ERP', desc: 'Custom addons, ORM models & corporate sales flow' },
-          { name: 'RAG AI', icon: ICONS.rag, proof: 'ChromaDB Search', desc: 'Cosine semantic lookup & zero-hallucination prompts' },
+          { name: 'RAG AI', icon: ICONS.rag, proof: 'FAISS + BM25', desc: 'Hybrid vector + Cross-Encoder reranking & OOS routing' },
           { name: 'ReactJS', icon: ICONS.react, proof: 'Admin Dashboards', desc: 'Modular components, responsive reactive portals' },
           { name: 'Tailwind', icon: ICONS.tailwind, proof: 'Swiss Grid UI', desc: 'Editorial token system, high-contrast dark & light' },
           { name: 'PostgreSQL', icon: ICONS.postgres, proof: 'AIPower DB', desc: 'JSONB schema, indexed queries & ACID transactions' },
@@ -78,7 +78,7 @@ function initRadialOrbitWheel() {
           { name: 'Laravel 11', icon: ICONS.laravel, proof: 'Production CMS', desc: 'Dynamic portfolio, bilingual VI/EN & Sanctum auth' },
           { name: 'Spring Boot', icon: ICONS.spring, proof: 'Laundry App', desc: 'Spring Data JPA, Hibernate & JWT security guards' },
           { name: 'Odoo Python', icon: ICONS.odoo, proof: 'Enterprise ERP', desc: 'Automated invoice workflows & stock management' },
-          { name: 'FastAPI', icon: ICONS.fastapi, proof: 'TourRist API', desc: 'High-speed async Python REST endpoints' },
+          { name: 'FastAPI', icon: ICONS.fastapi, proof: 'Tourest API', desc: 'SQLAlchemy ORM, WebSocket CSKH & PayPal/MoMo webhooks' },
           { name: 'MySQL 8.0', icon: ICONS.mysql, proof: 'Normalized DB', desc: 'Relational 3NF schemas with cascade constraints' },
           { name: 'JWT Security', icon: ICONS.jwt, proof: 'RBAC Guards', desc: 'Token lifecycle & multi-tier authorization layers' }
         ]
@@ -89,12 +89,12 @@ function initRadialOrbitWheel() {
         hubName: 'RAG & Data',
         icon: TAB_ICONS.rag,
         items: [
-          { name: 'ChromaDB', icon: ICONS.chromadb, proof: 'Vector Index', desc: 'Private doc embeddings & k-NN semantic search' },
-          { name: 'Applied RAG', icon: ICONS.rag, proof: 'TourRist Chatbot', desc: 'Document chunking & grounded LLM generation' },
+          { name: 'FAISS Vector', icon: ICONS.chromadb, proof: 'Tourest Index', desc: 'Dense semantic embeddings + L2 normalized k-NN' },
+          { name: 'Applied RAG', icon: ICONS.rag, proof: 'Tourest Chatbot', desc: 'FAISS + BM25 + Cross-Encoder & Out-of-Scope routing' },
           { name: 'PostgreSQL', icon: ICONS.postgres, proof: 'Enterprise DB', desc: 'Reliable transactional storage & JSONB support' },
-          { name: 'MySQL 8.0', icon: ICONS.mysql, proof: 'Portfolio DB', desc: 'Relational data for projects, skills & certificates' },
+          { name: 'MySQL 8.0', icon: ICONS.mysql, proof: 'Tourest & CMS', desc: 'Relational 3NF schemas for tours, bookings & CMS' },
           { name: 'SQLite', icon: ICONS.sqlite, proof: 'Embedded Engine', desc: 'Fast in-memory tests & zero-config WAL database' },
-          { name: 'Vector Search', icon: ICONS.chromadb, proof: 'Cosine Metric', desc: 'Dense embeddings for instant semantic document lookup' }
+          { name: 'Vector Search', icon: ICONS.chromadb, proof: 'Hybrid + Redis', desc: 'FAISS cosine retrieval with 2-tier Redis LRU cache' }
         ]
       },
       {
